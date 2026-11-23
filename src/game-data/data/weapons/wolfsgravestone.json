@@ -226,15 +226,26 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "wolfsgravestone.attackPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "wolfsgravestone.low-target-hit",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -256,7 +267,38 @@
           }
         }
       ]
+    },
+    {
+      "id": "wolfsgravestone.low-target-hit",
+      "condition": {
+        "fact": "wolfsgravestone.low-target-hitActive"
+      },
+      "recipient": "team",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.4,
+              0.5,
+              0.6,
+              0.7,
+              0.8
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "wolfsgravestone.low-target-hitActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "攻击命中生命值严格低于30%的敌人后的12秒内"
+    }
+  }
 }

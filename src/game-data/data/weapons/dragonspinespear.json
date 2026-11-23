@@ -226,17 +226,102 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。恒冰晶核、恒冰晶核（冰元素影响）按独立输出计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
+        "resolution": "implemented",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "已采用当次条件、合法精炼及输出适用范围。恒冰晶核、恒冰晶核（冰元素影响）按独立输出计算。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "dragonspinespear.icicleTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "普攻或重击已通过触发判定，且本次冰晶命中（10秒间隔）"
+    }
+  },
+  "hits": [
+    {
+      "id": "dragonspinespear.icicle",
+      "name": "恒冰晶核",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        {
+          "fact": "dragonspinespear.icicleTriggered"
+        },
+        {
+          "call": "condition.not",
+          "inputs": {
+            "term0": {
+              "fact": "aura.cryo"
+            }
+          },
+          "output": "active"
+        }
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": {
+            "refinement": [
+              0.8,
+              0.95,
+              1.1,
+              1.25,
+              1.4
+            ],
+            "unit": "scalar"
+          }
+        },
+        "output": "base"
+      }
+    },
+    {
+      "id": "dragonspinespear.icicle-cryo",
+      "name": "恒冰晶核（冰元素影响）",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        {
+          "fact": "dragonspinespear.icicleTriggered"
+        },
+        {
+          "fact": "aura.cryo"
+        }
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": {
+            "refinement": [
+              2,
+              2.4,
+              2.8,
+              3.2,
+              3.6
+            ],
+            "unit": "scalar"
+          }
+        },
+        "output": "base"
+      }
+    }
+  ]
 }

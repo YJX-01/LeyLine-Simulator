@@ -226,17 +226,60 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。传信之箭额外伤害按独立输出计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
+        "resolution": "implemented",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "已采用当次条件、合法精炼及输出适用范围。传信之箭额外伤害按独立输出计算。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "messenger.arrowTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "重击命中要害，且距离上次信使额外伤害至少10秒"
+    }
+  },
+  "hits": [
+    {
+      "id": "messenger.archers-message",
+      "name": "传信之箭额外伤害",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        {
+          "fact": "messenger.arrowTriggered"
+        }
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": {
+            "refinement": [
+              1,
+              1.25,
+              1.5,
+              1.75,
+              2
+            ],
+            "unit": "scalar"
+          }
+        },
+        "output": "base"
+      },
+      "critical": "always"
+    }
+  ]
 }

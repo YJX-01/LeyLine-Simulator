@@ -228,13 +228,42 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "lumidouceelegy.attackPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "lumidouceelegy.burning-damage",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+      },
+      {
+        "id": "confirmed-direct-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "lumidouceelegy.directEnergy",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次触发、装备件数或精炼档位、实际受益者和已确认的触发条件计算。"
+      },
+      {
+        "id": "direct-energy-timeline",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。"
       }
     ]
   },
@@ -256,7 +285,122 @@
           }
         }
       ]
+    },
+    {
+      "id": "lumidouceelegy.burning-damage",
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "lumidouceelegy.damage-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "lumidouceelegy.burningLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.18,
+                  0.23,
+                  0.28,
+                  0.33,
+                  0.38
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.36,
+                  0.46,
+                  0.56,
+                  0.66,
+                  0.76
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lumidouceelegy.directEnergy",
+      "application": "explicit",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "lumidouceelegy.directEnergyTriggered"
+          },
+          "term1": {
+            "call": "lumidouceelegy.directEnergy.fullLayers",
+            "inputs": {
+              "count": {
+                "fact": "lumidouceelegy.burningLayers"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyRestored",
+          "value": {
+            "refinement": [
+              12,
+              13,
+              14,
+              15,
+              16
+            ],
+            "unit": "energy"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "lumidouceelegy.burningLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "燃烧或命中燃烧目标后的当前增伤层数（8秒，至多2层）"
+    },
+    "lumidouceelegy.directEnergyTriggered": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次装备者触发燃烧或以草伤命中燃烧中的敌人，叠满或刷新2层且回能已就绪（12秒，后台可触发）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "lumidouceelegy.damage-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "lumidouceelegy.directEnergy.fullLayers",
+      "template": {
+        "id": "quantity-condition",
+        "input": "count",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 2,
+        "maxInput": 2,
+        "revision": "1"
+      }
+    }
+  ]
 }

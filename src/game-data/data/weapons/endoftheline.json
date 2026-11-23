@@ -226,17 +226,57 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。沿洄范围伤害按独立输出计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
+        "resolution": "implemented",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "已采用当次条件、合法精炼及输出适用范围。沿洄范围伤害按独立输出计算。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "endoftheline.net-snapTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "战技后的沿洄已触发本次伤害（15秒内、最多3次且间隔至少2秒）"
+    }
+  },
+  "hits": [
+    {
+      "id": "endoftheline.net-snap",
+      "name": "沿洄范围伤害",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        "endoftheline.net-snapTriggered"
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": {
+            "refinement": [
+              0.8,
+              1,
+              1.2,
+              1.4,
+              1.6
+            ],
+            "unit": "scalar"
+          }
+        },
+        "output": "base"
+      }
+    }
+  ]
 }

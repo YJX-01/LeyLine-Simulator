@@ -267,12 +267,44 @@
           }
         }
       ]
+    },
+    {
+      "id": "beyondthechrysalis.harvestWind",
+      "recipient": "owner",
+      "application": "explicit",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "beyondthechrysalis.harvestWind"
+          },
+          "term1": {
+            "fact": "beyondthechrysalis.harvestWindCooldownReady"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyRestored",
+          "value": {
+            "refinement": [
+              5,
+              5.5,
+              6,
+              6.5,
+              7
+            ],
+            "unit": "energy"
+          }
+        }
+      ]
     }
   ],
   "support": {
     "resolution": "complete",
     "evidence": "adopted",
-    "reason": "明确单次伤害范围：忠忱/叛弃之风在读取阶段的有效性分别明确提供，两者可重叠；10秒时效、退场清除与顺序须由记录或显式事实证明。能量恢复和完整轮转可执行性不在伤害证书内。",
+    "reason": "显式提供忠忱、叛弃之风的当前有效性，或提供本次丰获之风及其四秒回能资格。效果轮换、持续时间与退场重置需独立记录。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
@@ -289,7 +321,19 @@
             "revision": "1"
           }
         ],
-        "reason": "明确单次伤害范围：忠忱/叛弃之风在读取阶段的有效性分别明确提供，两者可重叠；10秒时效、退场清除与顺序须由记录或显式事实证明。能量恢复和完整轮转可执行性不在伤害证书内。"
+        "reason": "显式提供忠忱、叛弃之风在读取阶段的有效性，两者可重叠。"
+      },
+      {
+        "id": "confirmed-harvest-wind-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "beyondthechrysalis.harvestWind",
+            "revision": "1"
+          }
+        ],
+        "reason": "确认本次轮到丰获之风且满足四秒限制后，按精炼档给持有者恢复固定元素能量。"
       }
     ]
   },
@@ -301,6 +345,20 @@
       }
     },
     "beyondthechrysalis.betrayalWind": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "beyondthechrysalis.harvestWind": {
+      "label": "蝶变本次施放轮到丰获之风",
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "beyondthechrysalis.harvestWindCooldownReady": {
+      "label": "蝶变本次丰获之风满足四秒回能限制",
       "scope": "owner",
       "type": {
         "kind": "boolean"

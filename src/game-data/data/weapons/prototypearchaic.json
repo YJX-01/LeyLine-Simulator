@@ -226,15 +226,15 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。粉碎按独立输出计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
+        "resolution": "implemented",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "已采用当次条件、合法精炼及输出适用范围。粉碎按独立输出计算。"
       }
     ]
   },
@@ -243,7 +243,8 @@
       "scope": "query",
       "type": {
         "kind": "boolean"
-      }
+      },
+      "label": "普攻或重击已通过50%触发判定，且本次粉碎命中（15秒间隔）"
     }
   },
   "hits": [

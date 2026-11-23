@@ -226,17 +226,492 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "athousandfloatingdreams.matching-1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandfloatingdreams.matching-2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandfloatingdreams.matching-3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandfloatingdreams.different",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandfloatingdreams.different.1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandfloatingdreams.different.2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandfloatingdreams.different.3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandfloatingdreams.different.4",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandfloatingdreams.different.5",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandfloatingdreams.different.6",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandfloatingdreams.others",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "athousandfloatingdreams.sameElements": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "除装备者外的同元素队员人数"
+    },
+    "athousandfloatingdreams.differentElements": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "除装备者外的异元素队员人数"
+    }
+  },
+  "formulas": [
+    {
+      "id": "athousandfloatingdreams.same-1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "athousandfloatingdreams.same-2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "athousandfloatingdreams.same-3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "athousandfloatingdreams.different-per-member",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "athousandfloatingdreams.matching-1",
+      "condition": {
+        "call": "athousandfloatingdreams.same-1",
+        "inputs": {
+          "points": {
+            "fact": "athousandfloatingdreams.sameElements"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              32,
+              40,
+              48,
+              56,
+              64
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "athousandfloatingdreams.matching-2",
+      "condition": {
+        "call": "athousandfloatingdreams.same-2",
+        "inputs": {
+          "points": {
+            "fact": "athousandfloatingdreams.sameElements"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              64,
+              80,
+              96,
+              112,
+              128
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "athousandfloatingdreams.matching-3",
+      "condition": {
+        "call": "athousandfloatingdreams.same-3",
+        "inputs": {
+          "points": {
+            "fact": "athousandfloatingdreams.sameElements"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              96,
+              120,
+              144,
+              168,
+              192
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "athousandfloatingdreams.different",
+      "modifiers": [
+        {
+          "target": "attribute.anemoBonus",
+          "value": {
+            "call": "athousandfloatingdreams.different-per-member",
+            "inputs": {
+              "basis": {
+                "fact": "athousandfloatingdreams.differentElements"
+              },
+              "rate": {
+                "refinement": [
+                  0.1,
+                  0.14,
+                  0.18,
+                  0.22,
+                  0.26
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.3,
+                  0.42,
+                  0.54,
+                  0.66,
+                  0.78
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          },
+          "ownerElements": [
+            "anemo"
+          ]
+        },
+        {
+          "target": "attribute.geoBonus",
+          "value": {
+            "call": "athousandfloatingdreams.different-per-member",
+            "inputs": {
+              "basis": {
+                "fact": "athousandfloatingdreams.differentElements"
+              },
+              "rate": {
+                "refinement": [
+                  0.1,
+                  0.14,
+                  0.18,
+                  0.22,
+                  0.26
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.3,
+                  0.42,
+                  0.54,
+                  0.66,
+                  0.78
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          },
+          "ownerElements": [
+            "geo"
+          ]
+        },
+        {
+          "target": "attribute.electroBonus",
+          "value": {
+            "call": "athousandfloatingdreams.different-per-member",
+            "inputs": {
+              "basis": {
+                "fact": "athousandfloatingdreams.differentElements"
+              },
+              "rate": {
+                "refinement": [
+                  0.1,
+                  0.14,
+                  0.18,
+                  0.22,
+                  0.26
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.3,
+                  0.42,
+                  0.54,
+                  0.66,
+                  0.78
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          },
+          "ownerElements": [
+            "electro"
+          ]
+        },
+        {
+          "target": "attribute.hydroBonus",
+          "value": {
+            "call": "athousandfloatingdreams.different-per-member",
+            "inputs": {
+              "basis": {
+                "fact": "athousandfloatingdreams.differentElements"
+              },
+              "rate": {
+                "refinement": [
+                  0.1,
+                  0.14,
+                  0.18,
+                  0.22,
+                  0.26
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.3,
+                  0.42,
+                  0.54,
+                  0.66,
+                  0.78
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          },
+          "ownerElements": [
+            "hydro"
+          ]
+        },
+        {
+          "target": "attribute.pyroBonus",
+          "value": {
+            "call": "athousandfloatingdreams.different-per-member",
+            "inputs": {
+              "basis": {
+                "fact": "athousandfloatingdreams.differentElements"
+              },
+              "rate": {
+                "refinement": [
+                  0.1,
+                  0.14,
+                  0.18,
+                  0.22,
+                  0.26
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.3,
+                  0.42,
+                  0.54,
+                  0.66,
+                  0.78
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          },
+          "ownerElements": [
+            "pyro"
+          ]
+        },
+        {
+          "target": "attribute.cryoBonus",
+          "value": {
+            "call": "athousandfloatingdreams.different-per-member",
+            "inputs": {
+              "basis": {
+                "fact": "athousandfloatingdreams.differentElements"
+              },
+              "rate": {
+                "refinement": [
+                  0.1,
+                  0.14,
+                  0.18,
+                  0.22,
+                  0.26
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.3,
+                  0.42,
+                  0.54,
+                  0.66,
+                  0.78
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          },
+          "ownerElements": [
+            "cryo"
+          ]
+        },
+        {
+          "target": "attribute.dendroBonus",
+          "value": {
+            "call": "athousandfloatingdreams.different-per-member",
+            "inputs": {
+              "basis": {
+                "fact": "athousandfloatingdreams.differentElements"
+              },
+              "rate": {
+                "refinement": [
+                  0.1,
+                  0.14,
+                  0.18,
+                  0.22,
+                  0.26
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.3,
+                  0.42,
+                  0.54,
+                  0.66,
+                  0.78
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          },
+          "ownerElements": [
+            "dendro"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "athousandfloatingdreams.others",
+      "recipient": "team",
+      "excludeOwner": true,
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              40,
+              42,
+              44,
+              46,
+              48
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    }
+  ]
 }

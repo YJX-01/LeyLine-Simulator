@@ -228,15 +228,109 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "songofthevigil.stellar-attack",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+      },
+      {
+        "id": "confirmed-direct-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "songofthevigil.directEnergy",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次触发、装备件数或精炼档位、实际受益者和已确认的触发条件计算。"
+      },
+      {
+        "id": "direct-energy-timeline",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "songofthevigil.stellar-attack",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "reaction"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "reactionIds": [
+            "stellar-conduct",
+            "stellar-swirl"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 12000,
+        "phase": "after"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "songofthevigil.directEnergy",
+      "application": "explicit",
+      "condition": {
+        "fact": "songofthevigil.directEnergyTriggered"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyRestored",
+          "value": {
+            "refinement": [
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "unit": "energy"
+          }
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "songofthevigil.directEnergyTriggered": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次装备者触发元素反应，且回能已就绪（9秒，后台可触发）"
+    }
+  }
 }

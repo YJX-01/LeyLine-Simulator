@@ -228,13 +228,43 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已支持持有者受到伤害后新生成的钟剑护盾初始吸收量，以及持有者处于护盾庇护下时的伤害加成。",
     "mechanisms": [
       {
-        "id": "explicit-output-scope",
+        "id": "shielded-damage",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "thebell.shield-damage",
+            "revision": "1"
+          }
+        ],
+        "reason": "持有者处于任意护盾庇护下时，按精炼计算伤害加成。"
+      },
+      {
+        "id": "confirmed-triggered-shield",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "thebell.triggered-shield",
+            "revision": "1"
+          }
+        ],
+        "reason": "确认承伤触发后，按持有者生命上限和精炼计算初始吸收量。护盾仅保护持有者，持续10秒或直到护盾失效。"
+      },
+      {
+        "id": "automatic-shield-and-damage-taken",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "承伤与45秒限次的自动判定、10秒存续及提前破盾、后续来伤的实际吸收待接入。",
+        "impact": {
+          "recipient": "owner",
+          "attributes": [
+            "attribute.effectiveShieldAbsorption"
+          ]
+        }
       }
     ]
   },
@@ -259,7 +289,50 @@
           }
         }
       ]
+    },
+    {
+      "id": "thebell.triggered-shield",
+      "application": "explicit",
+      "condition": {
+        "fact": "thebell.rebelliousGuardianTriggered"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.shieldAbsorption",
+          "value": {
+            "call": "shield.hp-base",
+            "inputs": {
+              "basis": {
+                "stat": "hp"
+              },
+              "rate": {
+                "refinement": [
+                  0.2,
+                  0.23,
+                  0.26,
+                  0.29,
+                  0.32
+                ],
+                "unit": "scalar"
+              },
+              "flat": {
+                "amount": 0,
+                "unit": "hp"
+              }
+            }
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "thebell.rebelliousGuardianTriggered": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "持有者承伤后本次已生成钟剑护盾（持续10秒或至破盾，45秒间隔）"
+    }
+  }
 }

@@ -226,17 +226,123 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "xiphosmoonlight.owner-recharge",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "xiphosmoonlight.team-recharge",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "xiphosmoonlight.moonlightActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "西福斯月光本轮增益已生效（周期10秒，持续12秒）"
+    },
+    "xiphosmoonlight.masteryAtUpdate": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "elementalMastery"
+      },
+      "label": "最近一次月光触发时装备者元素精通"
+    }
+  },
+  "formulas": [
+    {
+      "id": "xiphosmoonlight.mastery-to-recharge",
+      "template": {
+        "id": "attribute-conversion",
+        "revision": "1",
+        "stat": "elementalMastery",
+        "target": "scalar",
+        "attribute": "basis",
+        "rate": "rate",
+        "output": "value"
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "xiphosmoonlight.owner-recharge",
+      "condition": {
+        "fact": "xiphosmoonlight.moonlightActive"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.energyRecharge",
+          "value": {
+            "call": "xiphosmoonlight.mastery-to-recharge",
+            "inputs": {
+              "basis": {
+                "fact": "xiphosmoonlight.masteryAtUpdate"
+              },
+              "rate": {
+                "refinement": [
+                  0.00036,
+                  0.00045,
+                  0.00054,
+                  0.00063,
+                  0.00072
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "xiphosmoonlight.team-recharge",
+      "condition": {
+        "fact": "xiphosmoonlight.moonlightActive"
+      },
+      "recipient": "team",
+      "excludeOwner": true,
+      "modifiers": [
+        {
+          "target": "attribute.energyRecharge",
+          "value": {
+            "call": "xiphosmoonlight.mastery-to-recharge",
+            "inputs": {
+              "basis": {
+                "fact": "xiphosmoonlight.masteryAtUpdate"
+              },
+              "rate": {
+                "refinement": [
+                  0.000108,
+                  0.000135,
+                  0.000162,
+                  0.000189,
+                  0.000216
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ]
 }

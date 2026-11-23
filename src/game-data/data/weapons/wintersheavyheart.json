@@ -226,17 +226,354 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "wintersheavyheart.cryo-mastery",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "wintersheavyheart.electro-attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "wintersheavyheart.gleam-mastery",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "wintersheavyheart.stellar-conduct",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "wintersheavyheart.stellar-swirl",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "wintersheavyheart.stellarGleam": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者已激活辉映·星烁"
+    }
+  },
+  "formulas": [
+    {
+      "id": "wintersheavyheart.mastery-per-cryo",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "elementalMastery",
+        "per": 1
+      }
+    },
+    {
+      "id": "wintersheavyheart.attack-per-electro",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "wintersheavyheart.mastery-per-cryo-electro",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "elementalMastery",
+        "per": 1
+      }
+    },
+    {
+      "id": "wintersheavyheart.stellar-conduct-per-member",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "wintersheavyheart.stellar-swirl-per-member",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "wintersheavyheart.cryo-mastery",
+      "condition": {
+        "call": "condition.not",
+        "inputs": {
+          "term0": {
+            "fact": "wintersheavyheart.stellarGleam"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "call": "wintersheavyheart.mastery-per-cryo",
+            "inputs": {
+              "basis": {
+                "teamCount": {
+                  "elements": [
+                    "cryo"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 4
+                }
+              },
+              "rate": {
+                "refinement": [
+                  24,
+                  30,
+                  36,
+                  42,
+                  48
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "amount": 1000,
+                "unit": "elementalMastery"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wintersheavyheart.electro-attack",
+      "condition": {
+        "call": "condition.not",
+        "inputs": {
+          "term0": {
+            "fact": "wintersheavyheart.stellarGleam"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "wintersheavyheart.attack-per-electro",
+            "inputs": {
+              "basis": {
+                "teamCount": {
+                  "elements": [
+                    "electro"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 4
+                }
+              },
+              "rate": {
+                "refinement": [
+                  0.048,
+                  0.06,
+                  0.072,
+                  0.084,
+                  0.096
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.192,
+                  0.24,
+                  0.288,
+                  0.336,
+                  0.384
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wintersheavyheart.gleam-mastery",
+      "condition": {
+        "fact": "wintersheavyheart.stellarGleam"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "call": "wintersheavyheart.mastery-per-cryo-electro",
+            "inputs": {
+              "basis": {
+                "teamCount": {
+                  "elements": [
+                    "cryo",
+                    "electro"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 4
+                }
+              },
+              "rate": {
+                "refinement": [
+                  20,
+                  25,
+                  30,
+                  35,
+                  40
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "amount": 1000,
+                "unit": "elementalMastery"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wintersheavyheart.stellar-conduct",
+      "condition": {
+        "fact": "wintersheavyheart.stellarGleam"
+      },
+      "appliesTo": {
+        "families": [
+          "stellar-conduct"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.stellar-conduct.damageBonus",
+          "value": {
+            "call": "wintersheavyheart.stellar-conduct-per-member",
+            "inputs": {
+              "basis": {
+                "teamCount": {
+                  "elements": [
+                    "cryo",
+                    "electro"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 4
+                }
+              },
+              "rate": {
+                "refinement": [
+                  0.06,
+                  0.075,
+                  0.09,
+                  0.105,
+                  0.12
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.24,
+                  0.3,
+                  0.36,
+                  0.42,
+                  0.48
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wintersheavyheart.stellar-swirl",
+      "condition": {
+        "fact": "wintersheavyheart.stellarGleam"
+      },
+      "appliesTo": {
+        "families": [
+          "stellar-swirl"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.stellar-swirl.damageBonus",
+          "value": {
+            "call": "wintersheavyheart.stellar-swirl-per-member",
+            "inputs": {
+              "basis": {
+                "teamCount": {
+                  "elements": [
+                    "cryo",
+                    "electro"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 4
+                }
+              },
+              "rate": {
+                "refinement": [
+                  0.06,
+                  0.075,
+                  0.09,
+                  0.105,
+                  0.12
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.24,
+                  0.3,
+                  0.36,
+                  0.42,
+                  0.48
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ]
 }

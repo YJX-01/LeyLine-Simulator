@@ -226,17 +226,117 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "hunterspath.elements",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "hunterspath.tireless-hunt",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "hunterspath.elements",
+      "appliesTo": {
+        "elements": [
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hunterspath.tireless-hunt",
+      "condition": {
+        "fact": "hunterspath.tireless-huntActive"
+      },
+      "appliesTo": {
+        "categories": [
+          "charged"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.baseDamageBonus",
+          "value": {
+            "call": "hunterspath.mastery-to-damage",
+            "inputs": {
+              "basis": {
+                "stat": "elementalMastery"
+              },
+              "rate": {
+                "refinement": [
+                  1.6,
+                  2,
+                  2.4,
+                  2.8,
+                  3.2
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ],
+  "formulas": [
+    {
+      "id": "hunterspath.mastery-to-damage",
+      "template": {
+        "id": "attribute-conversion",
+        "revision": "1",
+        "stat": "elementalMastery",
+        "target": "damage",
+        "attribute": "basis",
+        "rate": "rate",
+        "output": "value"
+      }
+    }
+  ],
+  "facts": {
+    "hunterspath.tireless-huntActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "无休止的狩猎对本次重击有效（10秒内且未用满12次）"
+    }
+  }
 }

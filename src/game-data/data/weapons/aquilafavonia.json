@@ -228,13 +228,43 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已支持攻击力加成、西风鹰之魂的独立物理伤害和持有者本次治疗量。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "aquilafavonia.attackPercent",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。西风鹰之魂按独立输出计算。"
+      },
+      {
+        "id": "confirmed-falcon-healing",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "aquilafavonia.falcon-healing",
+            "revision": "1"
+          }
+        ],
+        "reason": "确认持有者承伤并触发西风鹰之魂后，按精炼、攻击力、治疗与受治疗加成计算本次治疗量。"
+      },
+      {
+        "id": "automatic-falcon-and-hp",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "受击判定与15秒限次的自动处理、治疗实际到账量待接入。",
+        "impact": {
+          "recipient": "owner",
+          "attributes": [
+            "attribute.equipmentHealing"
+          ]
+        }
       }
     ]
   },
@@ -256,7 +286,83 @@
           }
         }
       ]
+    },
+    {
+      "id": "aquilafavonia.falcon-healing",
+      "application": "explicit",
+      "condition": {
+        "fact": "aquilafavonia.falconTriggered"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.equipmentHealing",
+          "value": {
+            "call": "healing.attack",
+            "inputs": {
+              "attack": {
+                "stat": "attack"
+              },
+              "rate": {
+                "refinement": [
+                  1,
+                  1.15,
+                  1.3,
+                  1.45,
+                  1.6
+                ],
+                "unit": "scalar"
+              },
+              "outgoing": {
+                "stat": "healingBonus"
+              },
+              "incoming": {
+                "stat": "incomingHealingBonus"
+              }
+            }
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "aquilafavonia.falconTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "持有者承伤后西风鹰之魂已触发（15秒间隔）"
+    }
+  },
+  "hits": [
+    {
+      "id": "aquilafavonia.falcon",
+      "name": "西风鹰之魂",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        "aquilafavonia.falconTriggered"
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": {
+            "refinement": [
+              2,
+              2.3,
+              2.6,
+              2.9,
+              3.2
+            ],
+            "unit": "scalar"
+          }
+        },
+        "output": "base"
+      }
+    }
+  ]
 }

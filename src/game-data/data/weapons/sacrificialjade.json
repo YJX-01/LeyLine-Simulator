@@ -226,17 +226,73 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "sacrificialjade.jade",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "sacrificialjade.jade.1",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "sacrificialjade.jadeActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "后台超过5秒取得，且登场未满10秒"
+    }
+  },
+  "buffs": [
+    {
+      "id": "sacrificialjade.jade",
+      "condition": {
+        "fact": "sacrificialjade.jadeActive"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.hpPercent",
+          "value": {
+            "refinement": [
+              0.32,
+              0.4,
+              0.48,
+              0.56,
+              0.64
+            ],
+            "unit": "scalar"
+          }
+        },
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              40,
+              50,
+              60,
+              70,
+              80
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    }
+  ]
 }

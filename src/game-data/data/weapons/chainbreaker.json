@@ -226,17 +226,128 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "chainbreaker.eligible-attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "chainbreaker.three-members",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "chainbreaker.eligibleMembers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "满足纳塔或异元素条件的队员人数（重合只计一次）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "chainbreaker.attack-per-member",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "chainbreaker.members-at-least-three",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 3,
+        "maxInput": 4
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "chainbreaker.eligible-attack",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "chainbreaker.attack-per-member",
+            "inputs": {
+              "basis": {
+                "fact": "chainbreaker.eligibleMembers"
+              },
+              "rate": {
+                "refinement": [
+                  0.048,
+                  0.06,
+                  0.072,
+                  0.084,
+                  0.096
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.192,
+                  0.24,
+                  0.288,
+                  0.336,
+                  0.384
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "chainbreaker.three-members",
+      "condition": {
+        "call": "chainbreaker.members-at-least-three",
+        "inputs": {
+          "points": {
+            "fact": "chainbreaker.eligibleMembers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              24,
+              30,
+              36,
+              42,
+              48
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    }
+  ]
 }

@@ -226,15 +226,26 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "lightoffoliarincision.critRate",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "lightoffoliarincision.foliar-incision",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -256,7 +267,66 @@
           }
         }
       ]
+    },
+    {
+      "id": "lightoffoliarincision.foliar-incision",
+      "condition": {
+        "fact": "lightoffoliarincision.foliar-incisionActive"
+      },
+      "appliesTo": {
+        "categories": [
+          "normal",
+          "skill"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.baseDamageBonus",
+          "value": {
+            "call": "lightoffoliarincision.mastery-damage",
+            "inputs": {
+              "basis": {
+                "stat": "elementalMastery"
+              },
+              "rate": {
+                "refinement": [
+                  1.2,
+                  1.5,
+                  1.8,
+                  2.1,
+                  2.4
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "formulas": [
+    {
+      "id": "lightoffoliarincision.mastery-damage",
+      "template": {
+        "id": "attribute-conversion",
+        "revision": "1",
+        "stat": "elementalMastery",
+        "target": "damage",
+        "attribute": "basis",
+        "rate": "rate",
+        "output": "value"
+      }
+    }
+  ],
+  "facts": {
+    "lightoffoliarincision.foliar-incisionActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "裁叶对本击有效（元素普攻后12秒内且未用满28次）"
+    }
+  }
 }

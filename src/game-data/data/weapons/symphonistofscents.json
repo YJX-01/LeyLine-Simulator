@@ -226,15 +226,36 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "symphonistofscents.attackPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "symphonistofscents.off-field-attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "symphonistofscents.recital-owner",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "symphonistofscents.recital-others",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -256,7 +277,94 @@
           }
         }
       ]
+    },
+    {
+      "id": "symphonistofscents.off-field-attack",
+      "condition": {
+        "call": "condition.not",
+        "inputs": {
+          "term0": {
+            "fact": "onField"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "symphonistofscents.recital-owner",
+      "condition": {
+        "fact": "symphonistofscents.recitalWindow"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.32,
+              0.4,
+              0.48,
+              0.56,
+              0.64
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "symphonistofscents.recital-others",
+      "condition": {
+        "fact": "symphonistofscents.recitalRecipient"
+      },
+      "recipient": "team",
+      "excludeOwner": true,
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.32,
+              0.4,
+              0.48,
+              0.56,
+              0.64
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "symphonistofscents.recitalWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者最近3秒内进行了治疗"
+    },
+    "symphonistofscents.recitalRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本角色是仍处于甘美回奏3秒有效期内的受治疗者"
+    }
+  }
 }

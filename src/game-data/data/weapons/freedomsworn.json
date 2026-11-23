@@ -226,17 +226,125 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "freedomsworn.damage",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "freedomsworn.rebel-damage",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "freedomsworn.rebel-attack",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "freedomsworn.damage",
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.1,
+              0.125,
+              0.15,
+              0.175,
+              0.2
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "freedomsworn.rebel-damage",
+      "condition": {
+        "fact": "freedomsworn.rebelSong"
+      },
+      "recipient": "team",
+      "appliesTo": {
+        "categories": [
+          "normal",
+          "charged",
+          "plunge"
+        ]
+      },
+      "stacking": {
+        "group": "millennial-movement.damageBonus",
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "freedomsworn.rebel-attack",
+      "condition": {
+        "fact": "freedomsworn.rebelSong"
+      },
+      "recipient": "team",
+      "stacking": {
+        "group": "millennial-movement.attackPercent",
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "freedomsworn.rebelSong": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "抗争之歌已生效（2枚奋起之符后12秒内）"
+    }
+  }
 }

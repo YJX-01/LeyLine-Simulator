@@ -228,15 +228,135 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "everlastingmoonglow.healing",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "everlastingmoonglow.normal-hp",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+      },
+      {
+        "id": "confirmed-direct-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "everlastingmoonglow.directEnergy",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次触发、装备件数或精炼档位、实际受益者和已确认的触发条件计算。"
+      },
+      {
+        "id": "direct-energy-timeline",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "everlastingmoonglow.healing",
+      "modifiers": [
+        {
+          "target": "attribute.healingBonus",
+          "value": {
+            "refinement": [
+              0.1,
+              0.125,
+              0.15,
+              0.175,
+              0.2
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "everlastingmoonglow.normal-hp",
+      "appliesTo": {
+        "categories": [
+          "normal"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.baseDamageBonus",
+          "value": {
+            "call": "everlastingmoonglow.hp-to-damage",
+            "inputs": {
+              "basis": {
+                "stat": "hp"
+              },
+              "rate": {
+                "refinement": [
+                  0.01,
+                  0.015,
+                  0.02,
+                  0.025,
+                  0.03
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "everlastingmoonglow.directEnergy",
+      "application": "explicit",
+      "condition": {
+        "fact": "everlastingmoonglow.directEnergyTriggered"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyRestored",
+          "value": {
+            "amount": 0.6,
+            "unit": "energy"
+          }
+        }
+      ]
+    }
+  ],
+  "formulas": [
+    {
+      "id": "everlastingmoonglow.hp-to-damage",
+      "template": {
+        "id": "attribute-conversion",
+        "revision": "1",
+        "stat": "hp",
+        "target": "damage",
+        "attribute": "basis",
+        "rate": "rate",
+        "output": "value"
+      }
+    }
+  ],
+  "facts": {
+    "everlastingmoonglow.directEnergyTriggered": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次装备者普攻命中敌人，距施放爆发不足12秒且回能已就绪（0.1秒）"
+    }
+  }
 }

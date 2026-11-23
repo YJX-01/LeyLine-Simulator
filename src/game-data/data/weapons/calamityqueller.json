@@ -226,17 +226,169 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "calamityqueller.elemental",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "calamityqueller.consummation",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "calamityqueller.consummation-off-field",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "calamityqueller.elemental",
+      "appliesTo": {
+        "elements": [
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "calamityqueller.consummation",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "calamityqueller.attack-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "calamityqueller.consummationLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.032,
+                  0.04,
+                  0.048,
+                  0.056,
+                  0.064
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.192,
+                  0.24,
+                  0.288,
+                  0.336,
+                  0.384
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "calamityqueller.consummation-off-field",
+      "condition": {
+        "call": "condition.not",
+        "inputs": {
+          "term0": {
+            "fact": "onField"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "calamityqueller.attack-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "calamityqueller.consummationLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.032,
+                  0.04,
+                  0.048,
+                  0.056,
+                  0.064
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.192,
+                  0.24,
+                  0.288,
+                  0.336,
+                  0.384
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "calamityqueller.consummationLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "圆顿当前层数（战技后20秒内，每秒1层，至多6层）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "calamityqueller.attack-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ]
 }

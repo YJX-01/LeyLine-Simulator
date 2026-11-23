@@ -226,17 +226,57 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "thrillingtalesofdragonslayers.handoff-attack",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "thrillingtalesofdragonslayers.switchRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "此角色是装备者主动切出时登场者且处于10秒增益内"
+    }
+  },
+  "buffs": [
+    {
+      "id": "thrillingtalesofdragonslayers.handoff-attack",
+      "condition": {
+        "fact": "thrillingtalesofdragonslayers.switchRecipient"
+      },
+      "recipient": "team",
+      "excludeOwner": true,
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.24,
+              0.3,
+              0.36,
+              0.42,
+              0.48
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ]
 }

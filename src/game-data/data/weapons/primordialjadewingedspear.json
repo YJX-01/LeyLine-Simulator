@@ -226,17 +226,128 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "primordialjadewingedspear.eagle-attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "primordialjadewingedspear.eagle-damage",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "primordialjadewingedspear.eagleLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前和璞鸢层数（命中后6秒，0.3秒内至多1层）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "primordialjadewingedspear.attack-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "primordialjadewingedspear.seven-layers",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 7,
+        "maxInput": 7
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "primordialjadewingedspear.eagle-attack",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "primordialjadewingedspear.attack-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "primordialjadewingedspear.eagleLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.032,
+                  0.039,
+                  0.046,
+                  0.053,
+                  0.06
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.224,
+                  0.273,
+                  0.322,
+                  0.371,
+                  0.42
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "primordialjadewingedspear.eagle-damage",
+      "condition": {
+        "call": "primordialjadewingedspear.seven-layers",
+        "inputs": {
+          "points": {
+            "fact": "primordialjadewingedspear.eagleLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ]
 }

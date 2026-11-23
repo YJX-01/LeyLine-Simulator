@@ -228,15 +228,114 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "flameforgedinsight.reaction-mastery",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+      },
+      {
+        "id": "confirmed-direct-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "flameforgedinsight.directEnergy",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次触发、装备件数或精炼档位、实际受益者和已确认的触发条件计算。"
+      },
+      {
+        "id": "direct-energy-timeline",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "flameforgedinsight.reaction-mastery",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "reaction"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "reactionIds": [
+            "electro-charged",
+            "lunar-charged",
+            "bloom",
+            "lunar-bloom",
+            "crystallize",
+            "lunar-crystallize"
+          ]
+        },
+        "cooldownMs": 15000
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 15000,
+        "phase": "after"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              60,
+              75,
+              90,
+              105,
+              120
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flameforgedinsight.directEnergy",
+      "application": "explicit",
+      "condition": {
+        "fact": "flameforgedinsight.directEnergyTriggered"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyRestored",
+          "value": {
+            "refinement": [
+              12,
+              15,
+              18,
+              21,
+              24
+            ],
+            "unit": "energy"
+          }
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "flameforgedinsight.directEnergyTriggered": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次装备者触发感电、月感电、绽放、月绽放、结晶或月结晶，且回能已就绪（15秒，后台可触发）"
+    }
+  }
 }

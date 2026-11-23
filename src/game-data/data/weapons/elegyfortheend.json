@@ -226,17 +226,118 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "elegyfortheend.mastery",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "elegyfortheend.farewell-elementalMastery",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "elegyfortheend.farewell-attackPercent",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "elegyfortheend.mastery",
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              60,
+              75,
+              90,
+              105,
+              120
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "elegyfortheend.farewell-elementalMastery",
+      "condition": {
+        "fact": "elegyfortheend.farewell"
+      },
+      "recipient": "team",
+      "stacking": {
+        "group": "millennial-movement.elementalMastery",
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              100,
+              125,
+              150,
+              175,
+              200
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "elegyfortheend.farewell-attackPercent",
+      "condition": {
+        "fact": "elegyfortheend.farewell"
+      },
+      "recipient": "team",
+      "stacking": {
+        "group": "millennial-movement.attackPercent",
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "elegyfortheend.farewell": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "别离之歌已生效（4枚追思之符后12秒内）"
+    }
+  }
 }

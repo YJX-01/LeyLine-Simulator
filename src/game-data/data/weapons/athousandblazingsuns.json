@@ -226,17 +226,150 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "athousandblazingsuns.scorching-brilliance",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandblazingsuns.scorching-brilliance.1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandblazingsuns.nightsoul-critDamage",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athousandblazingsuns.nightsoul-attackPercent",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "athousandblazingsuns.scorchingBrilliance": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "焚光已生效（含延长与夜魂后台暂停）"
+    },
+    "athousandblazingsuns.nightsoulBlessing": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者处于夜魂加持"
+    }
+  },
+  "buffs": [
+    {
+      "id": "athousandblazingsuns.scorching-brilliance",
+      "condition": {
+        "fact": "athousandblazingsuns.scorchingBrilliance"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critDamage",
+          "value": {
+            "refinement": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "unit": "scalar"
+          }
+        },
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "athousandblazingsuns.nightsoul-critDamage",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "athousandblazingsuns.scorchingBrilliance"
+          },
+          "term1": {
+            "fact": "athousandblazingsuns.nightsoulBlessing"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critDamage",
+          "value": {
+            "refinement": [
+              0.15,
+              0.1875,
+              0.225,
+              0.2625,
+              0.3
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "athousandblazingsuns.nightsoul-attackPercent",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "athousandblazingsuns.scorchingBrilliance"
+          },
+          "term1": {
+            "fact": "athousandblazingsuns.nightsoulBlessing"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.21,
+              0.2625,
+              0.315,
+              0.3675,
+              0.42
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ]
 }

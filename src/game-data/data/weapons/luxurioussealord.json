@@ -226,15 +226,21 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。大鲔冲击按独立输出计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "luxurioussealord.burst.damageBonus",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。大鲔冲击按独立输出计算。"
       }
     ]
   },
@@ -263,5 +269,45 @@
       ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "luxurioussealord.tunaTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者在场时爆发命中触发大鲔冲击，且本次命中目标"
+    }
+  },
+  "hits": [
+    {
+      "id": "luxurioussealord.tuna",
+      "name": "大鲔冲击",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        "luxurioussealord.tunaTriggered"
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": {
+            "refinement": [
+              1,
+              1.25,
+              1.5,
+              1.75,
+              2
+            ],
+            "unit": "scalar"
+          }
+        },
+        "output": "base"
+      }
+    }
+  ]
 }

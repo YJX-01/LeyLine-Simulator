@@ -226,15 +226,26 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "verdict.attackPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "verdict.seals",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -256,7 +267,71 @@
           }
         }
       ]
+    },
+    {
+      "id": "verdict.seals",
+      "appliesTo": {
+        "categories": [
+          "skill"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "verdict.damage-per-seal",
+            "inputs": {
+              "basis": {
+                "fact": "verdict.sealLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.18,
+                  0.225,
+                  0.27,
+                  0.315,
+                  0.36
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.36,
+                  0.45,
+                  0.54,
+                  0.63,
+                  0.72
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "verdict.sealLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前约印数（结晶/触发月结晶取得，战技伤害后0.2秒清除）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "verdict.damage-per-seal",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ]
 }

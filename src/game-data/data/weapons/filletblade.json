@@ -226,17 +226,57 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。决按独立输出计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
+        "resolution": "implemented",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "已采用当次条件、合法精炼及输出适用范围。决按独立输出计算。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "filletblade.gashTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "命中后已通过概率判定，且本次额外伤害命中单个目标"
+    }
+  },
+  "hits": [
+    {
+      "id": "filletblade.gash",
+      "name": "决",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        "filletblade.gashTriggered"
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": {
+            "refinement": [
+              2.4,
+              2.8,
+              3.2,
+              3.6,
+              4
+            ],
+            "unit": "scalar"
+          }
+        },
+        "output": "base"
+      }
+    }
+  ]
 }

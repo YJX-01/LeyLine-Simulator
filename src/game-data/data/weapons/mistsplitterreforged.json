@@ -226,17 +226,585 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.elements",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-1.1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-1.2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-1.3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-1.4",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-1.5",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-1.6",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-2.1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-2.2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-2.3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-2.4",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-2.5",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-2.6",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-3.1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-3.2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-3.3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-3.4",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-3.5",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mistsplitterreforged.emblem-3.6",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "mistsplitterreforged.elements",
+      "appliesTo": {
+        "elements": [
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mistsplitterreforged.emblem-1",
+      "condition": {
+        "call": "mistsplitterreforged.emblem-is1",
+        "inputs": {
+          "points": {
+            "fact": "mistsplitterreforged.emblemLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.anemoBonus",
+          "value": {
+            "refinement": [
+              0.08,
+              0.1,
+              0.12,
+              0.14,
+              0.16
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "anemo"
+          ]
+        },
+        {
+          "target": "attribute.geoBonus",
+          "value": {
+            "refinement": [
+              0.08,
+              0.1,
+              0.12,
+              0.14,
+              0.16
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "geo"
+          ]
+        },
+        {
+          "target": "attribute.electroBonus",
+          "value": {
+            "refinement": [
+              0.08,
+              0.1,
+              0.12,
+              0.14,
+              0.16
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "electro"
+          ]
+        },
+        {
+          "target": "attribute.hydroBonus",
+          "value": {
+            "refinement": [
+              0.08,
+              0.1,
+              0.12,
+              0.14,
+              0.16
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "hydro"
+          ]
+        },
+        {
+          "target": "attribute.pyroBonus",
+          "value": {
+            "refinement": [
+              0.08,
+              0.1,
+              0.12,
+              0.14,
+              0.16
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "pyro"
+          ]
+        },
+        {
+          "target": "attribute.cryoBonus",
+          "value": {
+            "refinement": [
+              0.08,
+              0.1,
+              0.12,
+              0.14,
+              0.16
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "cryo"
+          ]
+        },
+        {
+          "target": "attribute.dendroBonus",
+          "value": {
+            "refinement": [
+              0.08,
+              0.1,
+              0.12,
+              0.14,
+              0.16
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "dendro"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mistsplitterreforged.emblem-2",
+      "condition": {
+        "call": "mistsplitterreforged.emblem-is2",
+        "inputs": {
+          "points": {
+            "fact": "mistsplitterreforged.emblemLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.anemoBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "anemo"
+          ]
+        },
+        {
+          "target": "attribute.geoBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "geo"
+          ]
+        },
+        {
+          "target": "attribute.electroBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "electro"
+          ]
+        },
+        {
+          "target": "attribute.hydroBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "hydro"
+          ]
+        },
+        {
+          "target": "attribute.pyroBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "pyro"
+          ]
+        },
+        {
+          "target": "attribute.cryoBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "cryo"
+          ]
+        },
+        {
+          "target": "attribute.dendroBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "dendro"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mistsplitterreforged.emblem-3",
+      "condition": {
+        "call": "mistsplitterreforged.emblem-is3",
+        "inputs": {
+          "points": {
+            "fact": "mistsplitterreforged.emblemLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.anemoBonus",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "anemo"
+          ]
+        },
+        {
+          "target": "attribute.geoBonus",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "geo"
+          ]
+        },
+        {
+          "target": "attribute.electroBonus",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "electro"
+          ]
+        },
+        {
+          "target": "attribute.hydroBonus",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "hydro"
+          ]
+        },
+        {
+          "target": "attribute.pyroBonus",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "pyro"
+          ]
+        },
+        {
+          "target": "attribute.cryoBonus",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "cryo"
+          ]
+        },
+        {
+          "target": "attribute.dendroBonus",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          },
+          "ownerElements": [
+            "dendro"
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "mistsplitterreforged.emblemLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前雾切之巴印层数（普通元素伤害、施放爆发、能量未满）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "mistsplitterreforged.emblem-is1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "mistsplitterreforged.emblem-is2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "mistsplitterreforged.emblem-is3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    }
+  ]
 }

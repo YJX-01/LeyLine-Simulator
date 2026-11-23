@@ -226,17 +226,123 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "harangeppakufutsu.elemental",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "harangeppakufutsu.waves",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "harangeppakufutsu.elemental",
+      "appliesTo": {
+        "elements": [
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "harangeppakufutsu.waves",
+      "appliesTo": {
+        "categories": [
+          "normal"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "harangeppakufutsu.damage-per-wave",
+            "inputs": {
+              "basis": {
+                "fact": "harangeppakufutsu.consumedWaves"
+              },
+              "rate": {
+                "refinement": [
+                  0.2,
+                  0.25,
+                  0.3,
+                  0.35,
+                  0.4
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.4,
+                  0.5,
+                  0.6,
+                  0.7,
+                  0.8
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "harangeppakufutsu.consumedWaves": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "8秒波乱期间消耗的波穗层数（未生效填0）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "harangeppakufutsu.damage-per-wave",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ]
 }

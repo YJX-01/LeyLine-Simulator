@@ -226,17 +226,148 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "flowingpurity.skill-elements",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "flowingpurity.cleared-bond-elements",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "flowingpurity.skill-elements",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "action"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "categories": [
+            "skill"
+          ]
+        },
+        "cooldownMs": 10000
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 15000,
+        "phase": "after"
+      },
+      "appliesTo": {
+        "elements": [
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.08,
+              0.1,
+              0.12,
+              0.14,
+              0.16
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flowingpurity.cleared-bond-elements",
+      "appliesTo": {
+        "elements": [
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "flowingpurity.bond-to-elements",
+            "inputs": {
+              "basis": {
+                "fact": "flowingpurity.clearedBond"
+              },
+              "rate": {
+                "refinement": [
+                  0.02,
+                  0.025,
+                  0.03,
+                  0.035,
+                  0.04
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.12,
+                  0.15,
+                  0.18,
+                  0.21,
+                  0.24
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "flowingpurity.clearedBond": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "label": "15秒内清除的生命之契数值（未清除填0）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "flowingpurity.bond-to-elements",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "hp",
+        "to": "scalar",
+        "per": 1000
+      }
+    }
+  ]
 }

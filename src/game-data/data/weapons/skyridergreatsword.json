@@ -226,17 +226,67 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "skyridergreatsword.normal-charged-attack",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "skyridergreatsword.normal-charged-attack",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "categories": [
+            "normal",
+            "charged"
+          ],
+          "allowZeroDamage": true
+        },
+        "cooldownMs": 500
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 6000,
+        "phase": "after"
+      },
+      "stacking": {
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.06,
+              0.07,
+              0.08,
+              0.09,
+              0.1
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ]
 }

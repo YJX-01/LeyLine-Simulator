@@ -226,15 +226,31 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按当次已完成的声援任务检查项求值。每项独立增加攻击力，最多计六项，效果仅适用于装备者。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "ultimateoverlordsmegamagicsword.attackPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "ultimateoverlordsmegamagicsword.melusine-support",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "ultimateoverlordsmegamagicsword.melusine-task-support",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次已完成的声援任务检查项求值。每项独立增加攻击力，最多计六项，效果仅适用于装备者。"
       }
     ]
   },
@@ -256,7 +272,152 @@
           }
         }
       ]
+    },
+    {
+      "id": "ultimateoverlordsmegamagicsword.melusine-support",
+      "condition": {
+        "call": "ultimateoverlordsmegamagicsword.full-melusine-support",
+        "inputs": {
+          "state": {
+            "fact": "ultimateoverlordsmegamagicsword.melusineSupportState"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ultimateoverlordsmegamagicsword.melusine-task-support",
+      "condition": {
+        "call": "ultimateoverlordsmegamagicsword.melusine-task-support-state",
+        "inputs": {
+          "state": {
+            "fact": "ultimateoverlordsmegamagicsword.melusineSupportState"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "ultimateoverlordsmegamagicsword.melusine-task-support-attack",
+            "inputs": {
+              "basis": {
+                "call": "ultimateoverlordsmegamagicsword.melusine-task-support-factor",
+                "inputs": {
+                  "basis": {
+                    "fact": "ultimateoverlordsmegamagicsword.melusineTaskCount"
+                  }
+                },
+                "output": "factor"
+              },
+              "rate": {
+                "refinement": [
+                  0.02,
+                  0.025,
+                  0.03,
+                  0.035,
+                  0.04
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "ultimateoverlordsmegamagicsword.melusineSupportState": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "无声援",
+          "满额声援",
+          "按任务进度"
+        ]
+      },
+      "label": "美露莘声援当次进度"
+    },
+    "ultimateoverlordsmegamagicsword.melusineTaskCount": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "已完成的魔剑声援任务检查项（0至12项）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "ultimateoverlordsmegamagicsword.full-melusine-support",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "state",
+        "equals": "满额声援",
+        "values": [
+          "无声援",
+          "满额声援",
+          "按任务进度"
+        ]
+      }
+    },
+    {
+      "id": "ultimateoverlordsmegamagicsword.melusine-task-support-state",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "state",
+        "equals": "按任务进度",
+        "values": [
+          "无声援",
+          "满额声援",
+          "按任务进度"
+        ]
+      }
+    },
+    {
+      "id": "ultimateoverlordsmegamagicsword.melusine-task-support-factor",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "cap": 6,
+        "output": "factor",
+        "maxInput": 12
+      }
+    },
+    {
+      "id": "ultimateoverlordsmegamagicsword.melusine-task-support-attack",
+      "template": {
+        "id": "stat-product",
+        "revision": "1",
+        "unit": "scalar"
+      }
+    }
+  ]
 }

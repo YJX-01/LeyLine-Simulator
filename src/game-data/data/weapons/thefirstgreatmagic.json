@@ -226,15 +226,51 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "thefirstgreatmagic.charged.damageBonus",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "thefirstgreatmagic.gimmick-1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "thefirstgreatmagic.gimmick-2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "thefirstgreatmagic.gimmick-3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "thefirstgreatmagic.theatrics-1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "thefirstgreatmagic.theatrics-2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "thefirstgreatmagic.theatrics-3",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -261,7 +297,261 @@
           }
         }
       ]
+    },
+    {
+      "id": "thefirstgreatmagic.gimmick-1",
+      "condition": {
+        "call": "thefirstgreatmagic.gimmick-.is1",
+        "inputs": {
+          "points": {
+            "fact": "thefirstgreatmagic.sameElements"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "thefirstgreatmagic.gimmick-2",
+      "condition": {
+        "call": "thefirstgreatmagic.gimmick-.is2",
+        "inputs": {
+          "points": {
+            "fact": "thefirstgreatmagic.sameElements"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.32,
+              0.4,
+              0.48,
+              0.56,
+              0.64
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "thefirstgreatmagic.gimmick-3",
+      "condition": {
+        "call": "thefirstgreatmagic.gimmick-.is3",
+        "inputs": {
+          "points": {
+            "fact": "thefirstgreatmagic.sameElements"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.48,
+              0.6,
+              0.72,
+              0.84,
+              0.96
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "thefirstgreatmagic.theatrics-1",
+      "condition": {
+        "call": "thefirstgreatmagic.theatrics-.is1",
+        "inputs": {
+          "points": {
+            "fact": "thefirstgreatmagic.differentElements"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.movementSpeed",
+          "value": {
+            "refinement": [
+              0.04,
+              0.06,
+              0.08,
+              0.1,
+              0.12
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "thefirstgreatmagic.theatrics-2",
+      "condition": {
+        "call": "thefirstgreatmagic.theatrics-.is2",
+        "inputs": {
+          "points": {
+            "fact": "thefirstgreatmagic.differentElements"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.movementSpeed",
+          "value": {
+            "refinement": [
+              0.07,
+              0.09,
+              0.11,
+              0.13,
+              0.15
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "thefirstgreatmagic.theatrics-3",
+      "condition": {
+        "call": "thefirstgreatmagic.theatrics-.is3",
+        "inputs": {
+          "points": {
+            "fact": "thefirstgreatmagic.differentElements"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.movementSpeed",
+          "value": {
+            "refinement": [
+              0.1,
+              0.12,
+              0.14,
+              0.16,
+              0.18
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "thefirstgreatmagic.sameElements": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "与装备者元素类型相同的角色人数（计装备者，三名及以上填3）"
+    },
+    "thefirstgreatmagic.differentElements": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "与装备者元素类型不同的角色人数"
+    }
+  },
+  "formulas": [
+    {
+      "id": "thefirstgreatmagic.gimmick-.is1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "thefirstgreatmagic.gimmick-.is2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "thefirstgreatmagic.gimmick-.is3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "thefirstgreatmagic.theatrics-.is1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "thefirstgreatmagic.theatrics-.is2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "thefirstgreatmagic.theatrics-.is3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    }
+  ]
 }

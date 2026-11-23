@@ -226,17 +226,98 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。阳炎矢按独立输出计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "scionoftheblazingsun.heartsearer",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。阳炎矢按独立输出计算。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "scionoftheblazingsun.sunfire-arrowTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "重击已触发阳炎矢且本次命中目标（10秒间隔）"
+    },
+    "scionoftheblazingsun.heartseared": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本目标当前受灼心影响（阳炎矢命中后10秒内）"
+    }
+  },
+  "hits": [
+    {
+      "id": "scionoftheblazingsun.sunfire-arrow",
+      "name": "阳炎矢",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        "scionoftheblazingsun.sunfire-arrowTriggered"
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": {
+            "refinement": [
+              0.6,
+              0.75,
+              0.9,
+              1.05,
+              1.2
+            ],
+            "unit": "scalar"
+          }
+        },
+        "output": "base"
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "scionoftheblazingsun.heartsearer",
+      "appliesTo": {
+        "categories": [
+          "charged"
+        ]
+      },
+      "condition": {
+        "fact": "scionoftheblazingsun.heartseared"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ]
 }

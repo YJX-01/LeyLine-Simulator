@@ -266,6 +266,91 @@
           "kind": "reset-skill"
         }
       }
+    },
+    {
+      "id": "sacrificialsword.confirmed-reset",
+      "application": "explicit",
+      "appliesTo": {
+        "categories": [
+          "skill"
+        ]
+      },
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "onField"
+                      },
+                      "term1": {
+                        "call": "nearby.one",
+                        "inputs": {
+                          "count": {
+                            "fact": "targetsDamaged"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "sacrificial.resetReady"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "sacrificial.resetTriggered"
+              }
+            },
+            "output": "active"
+          },
+          "term1": {
+            "call": "skill.cooldown-positive",
+            "inputs": {
+              "duration": {
+                "fact": "skillCooldownBeforeResetMs"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.confirmedSkillChargesRestored",
+          "value": {
+            "amount": 1,
+            "unit": "count"
+          }
+        }
+      ]
     }
-  ]
+  ],
+  "facts": {
+    "sacrificial.resetReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "祭礼效果的触发间隔已结束"
+    },
+    "sacrificial.resetTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次祭礼重置的概率判定已成功"
+    }
+  }
 }

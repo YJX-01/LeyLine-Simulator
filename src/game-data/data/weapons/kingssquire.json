@@ -226,17 +226,93 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。森林教诲结束伤害按独立输出计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "kingssquire.forest-teachings",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。森林教诲结束伤害按独立输出计算。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "kingssquire.forest-teachingsActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "森林教诲已生效（战技或爆发后12秒内，切换清除）"
+    },
+    "kingssquire.teachingsExpired": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次森林教诲结束或被切换移除并命中"
+    }
+  },
+  "buffs": [
+    {
+      "id": "kingssquire.forest-teachings",
+      "condition": {
+        "fact": "kingssquire.forest-teachingsActive"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              60,
+              80,
+              100,
+              120,
+              140
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    }
+  ],
+  "hits": [
+    {
+      "id": "kingssquire.forest-release",
+      "name": "森林教诲结束伤害",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        "kingssquire.teachingsExpired"
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": {
+            "refinement": [
+              1,
+              1.2,
+              1.4,
+              1.6,
+              1.8
+            ],
+            "unit": "scalar"
+          }
+        },
+        "output": "base"
+      }
+    }
+  ]
 }

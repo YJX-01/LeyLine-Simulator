@@ -226,17 +226,109 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "lostprayertothesacredwinds.movement",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "lostprayertothesacredwinds.battle-stacks",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "lostprayertothesacredwinds.movement",
+      "modifiers": [
+        {
+          "target": "attribute.movementSpeed",
+          "value": 0.1
+        }
+      ]
+    },
+    {
+      "id": "lostprayertothesacredwinds.battle-stacks",
+      "appliesTo": {
+        "elements": [
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "lostprayertothesacredwinds.damage-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "lostprayertothesacredwinds.battleLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.08,
+                  0.1,
+                  0.12,
+                  0.14,
+                  0.16
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.32,
+                  0.4,
+                  0.48,
+                  0.56,
+                  0.64
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "lostprayertothesacredwinds.battleLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前战斗层数（场上每4秒1层，倒下或退场清除）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "lostprayertothesacredwinds.damage-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ]
 }

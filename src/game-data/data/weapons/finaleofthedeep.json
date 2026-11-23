@@ -226,17 +226,126 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "finaleofthedeep.skill-attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "finaleofthedeep.cleared-bond-attack",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "finaleofthedeep.skill-attack",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "action"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "categories": [
+            "skill"
+          ]
+        },
+        "cooldownMs": 10000
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 15000,
+        "phase": "after"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "finaleofthedeep.cleared-bond-attack",
+      "modifiers": [
+        {
+          "target": "attribute.flatAttack",
+          "value": {
+            "call": "finaleofthedeep.bond-to-attack",
+            "inputs": {
+              "basis": {
+                "fact": "finaleofthedeep.clearedBond"
+              },
+              "rate": {
+                "refinement": [
+                  0.024,
+                  0.03,
+                  0.036,
+                  0.042,
+                  0.048
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  150,
+                  187.5,
+                  225,
+                  262.5,
+                  300
+                ],
+                "unit": "attack"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "finaleofthedeep.clearedBond": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "label": "15秒内清除的生命之契数值（未清除填0）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "finaleofthedeep.bond-to-attack",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "hp",
+        "to": "attack",
+        "per": 1
+      }
+    }
+  ]
 }

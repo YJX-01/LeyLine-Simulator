@@ -226,15 +226,26 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "surfsup.hpPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "surfsup.scorching-summer",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -256,7 +267,71 @@
           }
         }
       ]
+    },
+    {
+      "id": "surfsup.scorching-summer",
+      "appliesTo": {
+        "categories": [
+          "normal"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "surfsup.damage-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "surfsup.summerLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.12,
+                  0.15,
+                  0.18,
+                  0.21,
+                  0.24
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.48,
+                  0.6,
+                  0.72,
+                  0.84,
+                  0.96
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "surfsup.summerLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前炽夏层数（战技后14秒内，普攻消耗、蒸发补充）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "surfsup.damage-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ]
 }

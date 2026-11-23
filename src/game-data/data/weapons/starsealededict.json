@@ -226,15 +226,46 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "starsealededict.critDamage",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "starsealededict.crystal-mastery",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "starsealededict.torch-mastery-1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "starsealededict.torch-mastery-2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "starsealededict.torch-mastery-3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "starsealededict.torch-crit",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -256,7 +287,262 @@
           }
         }
       ]
+    },
+    {
+      "id": "starsealededict.crystal-mastery",
+      "condition": {
+        "fact": "starsealededict.crystalWindow"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              48,
+              60,
+              72,
+              84,
+              96
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "starsealededict.torch-mastery-1",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "starsealededict.crystalWindow"
+          },
+          "term1": {
+            "call": "starsealededict.torch-is1",
+            "inputs": {
+              "points": {
+                "fact": "starsealededict.torchLayers"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              24,
+              30,
+              36,
+              42,
+              48
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "starsealededict.torch-mastery-2",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "starsealededict.crystalWindow"
+          },
+          "term1": {
+            "call": "starsealededict.torch-is2",
+            "inputs": {
+              "points": {
+                "fact": "starsealededict.torchLayers"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              48,
+              60,
+              72,
+              84,
+              96
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "starsealededict.torch-mastery-3",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "starsealededict.crystalWindow"
+          },
+          "term1": {
+            "call": "starsealededict.torch-is3",
+            "inputs": {
+              "points": {
+                "fact": "starsealededict.torchLayers"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              72,
+              90,
+              108,
+              126,
+              144
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "starsealededict.torch-crit",
+      "appliesTo": {
+        "families": [
+          "stellar-conduct"
+        ]
+      },
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "starsealededict.crystalWindow"
+          },
+          "term1": {
+            "fact": "starsealededict.stellarConduct"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critDamage",
+          "value": {
+            "call": "starsealededict.crit-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "starsealededict.torchLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.12,
+                  0.15,
+                  0.18,
+                  0.21,
+                  0.24
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.36,
+                  0.45,
+                  0.54,
+                  0.63,
+                  0.72
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "starsealededict.crystalWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "晶质调合有效（战技后20秒）"
+    },
+    "starsealededict.torchLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前炬中法度层数（晶质调合期间队伍反应，最多3层）"
+    },
+    "starsealededict.stellarConduct": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者已激活辉映·星超导"
+    }
+  },
+  "formulas": [
+    {
+      "id": "starsealededict.torch-is1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "starsealededict.torch-is2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "starsealededict.torch-is3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "starsealededict.crit-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ]
 }

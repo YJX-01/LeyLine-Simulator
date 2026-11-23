@@ -228,15 +228,106 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。",
     "mechanisms": [
       {
-        "id": "explicit-output-scope",
+        "id": "confirmed-direct-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "amenomakageuchi.directEnergy",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次触发、装备件数或精炼档位、实际受益者和已确认的触发条件计算。"
+      },
+      {
+        "id": "direct-energy-timeline",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "amenomakageuchi.directEnergyTriggered": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "元素爆发消耗胤种后已满2秒，本次回能（战技每5秒获得一枚、胤种存续30秒）"
+    },
+    "amenomakageuchi.consumedSeeds": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次爆发消耗的胤种（0至3枚）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "amenomakageuchi.directEnergy.count",
+      "template": {
+        "id": "linear-bonus",
+        "input": "count",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "amenomakageuchi.directEnergy.amount",
+      "template": {
+        "id": "stat-product",
+        "unit": "energy",
+        "revision": "1"
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "amenomakageuchi.directEnergy",
+      "application": "explicit",
+      "condition": {
+        "fact": "amenomakageuchi.directEnergyTriggered"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyRestored",
+          "value": {
+            "call": "amenomakageuchi.directEnergy.amount",
+            "inputs": {
+              "basis": {
+                "refinement": [
+                  6,
+                  7.5,
+                  9,
+                  10.5,
+                  12
+                ],
+                "unit": "energy"
+              },
+              "rate": {
+                "call": "amenomakageuchi.directEnergy.count",
+                "inputs": {
+                  "count": {
+                    "fact": "amenomakageuchi.consumedSeeds"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
 }

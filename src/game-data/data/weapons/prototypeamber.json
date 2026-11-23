@@ -228,15 +228,103 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已支持查询一次已确认的回复。爆发后六秒内每两秒的自动回复、多持有者覆盖与实际到账量待接入。",
     "mechanisms": [
       {
-        "id": "explicit-output-scope",
+        "id": "confirmed-healing-tick",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "prototypeamber.recovery",
+            "revision": "1"
+          }
+        ],
+        "reason": "每次治疗分别使用受益者的生命值上限和受治疗加成，以及持有者的治疗加成。"
+      },
+      {
+        "id": "confirmed-energy-tick",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "prototypeamber.recovery.1",
+            "revision": "1"
+          }
+        ],
+        "reason": "每次只给持有者恢复对应精炼档的固定元素能量。"
+      },
+      {
+        "id": "recovery-timing",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "爆发后六秒内每两秒的自动回复、多持有者覆盖与实际到账量待接入。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "prototypeamber.recoveryTick": {
+      "label": "试作金珀本次周期回复已触发",
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  },
+  "buffs": [
+    {
+      "id": "prototypeamber.recovery",
+      "recipient": "team",
+      "application": "explicit",
+      "condition": {
+        "fact": "prototypeamber.recoveryTick"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.equipmentHealing",
+          "value": {
+            "call": "healing.max-hp",
+            "inputs": {
+              "maxHp": {
+                "stat": "hp",
+                "actor": "recipient"
+              },
+              "rate": {
+                "refinement": [
+                  0.04,
+                  0.045,
+                  0.05,
+                  0.055,
+                  0.06
+                ],
+                "unit": "scalar"
+              },
+              "outgoing": {
+                "stat": "healingBonus"
+              },
+              "incoming": {
+                "stat": "incomingHealingBonus",
+                "actor": "recipient"
+              }
+            }
+          }
+        },
+        {
+          "target": "attribute.directEnergyRestored",
+          "recipient": "owner",
+          "value": {
+            "refinement": [
+              4,
+              4.5,
+              5,
+              5.5,
+              6
+            ],
+            "unit": "energy"
+          }
+        }
+      ]
+    }
+  ]
 }

@@ -228,15 +228,361 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "各精炼低生命值的重击伤害已采用。抗打断档位待接入。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "ferrousshadow.low-hp-charged-r1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "ferrousshadow.low-hp-charged-r2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "ferrousshadow.low-hp-charged-r3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "ferrousshadow.low-hp-charged-r4",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "ferrousshadow.low-hp-charged-r5",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+      },
+      {
+        "id": "pending-output-scope",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "各精炼低生命值的重击伤害已采用。抗打断档位待接入。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "formulas": [
+    {
+      "id": "ferrousshadow.is-r1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 5
+      }
+    },
+    {
+      "id": "ferrousshadow.below-hp-r1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "scalar",
+        "relation": "lt",
+        "threshold": 0.7,
+        "maxInput": 1
+      }
+    },
+    {
+      "id": "ferrousshadow.is-r2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 5
+      }
+    },
+    {
+      "id": "ferrousshadow.below-hp-r2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "scalar",
+        "relation": "lt",
+        "threshold": 0.75,
+        "maxInput": 1
+      }
+    },
+    {
+      "id": "ferrousshadow.is-r3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 5
+      }
+    },
+    {
+      "id": "ferrousshadow.below-hp-r3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "scalar",
+        "relation": "lt",
+        "threshold": 0.8,
+        "maxInput": 1
+      }
+    },
+    {
+      "id": "ferrousshadow.is-r4",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 4,
+        "maxInput": 5
+      }
+    },
+    {
+      "id": "ferrousshadow.below-hp-r4",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "scalar",
+        "relation": "lt",
+        "threshold": 0.85,
+        "maxInput": 1
+      }
+    },
+    {
+      "id": "ferrousshadow.is-r5",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 5,
+        "maxInput": 5
+      }
+    },
+    {
+      "id": "ferrousshadow.below-hp-r5",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "scalar",
+        "relation": "lt",
+        "threshold": 0.9,
+        "maxInput": 1
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "ferrousshadow.low-hp-charged-r1",
+      "appliesTo": {
+        "categories": [
+          "charged"
+        ]
+      },
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "call": "ferrousshadow.is-r1",
+            "inputs": {
+              "points": {
+                "state": "refinement"
+              }
+            },
+            "output": "active"
+          },
+          "term1": {
+            "call": "ferrousshadow.below-hp-r1",
+            "inputs": {
+              "points": {
+                "fact": "hpRatio"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": 0.3
+        }
+      ]
+    },
+    {
+      "id": "ferrousshadow.low-hp-charged-r2",
+      "appliesTo": {
+        "categories": [
+          "charged"
+        ]
+      },
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "call": "ferrousshadow.is-r2",
+            "inputs": {
+              "points": {
+                "state": "refinement"
+              }
+            },
+            "output": "active"
+          },
+          "term1": {
+            "call": "ferrousshadow.below-hp-r2",
+            "inputs": {
+              "points": {
+                "fact": "hpRatio"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": 0.35
+        }
+      ]
+    },
+    {
+      "id": "ferrousshadow.low-hp-charged-r3",
+      "appliesTo": {
+        "categories": [
+          "charged"
+        ]
+      },
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "call": "ferrousshadow.is-r3",
+            "inputs": {
+              "points": {
+                "state": "refinement"
+              }
+            },
+            "output": "active"
+          },
+          "term1": {
+            "call": "ferrousshadow.below-hp-r3",
+            "inputs": {
+              "points": {
+                "fact": "hpRatio"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": 0.4
+        }
+      ]
+    },
+    {
+      "id": "ferrousshadow.low-hp-charged-r4",
+      "appliesTo": {
+        "categories": [
+          "charged"
+        ]
+      },
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "call": "ferrousshadow.is-r4",
+            "inputs": {
+              "points": {
+                "state": "refinement"
+              }
+            },
+            "output": "active"
+          },
+          "term1": {
+            "call": "ferrousshadow.below-hp-r4",
+            "inputs": {
+              "points": {
+                "fact": "hpRatio"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": 0.45
+        }
+      ]
+    },
+    {
+      "id": "ferrousshadow.low-hp-charged-r5",
+      "appliesTo": {
+        "categories": [
+          "charged"
+        ]
+      },
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "call": "ferrousshadow.is-r5",
+            "inputs": {
+              "points": {
+                "state": "refinement"
+              }
+            },
+            "output": "active"
+          },
+          "term1": {
+            "call": "ferrousshadow.below-hp-r5",
+            "inputs": {
+              "points": {
+                "fact": "hpRatio"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": 0.5
+        }
+      ]
+    }
+  ]
 }

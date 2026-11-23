@@ -226,17 +226,65 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "芒性与荒性冲击均为独立物理伤害，按装备者攻击力、合法精炼和当次触发计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
+        "resolution": "implemented",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "芒性与荒性冲击均为独立物理伤害，按装备者攻击力、合法精炼和当次触发计算。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "swordofnarzissenkreuz.wielderWithoutArkhe": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "水仙十字之剑的装备者不具备始基力"
+    },
+    "swordofnarzissenkreuz.arkheBlastReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "普通攻击、重击或下落攻击命中后，本次芒性或荒性能量冲击已触发并命中当前目标（间隔至少12秒）"
+    }
+  },
+  "hits": [
+    {
+      "id": "swordofnarzissenkreuz.arkhe-blast",
+      "name": "勇者之剑·芒性／荒性能量冲击",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        "swordofnarzissenkreuz.wielderWithoutArkhe",
+        "swordofnarzissenkreuz.arkheBlastReady"
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": {
+            "refinement": [
+              1.6,
+              2,
+              2.4,
+              2.8,
+              3.2
+            ],
+            "unit": "scalar"
+          }
+        },
+        "output": "base"
+      }
+    }
+  ]
 }

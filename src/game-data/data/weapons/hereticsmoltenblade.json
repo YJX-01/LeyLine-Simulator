@@ -226,17 +226,233 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按当次生效的初光及其记录的上一秒移动距离求值，达到7米时取最高加成。装备者退场时排除。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "hereticsmoltenblade.first-light-minimum",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "hereticsmoltenblade.first-light-maximum",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "hereticsmoltenblade.first-light-distance",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次生效的初光及其记录的上一秒移动距离求值，达到7米时取最高加成。装备者退场时排除。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "hereticsmoltenblade.firstLightState": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "无效果",
+          "最低加成",
+          "最高加成",
+          "按上一秒移动距离"
+        ]
+      },
+      "label": "映落瞳中的初光当次状态（战技后14秒内有效，退场移除）"
+    },
+    "hereticsmoltenblade.firstLightPreviousSecondDistance": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "映落瞳中的初光记录的上一秒移动距离（米）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "hereticsmoltenblade.first-light-minimum-state",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "state",
+        "equals": "最低加成",
+        "values": [
+          "无效果",
+          "最低加成",
+          "最高加成",
+          "按上一秒移动距离"
+        ]
+      }
+    },
+    {
+      "id": "hereticsmoltenblade.first-light-maximum-state",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "state",
+        "equals": "最高加成",
+        "values": [
+          "无效果",
+          "最低加成",
+          "最高加成",
+          "按上一秒移动距离"
+        ]
+      }
+    },
+    {
+      "id": "hereticsmoltenblade.first-light-distance-state",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "state",
+        "equals": "按上一秒移动距离",
+        "values": [
+          "无效果",
+          "最低加成",
+          "最高加成",
+          "按上一秒移动距离"
+        ]
+      }
+    },
+    {
+      "id": "hereticsmoltenblade.first-light-distance-factor",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "basis",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 0.14285714285714285,
+        "offset": 1,
+        "threshold": 0,
+        "cap": 2,
+        "output": "factor"
+      }
+    },
+    {
+      "id": "hereticsmoltenblade.first-light-distance-attack",
+      "template": {
+        "id": "stat-product",
+        "revision": "1",
+        "unit": "scalar"
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "hereticsmoltenblade.first-light-minimum",
+      "condition": {
+        "call": "hereticsmoltenblade.first-light-minimum-state",
+        "inputs": {
+          "state": {
+            "fact": "hereticsmoltenblade.firstLightState"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "condition": {
+            "fact": "onField"
+          },
+          "value": {
+            "refinement": [
+              0.18,
+              0.225,
+              0.27,
+              0.315,
+              0.36
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hereticsmoltenblade.first-light-maximum",
+      "condition": {
+        "call": "hereticsmoltenblade.first-light-maximum-state",
+        "inputs": {
+          "state": {
+            "fact": "hereticsmoltenblade.firstLightState"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "condition": {
+            "fact": "onField"
+          },
+          "value": {
+            "refinement": [
+              0.36,
+              0.45,
+              0.54,
+              0.63,
+              0.72
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hereticsmoltenblade.first-light-distance",
+      "condition": {
+        "call": "hereticsmoltenblade.first-light-distance-state",
+        "inputs": {
+          "state": {
+            "fact": "hereticsmoltenblade.firstLightState"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "condition": {
+            "fact": "onField"
+          },
+          "value": {
+            "call": "hereticsmoltenblade.first-light-distance-attack",
+            "inputs": {
+              "basis": {
+                "call": "hereticsmoltenblade.first-light-distance-factor",
+                "inputs": {
+                  "basis": {
+                    "fact": "hereticsmoltenblade.firstLightPreviousSecondDistance"
+                  }
+                },
+                "output": "factor"
+              },
+              "rate": {
+                "refinement": [
+                  0.18,
+                  0.225,
+                  0.27,
+                  0.315,
+                  0.36
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ]
 }

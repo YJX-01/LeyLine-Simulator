@@ -226,17 +226,84 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "alleyhunter.damage",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "alleyhunter.damageStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前保留的增伤层数（后台每秒加1层，上场超过4秒后每秒减2层）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "alleyhunter.retained-damage",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "alleyhunter.damage",
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "alleyhunter.retained-damage",
+            "inputs": {
+              "basis": {
+                "fact": "alleyhunter.damageStacks"
+              },
+              "rate": {
+                "refinement": [
+                  0.02,
+                  0.025,
+                  0.03,
+                  0.035,
+                  0.04
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.2,
+                  0.25,
+                  0.3,
+                  0.35,
+                  0.4
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ]
 }

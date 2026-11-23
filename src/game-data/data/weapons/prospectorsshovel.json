@@ -226,17 +226,110 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "prospectorsshovel.electro-charged",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "prospectorsshovel.lunar-charged",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "prospectorsshovel.lunar-charged-full",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "prospectorsshovel.electro-charged",
+      "appliesTo": {
+        "families": [
+          "transformative"
+        ],
+        "reactionIds": [
+          "electro-charged"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.transformative.damageBonus",
+          "value": {
+            "refinement": [
+              0.48,
+              0.6,
+              0.72,
+              0.84,
+              0.96
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "prospectorsshovel.lunar-charged",
+      "appliesTo": {
+        "families": [
+          "lunar-charged"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.lunar.damageBonus",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "prospectorsshovel.lunar-charged-full",
+      "appliesTo": {
+        "families": [
+          "lunar-charged"
+        ]
+      },
+      "condition": {
+        "fact": "fullMoonsign"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.lunar.damageBonus",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ]
 }

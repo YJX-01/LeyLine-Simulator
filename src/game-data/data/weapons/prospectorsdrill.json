@@ -226,17 +226,147 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "prospectorsdrill.resistance-attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "prospectorsdrill.resistance-elements",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "prospectorsdrill.consumedMarks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "抗争10秒内消耗的团结标记（未生效填0，最多3枚）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "prospectorsdrill.attack-per-mark",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "prospectorsdrill.elements-per-mark",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "prospectorsdrill.resistance-attack",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "prospectorsdrill.attack-per-mark",
+            "inputs": {
+              "basis": {
+                "fact": "prospectorsdrill.consumedMarks"
+              },
+              "rate": {
+                "refinement": [
+                  0.03,
+                  0.04,
+                  0.05,
+                  0.06,
+                  0.07
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.09,
+                  0.12,
+                  0.15,
+                  0.18,
+                  0.21
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "prospectorsdrill.resistance-elements",
+      "appliesTo": {
+        "elements": [
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "prospectorsdrill.elements-per-mark",
+            "inputs": {
+              "basis": {
+                "fact": "prospectorsdrill.consumedMarks"
+              },
+              "rate": {
+                "refinement": [
+                  0.07,
+                  0.085,
+                  0.1,
+                  0.115,
+                  0.13
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.21,
+                  0.255,
+                  0.3,
+                  0.345,
+                  0.39
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ]
 }

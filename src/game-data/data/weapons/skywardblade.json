@@ -226,15 +226,31 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。破空之势追加伤害按独立输出计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "skywardblade.critRate",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "skywardblade.piercing-might",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "skywardblade.piercing-might.1",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。破空之势追加伤害按独立输出计算。"
       }
     ]
   },
@@ -256,7 +272,89 @@
           }
         }
       ]
+    },
+    {
+      "id": "skywardblade.piercing-might",
+      "condition": {
+        "fact": "skywardblade.piercingMight"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.movementSpeed",
+          "value": {
+            "refinement": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "unit": "scalar"
+          }
+        },
+        {
+          "target": "attribute.normalAttackSpeed",
+          "value": {
+            "refinement": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "skywardblade.piercingMight": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "破空之势已生效（施放爆发后的12秒内）"
+    },
+    "skywardblade.piercing-strikeTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "破空之势期间普攻或重击触发追加伤害并命中"
+    }
+  },
+  "hits": [
+    {
+      "id": "skywardblade.piercing-strike",
+      "name": "破空之势追加伤害",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        "skywardblade.piercing-strikeTriggered",
+        "skywardblade.piercingMight"
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": {
+            "refinement": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "unit": "scalar"
+          }
+        },
+        "output": "base"
+      }
+    }
+  ]
 }

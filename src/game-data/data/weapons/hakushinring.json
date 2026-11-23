@@ -226,17 +226,316 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "hakushinring.anemo-reaction",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "hakushinring.geo-reaction",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "hakushinring.electro-reaction",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "hakushinring.hydro-reaction",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "hakushinring.pyro-reaction",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "hakushinring.cryo-reaction",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "hakushinring.dendro-reaction",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "hakushinring.anemoReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发涉及风元素的雷元素相关反应，仍在6秒内"
+    },
+    "hakushinring.geoReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发涉及岩元素的雷元素相关反应，仍在6秒内"
+    },
+    "hakushinring.electroReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发涉及雷元素的雷元素相关反应，仍在6秒内"
+    },
+    "hakushinring.hydroReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发涉及水元素的雷元素相关反应，仍在6秒内"
+    },
+    "hakushinring.pyroReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发涉及火元素的雷元素相关反应，仍在6秒内"
+    },
+    "hakushinring.cryoReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发涉及冰元素的雷元素相关反应，仍在6秒内"
+    },
+    "hakushinring.dendroReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发涉及草元素的雷元素相关反应，仍在6秒内"
+    }
+  },
+  "buffs": [
+    {
+      "id": "hakushinring.anemo-reaction",
+      "recipient": "team",
+      "condition": {
+        "fact": "hakushinring.anemoReactionWindow"
+      },
+      "stacking": {
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.anemoBonus",
+          "value": {
+            "refinement": [
+              0.1,
+              0.125,
+              0.15,
+              0.175,
+              0.2
+            ],
+            "unit": "scalar"
+          },
+          "recipientElements": [
+            "anemo"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hakushinring.geo-reaction",
+      "recipient": "team",
+      "condition": {
+        "fact": "hakushinring.geoReactionWindow"
+      },
+      "stacking": {
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.geoBonus",
+          "value": {
+            "refinement": [
+              0.1,
+              0.125,
+              0.15,
+              0.175,
+              0.2
+            ],
+            "unit": "scalar"
+          },
+          "recipientElements": [
+            "geo"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hakushinring.electro-reaction",
+      "recipient": "team",
+      "condition": {
+        "fact": "hakushinring.electroReactionWindow"
+      },
+      "stacking": {
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.electroBonus",
+          "value": {
+            "refinement": [
+              0.1,
+              0.125,
+              0.15,
+              0.175,
+              0.2
+            ],
+            "unit": "scalar"
+          },
+          "recipientElements": [
+            "electro"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hakushinring.hydro-reaction",
+      "recipient": "team",
+      "condition": {
+        "fact": "hakushinring.hydroReactionWindow"
+      },
+      "stacking": {
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.hydroBonus",
+          "value": {
+            "refinement": [
+              0.1,
+              0.125,
+              0.15,
+              0.175,
+              0.2
+            ],
+            "unit": "scalar"
+          },
+          "recipientElements": [
+            "hydro"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hakushinring.pyro-reaction",
+      "recipient": "team",
+      "condition": {
+        "fact": "hakushinring.pyroReactionWindow"
+      },
+      "stacking": {
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.pyroBonus",
+          "value": {
+            "refinement": [
+              0.1,
+              0.125,
+              0.15,
+              0.175,
+              0.2
+            ],
+            "unit": "scalar"
+          },
+          "recipientElements": [
+            "pyro"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hakushinring.cryo-reaction",
+      "recipient": "team",
+      "condition": {
+        "fact": "hakushinring.cryoReactionWindow"
+      },
+      "stacking": {
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.cryoBonus",
+          "value": {
+            "refinement": [
+              0.1,
+              0.125,
+              0.15,
+              0.175,
+              0.2
+            ],
+            "unit": "scalar"
+          },
+          "recipientElements": [
+            "cryo"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hakushinring.dendro-reaction",
+      "recipient": "team",
+      "condition": {
+        "fact": "hakushinring.dendroReactionWindow"
+      },
+      "stacking": {
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.dendroBonus",
+          "value": {
+            "refinement": [
+              0.1,
+              0.125,
+              0.15,
+              0.175,
+              0.2
+            ],
+            "unit": "scalar"
+          },
+          "recipientElements": [
+            "dendro"
+          ]
+        }
+      ]
+    }
+  ]
 }

@@ -226,17 +226,289 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "fruitoffulfillment.wax-mastery-1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "fruitoffulfillment.wax-mastery-2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "fruitoffulfillment.wax-mastery-3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "fruitoffulfillment.wax-mastery-4",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "fruitoffulfillment.wax-mastery-5",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "fruitoffulfillment.wane-attack",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "fruitoffulfillment.waxAndWaneLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前盈缺层数（触发反应后获得，连续6秒未触发时减1层）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "fruitoffulfillment.wax-mastery-.is1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 5
+      }
+    },
+    {
+      "id": "fruitoffulfillment.wax-mastery-.is2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 5
+      }
+    },
+    {
+      "id": "fruitoffulfillment.wax-mastery-.is3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 5
+      }
+    },
+    {
+      "id": "fruitoffulfillment.wax-mastery-.is4",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 4,
+        "maxInput": 5
+      }
+    },
+    {
+      "id": "fruitoffulfillment.wax-mastery-.is5",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 5,
+        "maxInput": 5
+      }
+    },
+    {
+      "id": "fruitoffulfillment.attack-per-layer",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "layers",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": -0.05,
+        "offset": 0,
+        "threshold": 0,
+        "maxInput": 5,
+        "output": "value"
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "fruitoffulfillment.wax-mastery-1",
+      "condition": {
+        "call": "fruitoffulfillment.wax-mastery-.is1",
+        "inputs": {
+          "points": {
+            "fact": "fruitoffulfillment.waxAndWaneLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              24,
+              27,
+              30,
+              33,
+              36
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fruitoffulfillment.wax-mastery-2",
+      "condition": {
+        "call": "fruitoffulfillment.wax-mastery-.is2",
+        "inputs": {
+          "points": {
+            "fact": "fruitoffulfillment.waxAndWaneLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              48,
+              54,
+              60,
+              66,
+              72
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fruitoffulfillment.wax-mastery-3",
+      "condition": {
+        "call": "fruitoffulfillment.wax-mastery-.is3",
+        "inputs": {
+          "points": {
+            "fact": "fruitoffulfillment.waxAndWaneLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              72,
+              81,
+              90,
+              99,
+              108
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fruitoffulfillment.wax-mastery-4",
+      "condition": {
+        "call": "fruitoffulfillment.wax-mastery-.is4",
+        "inputs": {
+          "points": {
+            "fact": "fruitoffulfillment.waxAndWaneLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              96,
+              108,
+              120,
+              132,
+              144
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fruitoffulfillment.wax-mastery-5",
+      "condition": {
+        "call": "fruitoffulfillment.wax-mastery-.is5",
+        "inputs": {
+          "points": {
+            "fact": "fruitoffulfillment.waxAndWaneLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              120,
+              135,
+              150,
+              165,
+              180
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fruitoffulfillment.wane-attack",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "fruitoffulfillment.attack-per-layer",
+            "inputs": {
+              "layers": {
+                "fact": "fruitoffulfillment.waxAndWaneLayers"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ]
 }

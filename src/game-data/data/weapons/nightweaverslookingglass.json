@@ -226,17 +226,233 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "nightweaverslookingglass.skill-mastery",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "nightweaverslookingglass.lunar-mastery",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "nightweaverslookingglass.bloom",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "nightweaverslookingglass.other-blooms",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "nightweaverslookingglass.lunar-bloom",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "nightweaverslookingglass.skillWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "终北圣言有效（战技造成水或草伤后的4.5秒）"
+    },
+    "nightweaverslookingglass.lunarWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "朔月诗篇有效（队友触发月绽放后的10秒）"
+    }
+  },
+  "buffs": [
+    {
+      "id": "nightweaverslookingglass.skill-mastery",
+      "condition": {
+        "fact": "nightweaverslookingglass.skillWindow"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              60,
+              75,
+              90,
+              105,
+              120
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "nightweaverslookingglass.lunar-mastery",
+      "condition": {
+        "fact": "nightweaverslookingglass.lunarWindow"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              60,
+              75,
+              90,
+              105,
+              120
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "nightweaverslookingglass.bloom",
+      "appliesTo": {
+        "families": [
+          "transformative"
+        ],
+        "reactionIds": [
+          "bloom"
+        ]
+      },
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "nightweaverslookingglass.skillWindow"
+          },
+          "term1": {
+            "fact": "nightweaverslookingglass.lunarWindow"
+          }
+        },
+        "output": "active"
+      },
+      "recipient": "team",
+      "stacking": {
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.transformative.damageBonus",
+          "value": {
+            "refinement": [
+              1.2,
+              1.5,
+              1.8,
+              2.1,
+              2.4
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "nightweaverslookingglass.other-blooms",
+      "appliesTo": {
+        "families": [
+          "transformative"
+        ],
+        "reactionIds": [
+          "hyperbloom",
+          "burgeon"
+        ]
+      },
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "nightweaverslookingglass.skillWindow"
+          },
+          "term1": {
+            "fact": "nightweaverslookingglass.lunarWindow"
+          }
+        },
+        "output": "active"
+      },
+      "recipient": "team",
+      "stacking": {
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.transformative.damageBonus",
+          "value": {
+            "refinement": [
+              0.8,
+              1,
+              1.2,
+              1.4,
+              1.6
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "nightweaverslookingglass.lunar-bloom",
+      "appliesTo": {
+        "families": [
+          "lunar-bloom"
+        ]
+      },
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "nightweaverslookingglass.skillWindow"
+          },
+          "term1": {
+            "fact": "nightweaverslookingglass.lunarWindow"
+          }
+        },
+        "output": "active"
+      },
+      "recipient": "team",
+      "stacking": {
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.lunar.damageBonus",
+          "value": {
+            "refinement": [
+              0.4,
+              0.5,
+              0.6,
+              0.7,
+              0.8
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ]
 }

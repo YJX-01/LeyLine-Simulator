@@ -226,15 +226,41 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "keyofkhajnisut.hpPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "keyofkhajnisut.hymn-1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "keyofkhajnisut.hymn-2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "keyofkhajnisut.hymn-3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "keyofkhajnisut.grand-hymn-team",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -256,7 +282,227 @@
           }
         }
       ]
+    },
+    {
+      "id": "keyofkhajnisut.hymn-1",
+      "condition": {
+        "call": "keyofkhajnisut.hymn-is1",
+        "inputs": {
+          "points": {
+            "fact": "keyofkhajnisut.grandHymnLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "call": "keyofkhajnisut.hp-mastery",
+            "inputs": {
+              "basis": {
+                "stat": "hp"
+              },
+              "rate": {
+                "refinement": [
+                  0.0012,
+                  0.0015,
+                  0.0018,
+                  0.0021,
+                  0.0024
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "amount": 9007199254740991,
+                "unit": "elementalMastery"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "keyofkhajnisut.hymn-2",
+      "condition": {
+        "call": "keyofkhajnisut.hymn-is2",
+        "inputs": {
+          "points": {
+            "fact": "keyofkhajnisut.grandHymnLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "call": "keyofkhajnisut.hp-mastery",
+            "inputs": {
+              "basis": {
+                "stat": "hp"
+              },
+              "rate": {
+                "refinement": [
+                  0.0024,
+                  0.003,
+                  0.0036,
+                  0.0042,
+                  0.0048
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "amount": 9007199254740991,
+                "unit": "elementalMastery"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "keyofkhajnisut.hymn-3",
+      "condition": {
+        "call": "keyofkhajnisut.hymn-is3",
+        "inputs": {
+          "points": {
+            "fact": "keyofkhajnisut.grandHymnLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "call": "keyofkhajnisut.hp-mastery",
+            "inputs": {
+              "basis": {
+                "stat": "hp"
+              },
+              "rate": {
+                "refinement": [
+                  0.0036,
+                  0.0045,
+                  0.0054,
+                  0.0063,
+                  0.0072
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "amount": 9007199254740991,
+                "unit": "elementalMastery"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "keyofkhajnisut.grand-hymn-team",
+      "condition": {
+        "fact": "keyofkhajnisut.grand-hymn-teamActive"
+      },
+      "recipient": "team",
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "call": "keyofkhajnisut.hp-mastery",
+            "inputs": {
+              "basis": {
+                "stat": "hp"
+              },
+              "rate": {
+                "refinement": [
+                  0.002,
+                  0.0025,
+                  0.003,
+                  0.0035,
+                  0.004
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "amount": 9007199254740991,
+                "unit": "elementalMastery"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "keyofkhajnisut.grandHymnLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "宏大诗篇当前层数（0至3，战技命中后20秒）"
+    },
+    "keyofkhajnisut.grand-hymn-teamActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "宏大诗篇已达到或刷新3层并在全队精通20秒有效期内"
+    }
+  },
+  "formulas": [
+    {
+      "id": "keyofkhajnisut.hp-mastery",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "hp",
+        "to": "elementalMastery",
+        "per": 1
+      }
+    },
+    {
+      "id": "keyofkhajnisut.hymn-is1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "keyofkhajnisut.hymn-is2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "keyofkhajnisut.hymn-is3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    }
+  ]
 }

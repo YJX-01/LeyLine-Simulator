@@ -226,17 +226,219 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "thedaybreakchronicles.audience-normal",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "thedaybreakchronicles.audience-skill",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "thedaybreakchronicles.audience-burst",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "thedaybreakchronicles.normalLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "该类攻击当前晓风层数（脱战3秒满层，按在战斗中的流失与命中更新）"
+    },
+    "thedaybreakchronicles.skillLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "该类攻击当前晓风层数（脱战3秒满层，按在战斗中的流失与命中更新）"
+    },
+    "thedaybreakchronicles.burstLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "该类攻击当前晓风层数（脱战3秒满层，按在战斗中的流失与命中更新）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "thedaybreakchronicles.normal-damage-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "thedaybreakchronicles.skill-damage-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "thedaybreakchronicles.burst-damage-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "thedaybreakchronicles.audience-normal",
+      "appliesTo": {
+        "categories": [
+          "normal"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "thedaybreakchronicles.normal-damage-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "thedaybreakchronicles.normalLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.1,
+                  0.125,
+                  0.15,
+                  0.175,
+                  0.2
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.6,
+                  0.75,
+                  0.9,
+                  1.05,
+                  1.2
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "thedaybreakchronicles.audience-skill",
+      "appliesTo": {
+        "categories": [
+          "skill"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "thedaybreakchronicles.skill-damage-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "thedaybreakchronicles.skillLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.1,
+                  0.125,
+                  0.15,
+                  0.175,
+                  0.2
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.6,
+                  0.75,
+                  0.9,
+                  1.05,
+                  1.2
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "thedaybreakchronicles.audience-burst",
+      "appliesTo": {
+        "categories": [
+          "burst"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "thedaybreakchronicles.burst-damage-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "thedaybreakchronicles.burstLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.1,
+                  0.125,
+                  0.15,
+                  0.175,
+                  0.2
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.6,
+                  0.75,
+                  0.9,
+                  1.05,
+                  1.2
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ]
 }

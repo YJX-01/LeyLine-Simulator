@@ -226,31 +226,175 @@
   "namespace": "builtin",
   "revision": "2",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "impact": {
-          "recipient": "owner",
-          "attributes": [
-            "attribute.attackPercent",
-            "attribute.anemoBonus",
-            "attribute.geoBonus",
-            "attribute.electroBonus",
-            "attribute.hydroBonus",
-            "attribute.pyroBonus",
-            "attribute.cryoBonus",
-            "attribute.dendroBonus",
-            "attribute.elementalMastery"
-          ]
-        },
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "thewidsith.song-attackPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "thewidsith.song-damageBonus",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "thewidsith.song-elementalMastery",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "thewidsith.debutSong": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "登场后的当前主题曲（0无、1宣叙调、2咏叹调、3间奏曲）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "thewidsith.song-is1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "thewidsith.song-is2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "thewidsith.song-is3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "thewidsith.song-attackPercent",
+      "condition": {
+        "call": "thewidsith.song-is1",
+        "inputs": {
+          "points": {
+            "fact": "thewidsith.debutSong"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.6,
+              0.75,
+              0.9,
+              1.05,
+              1.2
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "thewidsith.song-damageBonus",
+      "condition": {
+        "call": "thewidsith.song-is2",
+        "inputs": {
+          "points": {
+            "fact": "thewidsith.debutSong"
+          }
+        },
+        "output": "active"
+      },
+      "appliesTo": {
+        "elements": [
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.48,
+              0.6,
+              0.72,
+              0.84,
+              0.96
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "thewidsith.song-elementalMastery",
+      "condition": {
+        "call": "thewidsith.song-is3",
+        "inputs": {
+          "points": {
+            "fact": "thewidsith.debutSong"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              240,
+              300,
+              360,
+              420,
+              480
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    }
+  ]
 }

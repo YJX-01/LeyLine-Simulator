@@ -226,17 +226,119 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "waveridingwhirl.whirl-hp",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "waveridingwhirl.hydro-hp",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "waveridingwhirl.whirlWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "施放战技后10秒内（15秒间隔）"
+    }
+  },
+  "buffs": [
+    {
+      "id": "waveridingwhirl.whirl-hp",
+      "condition": {
+        "fact": "waveridingwhirl.whirlWindow"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.hpPercent",
+          "value": {
+            "refinement": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "waveridingwhirl.hydro-hp",
+      "condition": {
+        "fact": "waveridingwhirl.whirlWindow"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.hpPercent",
+          "value": {
+            "call": "waveridingwhirl.hp-per-hydro",
+            "inputs": {
+              "basis": {
+                "teamCount": {
+                  "elements": [
+                    "hydro"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 2
+                }
+              },
+              "rate": {
+                "refinement": [
+                  0.12,
+                  0.15,
+                  0.18,
+                  0.21,
+                  0.24
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.24,
+                  0.3,
+                  0.36,
+                  0.42,
+                  0.48
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ],
+  "formulas": [
+    {
+      "id": "waveridingwhirl.hp-per-hydro",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ]
 }

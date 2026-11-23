@@ -226,17 +226,123 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "wanderingevenstar.owner-attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "wanderingevenstar.team-attack",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "wanderingevenstar.evenstarActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "流浪的晚星本轮增益已生效（周期10秒，持续12秒）"
+    },
+    "wanderingevenstar.masteryAtUpdate": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "elementalMastery"
+      },
+      "label": "最近一次流浪的晚星触发时装备者元素精通"
+    }
+  },
+  "formulas": [
+    {
+      "id": "wanderingevenstar.mastery-to-attack",
+      "template": {
+        "id": "attribute-conversion",
+        "revision": "1",
+        "stat": "elementalMastery",
+        "target": "attack",
+        "attribute": "basis",
+        "rate": "rate",
+        "output": "value"
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "wanderingevenstar.owner-attack",
+      "condition": {
+        "fact": "wanderingevenstar.evenstarActive"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.flatAttack",
+          "value": {
+            "call": "wanderingevenstar.mastery-to-attack",
+            "inputs": {
+              "basis": {
+                "fact": "wanderingevenstar.masteryAtUpdate"
+              },
+              "rate": {
+                "refinement": [
+                  0.24,
+                  0.3,
+                  0.36,
+                  0.42,
+                  0.48
+                ],
+                "unit": "attack"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wanderingevenstar.team-attack",
+      "condition": {
+        "fact": "wanderingevenstar.evenstarActive"
+      },
+      "recipient": "team",
+      "excludeOwner": true,
+      "modifiers": [
+        {
+          "target": "attribute.flatAttack",
+          "value": {
+            "call": "wanderingevenstar.mastery-to-attack",
+            "inputs": {
+              "basis": {
+                "fact": "wanderingevenstar.masteryAtUpdate"
+              },
+              "rate": {
+                "refinement": [
+                  0.072,
+                  0.09,
+                  0.108,
+                  0.126,
+                  0.144
+                ],
+                "unit": "attack"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ]
 }

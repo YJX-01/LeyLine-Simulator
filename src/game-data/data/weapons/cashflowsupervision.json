@@ -226,15 +226,41 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "cashflowsupervision.attackPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "cashflowsupervision.normal-damage",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "cashflowsupervision.charged-damage",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "cashflowsupervision.stellar-conduct",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "cashflowsupervision.full-stack-speed",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -256,7 +282,175 @@
           }
         }
       ]
+    },
+    {
+      "id": "cashflowsupervision.normal-damage",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "state-change"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "observation": {
+            "key": "hpRatioChange",
+            "test": "change"
+          }
+        },
+        "cooldownMs": 300
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 4000,
+        "phase": "after"
+      },
+      "stacking": {
+        "maxStacks": 3
+      },
+      "appliesTo": {
+        "categories": [
+          "normal"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cashflowsupervision.charged-damage",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "state-change"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "observation": {
+            "key": "hpRatioChange",
+            "test": "change"
+          }
+        },
+        "cooldownMs": 300
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 4000,
+        "phase": "after"
+      },
+      "stacking": {
+        "maxStacks": 3
+      },
+      "appliesTo": {
+        "categories": [
+          "charged"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.14,
+              0.175,
+              0.21,
+              0.245,
+              0.28
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cashflowsupervision.stellar-conduct",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "state-change"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "observation": {
+            "key": "hpRatioChange",
+            "test": "change"
+          }
+        },
+        "cooldownMs": 300
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 4000,
+        "phase": "after"
+      },
+      "stacking": {
+        "maxStacks": 3
+      },
+      "appliesTo": {
+        "families": [
+          "stellar-conduct"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.stellar-conduct.damageBonus",
+          "value": {
+            "refinement": [
+              0.14,
+              0.175,
+              0.21,
+              0.245,
+              0.28
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cashflowsupervision.full-stack-speed",
+      "condition": {
+        "fact": "cashflowsupervision.full-stack-speedActive"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.normalAttackSpeed",
+          "value": {
+            "refinement": [
+              0.08,
+              0.1,
+              0.12,
+              0.14,
+              0.16
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "cashflowsupervision.full-stack-speedActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前有3层金流监督效果"
+    }
+  }
 }

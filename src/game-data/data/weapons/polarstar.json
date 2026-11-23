@@ -226,15 +226,41 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "polarstar.skill-burst.damageBonus",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "polarstar.star1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "polarstar.star2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "polarstar.star3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "polarstar.star4",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -262,7 +288,175 @@
           }
         }
       ]
+    },
+    {
+      "id": "polarstar.star1",
+      "condition": {
+        "call": "polarstar.star.is1",
+        "inputs": {
+          "points": {
+            "fact": "polarstar.starLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.1,
+              0.125,
+              0.15,
+              0.175,
+              0.2
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "polarstar.star2",
+      "condition": {
+        "call": "polarstar.star.is2",
+        "inputs": {
+          "points": {
+            "fact": "polarstar.starLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "polarstar.star3",
+      "condition": {
+        "call": "polarstar.star.is3",
+        "inputs": {
+          "points": {
+            "fact": "polarstar.starLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.3,
+              0.375,
+              0.45,
+              0.525,
+              0.6
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "polarstar.star4",
+      "condition": {
+        "call": "polarstar.star.is4",
+        "inputs": {
+          "points": {
+            "fact": "polarstar.starLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.48,
+              0.6,
+              0.72,
+              0.84,
+              0.96
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "polarstar.starLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前白夜极星层数（普通、重击、战技、爆发各1层，12秒）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "polarstar.star.is1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "polarstar.star.is2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "polarstar.star.is3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "polarstar.star.is4",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 4,
+        "maxInput": 4
+      }
+    }
+  ]
 }

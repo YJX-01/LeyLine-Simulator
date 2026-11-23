@@ -226,17 +226,75 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。切落风按独立输出计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "kagotsurubeisshin.wind-attack",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。切落风按独立输出计算。"
       }
     ]
   },
-  "maxRefinement": 1
+  "maxRefinement": 1,
+  "facts": {
+    "kagotsurubeisshin.windTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "普攻、重击或下落触发切落风并命中（8秒间隔）"
+    },
+    "kagotsurubeisshin.wind-attackActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "切落风触发后的攻击增益仍有效（8秒）"
+    }
+  },
+  "hits": [
+    {
+      "id": "kagotsurubeisshin.wind",
+      "name": "切落风",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        "kagotsurubeisshin.windTriggered"
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": 1.8
+        },
+        "output": "base"
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "kagotsurubeisshin.wind-attack",
+      "condition": {
+        "fact": "kagotsurubeisshin.wind-attackActive"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": 0.15
+        }
+      ]
+    }
+  ]
 }

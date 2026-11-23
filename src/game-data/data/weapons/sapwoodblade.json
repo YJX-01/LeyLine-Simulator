@@ -226,17 +226,62 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "sapwoodblade.leaf",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "sapwoodblade.leafRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本角色拾取了此武器产生的叶片，且当前仍处于12秒增益内"
+    }
+  },
+  "buffs": [
+    {
+      "id": "sapwoodblade.leaf",
+      "recipient": "team",
+      "condition": {
+        "fact": "sapwoodblade.leafRecipient"
+      },
+      "stacking": {
+        "group": "forest-leaf.elementalMastery",
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              60,
+              75,
+              90,
+              105,
+              120
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    }
+  ]
 }

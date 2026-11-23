@@ -228,13 +228,47 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "angelosheptades.attackPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "angelosheptades.leading-light",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "angelosheptades.leading-light-backstage",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+      },
+      {
+        "id": "confirmed-direct-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "angelosheptades.directEnergy",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次触发、装备件数或精炼档位、实际受益者和已确认的触发条件计算。"
+      },
+      {
+        "id": "direct-energy-timeline",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。"
       }
     ]
   },
@@ -256,7 +290,169 @@
           }
         }
       ]
+    },
+    {
+      "id": "angelosheptades.leading-light",
+      "condition": {
+        "fact": "angelosheptades.leading-lightActive"
+      },
+      "recipient": "team",
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "angelosheptades.attack-to-damage",
+            "inputs": {
+              "basis": {
+                "stat": "attack"
+              },
+              "rate": {
+                "refinement": [
+                  0.1,
+                  0.13,
+                  0.16,
+                  0.19,
+                  0.22
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.26,
+                  0.34,
+                  0.42,
+                  0.5,
+                  0.58
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          },
+          "condition": {
+            "fact": "onField",
+            "of": "recipient"
+          }
+        }
+      ]
+    },
+    {
+      "id": "angelosheptades.leading-light-backstage",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "angelosheptades.leading-lightActive"
+          },
+          "term1": {
+            "fact": "angelosheptades.hexereiRecipient"
+          }
+        },
+        "output": "active"
+      },
+      "recipient": "team",
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "angelosheptades.attack-to-damage",
+            "inputs": {
+              "basis": {
+                "stat": "attack"
+              },
+              "rate": {
+                "refinement": [
+                  0.05,
+                  0.065,
+                  0.08,
+                  0.095,
+                  0.11
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.13,
+                  0.17,
+                  0.21,
+                  0.25,
+                  0.29
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          },
+          "condition": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          }
+        }
+      ]
+    },
+    {
+      "id": "angelosheptades.directEnergy",
+      "application": "explicit",
+      "condition": {
+        "fact": "angelosheptades.directEnergyTriggered"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyRestored",
+          "value": {
+            "refinement": [
+              14,
+              15,
+              16,
+              17,
+              18
+            ],
+            "unit": "energy"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "formulas": [
+    {
+      "id": "angelosheptades.attack-to-damage",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "attack",
+        "to": "scalar",
+        "per": 1000
+      }
+    }
+  ],
+  "facts": {
+    "angelosheptades.leading-lightActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "先导之光已生效（装备者创造护盾后20秒内）"
+    },
+    "angelosheptades.hexereiRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队伍的魔导·秘仪已激活，且此受益者为自己的魔导角色"
+    },
+    "angelosheptades.directEnergyTriggered": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次装备者创造护盾，或脱战开启宝箱，且指引者的餍足已就绪（14秒，上场或后台）"
+    }
+  }
 }

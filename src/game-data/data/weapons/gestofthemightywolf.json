@@ -226,17 +226,160 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "gestofthemightywolf.attack-speed",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "gestofthemightywolf.song-damage",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "gestofthemightywolf.song-crit",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "gestofthemightywolf.attack-speed",
+      "modifiers": [
+        {
+          "target": "attribute.normalAttackSpeed",
+          "value": 0.1
+        }
+      ]
+    },
+    {
+      "id": "gestofthemightywolf.song-damage",
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "gestofthemightywolf.damage-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "gestofthemightywolf.songLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.075,
+                  0.095,
+                  0.115,
+                  0.135,
+                  0.155
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.3,
+                  0.38,
+                  0.46,
+                  0.54,
+                  0.62
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "gestofthemightywolf.song-crit",
+      "condition": {
+        "fact": "gestofthemightywolf.hexerei"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critDamage",
+          "value": {
+            "call": "gestofthemightywolf.crit-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "gestofthemightywolf.songLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.075,
+                  0.095,
+                  0.115,
+                  0.135,
+                  0.155
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.3,
+                  0.38,
+                  0.46,
+                  0.54,
+                  0.62
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "gestofthemightywolf.songLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前四风诗系层数（普通命中1、战技或开始重击2，持续4秒）"
+    },
+    "gestofthemightywolf.hexerei": {
+      "scope": "team",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队伍已激活魔导·秘仪"
+    }
+  },
+  "formulas": [
+    {
+      "id": "gestofthemightywolf.damage-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "gestofthemightywolf.crit-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ]
 }

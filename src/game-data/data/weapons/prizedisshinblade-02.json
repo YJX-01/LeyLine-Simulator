@@ -228,15 +228,101 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用祟灵独立伤害、确认触发后的单次自疗与装备者伤害降低。连续攻击的自动触发和实际恢复到账量待核验。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "prizedisshinblade-02.damage-penalty",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "prizedisshinblade-02.curse-healing",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件与合法精炼。祟灵伤害和持有者自疗分别计算。"
+      },
+      {
+        "id": "pending-output-scope",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "连续攻击的自动触发和实际恢复到账量待核验。"
       }
     ]
   },
-  "maxRefinement": 1
+  "maxRefinement": 1,
+  "facts": {
+    "prizedisshinblade-02.curseTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "普攻、重击或下落触发祟灵并命中（8秒间隔）"
+    }
+  },
+  "hits": [
+    {
+      "id": "prizedisshinblade-02.curse",
+      "name": "祟灵",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        "prizedisshinblade-02.curseTriggered"
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": 1.8
+        },
+        "output": "base"
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "prizedisshinblade-02.damage-penalty",
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": -0.5
+        }
+      ]
+    },
+    {
+      "id": "prizedisshinblade-02.curse-healing",
+      "application": "explicit",
+      "condition": {
+        "fact": "prizedisshinblade-02.curseTriggered"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.equipmentHealing",
+          "value": {
+            "call": "healing.attack",
+            "inputs": {
+              "attack": {
+                "stat": "attack"
+              },
+              "rate": 1,
+              "outgoing": {
+                "stat": "healingBonus"
+              },
+              "incoming": {
+                "stat": "incomingHealingBonus"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
 }

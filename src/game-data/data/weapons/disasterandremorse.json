@@ -226,17 +226,189 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "disasterandremorse.no-pardon",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "disasterandremorse.no-pardon-hexerei",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "disasterandremorse.no-healing",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "disasterandremorse.no-healing-hexerei",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "disasterandremorse.hexerei": {
+      "scope": "team",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队伍已激活魔导·秘仪"
+    },
+    "disasterandremorse.no-pardonWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "无赦有效（初始3秒，可由战技与爆发命中延长）"
+    },
+    "disasterandremorse.no-healingWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "无愈有效（初始3秒，可由普攻与重击命中延长）"
+    }
+  },
+  "buffs": [
+    {
+      "id": "disasterandremorse.no-pardon",
+      "condition": {
+        "fact": "disasterandremorse.no-pardonWindow"
+      },
+      "appliesTo": {
+        "categories": [
+          "normal",
+          "charged"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.4,
+              0.5,
+              0.6,
+              0.7,
+              0.8
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "disasterandremorse.no-pardon-hexerei",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "disasterandremorse.no-pardonWindow"
+          },
+          "term1": {
+            "fact": "disasterandremorse.hexerei"
+          }
+        },
+        "output": "active"
+      },
+      "appliesTo": {
+        "categories": [
+          "normal",
+          "charged"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.3,
+              0.375,
+              0.45,
+              0.525,
+              0.6
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "disasterandremorse.no-healing",
+      "condition": {
+        "fact": "disasterandremorse.no-healingWindow"
+      },
+      "appliesTo": {
+        "categories": [
+          "skill",
+          "burst"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.4,
+              0.5,
+              0.6,
+              0.7,
+              0.8
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "disasterandremorse.no-healing-hexerei",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "disasterandremorse.no-healingWindow"
+          },
+          "term1": {
+            "fact": "disasterandremorse.hexerei"
+          }
+        },
+        "output": "active"
+      },
+      "appliesTo": {
+        "categories": [
+          "skill",
+          "burst"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.3,
+              0.375,
+              0.45,
+              0.525,
+              0.6
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ]
 }

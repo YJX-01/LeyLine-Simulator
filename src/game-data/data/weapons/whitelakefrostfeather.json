@@ -228,15 +228,194 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "whitelakefrostfeather.lake-attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "whitelakefrostfeather.lake-stellar-crit",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+      },
+      {
+        "id": "confirmed-direct-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "whitelakefrostfeather.directEnergy",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次触发、装备件数或精炼档位、实际受益者和已确认的触发条件计算。"
+      },
+      {
+        "id": "direct-energy-timeline",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "whitelakefrostfeather.lakeLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前湖色的哀告层数（战技命中后8秒，触发间隔0.1秒）"
+    },
+    "whitelakefrostfeather.directEnergyTriggered": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次装备者触发星烁反应或造成星烁反应伤害，且回能已就绪（3.5秒，后台可触发）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "whitelakefrostfeather.attack-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "whitelakefrostfeather.full-stacks",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "whitelakefrostfeather.lake-attack",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "whitelakefrostfeather.attack-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "whitelakefrostfeather.lakeLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.08,
+                  0.1,
+                  0.12,
+                  0.14,
+                  0.16
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.24,
+                  0.3,
+                  0.36,
+                  0.42,
+                  0.48
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "whitelakefrostfeather.lake-stellar-crit",
+      "appliesTo": {
+        "families": [
+          "stellar-conduct",
+          "stellar-swirl"
+        ]
+      },
+      "condition": {
+        "call": "whitelakefrostfeather.full-stacks",
+        "inputs": {
+          "points": {
+            "fact": "whitelakefrostfeather.lakeLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critDamage",
+          "value": {
+            "refinement": [
+              0.5,
+              0.65,
+              0.8,
+              0.95,
+              1.1
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "whitelakefrostfeather.directEnergy",
+      "application": "explicit",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "whitelakefrostfeather.directEnergyTriggered"
+          },
+          "term1": {
+            "call": "whitelakefrostfeather.full-stacks",
+            "inputs": {
+              "points": {
+                "fact": "whitelakefrostfeather.lakeLayers"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyRestored",
+          "value": {
+            "refinement": [
+              4,
+              4.5,
+              5,
+              5.5,
+              6
+            ],
+            "unit": "energy"
+          }
+        }
+      ]
+    }
+  ]
 }

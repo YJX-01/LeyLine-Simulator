@@ -226,15 +226,31 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "wolffang.skill-burst.damageBonus",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "wolffang.skill-crit",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "wolffang.burst-crit",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -262,7 +278,121 @@
           }
         }
       ]
+    },
+    {
+      "id": "wolffang.skill-crit",
+      "appliesTo": {
+        "categories": [
+          "skill"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critRate",
+          "value": {
+            "call": "wolffang.crit-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "wolffang.skillCritLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.02,
+                  0.025,
+                  0.03,
+                  0.035,
+                  0.04
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.08,
+                  0.1,
+                  0.12,
+                  0.14,
+                  0.16
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wolffang.burst-crit",
+      "appliesTo": {
+        "categories": [
+          "burst"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critRate",
+          "value": {
+            "call": "wolffang.crit-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "wolffang.burstCritLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.02,
+                  0.025,
+                  0.03,
+                  0.035,
+                  0.04
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.08,
+                  0.1,
+                  0.12,
+                  0.14,
+                  0.16
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "wolffang.skillCritLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前战技暴击层数（前台战技命中后获得，持续10秒，至多4层）"
+    },
+    "wolffang.burstCritLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前爆发暴击层数（前台爆发命中后获得，持续10秒，至多4层）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "wolffang.crit-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ]
 }

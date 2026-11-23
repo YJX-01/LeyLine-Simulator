@@ -228,13 +228,47 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "nocturnescurtaincall.hpPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "nocturnescurtaincall.wine-hp",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "nocturnescurtaincall.wine-lunar-crit",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+      },
+      {
+        "id": "confirmed-direct-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "nocturnescurtaincall.directEnergy",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次触发、装备件数或精炼档位、实际受益者和已确认的触发条件计算。"
+      },
+      {
+        "id": "direct-energy-timeline",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。"
       }
     ]
   },
@@ -256,7 +290,94 @@
           }
         }
       ]
+    },
+    {
+      "id": "nocturnescurtaincall.wine-hp",
+      "condition": {
+        "fact": "nocturnescurtaincall.divineWine"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.hpPercent",
+          "value": {
+            "refinement": [
+              0.14,
+              0.16,
+              0.18,
+              0.2,
+              0.22
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "nocturnescurtaincall.wine-lunar-crit",
+      "condition": {
+        "fact": "nocturnescurtaincall.divineWine"
+      },
+      "appliesTo": {
+        "families": [
+          "lunar-charged",
+          "lunar-crystallize",
+          "lunar-bloom"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critDamage",
+          "value": {
+            "refinement": [
+              0.6,
+              0.8,
+              1,
+              1.2,
+              1.4
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "nocturnescurtaincall.directEnergy",
+      "application": "explicit",
+      "condition": {
+        "fact": "nocturnescurtaincall.directEnergyTriggered"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyRestored",
+          "value": {
+            "refinement": [
+              14,
+              15,
+              16,
+              17,
+              18
+            ],
+            "unit": "energy"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "nocturnescurtaincall.divineWine": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "丰饶海的神酒已生效（月曜反应后的12秒内）"
+    },
+    "nocturnescurtaincall.directEnergyTriggered": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次装备者触发月曜反应或造成月曜反应伤害，且回能已就绪（18秒，后台可触发）"
+    }
+  }
 }

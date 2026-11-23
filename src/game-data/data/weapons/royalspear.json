@@ -226,17 +226,84 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "royalspear.focus",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "royalspear.focusLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前专注层数（造成伤害增加，暴击后归零）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "royalspear.crit-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "royalspear.focus",
+      "modifiers": [
+        {
+          "target": "attribute.critRate",
+          "value": {
+            "call": "royalspear.crit-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "royalspear.focusLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.08,
+                  0.1,
+                  0.12,
+                  0.14,
+                  0.16
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.4,
+                  0.5,
+                  0.6,
+                  0.7,
+                  0.8
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ]
 }

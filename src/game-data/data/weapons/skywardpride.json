@@ -226,15 +226,21 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。真空刃按独立输出计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "skywardpride.damage",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。真空刃按独立输出计算。"
       }
     ]
   },
@@ -258,5 +264,45 @@
       ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "skywardpride.vacuum-bladeTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "爆发后20秒及8次次数内，普攻或重击触发真空刃命中"
+    }
+  },
+  "hits": [
+    {
+      "id": "skywardpride.vacuum-blade",
+      "name": "真空刃",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        "skywardpride.vacuum-bladeTriggered"
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": {
+            "refinement": [
+              0.8,
+              1,
+              1.2,
+              1.4,
+              1.6
+            ],
+            "unit": "scalar"
+          }
+        },
+        "output": "base"
+      }
+    }
+  ]
 }

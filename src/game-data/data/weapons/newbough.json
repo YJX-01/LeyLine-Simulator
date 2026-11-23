@@ -226,17 +226,452 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "newbough.verdure-atk",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "newbough.verdure-mastery-1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "newbough.verdure-mastery-2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "newbough.verdure-mastery-3",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "newbough.gleam-atk",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "newbough.stellar-conduct",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "newbough.stellar-swirl",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "newbough.verdureLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前蓊郁层数（战技后12秒内命中，每次6秒效果）"
+    },
+    "newbough.stellarGleam": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者已激活辉映·星烁"
+    }
+  },
+  "formulas": [
+    {
+      "id": "newbough.normal-attack-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "newbough.mastery-at-layer1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "newbough.mastery-at-layer2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "newbough.mastery-at-layer3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "newbough.gleam-attack-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "newbough.stellar-conduct-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    },
+    {
+      "id": "newbough.stellar-swirl-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "newbough.verdure-atk",
+      "condition": {
+        "call": "condition.not",
+        "inputs": {
+          "term0": {
+            "fact": "newbough.stellarGleam"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "newbough.normal-attack-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "newbough.verdureLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.04,
+                  0.05,
+                  0.06,
+                  0.07,
+                  0.08
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.12,
+                  0.15,
+                  0.18,
+                  0.21,
+                  0.24
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "newbough.verdure-mastery-1",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "fact": "newbough.stellarGleam"
+              }
+            },
+            "output": "active"
+          },
+          "term1": {
+            "call": "newbough.mastery-at-layer1",
+            "inputs": {
+              "points": {
+                "fact": "newbough.verdureLayers"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              20,
+              25,
+              30,
+              35,
+              40
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "newbough.verdure-mastery-2",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "fact": "newbough.stellarGleam"
+              }
+            },
+            "output": "active"
+          },
+          "term1": {
+            "call": "newbough.mastery-at-layer2",
+            "inputs": {
+              "points": {
+                "fact": "newbough.verdureLayers"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              40,
+              50,
+              60,
+              70,
+              80
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "newbough.verdure-mastery-3",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "fact": "newbough.stellarGleam"
+              }
+            },
+            "output": "active"
+          },
+          "term1": {
+            "call": "newbough.mastery-at-layer3",
+            "inputs": {
+              "points": {
+                "fact": "newbough.verdureLayers"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              60,
+              75,
+              90,
+              105,
+              120
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "newbough.gleam-atk",
+      "condition": {
+        "fact": "newbough.stellarGleam"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "newbough.gleam-attack-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "newbough.verdureLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.06,
+                  0.075,
+                  0.09,
+                  0.105,
+                  0.12
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.18,
+                  0.225,
+                  0.27,
+                  0.315,
+                  0.36
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "newbough.stellar-conduct",
+      "appliesTo": {
+        "families": [
+          "stellar-conduct"
+        ]
+      },
+      "condition": {
+        "fact": "newbough.stellarGleam"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.stellar-conduct.damageBonus",
+          "value": {
+            "call": "newbough.stellar-conduct-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "newbough.verdureLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.08,
+                  0.1,
+                  0.12,
+                  0.14,
+                  0.16
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.24,
+                  0.3,
+                  0.36,
+                  0.42,
+                  0.48
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "newbough.stellar-swirl",
+      "appliesTo": {
+        "families": [
+          "stellar-swirl"
+        ]
+      },
+      "condition": {
+        "fact": "newbough.stellarGleam"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.stellar-swirl.damageBonus",
+          "value": {
+            "call": "newbough.stellar-swirl-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "newbough.verdureLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.08,
+                  0.1,
+                  0.12,
+                  0.14,
+                  0.16
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.24,
+                  0.3,
+                  0.36,
+                  0.42,
+                  0.48
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    }
+  ]
 }

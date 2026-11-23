@@ -226,17 +226,86 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。降临追加伤害按独立输出计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "swordofdescension.traveler-platform",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。降临追加伤害按独立输出计算。"
       }
     ]
   },
-  "maxRefinement": 1
+  "maxRefinement": 1,
+  "facts": {
+    "swordofdescension.descentTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "PlayStation 平台上普攻或重击已通过触发判定，且本次伤害命中"
+    },
+    "swordofdescension.traveler-platformActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当次使用 PlayStation 平台"
+    }
+  },
+  "hits": [
+    {
+      "id": "swordofdescension.descent",
+      "name": "降临追加伤害",
+      "element": "physical",
+      "category": null,
+      "family": "ordinary",
+      "when": [
+        {
+          "fact": "swordofdescension.descentTriggered"
+        }
+      ],
+      "base": {
+        "template": "attack-damage-base",
+        "inputs": {
+          "attribute": {
+            "stat": "attack"
+          },
+          "ratio": 2
+        },
+        "output": "base"
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "swordofdescension.traveler-platform",
+      "activation": {
+        "characterGameIds": [
+          10000005,
+          10000007
+        ]
+      },
+      "condition": {
+        "fact": "swordofdescension.traveler-platformActive"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.flatAttack",
+          "value": {
+            "amount": 66,
+            "unit": "attack"
+          }
+        }
+      ]
+    }
+  ]
 }

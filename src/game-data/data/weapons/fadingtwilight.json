@@ -226,17 +226,174 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "fadingtwilight.twilight1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "fadingtwilight.twilight2",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "fadingtwilight.twilight3",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "fadingtwilight.state": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "夕暮",
+          "流霞",
+          "朝晖"
+        ]
+      },
+      "label": "当前霞色"
+    }
+  },
+  "formulas": [
+    {
+      "id": "fadingtwilight.twilight.is1",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "points",
+        "values": [
+          "夕暮",
+          "流霞",
+          "朝晖"
+        ],
+        "equals": "夕暮"
+      }
+    },
+    {
+      "id": "fadingtwilight.twilight.is2",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "points",
+        "values": [
+          "夕暮",
+          "流霞",
+          "朝晖"
+        ],
+        "equals": "流霞"
+      }
+    },
+    {
+      "id": "fadingtwilight.twilight.is3",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "points",
+        "values": [
+          "夕暮",
+          "流霞",
+          "朝晖"
+        ],
+        "equals": "朝晖"
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "fadingtwilight.twilight1",
+      "condition": {
+        "call": "fadingtwilight.twilight.is1",
+        "inputs": {
+          "points": {
+            "fact": "fadingtwilight.state"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.06,
+              0.075,
+              0.09,
+              0.105,
+              0.12
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fadingtwilight.twilight2",
+      "condition": {
+        "call": "fadingtwilight.twilight.is2",
+        "inputs": {
+          "points": {
+            "fact": "fadingtwilight.state"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.1,
+              0.125,
+              0.15,
+              0.175,
+              0.2
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fadingtwilight.twilight3",
+      "condition": {
+        "call": "fadingtwilight.twilight.is3",
+        "inputs": {
+          "points": {
+            "fact": "fadingtwilight.state"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.14,
+              0.175,
+              0.21,
+              0.245,
+              0.28
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ]
 }

@@ -226,17 +226,371 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "forgedbythegoldenmelody.live-attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "forgedbythegoldenmelody.live-mastery",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "forgedbythegoldenmelody.live-stellar-conduct",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "forgedbythegoldenmelody.live-stellar-swirl",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "forgedbythegoldenmelody.echo-attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "forgedbythegoldenmelody.echo-mastery",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "forgedbythegoldenmelody.echo-stellar-conduct",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "forgedbythegoldenmelody.echo-stellar-swirl",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "forgedbythegoldenmelody.melody": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "未生效",
+          "攻击",
+          "精通",
+          "星烁"
+        ]
+      },
+      "label": "当前10秒周期的谐律乐章"
+    },
+    "forgedbythegoldenmelody.counterpoint": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "未生效",
+          "攻击",
+          "精通",
+          "星烁"
+        ]
+      },
+      "label": "星烁后12秒内的谐律乐章复调"
+    }
+  },
+  "formulas": [
+    {
+      "id": "forgedbythegoldenmelody.mode-0",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "song",
+        "values": [
+          "未生效",
+          "攻击",
+          "精通",
+          "星烁"
+        ],
+        "equals": "攻击"
+      }
+    },
+    {
+      "id": "forgedbythegoldenmelody.mode-1",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "song",
+        "values": [
+          "未生效",
+          "攻击",
+          "精通",
+          "星烁"
+        ],
+        "equals": "精通"
+      }
+    },
+    {
+      "id": "forgedbythegoldenmelody.mode-2",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "song",
+        "values": [
+          "未生效",
+          "攻击",
+          "精通",
+          "星烁"
+        ],
+        "equals": "星烁"
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "forgedbythegoldenmelody.live-attack",
+      "condition": {
+        "call": "forgedbythegoldenmelody.mode-0",
+        "inputs": {
+          "song": {
+            "fact": "forgedbythegoldenmelody.melody"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.18,
+              0.225,
+              0.27,
+              0.315,
+              0.36
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "forgedbythegoldenmelody.live-mastery",
+      "condition": {
+        "call": "forgedbythegoldenmelody.mode-1",
+        "inputs": {
+          "song": {
+            "fact": "forgedbythegoldenmelody.melody"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              120,
+              150,
+              180,
+              210,
+              240
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "forgedbythegoldenmelody.live-stellar-conduct",
+      "condition": {
+        "call": "forgedbythegoldenmelody.mode-2",
+        "inputs": {
+          "song": {
+            "fact": "forgedbythegoldenmelody.melody"
+          }
+        },
+        "output": "active"
+      },
+      "appliesTo": {
+        "families": [
+          "stellar-conduct"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.stellar-conduct.damageBonus",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "forgedbythegoldenmelody.live-stellar-swirl",
+      "condition": {
+        "call": "forgedbythegoldenmelody.mode-2",
+        "inputs": {
+          "song": {
+            "fact": "forgedbythegoldenmelody.melody"
+          }
+        },
+        "output": "active"
+      },
+      "appliesTo": {
+        "families": [
+          "stellar-swirl"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.stellar-swirl.damageBonus",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "forgedbythegoldenmelody.echo-attack",
+      "condition": {
+        "call": "forgedbythegoldenmelody.mode-0",
+        "inputs": {
+          "song": {
+            "fact": "forgedbythegoldenmelody.counterpoint"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.18,
+              0.225,
+              0.27,
+              0.315,
+              0.36
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "forgedbythegoldenmelody.echo-mastery",
+      "condition": {
+        "call": "forgedbythegoldenmelody.mode-1",
+        "inputs": {
+          "song": {
+            "fact": "forgedbythegoldenmelody.counterpoint"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              120,
+              150,
+              180,
+              210,
+              240
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "forgedbythegoldenmelody.echo-stellar-conduct",
+      "condition": {
+        "call": "forgedbythegoldenmelody.mode-2",
+        "inputs": {
+          "song": {
+            "fact": "forgedbythegoldenmelody.counterpoint"
+          }
+        },
+        "output": "active"
+      },
+      "appliesTo": {
+        "families": [
+          "stellar-conduct"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.stellar-conduct.damageBonus",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "forgedbythegoldenmelody.echo-stellar-swirl",
+      "condition": {
+        "call": "forgedbythegoldenmelody.mode-2",
+        "inputs": {
+          "song": {
+            "fact": "forgedbythegoldenmelody.counterpoint"
+          }
+        },
+        "output": "active"
+      },
+      "appliesTo": {
+        "families": [
+          "stellar-swirl"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.stellar-swirl.damageBonus",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ]
 }

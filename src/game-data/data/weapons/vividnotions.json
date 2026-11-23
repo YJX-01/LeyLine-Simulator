@@ -226,15 +226,31 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "vividnotions.attackPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "vividnotions.dawn",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "vividnotions.twilight",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -256,7 +272,75 @@
           }
         }
       ]
+    },
+    {
+      "id": "vividnotions.dawn",
+      "condition": {
+        "fact": "vividnotions.dawnActive"
+      },
+      "appliesTo": {
+        "categories": [
+          "plunge"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critDamage",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "vividnotions.twilight",
+      "condition": {
+        "fact": "vividnotions.twilightActive"
+      },
+      "appliesTo": {
+        "categories": [
+          "plunge"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critDamage",
+          "value": {
+            "refinement": [
+              0.4,
+              0.5,
+              0.6,
+              0.7,
+              0.8
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "vividnotions.dawnActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "初霞之彩对本次下落有效（下落攻击启动后）"
+    },
+    "vividnotions.twilightActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "苍暮之辉对本次下落有效（战技或爆发后15秒内）"
+    }
+  }
 }

@@ -228,15 +228,135 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "给定当次破浪层数可计算造成和受到的伤害修正，驻场叠层和承伤失层的时序仍待验证。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "serpentspine.wave-damage",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "serpentspine.wave-incoming-damage",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+      },
+      {
+        "id": "pending-output-scope",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "驻场叠层、退场保留和承伤失层的时序仍待验证。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "serpentspine.waveLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前破浪层数（场上每4秒加一层，承伤时减一层）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "serpentspine.damage-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "serpentspine.wave-damage",
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "call": "serpentspine.damage-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "serpentspine.waveLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.06,
+                  0.07,
+                  0.08,
+                  0.09,
+                  0.1
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.3,
+                  0.35,
+                  0.4,
+                  0.45,
+                  0.5
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "serpentspine.wave-incoming-damage",
+      "modifiers": [
+        {
+          "target": "attribute.incomingDamageReduction",
+          "value": {
+            "call": "product.scalar",
+            "inputs": {
+              "basis": {
+                "call": "serpentspine.damage-per-layer",
+                "inputs": {
+                  "basis": {
+                    "fact": "serpentspine.waveLayers"
+                  },
+                  "rate": {
+                    "refinement": [
+                      0.03,
+                      0.027,
+                      0.024,
+                      0.022,
+                      0.02
+                    ],
+                    "unit": "scalar"
+                  },
+                  "cap": {
+                    "refinement": [
+                      0.15,
+                      0.135,
+                      0.12,
+                      0.11,
+                      0.1
+                    ],
+                    "unit": "scalar"
+                  }
+                }
+              },
+              "rate": -1
+            }
+          }
+        }
+      ]
+    }
+  ]
 }

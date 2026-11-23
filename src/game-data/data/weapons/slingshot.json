@@ -226,17 +226,116 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "slingshot.fast",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "slingshot.slow",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "slingshot.flightMs": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "箭矢从发射到命中经过的毫秒数"
+    }
+  },
+  "formulas": [
+    {
+      "id": "slingshot.fast-arrow",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "scalar",
+        "relation": "lte",
+        "threshold": 300
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "slingshot.fast",
+      "condition": {
+        "call": "slingshot.fast-arrow",
+        "inputs": {
+          "points": {
+            "fact": "slingshot.flightMs"
+          }
+        },
+        "output": "active"
+      },
+      "appliesTo": {
+        "categories": [
+          "normal",
+          "charged"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.36,
+              0.42,
+              0.48,
+              0.54,
+              0.6
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "slingshot.slow",
+      "condition": {
+        "call": "condition.not",
+        "inputs": {
+          "term0": {
+            "call": "slingshot.fast-arrow",
+            "inputs": {
+              "points": {
+                "fact": "slingshot.flightMs"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "appliesTo": {
+        "categories": [
+          "normal",
+          "charged"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": -0.1
+        }
+      ]
+    }
+  ]
 }

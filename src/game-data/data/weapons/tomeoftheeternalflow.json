@@ -228,13 +228,42 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "tomeoftheeternalflow.hpPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "tomeoftheeternalflow.hp-change-charged",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+      },
+      {
+        "id": "confirmed-direct-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "tomeoftheeternalflow.directEnergy",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次触发、装备件数或精炼档位、实际受益者和已确认的触发条件计算。"
+      },
+      {
+        "id": "direct-energy-timeline",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。"
       }
     ]
   },
@@ -256,7 +285,121 @@
           }
         }
       ]
+    },
+    {
+      "id": "tomeoftheeternalflow.hp-change-charged",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "state-change"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "observation": {
+            "key": "hpRatioChange",
+            "test": "change"
+          }
+        },
+        "cooldownMs": 300
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 4000,
+        "phase": "after"
+      },
+      "appliesTo": {
+        "categories": [
+          "charged"
+        ]
+      },
+      "stacking": {
+        "maxStacks": 3
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.14,
+              0.18,
+              0.22,
+              0.26,
+              0.3
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tomeoftheeternalflow.directEnergy",
+      "application": "explicit",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "tomeoftheeternalflow.directEnergyTriggered"
+          },
+          "term1": {
+            "call": "tomeoftheeternalflow.directEnergy.fullLayers",
+            "inputs": {
+              "count": {
+                "fact": "tomeoftheeternalflow.energyLayers"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyRestored",
+          "value": {
+            "refinement": [
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "unit": "energy"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "tomeoftheeternalflow.directEnergyTriggered": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次装备者生命值增减，增伤叠满或刷新3层（叠层间隔0.3秒、有效4秒），且回能已就绪（12秒）"
+    },
+    "tomeoftheeternalflow.energyLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次生命值变化后重击增伤层数（0至3层）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "tomeoftheeternalflow.directEnergy.fullLayers",
+      "template": {
+        "id": "quantity-condition",
+        "input": "count",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 3,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    }
+  ]
 }

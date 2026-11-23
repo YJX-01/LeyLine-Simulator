@@ -226,17 +226,118 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "songofbrokenpines.attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "songofbrokenpines.banner-normalAttackSpeed",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "songofbrokenpines.banner-attackPercent",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "songofbrokenpines.attack",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "songofbrokenpines.banner-normalAttackSpeed",
+      "recipient": "team",
+      "condition": {
+        "fact": "songofbrokenpines.bannerSong"
+      },
+      "stacking": {
+        "group": "millennial-movement.normalAttackSpeed",
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.normalAttackSpeed",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "songofbrokenpines.banner-attackPercent",
+      "recipient": "team",
+      "condition": {
+        "fact": "songofbrokenpines.bannerSong"
+      },
+      "stacking": {
+        "group": "millennial-movement.attackPercent",
+        "scope": "team",
+        "policy": "max",
+        "maxStacks": 4
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "songofbrokenpines.bannerSong": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "揭旗之歌已生效（4枚低语之符后12秒内）"
+    }
+  }
 }

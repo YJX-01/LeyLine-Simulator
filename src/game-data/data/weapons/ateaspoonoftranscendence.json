@@ -226,15 +226,31 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "ateaspoonoftranscendence.attackPercent",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "ateaspoonoftranscendence.stellar-conduct",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "ateaspoonoftranscendence.stellar-swirl",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -251,6 +267,98 @@
               0.42,
               0.49,
               0.56
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ateaspoonoftranscendence.stellar-conduct",
+      "appliesTo": {
+        "families": [
+          "stellar-conduct"
+        ]
+      },
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "categories": [
+            "charged"
+          ],
+          "allowZeroDamage": true
+        },
+        "cooldownMs": 200
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 5000,
+        "phase": "after"
+      },
+      "stacking": {
+        "maxStacks": 3
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.stellar-conduct.damageBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ateaspoonoftranscendence.stellar-swirl",
+      "appliesTo": {
+        "families": [
+          "stellar-swirl"
+        ]
+      },
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "categories": [
+            "charged"
+          ],
+          "allowZeroDamage": true
+        },
+        "cooldownMs": 200
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 5000,
+        "phase": "after"
+      },
+      "stacking": {
+        "maxStacks": 3
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.stellar-swirl.damageBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
             ],
             "unit": "scalar"
           }

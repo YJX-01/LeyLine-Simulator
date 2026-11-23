@@ -226,17 +226,120 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "cloudforged.mastery1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "cloudforged.mastery2",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "cloudforged.energyLossLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "18秒内保持的元素能量减少效果层数"
+    }
+  },
+  "formulas": [
+    {
+      "id": "cloudforged.mastery.is1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 2
+      }
+    },
+    {
+      "id": "cloudforged.mastery.is2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 2
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "id": "cloudforged.mastery1",
+      "condition": {
+        "call": "cloudforged.mastery.is1",
+        "inputs": {
+          "points": {
+            "fact": "cloudforged.energyLossLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              40,
+              50,
+              60,
+              70,
+              80
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cloudforged.mastery2",
+      "condition": {
+        "call": "cloudforged.mastery.is2",
+        "inputs": {
+          "points": {
+            "fact": "cloudforged.energyLossLayers"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              80,
+              100,
+              120,
+              140,
+              160
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    }
+  ]
 }

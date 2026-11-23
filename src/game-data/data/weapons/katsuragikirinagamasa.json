@@ -228,13 +228,35 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。",
     "mechanisms": [
       {
-        "id": "explicit-output-scope",
+        "id": "confirmed-direct-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "katsuragikirinagamasa.directEnergy",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "katsuragikirinagamasa.directEnergySpend",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "katsuragikirinagamasa.directEnergy.1",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次触发、装备件数或精炼档位、实际受益者和已确认的触发条件计算。"
+      },
+      {
+        "id": "direct-energy-timeline",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。"
       }
     ]
   },
@@ -261,7 +283,150 @@
           }
         }
       ]
+    },
+    {
+      "id": "katsuragikirinagamasa.directEnergySpend",
+      "application": "explicit",
+      "condition": {
+        "call": "katsuragikirinagamasa.directEnergy.spendStage",
+        "inputs": {
+          "stage": {
+            "fact": "katsuragikirinagamasa.directEnergyStage"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyChange",
+          "value": {
+            "call": "katsuragikirinagamasa.directEnergySpend.delta",
+            "inputs": {
+              "basis": {
+                "call": "katsuragikirinagamasa.directEnergySpend.amount",
+                "inputs": {
+                  "energy": {
+                    "fact": "currentEnergy"
+                  }
+                }
+              },
+              "rate": {
+                "amount": -1,
+                "unit": "scalar"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "katsuragikirinagamasa.directEnergy",
+      "application": "explicit",
+      "condition": {
+        "call": "katsuragikirinagamasa.directEnergy.restoreStage",
+        "inputs": {
+          "stage": {
+            "fact": "katsuragikirinagamasa.directEnergyStage"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyRestored",
+          "value": {
+            "refinement": [
+              3,
+              3.5,
+              4,
+              4.5,
+              5
+            ],
+            "unit": "energy"
+          }
+        },
+        {
+          "target": "attribute.directEnergyChange",
+          "value": {
+            "refinement": [
+              3,
+              3.5,
+              4,
+              4.5,
+              5
+            ],
+            "unit": "energy"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "katsuragikirinagamasa.directEnergyStage": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "未触发",
+          "扣除",
+          "回能"
+        ]
+      },
+      "label": "本次战技命中后（10秒间隔，后台可触发）：到达扣能时刻，或触发后的第2、4、6秒之一"
+    }
+  },
+  "formulas": [
+    {
+      "id": "katsuragikirinagamasa.directEnergy.restoreStage",
+      "template": {
+        "id": "enum-condition",
+        "input": "stage",
+        "values": [
+          "未触发",
+          "扣除",
+          "回能"
+        ],
+        "equals": "回能",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "katsuragikirinagamasa.directEnergySpend.amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "energy",
+        "inputUnit": "energy",
+        "outputUnit": "energy",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "katsuragikirinagamasa.directEnergySpend.delta",
+      "template": {
+        "id": "stat-product",
+        "unit": "energy",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "katsuragikirinagamasa.directEnergy.spendStage",
+      "template": {
+        "id": "enum-condition",
+        "input": "stage",
+        "values": [
+          "未触发",
+          "扣除",
+          "回能"
+        ],
+        "equals": "扣除",
+        "revision": "1"
+      }
+    }
+  ]
 }

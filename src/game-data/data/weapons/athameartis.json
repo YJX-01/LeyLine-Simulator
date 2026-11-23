@@ -226,17 +226,198 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按精炼、白昼之刃窗口、受益角色和魔导·秘仪状态计算爆发暴伤及攻击力。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "athameartis.burst-crit",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athameartis.daybreak-owner",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athameartis.daybreak-team",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athameartis.daybreak-owner-hexerei",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "athameartis.daybreak-team-hexerei",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "athameartis.burst-crit",
+      "appliesTo": {
+        "categories": [
+          "burst"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critDamage",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "athameartis.daybreak-owner",
+      "condition": {
+        "fact": "athameartis.daybreakWindow"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "athameartis.daybreak-team",
+      "condition": {
+        "fact": "athameartis.daybreakWindow"
+      },
+      "recipient": "team",
+      "excludeOwner": true,
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          },
+          "condition": {
+            "fact": "onField",
+            "of": "recipient"
+          }
+        }
+      ]
+    },
+    {
+      "id": "athameartis.daybreak-owner-hexerei",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "athameartis.daybreakWindow"
+          },
+          "term1": {
+            "fact": "athameartis.hexerei"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.15,
+              0.1875,
+              0.225,
+              0.2625,
+              0.3
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "athameartis.daybreak-team-hexerei",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "fact": "athameartis.daybreakWindow"
+          },
+          "term1": {
+            "fact": "athameartis.hexerei"
+          }
+        },
+        "output": "active"
+      },
+      "recipient": "team",
+      "excludeOwner": true,
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          },
+          "condition": {
+            "fact": "onField",
+            "of": "recipient"
+          }
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "athameartis.daybreakWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "白昼之刃已生效（装备者爆发命中后3秒内）"
+    },
+    "athameartis.hexerei": {
+      "scope": "team",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队伍已激活魔导·秘仪"
+    }
+  }
 }

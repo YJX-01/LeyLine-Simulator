@@ -228,15 +228,166 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。历史共鸣进度由用户确认。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "exaiphanesblade.traveler-attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "exaiphanesblade.traveler-crit",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+      },
+      {
+        "id": "confirmed-direct-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "exaiphanesblade.directEnergy",
+            "revision": "1"
+          }
+        ],
+        "reason": "按当次触发、装备件数或精炼档位、实际受益者和已确认的触发条件计算。"
+      },
+      {
+        "id": "direct-energy-timeline",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。历史共鸣进度由用户确认。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "exaiphanesblade.resonatedElements": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "旅行者曾共鸣的不同元素数（0至7）"
+    },
+    "exaiphanesblade.traveler-attackActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旅行者装备并在命中敌人后8秒内"
+    },
+    "exaiphanesblade.directEnergyTriggered": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次旅行者的攻击命中敌人，且回能已就绪（5秒，后台可触发）"
+    }
+  },
+  "buffs": [
+    {
+      "id": "exaiphanesblade.traveler-attack",
+      "condition": {
+        "fact": "exaiphanesblade.traveler-attackActive"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.32,
+              0.4
+            ],
+            "unit": "scalar"
+          }
+        }
+      ],
+      "activation": {
+        "characterGameIds": [
+          10000005,
+          10000007
+        ]
+      }
+    },
+    {
+      "id": "exaiphanesblade.traveler-crit",
+      "activation": {
+        "refinement": 2,
+        "characterGameIds": [
+          10000005,
+          10000007
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critDamage",
+          "value": {
+            "call": "exaiphanesblade.crit-per-element",
+            "inputs": {
+              "elements": {
+                "fact": "exaiphanesblade.resonatedElements"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "exaiphanesblade.directEnergy",
+      "application": "explicit",
+      "condition": {
+        "fact": "exaiphanesblade.directEnergyTriggered"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.directEnergyRestored",
+          "value": {
+            "refinement": [
+              3,
+              3,
+              5,
+              5,
+              5
+            ],
+            "unit": "energy"
+          }
+        }
+      ],
+      "activation": {
+        "characterGameIds": [
+          10000005,
+          10000007
+        ]
+      }
+    }
+  ],
+  "formulas": [
+    {
+      "id": "exaiphanesblade.crit-per-element",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "elements",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.06,
+        "offset": 0,
+        "threshold": 0,
+        "maxInput": 7,
+        "output": "value"
+      }
+    }
+  ]
 }

@@ -228,15 +228,74 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已支持按精炼和持有者生命值、治疗及受治疗加成查询一次已确认的回复。微粒与晶球获取记录和连续拾取的触发归属待接入。",
     "mechanisms": [
       {
-        "id": "explicit-output-scope",
+        "id": "confirmed-healing",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "travelershandysword.healing",
+            "revision": "1"
+          }
+        ],
+        "reason": "已支持按精炼和持有者生命值、治疗及受治疗加成查询一次已确认的回复。"
+      },
+      {
+        "id": "automatic-healing-trigger",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "reason": "微粒与晶球获取记录和连续拾取的触发归属待接入。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "travelershandysword.particleHealing": {
+      "label": "本次获得元素微粒或晶球",
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  },
+  "buffs": [
+    {
+      "id": "travelershandysword.healing",
+      "application": "explicit",
+      "condition": {
+        "fact": "travelershandysword.particleHealing"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.equipmentHealing",
+          "value": {
+            "call": "healing.max-hp",
+            "inputs": {
+              "maxHp": {
+                "stat": "hp"
+              },
+              "rate": {
+                "refinement": [
+                  0.01,
+                  0.0125,
+                  0.015,
+                  0.0175,
+                  0.02
+                ],
+                "unit": "scalar"
+              },
+              "outgoing": {
+                "stat": "healingBonus"
+              },
+              "incoming": {
+                "stat": "incomingHealingBonus"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
 }

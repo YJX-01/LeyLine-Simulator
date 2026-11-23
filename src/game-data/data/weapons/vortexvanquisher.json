@@ -226,15 +226,31 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "已采用当次条件、合法精炼及输出适用范围。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "vortexvanquisher.shield-strength",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "vortexvanquisher.stacked-attack",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "vortexvanquisher.shielded-attack",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用当次条件、合法精炼及输出适用范围。"
       }
     ]
   },
@@ -256,7 +272,106 @@
           }
         }
       ]
+    },
+    {
+      "id": "vortexvanquisher.stacked-attack",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "vortexvanquisher.attack-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "vortexvanquisher.attackLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.04,
+                  0.05,
+                  0.06,
+                  0.07,
+                  0.08
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.2,
+                  0.25,
+                  0.3,
+                  0.35,
+                  0.4
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "vortexvanquisher.shielded-attack",
+      "condition": {
+        "fact": "shielded"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "vortexvanquisher.attack-per-layer",
+            "inputs": {
+              "basis": {
+                "fact": "vortexvanquisher.attackLayers"
+              },
+              "rate": {
+                "refinement": [
+                  0.04,
+                  0.05,
+                  0.06,
+                  0.07,
+                  0.08
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.2,
+                  0.25,
+                  0.3,
+                  0.35,
+                  0.4
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
     }
   ],
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "facts": {
+    "vortexvanquisher.attackLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "命中后的当前攻击层数（8秒内，每0.3秒至多1层）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "vortexvanquisher.attack-per-layer",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ]
 }
