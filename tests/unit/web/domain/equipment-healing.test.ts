@@ -39,7 +39,7 @@ it('shows Prototype Amber healing per recipient and keeps the owner energy value
     expect(choice.modifiers.map(modifier => modifier.target)).toEqual(targets);
     expect(choice.fields[0].label).toBe('试作金珀本次周期回复已触发');
     const output = (input: typeof project) => evaluateTimeline(input).points.find(point => point.id === hit)!.real!;
-    expect(calculatorBuffValues(output(project), [choice])).toContainEqual([healing, '待确认']);
+    expect(calculatorBuffValues(output(project), [choice])).toContainEqual([healing, '—']);
     for (const setting of choice.requirements) setCalculatorFact(request, setting, choice.ownerId);
     const applied = applyCalculatorBuffs(project, request, choices, new Map([[choice.id, true]]), 1000, hit);
     applied.project.timeline.find(record => record.id === hit)!.damage = { ...request, effectApplications: applied.applications };

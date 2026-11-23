@@ -2,10 +2,14 @@ import { definitionKey, type CalculationTraceNode, type DamageRequest, type Dama
 import { realStatLabel } from './workbench-labels';
 import { buffTargetLabel, type CalculatorBuff } from './calculator-buffs';
 
-export const damageNumber = (value?: number | null) => value == null || !Number.isFinite(value) ? '待确认' : value.toLocaleString('zh-CN', { maximumFractionDigits: 6 });
+export const damageNumber = (value?: number | null) => value == null || !Number.isFinite(value) ? '—' : value.toLocaleString('zh-CN', { maximumFractionDigits: 6 });
+/** Current-format files can carry support notes written by earlier catalog revisions. */
+export function calculatorSupportText(message: string) {
+  return message.replace(/(?:尚|仍)?待(?:核实|核验|确认)/g, '尚无验证结论').replaceAll('需补充条件', '缺少计算所需的输入');
+}
 export const critNames = { noncritical: '非暴击', critical: '暴击', expected: '期望' };
 export const reactionNames = { none: '无反应', vaporize: '蒸发', melt: '融化', aggravate: '超激化', spread: '蔓激化' };
-const percent = (value?: number | null) => value == null ? '待确认' : damageNumber(value * 100) + '%';
+const percent = (value?: number | null) => value == null ? '—' : damageNumber(value * 100) + '%';
 const numeric = (entry?: EvaluatedValue | CalculationTraceNode) => entry?.state === 'known' && entry.value?.kind === 'quantity' ? entry.value.value : null;
 type Row = [string, string];
 export interface CalculatorFactor { label: string; value: number | null; multiplier: boolean; rows: Row[] }
@@ -85,7 +89,7 @@ export function calculatorFactors(real: DamageResult, damage: DamageRequest, buf
     if (entry) cards.push({ label, value: numeric(entry), multiplier, rows: [...rows, ...contributions(entry.traceId)] });
   }
   const scaling: Row[] = real.scaling.map(term => [realStatLabel(term.stat) + ' × 倍率',
-    damageNumber(term.attribute) + ' × ' + damageNumber(term.multiplier) + (term.count ? ' × ' + damageNumber(term.count.value) : '') + ' = ' + damageNumber(term.contribution)]);
+    term.count?.value === 0 ? '计数为 0，贡献 0' : damageNumber(term.attribute) + ' × ' + damageNumber(term.multiplier) + (term.count ? ' × ' + damageNumber(term.count.value) : '') + ' = ' + damageNumber(term.contribution)]);
   const stageRow = (key: string, label: string): Row => [label, damageNumber(numeric(stages.get(key)))];
   if (stages.has('skill-base')) {
     cards.push({ label: '数值 × 倍率区', value: numeric(rootNodes.get('base')), multiplier: false,
@@ -97,11 +101,11 @@ export function calculatorFactors(real: DamageResult, damage: DamageRequest, buf
   add('bonus','增伤区', inputs('bonus', [['one','基础倍率'],['elementBonus','元素或物理伤害加成',true],['hitBonus','命中伤害加成',true],['targetReduction','目标减伤',true]]));
   add('reaction-bonus','反应增伤区', [stageRow('reaction-em','精通加成'), ...inputs('reaction-bonus',[['reactionBonus','反应伤害加成',true],['em','元素精通']])]);
   add('reaction-flat','反应固定加值', inputs('reaction-flat',[['flatBaseBonus','附加基础伤害']]), false);
-  add('crit','暴击区', [['暴击方式', damage.crit ? critNames[damage.crit] : '待确认'],
+  add('crit','暴击区', [['暴击方式', damage.crit ? critNames[damage.crit] : '—'],
     ...inputs('crit', [['critRate','暴击率',true],['critDamage','暴击伤害',true],['one','基础倍率']])]);
   add('defense','防御区', inputs('defense', [['characterLevel','角色等级'],['enemyLevel','目标等级'],['reduction','减防比例',true],['ignore','无视防御',true]]));
   add('resistance','抗性区', inputs('resistance', [['resistance','目标对应抗性',true]]));
-  add('amplification','增幅反应区', [['反应', damage.reaction ? reactionNames[damage.reaction === 'none' ? 'none' : damage.reaction.type] : '待确认'],
+  add('amplification','增幅反应区', [['反应', damage.reaction ? reactionNames[damage.reaction === 'none' ? 'none' : damage.reaction.type] : '—'],
     ...(real.reaction?.family === 'amplifying' ? [['反应系数',damageNumber(real.reaction.coefficient)],['元素精通',damageNumber(real.reaction.elementalMastery)],['反应加成',percent(real.reaction.bonus)]] as Row[] : [])]);
   add('elevation','反应提升区', inputs('elevation',[['elevation','反应伤害提升',true],['elevationFactor','提升倍率']]));
   if (numeric(stages.get('ordinary-elevation')) !== 1) add('ordinary-elevation', '擢升区', inputs('ordinary-elevation', [['elevationFactor', '擢升倍率']]));

@@ -23,7 +23,7 @@ export function evaluateSceneHit(
       if (Number.isFinite(damage)) {
         baseDamage = damage;
         if ('trueDamage' in definition) value = damage;
-        else issues.push({ code: 'unsupported', message: '冲击的伤害元素、防御及抗性结算待核验。' });
+        else issues.push({ code: 'unsupported', message: '尚无该冲击的伤害元素、防御及抗性结算依据。' });
       }
       else issues.push({ code: 'invalid-input', message: 'ElementLevelCo 超出可计算范围。' });
     }

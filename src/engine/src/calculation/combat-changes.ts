@@ -294,7 +294,8 @@ export function projectBuffContext(project: Project, includeInstances = false) {
       instances.set(key, list);
     }
   }
-  return {events,factIntervals,instances,sceneGrants:grantedSceneEffects(prepared.runtime.team)};
+  return { events, factIntervals, instances, teamFacts: prepared.runtime.context.team.facts,
+    stateFrames: prepared.runtime.context.stateFrames, sceneGrants: grantedSceneEffects(prepared.runtime.team) };
 }
 
 export function projectCombatEvents(project: Project) { return projectBuffContext(project)?.events ?? []; }

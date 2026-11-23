@@ -13,7 +13,6 @@ const buffValues = computed(() => calculatorBuffValues(props.real, props.buffs))
       <summary class="card-action-trigger"><span>{{ card.label }}</span><strong>{{ card.multiplier && card.value != null ? '× ' : '' }}{{ damageNumber(card.value) }}</strong>
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg></summary>
       <dl v-if="card.rows.length"><div v-for="([label,value], i) in card.rows" :key="i"><dt>{{ label }}</dt><dd>{{ value }}</dd></div></dl>
-      <p v-else>分项待确认</p>
     </details>
     <details v-if="buffValues.length" class="factor-card" data-card-action="detail">
       <summary class="card-action-trigger">本次增益数值</summary>

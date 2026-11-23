@@ -2,11 +2,42 @@ import { createCombatStateReader, effectRecipientMatches, grantedBuildEffects, h
 import { authoredHit, effectiveHitElement } from '@leyline/schema/hit-bindings';
 import { combatFactDeclaration } from '@leyline/schema/buffs';
 import type { findBuildHit } from '@leyline/schema';
-import { putHitFact, subjectFacts, definitionKey, partyInfusionFact, partyInfusionOptions, type FactSubject, type CalculationBinding, type CalculationBundle, type CombatConditions, type CombatStateField, type DamageRequest, type PartyInfusionElement, type Project, type Value, type ValueType } from '@leyline/schema';
+import { putHitFact, subjectFacts, definitionKey, partyInfusionFact, partyInfusionOptions, type FactSubject, type CalculationBinding, type CalculationBundle, type CombatConditions, type CombatStateField, type DamageRequest, type PartyInfusionElement, type Project, type RequiredInput, type Value, type ValueType } from '@leyline/schema';
 import { nextRecordId } from './workbench-project';
+import type { CalculationFact, Talent } from '@leyline/schema';
+
+export function presetCalculatorHitInputs(damage: DamageRequest, inputs: NonNullable<Talent['inputs']>, recorded?: Record<string, CalculationFact>) {
+  const event = { kind: 'event' } as const;
+  for (const input of inputs) {
+    if (subjectFacts(damage.facts, event)?.[input.id]?.value != null) continue;
+    const prior = recorded?.[input.id]?.value;
+    const value = prior?.kind === 'quantity' && prior.unit === input.type.unit ? prior.value : input.min;
+    putHitFact(damage.facts ??= [], event, input.id, { ...input.type, value });
+  }
+}
 
 export interface CalculatorFactSetting { key: string; value: Value; subject?: FactSubject }
-export interface CalculatorFactField { key: string; type: ValueType; subject?: FactSubject; label?: string }
+export interface CalculatorFactField { key: string; type: ValueType; subject?: FactSubject; label?: string; inherited?: Value; fromTrigger?: boolean }
+export function calculatorFactPreset(field: CalculatorFactField, actorId: string): Value {
+  const { type, key, subject } = field;
+  if (type.kind === 'boolean') return { kind: 'boolean', value: key === 'onField' && subject?.kind === 'actor' && subject.id === actorId };
+  if (type.kind === 'enum') return { kind: 'enum', value: type.values.includes('none') ? 'none' : type.values[0] };
+  const value = ['hpRatio', 'targetHpRatio', 'targetsHit', 'targetsDamaged', 'nearbyEnemies', 'reactionCoefficient'].includes(key) ? 1 : 0;
+  return { kind: 'quantity', unit: type.unit, value };
+}
+
+/** Fill only editable facts the evaluator actually needs, preserving recorded and inferred values. */
+export function missingCalculatorPresets(facts: DamageRequest['facts'], fields: CalculatorFactField[], inputs: RequiredInput[], actorId: string) {
+  return fields.flatMap(field => {
+    const { subject, key } = field;
+    if (!subject || subjectFacts(facts, subject)?.[key]?.value != null) return [];
+    const scope = subject.kind === 'event' ? 'query' : subject.kind === 'actor' ? subject.id : subject.kind;
+    const missing = inputs.some(input => input.key === key && input.requiredBy.length
+      && (input.scope === scope || input.scope.endsWith(':' + scope)));
+    return missing ? [{ key, subject, value: calculatorFactPreset(field, actorId) }] : [];
+  });
+}
+
 export function calculatorIntervals(project: Project, actor: string, timeMs: number, recordId?: string): CombatConditions {
   if (!project.combatStates?.length && !project.timeline.some(r => r.fieldSwitch)) return {};
   const order = project.timeline.find(r => r.id === recordId)?.order;

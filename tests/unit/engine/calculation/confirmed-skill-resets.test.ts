@@ -56,6 +56,6 @@ it('shows the cleared cooldown and its known zero remainder only for a confirmed
   };
   expect(solve(true)).toEqual(['3.5 秒（重置后 0 秒）']);
   expect(solve(false)).toEqual([]);
-  expect(solve(null)).toEqual(['待确认']);
+  expect(solve(null)).toEqual(['—']);
   expect(solve(true, false)).toEqual([]);
 });

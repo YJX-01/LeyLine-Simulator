@@ -16,8 +16,8 @@ import { getReactionCalculationBundle, loadCatalog, type GameCatalog } from '@le
 import type { TransformativeFamily, ProjectReaction } from '@leyline/schema';
 import { damageCalculatorSchema, projectSchema, type ValueType, elements, createTalentRankReader, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest } from '@leyline/schema';
 import type { AccountCharacter } from '../domain/account';
-import { addCalculatorSceneHit, calculatorRequest, calculatorSceneHits, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
-import { addActorFromBuild, addAttributeCapture, addTransformativeReaction, defaultEnemy } from '../domain/real-project';
+import { addCalculatorCapture, addCalculatorSceneHit, calculatorRequest, calculatorSceneHits, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
+import { addActorFromBuild, addTransformativeReaction, defaultEnemy } from '../domain/real-project';
 import { createEmptyProject, nextRecordId } from '../domain/workbench-project';
 import { teamArtifactEntries } from '../domain/team-members';
 import { buildRollBasis } from '../domain/effective-roll-basis';
@@ -44,8 +44,8 @@ import CalculatorBuffPicker from '../components/CalculatorBuffPicker.vue';
 import CalculatorFactorCards from '../components/CalculatorFactorCards.vue';
 import { calculatorHitChoices, type CalculatorHitChoice } from '../domain/calculator-hits';
 import { applyCalculatorBuffs, buffFactNames, calculatorBuffChoices, resolveBuffSelection } from '../domain/calculator-buffs';
-import { calculatorHitElement, calculatorIntervals, calculatorOnFieldActor, calculatorHitFactFields, calculatorPartyInfusionOptions, type CalculatorFactField, selectionFacts, setCalculatorFact } from '../domain/calculator-conditions';
-import { damageNumber as number, reactionNames, critNames } from '../domain/calculator-factors';
+import { presetCalculatorHitInputs, missingCalculatorPresets, calculatorFactPreset, calculatorHitElement, calculatorIntervals, calculatorOnFieldActor, calculatorHitFactFields, calculatorPartyInfusionOptions, type CalculatorFactField, selectionFacts, setCalculatorFact } from '../domain/calculator-conditions';
+import { calculatorSupportText, damageNumber as number, reactionNames, critNames } from '../domain/calculator-factors';
 import type { SavedTeam } from '../stores/saved-teams';
 import { loadSavedDamage, saveDamageSnapshot } from '../platform/saved-damage';
 const SavedDamageList = defineAsyncComponent(() => import('../components/SavedDamageList.vue'));
@@ -137,14 +137,20 @@ const factFields = computed(() => {
     const keys = ['targetsDamaged', 'triggerRoll', ...changes.some(({ rule }) => rule.critical) ? ['criticalTargets'] : []];
     for (const key of keys) partyFields.push({ key, type: combatFactDeclaration(undefined, key)!.type, subject: { kind: 'event' } });
   }
+  for (const key of ['hpRatio', 'onField', 'shielded'] as const) partyFields.push({
+    key, type: combatFactDeclaration(undefined, key)!.type, subject: { kind: 'actor', id: owner },
+  });
   for (const field of [...partyFields, ...calculatorHitFactFields(selectedBinding.value, owner, dealer?.id, hitOwner.value?.build?.constellation), ...buffs.value.flatMap(buff => buff.fields)]) {
     const subject = field.subject;
-    if (!subject || subject.kind === 'actor' && subject.id === owner && ['hpRatio', 'shielded', 'onField'].includes(field.key)
+    if (!subject
       || subject.kind === 'event' && (hitInputs.value.some(input => input.id === field.key) || ['critMode', 'reactionMode'].includes(field.key))) continue;
     const name = subject.kind === 'actor' ? document.value?.project.candidate.actors.find(actor => actor.id === subject.id)?.build?.character.identity.name
       : subject.kind === 'team' ? '队伍' : subject.kind === 'target' ? '目标' : '本击';
     const label = field.label ?? selectedBinding.value?.entity.metadata.facts?.[field.key]?.label ?? buffFactNames[field.key] ?? field.key;
-    fields.set(JSON.stringify([subject, field.key]), { ...field, label: [name, label].filter(Boolean).join(' · ') });
+    const own = subject.kind === 'actor' && subject.id === owner;
+    const caption = field.key === 'hpRatio' ? '生命比例（%）' : label;
+    fields.set(JSON.stringify([subject, field.key]), { ...field, label: own && ['hpRatio', 'onField', 'shielded'].includes(field.key)
+      ? caption : [name, caption].filter(Boolean).join(' · ') });
   }
   return [...fields.values()];
 });
@@ -162,11 +168,12 @@ function updateSceneHit(patch: Partial<Pick<SceneHitRequest, 'elementLevelCo' | 
     ? { ...record, sceneHit: { ...record.sceneHit, ...patch } } : record);
   document.value = { ...current, project: { ...current.project, timeline } };
 }
-const sceneTriggered = computed({ get: () => sceneHit.value?.triggered ?? null, set: triggered => updateSceneHit({ triggered }) });
-const sceneTargetHit = computed({ get: () => sceneHit.value?.targetHit ?? null, set: targetHit => updateSceneHit({ targetHit }) });
+const sceneTriggered = computed({ get: () => sceneHit.value?.triggered ?? true, set: triggered => updateSceneHit({ triggered }) });
+const sceneTargetHit = computed({ get: () => sceneHit.value?.targetHit ?? true, set: targetHit => updateSceneHit({ targetHit }) });
 function setSceneCoefficient(event: Event) {
   const input = event.target as HTMLInputElement;
-  updateSceneHit({ elementLevelCo: input.value === '' ? null : input.valueAsNumber });
+  if (!input.value) input.value = '1';
+  updateSceneHit({ elementLevelCo: input.valueAsNumber });
 }
 function exportMetadata() {
   if (!actor.value?.build) return;
@@ -202,9 +209,9 @@ const inputNames: Record<string, string> = { counterCharge: '反击档位', nami
 const factLabels: Record<string, string> = { ...buffFactNames, ...inputNames, critMode: '暴击', reactionMode: '反应' };
 function diagnosticText(message: string) {
   const prefix = '计算事实尚未明确：';
-  if (!message.startsWith(prefix)) return message;
+  if (!message.startsWith(prefix)) return calculatorSupportText(message);
   const key = message.slice(prefix.length);
-  return '需填写' + (factLabels[key] ?? key);
+  return '需填写' + (factLabels[key] ?? factFields.value.find(field => field.key === key)?.label ?? key);
 }
 const missingBuff = computed(() => [point.value, expectedPoint.value].some(point => point?.real?.structured?.requiredInputs.some(input =>
   input.requiredBy.length && (factFields.value.some(field => field.key === input.key) || ['onField', 'shielded', 'hpRatio'].includes(input.key)))));
@@ -216,9 +223,10 @@ const diagnostics = computed(() => {
 });
 function unavailable(assessment: AxisResponse['result'] | undefined, record: typeof point.value) {
   if (record?.real?.status === 'invalid' || assessment?.status === 'invalid') return '输入需修正';
-  if (record?.real?.issues.some(issue => issue.code === 'unknown')) return '需补充条件';
+  const missing = record?.real?.issues.find(issue => issue.code === 'unknown');
+  if (missing) return diagnosticText(missing.message);
   if (record?.real?.issues.some(issue => issue.code === 'unsupported')) return '机制尚未支持';
-  return '需补充条件';
+  return '未取得计算结果';
 }
 const reactionType = computed({ get: () => damage.value.reaction === null ? '' : damage.value.reaction === 'none' ? 'none' : damage.value.reaction.type,
   set: (value: string) => { damage.value.reaction = !value ? null : value === 'none' ? 'none' : { type: value as 'melt' | 'vaporize' | 'aggravate' | 'spread', trigger: 'record-owner' }; } });
@@ -301,7 +309,7 @@ function editCaptureFact(record: CaptureRecord, field: CaptureField, event: Even
   if (!current) return;
   const input = (event.target as HTMLInputElement).value;
   const type = field.type;
-  const value = input === '' ? null : type.kind === 'quantity' ? { ...type, value: Number(input) }
+  const value = input === '' ? calculatorFactPreset(field, record.actor) : type.kind === 'quantity' ? { ...type, value: Number(input) }
     : type.kind === 'boolean' ? { kind: 'boolean' as const, value: input === 'true' } : { kind: 'enum' as const, value: input };
   if (value?.kind === 'quantity' && (!Number.isFinite(value.value) || value.unit === 'count' && (!Number.isSafeInteger(value.value) || value.value < 0))) return;
   const facts = structuredClone(toRaw(record.captureFacts ?? []));
@@ -343,7 +351,7 @@ function install(next: DamageCalculatorDocument, saved = false) {
   damage.value = record?.damage ? JSON.parse(JSON.stringify(record.damage)) : emptyDamage();
   if (record?.reactionEvent) {
     const reaction = structuredClone(toRaw(record.reactionEvent));
-    damage.value = { ...damage.value, crit: isTransformative(reaction.family) ? reaction.contributors[0].crit : null,
+    damage.value = { ...damage.value, crit: isTransformative(reaction.family) ? reaction.contributors[0].crit ?? 'noncritical' : null,
       facts: reaction.facts, effectApplications: reaction.effectApplications };
   }
   hitTime.value = (record?.timeMs ?? 0) / 1000; captureTime.value = '';
@@ -416,7 +424,8 @@ function selectDamage(choice: CalculatorHitChoice) {
   const previousSkill = skill.value?.id, previousReaction = reactionType.value;
   if (sceneHit.value) damage.value = emptyDamage();
   damage.value = { ...damage.value, hit: choice.ref };
-  delete damage.value.hitOrdinal;
+  if (selectedHit.value?.selection?.repetitions) damage.value.hitOrdinal = 1;
+  else delete damage.value.hitOrdinal;
   if (selectedHit.value?.critical === 'always') damage.value.crit = 'critical';
   const priorFacts = subjectFacts(damage.value.facts, { kind: 'event' });
   if (previousSkill !== choice.skillId && priorFacts) for (const input of previousInputs) delete priorFacts[input.id];
@@ -428,10 +437,18 @@ function selectDamage(choice: CalculatorHitChoice) {
     damage.value.effectApplications = damage.value.effectApplications.filter(entry => applicable.has(entry.instanceId));
   }
   if (!previousSkill || previousSkill !== choice.skillId) {
-    for (const input of hitInputs.value) putHitFact(damage.value.facts ??= [], { kind: 'event' }, input.id, { ...input.type, value: input.min });
+    presetCalculatorHitInputs(damage.value, hitInputs.value);
   }
   if (hitOwner.value) {
     const draft: DamageRequest = JSON.parse(JSON.stringify(damage.value));
+    // Set up the ordinary single-hit trial before resolving conditional passives.
+    if (!document.value?.project.timeline.length) {
+      for (const field of factFields.value) {
+        if (field.subject?.kind !== 'actor' || !['onField', 'hpRatio', 'shielded'].includes(field.key)) continue;
+        if (subjectFacts(draft.facts, field.subject)?.[field.key]?.value == null)
+          setCalculatorFact(draft, { ...field, value: calculatorFactPreset(field, hitOwner.value.id) }, hitOwner.value.id);
+      }
+    }
     const changes = resolveBuffSelection(buffs.value, draft, intervals.value, hitOwner.value.id, new Map());
     applyBuffs(changes, draft);
   } else void calculate();
@@ -535,6 +552,10 @@ function prepareDocument() {
   const timeMs = Math.round(hitTime.value * 1000);
   if (!Number.isFinite(hitTime.value) || timeMs < 0 || timeMs > 3600000) throw new Error('请填写0至3600秒内的命中时刻。');
   if (damage.value.hit.hitId) {
+    damage.value.crit ??= 'critical';
+    damage.value.reaction ??= 'none';
+    const existing = timeline.find(record => record.id === next.recordId);
+    presetCalculatorHitInputs(damage.value, hitInputs.value, existing?.facts);
     const index = timeline.findIndex(record => record.id === next.recordId);
     if (index >= 0) timeline[index] = { ...timeline[index], reactionEvent:undefined, sceneHit:undefined, timeMs, damage: damage.value };
     else {
@@ -542,6 +563,17 @@ function prepareDocument() {
       timeline.push({ id: next.recordId, actor: next.actorId, kind: 'damage', definition: `${next.actorId}-real-damage`,
         timeMs, order: Math.max(-1, ...timeline.map(record => record.order)) + 1, damage: damage.value });
     }
+    const snapshot = selectedHit.value?.snapshot;
+    if (snapshot && !damage.value.capture?.recordId) {
+      const hit = timeline.find(record => record.id === next.recordId)!;
+      const source = captures.value.filter(record => record.id !== hit.id && (record.timeMs < timeMs
+        || record.timeMs === timeMs && record.order < hit.order)).sort((a,b) => b.timeMs - a.timeMs || b.order - a.order)[0];
+      let recordId = source?.id;
+      if (!recordId && skill.value?.id === snapshot.sourceSkillId) recordId = hit.id;
+      recordId ??= addCalculatorCapture(next.project, hit.actor, snapshot.sourceSkillId, timeMs, hit.id);
+      damage.value.capture = { recordId, phase: 'before' };
+      next.project.timeline.find(record => record.id === hit.id)!.damage = damage.value;
+    } else if (damage.value.capture) damage.value.capture.phase ??= 'before';
   } else if (standalone.value) {
     const i=timeline.findIndex(r=>r.id===next.recordId);
     const reaction = standalone.value;
@@ -549,7 +581,11 @@ function prepareDocument() {
       contributors: transformative.value ? reaction.contributors.map(owner => ({ ...owner, crit:damage.value.crit })) : reaction.contributors }};
   } else if (sceneHit.value) {
     const index = timeline.findIndex(record => record.id === next.recordId);
-    if (index >= 0) timeline[index] = { ...timeline[index], timeMs };
+    if (index >= 0) {
+      const scene = sceneHit.value;
+      timeline[index] = { ...timeline[index], timeMs, sceneHit: { ...scene,
+        triggered: scene.triggered ?? true, targetHit: scene.targetHit ?? true, elementLevelCo: scene.elementLevelCo ?? 1 } };
+    }
   }
   return damageCalculatorSchema.parse(next);
 }
@@ -557,12 +593,12 @@ async function createCapture() {
   error.value = '';
   try {
     if (!document.value || document.value.baseline || !hitOwner.value || !selectedHit.value?.snapshot) return;
-    if (String(captureTime.value).trim() === '') throw new Error('请填写已确认的属性捕获时刻。');
-    const timeMs = Math.round(Number(captureTime.value) * 1000);
-    const next = damageCalculatorSchema.parse(document.value);
-    const recordId = addAttributeCapture(next.project, hitOwner.value.id, selectedHit.value.snapshot.sourceSkillId, timeMs);
+    const timeMs = Math.round(Number(captureTime.value === '' ? hitTime.value : captureTime.value) * 1000);
+    if (timeMs > Math.round(hitTime.value * 1000)) throw new Error('属性捕获时刻应早于或等于命中时刻。');
+    const next = prepareDocument()!;
+    const recordId = addCalculatorCapture(next.project, hitOwner.value.id, selectedHit.value.snapshot.sourceSkillId, timeMs, next.recordId);
     document.value = next;
-    damage.value.capture = { recordId, phase: null };
+    damage.value.capture = { recordId, phase: 'before' };
     captureTime.value = '';
   } catch (cause) { showError(cause); }
 }
@@ -580,17 +616,56 @@ async function calculate() {
     calculationFinished = new Promise<void>(resolve => { finishCalculation = resolve; });
     const recordId = next.recordId;
     const expectedTask = ++taskId;
+    let actual: AxisResponse;
+    let retry: Promise<void> | undefined;
+    function complete(expected: AxisResponse['result']) {
+      const evaluation = actual.comparison?.candidates[0]?.result ?? actual.result;
+      const incomplete = [evaluation, expected].flatMap(result => {
+        const point = result.points.find(point => point.id === recordId);
+        return point?.value == null && point?.real?.structured ? [point.real.structured] : [];
+      });
+      const missing = incomplete.flatMap(entry => entry.requiredInputs);
+      const owner = hitOwner.value?.id;
+      if (owner && next && !next.baseline && missing.length) {
+        const updated = new Map<string, CaptureRecord>();
+        for (const { record, fields } of captureGroups.value) {
+          const atSource = incomplete.some(entry => entry.trace.some(node =>
+            node.context?.eventId === record.id && node.state === 'unknown'));
+          if (!atSource) continue;
+          const presets = missingCalculatorPresets(record.captureFacts, fields, missing, record.actor);
+          if (!presets.length) continue;
+          const facts = structuredClone(toRaw(record.captureFacts ?? []));
+          for (const preset of presets) putHitFact(facts, preset.subject, preset.key, preset.value);
+          updated.set(record.id, { ...record, captureFacts: facts });
+        }
+        if (updated.size) {
+          document.value = { ...next, project: { ...next.project, timeline: next.project.timeline.map(row => updated.get(row.id) ?? row) } };
+          retry = calculate();
+          return;
+        }
+        const presets = missingCalculatorPresets(damage.value.facts, factFields.value, missing, owner);
+        if (presets.length) {
+          const draft: DamageRequest = JSON.parse(JSON.stringify(damage.value));
+          for (const preset of presets) setCalculatorFact(draft, preset, owner);
+          damage.value = draft;
+          retry = calculate();
+          return;
+        }
+      }
+      response.value = actual;
+      expectedResult.value = expected;
+      stop();
+    }
     worker.onmessage = (event: MessageEvent<AxisResponse>) => {
       if (activeWorker !== worker) return;
-      if (event.data.taskId === expectedTask) {
-        expectedResult.value = event.data.result;
-        if (event.data.error) error.value = event.data.error;
-        stop(); return;
-      }
-      if (event.data.taskId !== request.taskId) return;
-      response.value = event.data;
       if (event.data.error) { error.value = event.data.error; stop(); return; }
-      if (sceneHit.value || standalone.value && !transformative.value || damage.value.crit === 'expected' || selectedHit.value?.critical === 'always') { expectedResult.value = result.value; stop(); return; }
+      if (event.data.taskId === expectedTask) { complete(event.data.result); return; }
+      if (event.data.taskId !== request.taskId) return;
+      actual = event.data;
+      if (sceneHit.value || standalone.value && !transformative.value || damage.value.crit === 'expected' || selectedHit.value?.critical === 'always') {
+        complete(actual.comparison?.candidates[0]?.result ?? actual.result);
+        return;
+      }
       try {
         const evaluated = request.candidates ? calculatorWorkerRequest({ ...next, baseline: undefined }, expectedTask).project : request.project;
         const timeline = evaluated.timeline.map(record => {
@@ -606,6 +681,7 @@ async function calculate() {
     worker.onmessageerror = worker.onerror = () => { if (activeWorker === worker) { stop(); error.value = '计算进程未完成，请重新计算。'; } };
     worker.postMessage(request);
     await calculationFinished;
+    await retry;
   } catch (cause) { stop(); showError(cause); }
 }
 async function reviewContent() {
@@ -638,7 +714,9 @@ function endComparison() {
 }
 async function save() {
   error.value = '';
-  try { const next = prepareDocument(); if (!next) return false; calculatorRequest(next, 0); if (JSON.stringify(document.value) !== JSON.stringify(next)) document.value = next; downloadJson(packDocument('damage-calculator', next), '伤害计算.json'); savedSignature.value = signature(); return true; }
+  try {
+    while (calculationFinished) await calculationFinished;
+    const next = prepareDocument(); if (!next) return false; calculatorRequest(next, 0); if (JSON.stringify(document.value) !== JSON.stringify(next)) document.value = next; downloadJson(packDocument('damage-calculator', next), '伤害计算.json'); savedSignature.value = signature(); return true; }
   catch (cause) { showError(cause); return false; }
 }
 async function saveDamage() {
@@ -646,13 +724,13 @@ async function saveDamage() {
   savingDamage.value = true;
   error.value = '';
   try {
+    if (calculationFinished) {
+      while (calculationFinished) await calculationFinished;
+    } else if (!result.value) await calculate();
+    if (!result.value) return false;
     const next = prepareDocument()!;
-    if (JSON.stringify(next) !== documentSignature.value) document.value = next;
     const before = signature();
     if (before === listed.value?.signature) return true;
-    if (calculationFinished) await calculationFinished;
-    else if (!result.value) await calculate();
-    if (signature() !== before || !result.value) return false;
     const value = point.value?.value ?? undefined;
     const id = await saveDamageSnapshot({
       name: sceneHit.value ? selectedLabel.value : [roleName.value,...(standalone.value ? [selectedLabel.value] : [selectedChoice.value!.alias,selectedChoice.value!.name])].join(' / '),
@@ -703,14 +781,20 @@ async function selectRecord(id: string) {
 }
 function setInput(id: string, event: Event) {
   const raw = (event.target as HTMLInputElement).value, input = hitInputs.value.find(input => input.id === id);
-  if (input) putHitFact(damage.value.facts ??= [], { kind: 'event' }, id, raw.trim() ? { ...input.type, value: Number(raw) } : null);
+  if (!input) return;
+  const value = raw.trim() ? Number(raw) : input.min;
+  putHitFact(damage.value.facts ??= [], { kind: 'event' }, id, { ...input.type, value });
+  if (!raw.trim()) (event.target as HTMLInputElement).value = String(value);
 }
 function setHitOrdinal(event: Event) {
   const control = event.target as HTMLSelectElement;
   if (control.value) damage.value.hitOrdinal = Number(control.value);
   else delete damage.value.hitOrdinal;
 }
-function setCapture(event: Event) { damage.value.capture = { recordId: (event.target as HTMLSelectElement).value || null, phase: damage.value.capture?.phase ?? null }; }
+function setCapture(event: Event) {
+  const recordId = (event.target as HTMLSelectElement).value;
+  damage.value.capture = { recordId, phase: recordId === document.value?.recordId ? 'before' : damage.value.capture?.phase ?? 'before' };
+}
 function leaveCalculator(action: () => void) {
   if (editorDialog.value) editorDialog.value.requestLeave(() => { editor.value = undefined; requestLeave(action); });
   else requestLeave(action);
@@ -759,10 +843,10 @@ defineExpose({ requestLeave: leaveCalculator });
         <button class="ui-action" data-accent="anemo" :disabled="working || !selectedLabel" @click="calculate">{{ working ? '计算中' : document?.baseline ? '重算候选' : '计算伤害' }}</button>
       </div></header>
       <div class="damage-totals">
-        <div><span>{{ sceneHitDefinition?.recipient === 'character' ? '场上角色最终承伤' : sceneBaseOnly || point?.real?.status !== 'partial' ? '最终伤害值' : '模型伤害（待核验）' }} <small v-if="!sceneHit && damage.crit">{{ critNames[damage.crit] }}</small></span>
-          <output v-if="result" data-testid="calculator-value">{{ point?.value != null ? number(point.value) : sceneBaseOnly && point?.real?.baseDamage != null ? '待核验' : unavailable(result, point) }}</output><strong v-else>—</strong></div>
+        <div><span>{{ sceneHitDefinition?.recipient === 'character' ? '场上角色最终承伤' : sceneBaseOnly || point?.real?.status !== 'partial' ? '最终伤害值' : '模型估算伤害' }} <small v-if="!sceneHit && damage.crit">{{ critNames[damage.crit] }}</small></span>
+          <output v-if="result" data-testid="calculator-value">{{ point?.value != null ? number(point.value) : sceneBaseOnly && point?.real?.baseDamage != null ? '仅能计算减伤前基数' : unavailable(result, point) }}</output><strong v-else>—</strong></div>
         <div v-if="sceneBaseOnly"><span>减伤前基数</span><output v-if="result" data-testid="calculator-scene-base">{{ number(point?.real?.baseDamage) }}</output><strong v-else>—</strong></div>
-        <div v-if="!sceneHit"><span>{{ expectedPoint?.real?.status === 'partial' ? '模型期望（待核验）' : '期望伤害值' }}</span><output v-if="result" data-testid="calculator-expected">{{ working && !expectedResult ? '…' : expectedPoint?.value == null ? unavailable(expectedResult, expectedPoint) : number(expectedPoint?.value) }}</output><strong v-else>—</strong></div>
+        <div v-if="!sceneHit"><span>{{ expectedPoint?.real?.status === 'partial' ? '模型估算期望' : '期望伤害值' }}</span><output v-if="result" data-testid="calculator-expected">{{ working && !expectedResult ? '…' : expectedPoint?.value == null ? unavailable(expectedResult, expectedPoint) : number(expectedPoint?.value) }}</output><strong v-else>—</strong></div>
       </div>
       <template v-if="result">
         <details v-if="diagnostics.length" class="result-support"
@@ -793,27 +877,27 @@ defineExpose({ requestLeave: leaveCalculator });
               <option value="">未指定</option><option v-for="ordinal in selectedHit.selection.repetitions" :key="ordinal" :value="ordinal">第{{ ordinal }}击</option>
             </select></label>
             <template v-if="sceneHit">
-              <label>ElementLevelCo 系数<input type="number" min="0" step="any" placeholder="待确认" :value="sceneHit.elementLevelCo ?? ''" @input="setSceneCoefficient"></label>
-              <label>冲击触发<select v-model="sceneTriggered"><option :value="null">待确认</option><option :value="true">已满足</option><option :value="false">未满足</option></select></label>
-              <label>{{ sceneHitDefinition?.recipient === 'character' ? '场上角色受到冲击' : '当前敌人受到冲击' }}<select v-model="sceneTargetHit"><option :value="null">待确认</option><option :value="true">命中</option><option :value="false">未命中</option></select></label>
+              <label>ElementLevelCo 系数<input type="number" min="0" step="any" :value="sceneHit.elementLevelCo ?? 1" @input="($event.target as HTMLInputElement).value && setSceneCoefficient($event)" @change="setSceneCoefficient"></label>
+              <label>冲击触发<select v-model="sceneTriggered"><option :value="true">已满足</option><option :value="false">未满足</option></select></label>
+              <label>{{ sceneHitDefinition?.recipient === 'character' ? '场上角色受到冲击' : '当前敌人受到冲击' }}<select v-model="sceneTargetHit"><option :value="true">命中</option><option :value="false">未命中</option></select></label>
             </template>
-            <label v-else-if="!standalone || transformative">暴击<select v-model="damage.crit" :disabled="selectedHit?.critical === 'always'"><option :value="null">待确认</option><option value="noncritical">非暴击</option><option value="critical">暴击</option><option value="expected">期望伤害</option></select></label>
+            <label v-else-if="!standalone || transformative">暴击<select v-model="damage.crit" :disabled="selectedHit?.critical === 'always'"><option value="noncritical">非暴击</option><option value="critical">暴击</option><option value="expected">期望伤害</option></select></label>
             <label v-if="infusionChoices.length">本击队伍附魔<select v-model="partyInfusion"><option value="none">无</option><option v-for="[element, sources] in infusionChoices" :key="element" :value="element">{{ realElementLabel(element) }}元素（{{ sources.join('、') }}）</option></select></label>
-            <label v-if="!standalone && !sceneHit">反应<select v-model="reactionType"><option value="">待确认</option><option v-for="reaction in reactionChoices" :key="reaction" :value="reaction">{{ reactionNames[reaction] }}</option></select></label>
+            <label v-if="!standalone && !sceneHit">反应<select v-model="reactionType"><option v-for="reaction in reactionChoices" :key="reaction" :value="reaction">{{ reactionNames[reaction] }}</option></select></label>
             <label v-for="input in hitInputs" :key="input.id">{{ inputNames[input.id] ?? queryCharacter?.metadata.facts?.[input.id]?.label ?? buffFactNames[input.id] ?? input.id }}
-              <select v-if="input.id === 'counterCharge'" :value="subjectFacts(damage.facts, { kind: 'event' })?.[input.id]?.value?.value ?? ''" @change="setInput(input.id, $event)"><option value="">待确认</option><option :value="0">0 / 无反击加成</option><option :value="1">1 / 一档反击</option><option :value="2">2 / 满档／完美反击</option></select>
-              <input v-else type="number" :min="input.min" :max="talentInputMaximum(input, hitOwner?.build?.constellation ?? 0)" :step="input.integer ? 1 : 'any'" :value="subjectFacts(damage.facts, { kind: 'event' })?.[input.id]?.value?.value ?? ''" placeholder="待确认" @input="setInput(input.id, $event)">
+              <select v-if="input.id === 'counterCharge'" :value="subjectFacts(damage.facts, { kind: 'event' })?.[input.id]?.value?.value ?? ''" @change="setInput(input.id, $event)"><option :value="0">0 / 无反击加成</option><option :value="1">1 / 一档反击</option><option :value="2">2 / 满档／完美反击</option></select>
+              <input v-else type="number" :min="input.min" :max="talentInputMaximum(input, hitOwner?.build?.constellation ?? 0)" :step="input.integer ? 1 : 'any'" :value="subjectFacts(damage.facts, { kind: 'event' })?.[input.id]?.value?.value ?? ''" @input="($event.target as HTMLInputElement).value && setInput(input.id, $event)" @change="setInput(input.id, $event)">
             </label>
-            <template v-if="selectedHit?.snapshot"><label>属性捕获来源<select :value="damage.capture?.recordId ?? ''" @change="setCapture"><option value="">待确认</option><option v-for="record in captures" :key="record.id" :value="record.id">{{ actorLabel(document!.project, record.actor) }} / {{ recordLabel(document!.project, record.id) }} / {{ record.timeMs / 1000 }}秒</option></select></label><label>捕获时点<select :value="damage.capture?.phase ?? ''" @change="damage.capture = { recordId: damage.capture?.recordId ?? null, phase: (($event.target as HTMLSelectElement).value || null) as 'before' | 'after' | null }"><option value="">待确认</option><option value="before">记录生效前</option><option value="after">记录生效后</option></select></label></template>
+            <template v-if="selectedHit?.snapshot"><label>属性捕获来源<select :value="damage.capture?.recordId ?? ''" @change="setCapture"><option v-for="record in captures" :key="record.id" :value="record.id">{{ actorLabel(document!.project, record.actor) }} / {{ recordLabel(document!.project, record.id) }} / {{ record.timeMs / 1000 }}秒</option></select></label><label>捕获时点<select :value="damage.capture?.phase ?? ''" @change="damage.capture = { recordId: damage.capture?.recordId ?? null, phase: (($event.target as HTMLSelectElement).value || null) as 'before' | 'after' | null }"><option value="before">记录生效前</option><option :disabled="damage.capture?.recordId === document.recordId" value="after">记录生效后</option></select></label></template>
           </div>
           <p v-if="sceneHitDefinition" class="muted">{{ sceneHitDefinition.trigger }}。<template v-if="sceneHitDefinition.cooldownMs">冷却 {{ sceneHitDefinition.cooldownMs / 1000 }} 秒。</template>
             <template v-if="sceneHitDefinition.delayMs">触发后 {{ sceneHitDefinition.delayMs }} 毫秒命中。</template><template v-if="sceneHitDefinition.radius">冲击范围 {{ sceneHitDefinition.radius }} 米。</template></p>
           <details v-for="group in captureGroups" :key="group.record.id"><summary>{{ group.title }}</summary><div class="calculator-fields">
             <label v-for="field in group.fields" :key="JSON.stringify([field.subject, field.key])">{{ captureFieldLabel(field) }}
               <input v-if="field.type.kind === 'quantity'" type="number" :step="field.type.unit === 'count' ? 1 : 'any'"
-                :value="subjectFacts(group.record.captureFacts, field.subject)?.[field.key]?.value?.value ?? ''" @change="editCaptureFact(group.record, field, $event)">
-              <select v-else :value="String(subjectFacts(group.record.captureFacts, field.subject)?.[field.key]?.value?.value ?? '')" @change="editCaptureFact(group.record, field, $event)">
-                <option value="">待确认</option><template v-if="field.type.kind === 'boolean'"><option value="true">是</option><option value="false">否</option></template>
+                :value="subjectFacts(group.record.captureFacts, field.subject)?.[field.key]?.value?.value ?? calculatorFactPreset(field, group.record.actor).value" @change="editCaptureFact(group.record, field, $event)">
+              <select v-else :value="String(subjectFacts(group.record.captureFacts, field.subject)?.[field.key]?.value?.value ?? calculatorFactPreset(field, group.record.actor).value)" @change="editCaptureFact(group.record, field, $event)">
+                <template v-if="field.type.kind === 'boolean'"><option value="true">是</option><option value="false">否</option></template>
                 <option v-else v-for="option in field.type.values" :key="option" :value="option">{{ option }}</option>
               </select>
             </label>
@@ -829,7 +913,7 @@ defineExpose({ requestLeave: leaveCalculator });
           <ReactionRecordForm v-if="document && hitOwner && !document.baseline" :project="document.project" :actor="hitOwner.id" :time-ms="Math.round(hitTime*1000)" :before="document.recordId" :changes="result?.combatChanges"
             @reaction="(actor,reaction,element)=>recordBeforeHit((p,t)=>addReactionObservation(p,actor,t,reaction,element))"
             @pickup="(actor,source,effect)=>recordBeforeHit((p,t)=>addParticlePickup(p,actor,source,t,effect))" />
-          <fieldset v-if="selectedHit?.snapshot" :disabled="!!document?.baseline"><label>独立捕获时刻（秒）<input v-model="captureTime" type="number" min="0" max="3600" step="0.001" placeholder="填写已确认时刻"></label><button class="ui-action soft" data-accent="hydro" @click="createCapture">添加属性捕获点</button></fieldset>
+          <fieldset v-if="selectedHit?.snapshot" :disabled="!!document?.baseline"><label>独立捕获时刻（秒）<input v-model="captureTime" type="number" min="0" max="3600" step="0.001" :placeholder="String(hitTime)"></label><button class="ui-action soft" data-accent="hydro" @click="createCapture">添加属性捕获点</button></fieldset>
     </section>
     <section v-if="character?.build" class="library-section calculator-build" aria-label="角色配置">
       <header class="result-heading"><h3>角色配置</h3>

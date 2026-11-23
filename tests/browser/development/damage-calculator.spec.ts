@@ -3,7 +3,8 @@ import { readDocument } from '../../helpers/browser-document';
 import { catalogSnapshotFields } from '../../helpers/catalog-snapshot-fields';
 import { createRuntimeCatalog } from '../../../tools/lib/runtime-catalog.mjs';
 import { existsSync, readFileSync } from 'node:fs';
-import { expect, test, type Locator, type Page } from '@playwright/test';
+import { test } from '../../helpers/calculator-browser';
+import { expect, type Locator, type Page } from '@playwright/test';
 import type { AxisResponse, Build, DamageCalculatorDocument, Project } from '@leyline/schema';
 import { recordedVaresaPlunge, recordedVesnaDamage, vesnaRecording } from '../../helpers/recorded-vesna';
 
@@ -135,7 +136,7 @@ test('calculator shares the team and character pickers and retains a four-member
   const expectedValue = () => expect.poll(async () => Number((await calculator.getByTestId('calculator-expected').textContent())?.replaceAll(',', '')));
   await calculatorFactValue().toBeCloseTo(recordedVaresaPlunge('critical'), 5);
   await expectedValue().toBeCloseTo(recordedVaresaPlunge('expected'), 5);
-  await expect(calculator.getByText('模型伤害（待核验）', { exact: false }).first()).toBeVisible();
+  await expect(calculator.getByText('模型估算伤害', { exact: false }).first()).toBeVisible();
   await button('选择角色').click();
   await roles.getByRole('button',{name:'选择薇斯纳'}).click();
   await button('选择伤害').click();
@@ -239,9 +240,9 @@ test('calculator uses formal Beidou damage, isolated candidates and saved-file W
   await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
   const uncharged = (18.87648 * 8.349 + 67.54129 + 23.245 * 5.968 + 46.7) * 2.0672 * 1.24 * 0.45;
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(uncharged, 5);
-  await calculator.getByRole('combobox', { name: '反击档位', exact: true }).selectOption('');
-  await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
-  await expect(calculator.getByRole('list', { name: '未完成的计算条件' })).toContainText('反击档位');
+  const charge = calculator.getByRole('combobox', { name: '反击档位', exact: true });
+  await expect(charge).toHaveValue('0');
+  await expect(charge.getByText('待确认')).toHaveCount(0);
   await calculator.getByRole('combobox', { name: '反击档位', exact: true }).selectOption('2');
   await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
   const attack = 18.87648 * 8.349 + 67.54129 + 23.245 * 5.968 + 46.7;
@@ -313,7 +314,8 @@ test('calculator creates a named independent Kaeya capture, saves it and recompu
   await calculator.getByRole('combobox', { name: '反应', exact: true }).selectOption('none');
   await calculator.getByLabel('命中时刻（秒）', { exact: true }).fill('1');
   await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
-  await expect(calculator.getByTestId('calculator-value')).toHaveText('需补充条件');
+  await expect(calculator.getByTestId('calculator-value')).toHaveText(/^[\d,.]+$/);
+  await expect(calculator.getByRole('combobox', { name: '捕获时点', exact: true })).toHaveValue('before');
   await calculator.getByLabel('独立捕获时刻（秒）', { exact: true }).fill('0.2');
   await calculator.getByRole('button', { name: '添加属性捕获点', exact: true }).click();
   await expect(calculator.getByRole('combobox', { name: '属性捕获来源', exact: true }).locator('option').last()).toContainText('属性捕获 / 0.2秒');
@@ -374,7 +376,7 @@ test('Kaeya C3 sequential talent editing, dirty navigation and formal Worker res
   await calculator.getByRole('button', { name: '选择增益', exact: true }).click();
   await calculator.getByLabel('生命比例（%）', { exact: true }).click();
   await expect(calculator.getByLabel('生命比例（%）', { exact: true })).toBeFocused();
-  await page.keyboard.type('90');
+  await calculator.getByLabel('生命比例（%）', { exact: true }).fill('90');
   await calculator.getByRole('button', { name: '应用增益', exact: true }).click();
   await expect(calculator.getByTestId('calculator-value')).toHaveCount(0); // Never leave a stale previous result visible.
 });
@@ -444,7 +446,7 @@ test('calculator reads the recorded public showcase explicitly without writing l
   await calculator.getByRole('combobox', { name: '暴击', exact: true }).selectOption('noncritical');
   await calculator.getByRole('combobox', { name: '反应', exact: true }).selectOption('none');
   await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
-  await expect(calculator.locator('.damage-totals')).toContainText('模型伤害（待核验）');
+  await expect(calculator.locator('.damage-totals')).toContainText('模型估算伤害');
   await calculator.getByText('计算条件与支持范围', { exact: true }).click();
   await expect(calculator.getByRole('list', { name: '未完成的计算条件' })).toContainText('命座');
   const after = await page.evaluate(async () => {
@@ -534,14 +536,14 @@ test('old saved content changes only after review and explicit adoption in the c
   const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
   await calculator.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles({ name: '内容快照.json', mimeType: 'application/json', buffer: Buffer.from(content) });
   const expected = (18.6984 * 8.349 + 66.90411 + 23.245 * 5.968 + 46.7) * 3.824 * 0.45;
-  await expect(calculator.locator('.damage-totals')).toContainText('模型伤害（待核验）');
+  await expect(calculator.locator('.damage-totals')).toContainText('模型估算伤害');
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(expected, 5);
   await calculator.getByText('角色定义', { exact: true }).click();
   await calculator.getByRole('button', { name: '检查当前内容', exact: true }).click();
   const review = page.getByRole('dialog', { name: '更新计算副本内容', exact: true });
   await expect(review).toContainText('角色定义（4 → 6）');
   await review.getByRole('button', { name: '关闭更新计算副本内容', exact: true }).click();
-  await expect(calculator.locator('.damage-totals')).toContainText('模型伤害（待核验）');
+  await expect(calculator.locator('.damage-totals')).toContainText('模型估算伤害');
   await calculator.getByRole('button', { name: '检查当前内容', exact: true }).click();
   await review.getByRole('button', { name: '采用当前内容并重算', exact: true }).click();
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(expected, 5);
@@ -650,7 +652,7 @@ test('Nicole’s on-field dealer determines the projection damage, reaction choi
   await expect(reactions.locator('option[value="vaporize"]')).toHaveCount(0);
   await calculator.getByRole('button', { name: '选择增益', exact: true }).click();
   const picker = page.getByRole('dialog', { name: '选择增益' });
-  await expect(picker.getByRole('combobox', { name: '凯亚 · 站场', exact: true })).toHaveValue('true');
+  await expect(picker.getByRole('combobox', { name: '凯亚 · 站场', exact: true }).first()).toHaveValue('true');
   await picker.getByRole('combobox', { name: '本击 · 本次奥迹造影可触发', exact: true }).selectOption('false');
   await picker.getByRole('button', { name: '应用增益' }).click();
   await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
@@ -766,7 +768,9 @@ test('Nahida C2 marked Bloom keeps its target condition and expected crit in a r
   for (const [mark, mode, factor] of [['false', 'expected', 1], ['true', 'critical', 2], ['true', 'expected', 1.2]] as const) {
     await calc.getByRole('button', { name: '选择增益', exact: true }).click();
     const dialog = page.getByRole('dialog', { name: '选择增益' });
-    await dialog.getByRole('combobox', { name: /目标被纳西妲施加蕴种印/ }).selectOption(mark);
+    const marks = dialog.getByRole('combobox', { name: /目标被纳西妲施加蕴种印/ });
+    await marks.first().selectOption(mark);
+    for (const field of await marks.all()) await expect(field).toHaveValue(mark);
     await dialog.getByRole('button', { name: '应用增益' }).click();
     await critical.selectOption(mode);
     await calc.getByRole('button', { name: '计算伤害', exact: true }).click();
@@ -1012,9 +1016,9 @@ for (const weapon of [
     for (const [input, expected] of weapon.inputs) {
       await calc.getByRole('button', { name: '选择增益', exact: true }).click();
       const picker = page.getByRole('dialog', { name: '选择增益' });
-      await picker.getByRole('combobox', { name: weapon.state }).selectOption(weapon.mode);
-      await picker.getByRole('spinbutton', { name: weapon.amount }).fill(input);
-      await picker.getByRole('combobox', { name: '站场', exact: true }).selectOption('true');
+      await picker.getByRole('combobox', { name: weapon.state }).first().selectOption(weapon.mode);
+      await picker.getByRole('spinbutton', { name: weapon.amount }).first().fill(input);
+      await picker.getByRole('combobox', { name: '站场', exact: true }).first().selectOption('true');
       await picker.getByRole('button', { name: '应用增益' }).click();
       await expect(values.locator('dd', { hasText: expected })).toHaveText(expected);
     }
@@ -1037,7 +1041,7 @@ test('Kaveh retains his burst attack speed when applying another condition and r
   await calc.getByRole('button', { name: '选择增益', exact: true }).click();
   const picker = page.getByRole('dialog', { name: '选择增益' });
   await expect(picker.getByRole('checkbox', { name: /御驿的径迹/ })).toBeChecked();
-  await picker.getByRole('combobox', { name: '护盾存在', exact: true }).selectOption('true');
+  await picker.getByRole('combobox', { name: '护盾存在', exact: true }).first().selectOption('true');
   await picker.getByRole('button', { name: '应用增益' }).click();
   await expect(speed).toHaveText('15%');
   const downloading = page.waitForEvent('download');
@@ -1226,7 +1230,7 @@ test('Xiangling saves the ordinal of a repeated hit and replays its single-hit a
   await expect(ordinal).toHaveValue('4');
   await expect(value).toHaveText(first);
   await choose('xiangling.normal.param3');
-  await expect(ordinal).toHaveValue('');
+  await expect(ordinal).toHaveValue('1');
   await expect(ordinal.getByRole('option')).toHaveCount(3);
   await choose('xiangling.normal.param1');
   await expect(ordinal).toHaveCount(0);
@@ -1350,14 +1354,14 @@ test('Sigewinne takes the party Bond of Life from the healing form and keeps her
   await form.getByLabel(/受治疗队员生命比例/).fill('49');
   await total.fill('5000');
   await record.click();
-  await expect(changes).toContainText('基础治疗量 ' + format(base) + ' 点，待确认');
+  await expect(changes).toContainText('基础治疗量 ' + format(base) + ' 点，缺少记录：');
   const download = page.waitForEvent('download');
   await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
   const file = info.outputPath('sigewinne-healing.json');
   await (await download).saveAs(file);
   await open.setInputFiles(file);
   await expect(changes).toContainText(format(base * 1.15) + ' 点治疗');
-  await expect(changes).toContainText('基础治疗量 ' + format(base) + ' 点，待确认');
+  await expect(changes).toContainText('基础治疗量 ' + format(base) + ' 点，缺少记录：');
 });
 
 test('Zhongli C6 uses the entered Jade Shield damage and recipient cap in a saved calculator', async ({ page }, info) => {
@@ -1512,7 +1516,7 @@ test('scene ranges and interruption resistance use the selected reaction and sta
   await scene.selectOption('scene.field.domainofforgeryartisanshipi.0');
   await calc.getByRole('button', { name: '选择增益', exact: true }).click();
   const picker = page.getByRole('dialog', { name: '选择增益' });
-  await picker.getByRole('spinbutton', { name: /当前水伤层数/ }).fill('5');
+  await picker.getByRole('spinbutton', { name: /当前水伤层数/ }).first().fill('5');
   await picker.getByRole('button', { name: '应用增益' }).click();
   await expect(amount('抗打断参数增量')).toHaveText('0.3');
   const download = page.waitForEvent('download');

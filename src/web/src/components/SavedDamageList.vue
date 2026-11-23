@@ -34,7 +34,7 @@ async function remove() {
       <li v-for="row in rows" :key="row.id">
         <button type="button" class="damage-entry" data-card-action="detail" @click="emit('open', row.id)">
           <strong>{{ row.name }}</strong>
-          <span v-if="row.value != null">伤害 {{ damageNumber(row.value) }}<template v-if="row.verification === 'pending'"> · 待核验</template></span>
+          <span v-if="row.value != null">{{ row.verification === 'pending' ? '模型估算伤害' : '伤害' }} {{ damageNumber(row.value) }}</span>
           <small>{{ [row.team, new Date(row.savedAt).toLocaleString('zh-CN')].filter(Boolean).join(' / ') }}</small>
         </button>
         <button type="button" class="ui-action soft" data-size="md" data-accent="pyro" :aria-label="'删除 ' + row.name" @click="removing = row">删除</button>

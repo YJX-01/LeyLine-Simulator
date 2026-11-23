@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test';
+import { test } from '../../helpers/calculator-browser';
+import { expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import type { DamageCalculatorDocument } from '@leyline/schema';
 import { readDocument } from '../../helpers/browser-document';
@@ -43,10 +44,10 @@ test('scene shockwave uses the selected difficulty, explicit coefficient and ene
 
   await chooseScene(first, second);
   await expect(hitTime).toHaveValue('0.05');
-  await expect(value).toHaveText('需补充条件');
+  await expect(value).toHaveText('4');
   await trigger.selectOption({ label: '已满足' });
   await target.selectOption({ label: '命中' });
-  await coefficient.pressSequentially('125.5');
+  await coefficient.fill('125.5');
   await expect(coefficient).toHaveValue('125.5');
   await evaluate('502');
   await hitTime.fill('0.049');
@@ -55,10 +56,10 @@ test('scene shockwave uses the selected difficulty, explicit coefficient and ene
   await evaluate('502');
 
   await field.selectOption(second);
-  await expect(value).toHaveText('需补充条件');
+  await expect(value).toContainText('请选择与该冲击匹配的秘境难度');
   await chooseScene(second, first);
-  await expect(coefficient).toBeEmpty();
-  await expect(value).toHaveText('需补充条件');
+  await expect(coefficient).toHaveValue('1');
+  await expect(value).toHaveText('4');
   await trigger.selectOption({ label: '已满足' });
   await target.selectOption({ label: '命中' });
   await coefficient.fill('0');
@@ -105,7 +106,7 @@ test('scene shockwave uses the selected difficulty, explicit coefficient and ene
   await trigger.selectOption({ label: '已满足' });
   await calculator.getByRole('combobox', { name: '场上角色受到冲击' }).selectOption({ label: '命中' });
   await coefficient.fill('125.5');
-  await evaluate('待核验');
+  await evaluate('仅能计算减伤前基数');
   await expect(calculator.getByTestId('calculator-scene-base')).toHaveText('502');
   await expect(button('设为比较基准')).toHaveCount(0);
   await hitTime.fill('0.099');

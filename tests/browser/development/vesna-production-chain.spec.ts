@@ -1,6 +1,7 @@
 import { readDocument } from '../../helpers/browser-document';
 import { existsSync, readFileSync } from 'node:fs';
-import { expect, test } from '@playwright/test';
+import { test } from '../../helpers/calculator-browser';
+import { expect } from '@playwright/test';
 import type { CharacterMetadata, DamageCalculatorDocument, LocalAccount } from '@leyline/schema';
 import { recordedVesnaDamage, vesnaRecording } from '../../helpers/recorded-vesna';
 
@@ -44,10 +45,10 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await calculator.getByRole('dialog', { name: '选择伤害' }).locator('[data-hit-id="vesna.skill.param5"]').click();
   const buffDialog = page.getByRole('dialog', { name: '选择增益' });
   await button('选择增益').click();
-  await expect(select('薇斯纳 · 星辉状态')).toHaveValue('stellar-swirl');
-  await expect(select('薇斯纳 · 薇斯纳战技姿态')).toHaveValue('true');
+  await expect(select('薇斯纳 · 星辉状态').first()).toHaveValue('stellar-swirl');
+  await expect(select('薇斯纳 · 薇斯纳战技姿态').first()).toHaveValue('true');
   for (const option of await buffDialog.getByRole('checkbox').all()) await option.check();
-  await expect(calculator.getByRole('spinbutton', { name: '薇斯纳 · 律令层数', exact: true })).toHaveValue('6');
+  await expect(calculator.getByRole('spinbutton', { name: '薇斯纳 · 律令层数', exact: true }).first()).toHaveValue('6');
   await button('应用增益').click();
   const number = (id: string) => expect.poll(async () => Number((await calculator.getByTestId(id).textContent())?.replaceAll(',', '')));
   const baseline = recordedVesnaDamage(1), candidate = recordedVesnaDamage(2);
@@ -56,13 +57,9 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await number('calculator-value').toBeCloseTo(recordedVesnaDamage(1, 1, true, 'critical'), 5);
   await select('暴击').selectOption('expected');
   await button('选择增益').click();
-  await select('薇斯纳 · 蝶变 / 叛弃之风（10秒内）').selectOption('');
-  await button('应用增益').click();
-  await button('计算伤害').click();
-  await expect(calculator.getByTestId('calculator-value')).toHaveText('需补充条件');
-  await expect(calculator.getByRole('list', { name:'未完成的计算条件' })).toContainText('蝶变 / 叛弃之风');
-  await button('补充增益条件').click();
-  await buffDialog.getByRole('checkbox', { name: /叛弃之风/ }).check();
+  const betrayal = buffDialog.locator('.buff-entry').filter({ has: page.getByRole('checkbox', { name: /叛弃之风/ }) });
+  await expect(betrayal.getByRole('combobox', { name: '薇斯纳 · 蝶变 / 叛弃之风（10秒内）', exact: true })).toHaveValue('true');
+  await expect(betrayal.getByRole('option', { name: '待确认' })).toHaveCount(0);
   await button('应用增益').click();
   await button('计算伤害').click();
   await number('calculator-value').toBeCloseTo(baseline, 5);
@@ -86,6 +83,11 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await button('选择增益').click();
   await loyalWind.check();
   await page.screenshot({ path: info.outputPath('buff-picker.png') });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(betrayal.getByRole('combobox')).toBeVisible();
+  expect(await buffDialog.evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
+  await page.screenshot({ path: info.outputPath('buff-picker-mobile.png') });
+  await page.setViewportSize({ width: 1536, height: 1050 });
   await button('应用增益').click();
   await button('计算伤害').click();
   await number('calculator-value').toBeCloseTo(baseline, 5);
@@ -149,5 +151,20 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await expect(entry).toHaveAttribute('aria-current', 'page');
   await entry.press('Escape');
   await expect(navigation).toBeFocused();
+  // An older calculator file can explicitly leave an editable condition unanswered.
+  const incomplete = await page.evaluate(async file => {
+    // @ts-expect-error Vite browser source URL.
+    const { packDocument } = await import('/src/domain/content-document.ts');
+    delete file.baseline;
+    const hit = file.project.timeline.find(record => record.id === file.recordId)!.damage!;
+    hit.facts!.find(row => row.subject.kind === 'actor' && row.subject.id === file.actorId)!.values['beyondthechrysalis.loyalWind'].value = null;
+    return JSON.stringify(packDocument('damage-calculator', file));
+  }, document);
+  await calculator.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles({
+    name: '未设置忠忱之风.json', mimeType: 'application/json', buffer: Buffer.from(incomplete),
+  });
+  await number('calculator-value').toBeCloseTo(recordedVesnaDamage(2, 1, false), 5);
+  await button('选择增益').click();
+  await expect(loyalWind).not.toBeChecked();
   expect(errors).toEqual([]);
 });

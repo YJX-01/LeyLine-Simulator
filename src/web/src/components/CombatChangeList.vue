@@ -33,7 +33,7 @@ const missing: Record<string,string> = { previousTrigger: '此前触发结果', 
       <template v-else-if="row.status === 'applied'">重置一次元素战技冷却<template v-if="row.cooldownAfterMs !== undefined">，剩余 {{ format(row.cooldownAfterMs / 1000) }} 秒</template></template>
       <template v-if="row.probability !== undefined">（触发概率 {{ format(row.probability * 100) }}%）</template>
       <template v-if="row.status === 'unknown' && row.baseHealing !== undefined">基础治疗量 {{ format(row.baseHealing) }} 点，</template>
-      <template v-if="row.missing?.length">待确认{{ row.missing.map(key => buffFactNames[key] ?? missing[key] ?? key).join('、') }}</template>
+      <template v-if="row.missing?.length">缺少记录：{{ row.missing.map(key => buffFactNames[key] ?? missing[key] ?? key).join('、') }}</template>
     </li></ul>
   </details>
 </template>

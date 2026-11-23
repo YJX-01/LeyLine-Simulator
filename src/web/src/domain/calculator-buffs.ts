@@ -1,10 +1,10 @@
 import { authoredHit } from '@leyline/schema/hit-bindings';
 import { buffEventSelectors, findBuildHit, isTransformative, subjectFacts } from '@leyline/schema';
 import { buffEndMs, calculationEffectInstanceId, effectRecipientMatches, grantedBuildEffects, grantedGleamEffects, grantedResonances, hitMatches, instanceActive, projectBuffContext, stackExpiryUncertain } from '@leyline/engine';
-import { projectSchema, definitionKey, type Build, type CalculationBinding, type CalculationFact, type CombatConditions, type CombatFrame, type DamageRequest, type DefinitionRef, type EffectDefinition, type Project } from '@leyline/schema';
+import { projectSchema, definitionKey, type Build, type CalculationBundle, type CalculationBinding, type CalculationFact, type CombatConditions, type CombatFrame, type DamageRequest, type DefinitionRef, type EffectDefinition, type Project } from '@leyline/schema';
 import { addConfirmedBuff, addSkillAction } from './real-project';
 import { damageFamilyLabel, realElementLabel, realStatLabels } from './workbench-labels';
-import { calculatorHitElement, calculatorIntervals, calculatorOnFieldActor, hpChoice, hpMatches, bindingFactFields, selectionFacts, setCalculatorFact, stackChoice, calculatorFactValue, withCurrentConditions, type CalculatorFactField, type CalculatorFactSetting } from './calculator-conditions';
+import { calculatorFactPreset, setCalculatorCondition, calculatorHitElement, calculatorIntervals, calculatorOnFieldActor, hpChoice, hpMatches, bindingFactFields, selectionFacts, setCalculatorFact, stackChoice, calculatorFactValue, withCurrentConditions, type CalculatorFactField, type CalculatorFactSetting } from './calculator-conditions';
 
 export interface CalculatorBuff {
   id: string;
@@ -128,6 +128,8 @@ export const buffFactNames: Record<string, string> = {
 };
 type Entity = Build['character'] | NonNullable<Build['weapon']> | Build['sets'][number];
 type BuffFactSource = Pick<CalculatorBuff, 'ownerId' | 'derivedFacts'>;
+type BuffSelection = Pick<CalculatorBuff, 'id' | 'disabled' | 'triggerSkill' | 'confirmTrigger' | 'explicit' | 'checked'
+  | 'requirements' | 'stacks' | 'hp' | 'toggleFact'> & BuffFactSource;
 function buffFactValue(item: BuffFactSource, damage: DamageRequest, key: string, subject?: CalculatorFactSetting['subject']) {
   const explicit = calculatorFactValue(damage, key, item.ownerId, subject);
   if (explicit !== undefined || subject && (subject.kind !== 'actor' || subject.id !== item.ownerId)) return explicit;
@@ -139,6 +141,49 @@ export function buffConditionsMet(item: Pick<CalculatorBuff, 'requirements' | 's
     && (!item.hp || hpMatches(item.hp, calculatorFactValue(damage, 'hpRatio', item.ownerId)))
     && (!item.stacks || Number(calculatorFactValue(damage, item.stacks.key, item.ownerId)) > 0);
 }
+export function calculatorBuffChecked(item: BuffSelection, damage: DamageRequest, selection?: boolean) {
+  const enabled = selection ?? (!item.disabled && !item.triggerSkill && !item.confirmTrigger && (!item.explicit || item.checked));
+  return enabled && buffConditionsMet(item, damage);
+}
+
+export function calculatorLayerSeconds(timing: NonNullable<CalculatorBuff['timing']>) {
+  return (timing.remainingMs ?? timing.durationMs) / 1000;
+}
+
+export function calculatorEffectControls(effect: EffectDefinition, bundle: CalculationBundle, owner: string, recipient: string, contributor: string) {
+  const predicate = effect.predicate;
+  const toggleFact = predicate?.kind === 'fact' && predicate.scope === 'owner' && predicate.type.kind === 'boolean'
+    && !['onField', 'shielded'].includes(predicate.key) ? predicate.key : undefined;
+  const requirements = selectionFacts(predicate, bundle);
+  const fields = [...bindingFactFields(predicate, owner, recipient, contributor), ...bindingFactFields(effect.value, owner, recipient, contributor)];
+  const target = effect.target.kind === 'attribute' ? effect.target.attribute.id : effect.target.port;
+  if ((target.startsWith('attribute.aimCharge') || effect.buff?.id === 'chasca.c6.fatal-round-crit')
+    && predicate?.kind === 'fact' && predicate.type.kind === 'boolean' && (predicate.scope === 'query' || predicate.scope === 'recipient')) {
+    const field = fields.find(entry => entry.key === predicate.key);
+    if (field?.subject) requirements.push({ key: field.key, subject: field.subject, value: { kind: 'boolean', value: true } });
+  }
+  if (effect.windowFact) fields.push({ fromTrigger: true, key: effect.windowFact, type: { kind: 'boolean' }, subject: { kind: 'actor', id: owner } });
+  return { fields, toggleFact, requirements, stacks: stackChoice(effect.value, bundle),
+    hp: hpChoice(predicate, bundle) ?? hpChoice(effect.value, bundle) };
+}
+
+/** Apply the card's editable defaults before evaluating its activation requirements. */
+export function enableCalculatorBuff(item: Pick<CalculatorBuff, 'ownerId' | 'fields' | 'requirements' | 'hp' | 'stacks' | 'derivedFacts'>,
+  damage: DamageRequest, intervals: CombatConditions, actorId: string) {
+  const current = withCurrentConditions(damage, intervals, actorId);
+  for (const field of item.fields) {
+    if (field.fromTrigger || field.inherited || buffFactValue(item, current, field.key, field.subject) != null) continue;
+    setCalculatorFact(damage, { ...field, value: calculatorFactPreset(field, actorId) }, actorId);
+  }
+  for (const setting of item.requirements) setCalculatorFact(damage, setting, item.ownerId);
+  if (item.hp && !hpMatches(item.hp, calculatorFactValue(current, 'hpRatio', item.ownerId))) {
+    setCalculatorCondition(damage, item.ownerId, 'hpRatio', item.hp.preset);
+  }
+  if (item.stacks && !(Number(calculatorFactValue(damage, item.stacks.key, item.ownerId)) > 0)) {
+    setCalculatorFact(damage, { key: item.stacks.key, value: { kind: 'quantity', unit: 'count', value: item.stacks.max } }, item.ownerId);
+  }
+}
+
 function magnitude(binding: CalculationBinding, build: Build, entity: Entity) {
   if (binding.kind === 'constant' && binding.value.kind === 'quantity') return binding.value;
   if (binding.kind === 'refinement-parameter') return { value: binding.values[build.refinement - 1], unit: binding.type.unit };
@@ -209,7 +254,23 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
   const choices: CalculatorBuff[] = [];
   const publicBuffs = grantedResonances(members);
   const gleamGrants=grantedGleamEffects(members);
-  const derived = context.events.find(event => event.id === recordId && event.timeMs === timeMs)?.derivedStates?.before;
+  const event = context.events.find(event => event.id === recordId && event.timeMs === timeMs);
+  const derived = event?.derivedStates?.before;
+  const inherited = new Map<string, Record<string, CalculationFact>>();
+  function mergeFacts(subject: object, facts: Record<string, CalculationFact>) {
+    const key = JSON.stringify(subject);
+    inherited.set(key, { ...inherited.get(key), ...facts });
+  }
+  mergeFacts({ kind: 'team' }, context.teamFacts);
+  for (const interval of context.factIntervals) {
+    if (interval.startMs <= timeMs && timeMs < interval.endMs) mergeFacts(interval.subject, interval.facts);
+  }
+  for (const [id, facts] of Object.entries(derived ?? {})) mergeFacts({ kind: 'actor', id }, facts);
+  for (const frame of context.stateFrames ?? []) {
+    if (frame.eventId === recordId && frame.phase === 'before') mergeFacts(frame.subject, frame.facts);
+  }
+  for (const row of event?.subjectFacts ?? []) mergeFacts(row.subject, row.values);
+  if (event) mergeFacts({ kind: 'event' }, event.facts);
   for (const { id: ownerId, build } of members) {
     if (!build) continue;
     const { character } = build;
@@ -230,24 +291,13 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
         : passive ? { kind: 'skills', id: portrait + '-passive' + (character.passives.indexOf(passive) + 1) }
         : { kind: 'characters', id: portrait };
       const description = describe(effect, build, entity);
-      const predicate = effect.predicate;
-      const toggleFact = predicate?.kind === 'fact' && predicate.scope === 'owner' && predicate.type.kind === 'boolean'
-        && !['onField','shielded'].includes(predicate.key) ? predicate.key : undefined;
-      const requirements = selectionFacts(predicate, entity.calculation.bundle);
-      const stacks = stackChoice(effect.value, entity.calculation.bundle);
-      const hp = hpChoice(predicate, entity.calculation.bundle) ?? hpChoice(effect.value, entity.calculation.bundle);
+      const controls = calculatorEffectControls(effect, entity.calculation.bundle, ownerId, recipientId, sourceId);
       const declarations = scene ? interval?.definition.facts : entity.metadata.facts;
-      const fields = [...bindingFactFields(predicate, ownerId, recipientId, sourceId), ...bindingFactFields(effect.value, ownerId, recipientId, sourceId)]
-        .filter(field => field.key !== scene?.id).map(field => ({ ...field, label: declarations?.[field.key]?.label }));
-      if ((target.startsWith('attribute.aimCharge') || effect.buff?.id === 'chasca.c6.fatal-round-crit')
-        && predicate?.kind === 'fact' && predicate.type.kind === 'boolean' && (predicate.scope === 'query' || predicate.scope === 'recipient')) {
-        const field = fields.find(entry => entry.key === predicate.key);
-        if (field?.subject) requirements.push({ key: field.key, subject: field.subject, value: { kind: 'boolean', value: true } });
-      }
-      if (effect.windowFact) fields.push({key:effect.windowFact,type:{kind:'boolean'},subject:{kind:'actor',id:ownerId},label:declarations?.[effect.windowFact]?.label});
+      const fields = controls.fields.filter(field => field.key !== scene?.id).map(field => ({ ...field, label: declarations?.[field.key]?.label,
+        inherited: inherited.get(JSON.stringify(field.subject))?.[field.key]?.value ?? undefined }));
       const counterFacts = effect.counter && [effect.counter.fact, ...(effect.counter.overflowFact ? [effect.counter.overflowFact] : [])];
       const common = { ownerId, effect: effect.buff ?? effect.identity, name, source, description, icon, target, derivedFacts: derived?.[ownerId],
-        modifiers: [{ id: effect.identity.id, target }], explicit: effect.application === 'explicit', toggleFact, requirements, fields, stacks, hp, counterFacts };
+        modifiers: [{ id: effect.identity.id, target }], explicit: effect.application === 'explicit', ...controls, fields, counterFacts };
       const trigger = effect.trigger;
       const timing = effect.lifetime.kind === 'interval' ? { durationMs: effect.lifetime.durationMs, maxLayers: effect.stacking.maxStacks } : undefined;
       const position = {id: recordId ?? '', timeMs, order};
@@ -276,7 +326,7 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
             && buffConditionsMet(common, current),
           triggerTime: event?.timeMs, ...(event?.confirmedBuff && event.timeMs === timeMs && timing ? { timing: { ...timing, maxLayers: 1, source: event.id, remainingMs: endMs-timeMs } } : {}),
           ...(event && captured.length ? { capturedStats: { recordId: event.id, attributes: captured } } : {}),
-          description: description + (unknownExpiry ? '（本层是否已刷新仍待确认）' : event && timing ? '（剩余' + (endMs-timeMs) / 1000 + '秒）' : '') });
+          description: description + (unknownExpiry ? '（缺少本层的刷新记录）' : event && timing ? '（剩余' + (endMs-timeMs) / 1000 + '秒）' : '') });
       }
     }
   }
@@ -296,16 +346,15 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
   return [...grouped.values()];
 }
 
-/** Apply the same defaults to a new calculation and to the picker. Preserve explicit unknowns. */
-export function resolveBuffSelection(choices: readonly CalculatorBuff[], damage: DamageRequest, intervals: CombatConditions, actorId: string, changes: ReadonlyMap<string, boolean>) {
+/** Apply the same selection defaults to a new calculation and to the picker. */
+export function resolveBuffSelection(choices: readonly BuffSelection[], damage: DamageRequest, intervals: CombatConditions, actorId: string, changes: ReadonlyMap<string, boolean>) {
   const selected = new Map(changes);
   const current = withCurrentConditions(damage, intervals, actorId);
   for (const item of choices) {
-    if (item.unknownExpiry && !selected.has(item.id)) continue;
     const absent = (key: string, subject?: CalculatorFactSetting['subject']) => buffFactValue(item, current, key, subject) === undefined;
     const enabled = selected.get(item.id) ?? (!item.disabled && (!item.explicit || item.checked));
     if (item.triggerSkill || item.confirmTrigger || item.disabled || enabled && buffConditionsMet(item, current)) continue;
-    if (item.explicit && !damage.effectApplications?.some(entry => entry.instanceId === item.id) && !selected.has(item.id)) selected.set(item.id, false);
+    if (item.explicit && !damage.effectApplications?.some(entry => entry.instanceId === item.id && entry.active != null) && !selected.has(item.id)) selected.set(item.id, false);
     if (item.toggleFact && absent(item.toggleFact)) setCalculatorFact(damage, { key: item.toggleFact, value: { kind: 'boolean', value: false } }, item.ownerId);
     if (item.stacks && absent(item.stacks.key)) setCalculatorFact(damage, { key: item.stacks.key, value: { kind: 'quantity', unit: 'count', value: 0 } }, item.ownerId);
     if (!item.explicit && (item.hp && absent('hpRatio') || item.requirements.some(setting => absent(setting.key, setting.subject)))) selected.set(item.id, false);

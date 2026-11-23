@@ -4,7 +4,7 @@ import { unpackDocument } from './content-document';
 import { getArtifactSet, getCharacter, getWeapon } from '@leyline/game-data';
 import { damageCalculatorSchema, projectSchema, type AccountCharacter, type LocalAccount, type AxisRequest, type Build, type DamageCalculatorDocument, type DamageRequest, type Enemy, type Project, type SceneHitRequest } from '@leyline/schema';
 import { loadAccountGameData } from './account-presentation';
-import { addActorFromBuild } from './real-project';
+import { addActorFromBuild, addAttributeCapture } from './real-project';
 import { createEmptyProject, nextRecordId } from './workbench-project';
 import { calculationArtifact } from './build-snapshot';
 import { prepareStructuredBuilds } from '@leyline/engine';
@@ -76,6 +76,19 @@ export function createDamageCalculation(build: Build, damage: DamageRequest, ene
   return damageCalculatorSchema.parse({ schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId, recordId });
 }
 
+export function addCalculatorCapture(project: Project, actor: string, skill: string, timeMs: number, hitId?: string) {
+  const id = addAttributeCapture(project, actor, skill, timeMs);
+  const hit = project.timeline.find(record => record.id === hitId);
+  if (hit && hit.timeMs === timeMs) {
+    const order = hit.order;
+    for (const record of project.timeline) {
+      if (record.id === id) record.order = order;
+      else if (record.timeMs === timeMs && record.order >= order) record.order++;
+    }
+  }
+  return id;
+}
+
 export function calculatorSceneHits(project: Project | undefined) {
   const choices = new Map((project?.sceneEffects ?? []).filter(({ definition }) => definition.hits?.length)
     .map(({ definition }) => [definitionKey(definition), definition]));
@@ -90,7 +103,7 @@ export function addCalculatorSceneHit(project: Project, actorId: string, scene: 
   const record: Project['timeline'][number] = {
     id, actor: actorId, timeMs, order: previous?.order ?? Math.max(-1, ...project.timeline.map(entry => entry.order)) + 1,
     kind: 'damage', definition: `${actorId}-real-damage`,
-    sceneHit: { scene, elementLevelCo: null, triggered: null, targetHit: null },
+    sceneHit: { scene, elementLevelCo: 1, triggered: true, targetHit: true },
   };
   project.timeline = previous ? project.timeline.map(entry => entry.id === id ? record : entry) : [...project.timeline, record];
   if (!previous && project.objective.damageIds) project.objective.damageIds.push(id);
