@@ -14,19 +14,27 @@ const literal = JSON.stringify;
 export function catalogPlugin() {
   let runtime;
   const shared = new Map();
+  function invalidateCatalog(file, server) {
+    const path = file.replaceAll('\\', '/');
+    if (!['/game-data/data/', '/tools/data/sources/catalog/', '/assets/'].some(folder => path.includes(folder))) return false;
+    runtime = undefined;
+    for (const [id, module] of server.moduleGraph.idToModuleMap) {
+      if (id.startsWith('\0virtual:leyline-')) server.moduleGraph.invalidateModule(module);
+    }
+    return true;
+  }
   return {
     name: 'leyline-canonical-catalog',
     resolveId(id) { if (id.startsWith(prefix) || id.startsWith('virtual:leyline-display/')) return '\0' + id; },
     configureServer(server) {
       server.watcher.add(['src/game-data/data', 'tools/data/sources/catalog', 'assets'].map(path => resolve(root, path)));
+      if (server.config.server.hmr === false) {
+        const refresh = file => invalidateCatalog(file, server);
+        server.watcher.on('change', refresh).on('add', refresh).on('unlink', refresh);
+      }
     },
     handleHotUpdate({ file, server }) {
-      const path = file.replaceAll('\\', '/');
-      if (!['/game-data/data/', '/tools/data/sources/catalog/', '/assets/'].some(folder => path.includes(folder))) return;
-      runtime = undefined;
-      for (const [id, module] of server.moduleGraph.idToModuleMap) {
-        if (id.startsWith('\0virtual:leyline-')) server.moduleGraph.invalidateModule(module);
-      }
+      if (!invalidateCatalog(file, server)) return;
       server.ws.send({ type: 'full-reload' });
       return [];
     },

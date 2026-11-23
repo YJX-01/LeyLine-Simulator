@@ -29,21 +29,26 @@ export function catalogList(inventory = catalogInventory()) {
 
 export async function createRuntimeCatalog() {
   const schemas = await loadContentSchema(), engine = await loadContentSchema('/src/engine/src/index.ts');
-  const inventory = catalogInventory(), library = readCalculationLibrary(readCalculationData);
+  const inventory = catalogInventory();
+  const definitions = new Map();
+  const library = readCalculationLibrary(path => {
+    const definition = readCalculationData(path);
+    definitions.set(path, definition);
+    return definition;
+  });
   const compiled = engine.compileCalculation(library);
   if (!compiled.ok) throw new Error(JSON.stringify(compiled.diagnostics));
   const linker = createContentLinker({ schemas, ...engine, library: compiled.program });
   async function get(group, id) {
     if (!inventory[group]?.includes(id)) throw new Error('Undefined catalog entry: ' + group + '/' + id);
-    const file = new URL(folders[group] + '/' + id + '.json', data);
+    const definition = definitions.get('src/game-data/data/' + folders[group] + '/' + id + '.json');
     if (group === 'characters') {
-      schemas.characterMetadataSchema.parse(readContentSource(file));
-      return linker.character(readCalculationData(file));
+      schemas.characterMetadataSchema.parse(definition.metadata);
+      return linker.character(definition);
     }
-    const raw = readContentSource(file);
-    if (group === 'weapons') return linker.weapon(readCalculationData(file));
-    if (group === 'sets') return linker.set(readCalculationData(file));
-    const actions = schemas.characterActionsDefinitionSchema.parse(raw);
+    if (group === 'weapons') return linker.weapon(definition);
+    if (group === 'sets') return linker.set(definition);
+    const actions = schemas.characterActionsDefinitionSchema.parse(definition);
     const closure = engine.collectCalculationRoots(compiled.program, { roots: [actions.calculation.stateMachine],
       sourceIds: [...new Set([...actions.sources, ...actions.actions.flatMap(a => a.sources), ...actions.gaps.flatMap(g => g.sources)])], families: [] });
     if (!closure.ok) throw new Error(JSON.stringify(closure.diagnostics));
