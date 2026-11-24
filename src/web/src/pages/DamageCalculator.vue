@@ -14,7 +14,7 @@ import { APP_VERSION } from '@leyline/schema/version';
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, ref, shallowRef, toRaw, watch } from 'vue';
 import { getReactionCalculationBundle } from '@leyline/game-data';
 import type { TransformativeFamily, ProjectReaction } from '@leyline/schema';
-import { damageCalculatorSchema, projectSchema, type ValueType, elements, createTalentRankReader, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest, type StatKey } from '@leyline/schema';
+import { damageCalculatorSchema, projectSchema, type ValueType, createTalentRankReader, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest, type StatKey } from '@leyline/schema';
 import type { AccountArtifact, AccountCharacter, LocalAccount } from '../domain/account';
 import { addCalculatorCapture, addCalculatorSceneHit, calculatorRequest, calculatorCritProject, calculatorSceneHits, calculatorSnapshotDraft, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
 import { addActorFromBuild, addTransformativeReaction, defaultEnemy } from '../domain/real-project';
@@ -48,11 +48,13 @@ import TeamCard from '../components/TeamCard.vue';
 import CalculatorDamageCard from '../components/CalculatorDamageCard.vue';
 import CalculatorDamagePicker from '../components/CalculatorDamagePicker.vue';
 import CalculatorBuffPicker from '../components/CalculatorBuffPicker.vue';
+import CalculatorEnemySettings from '../components/CalculatorEnemySettings.vue';
+import SlotPlaceholder from '../components/SlotPlaceholder.vue';
 import CalculatorFactorCards from '../components/CalculatorFactorCards.vue';
 import { calculatorHitChoices, type CalculatorHitChoice } from '../domain/calculator-hits';
 import { applyCalculatorBuffs, buffDisplayName, buffFactNames, calculatorBuffChoices, resolveBuffSelection } from '../domain/calculator-buffs';
 import { presetCalculatorHitInputs, missingCalculatorPresets, calculatorFactPreset, calculatorHitElement, calculatorIntervals, calculatorOnFieldActor, calculatorHitFactFields, calculatorPartyInfusionOptions, type CalculatorFactField, selectionFacts, setCalculatorFact } from '../domain/calculator-conditions';
-import { calculatorSupportText, damageNumber as number, reactionNames, critNames } from '../domain/calculator-factors';
+import { calculatorBuffReadouts, calculatorSupportText, damageNumber as number, reactionNames, critNames } from '../domain/calculator-factors';
 import type { SavedTeam } from '../stores/saved-teams';
 import { loadSavedDamage, saveDamageSnapshot } from '../platform/saved-damage';
 const SavedDamageList = defineAsyncComponent(() => import('../components/SavedDamageList.vue'));
@@ -129,6 +131,7 @@ const sceneHit = computed(() => !damage.value.hit.hitId ? document.value?.projec
 const sceneChoices = computed(() => calculatorSceneHits(document.value?.project));
 const sceneDefinition = computed(() => sceneHit.value && matchingSceneHits(document.value?.project.sceneEffects, sceneHit.value.scene)[0]?.definition);
 const sceneHitDefinition = computed(() => sceneDefinition.value?.hits?.[0]);
+const hasDamageCard = computed(() => !!(selectedChoice.value || standalone.value || sceneDefinition.value));
 const sceneBaseOnly = computed(() => sceneHitDefinition.value && 'settlement' in sceneHitDefinition.value);
 const transformative = computed(() => !!standalone.value && isTransformative(standalone.value.family));
 const selectedLabel = computed(() => {
@@ -143,10 +146,13 @@ const intervals = computed(() => document.value && hitOwner.value
   ? calculatorIntervals(document.value.project, hitOwner.value.id, Math.round(hitTime.value * 1000), document.value.recordId) : {});
 const buffs = computed(() => document.value && hitOwner.value ? calculatorBuffChoices(document.value.project, hitOwner.value.id, damage.value,
   Math.round(hitTime.value * 1000), document.value.recordId, intervals.value) : []);
-const includedBuffs = computed(() => buffs.value.filter(buff => buff.checked));
-const buffIcons = computed(() => includedBuffs.value.map(buff => ({
-  id: buff.id, icon: buff.icon, label: buffDisplayName(buff) + '，' + buff.source + '，' + buff.description,
-})));
+const buffIcons = computed(() => {
+  const values = calculatorBuffReadouts(point.value?.real, buffs.value);
+  return buffs.value.filter(buff => buff.checked).map(buff => ({
+    id: buff.id, icon: buff.icon, label: [buffDisplayName(buff), buff.source, buff.description].join('，'),
+    rows: values.get(buff.id) ?? [],
+  }));
+});
 const factFields = computed(() => {
   const hit = selectedHit.value;
   const owner = hitOwner.value?.id;
@@ -941,32 +947,40 @@ defineExpose({ requestLeave: leaveCalculator });
       <button type="button" class="ui-action" data-accent="anemo" :disabled="!selectedLabel || savingDamage || listed?.signature === signature()" @click="saveDamage">保存伤害</button>
     </header>
     <div class="calculator-selections" aria-label="计算选择">
-      <TeamCard v-if="selectedTeam && teamProject" class="calculator-team" action="replace" :name="selectedTeam.name" :members="teamProject.candidate.actors"
+      <TeamCard v-if="selectedTeam && teamProject" class="calculator-team equipment-slot-card" data-density="compact" action="replace" :name="selectedTeam.name" :members="teamProject.candidate.actors" :title="selectedTeam.name"
+        :style="{ '--member-count': teamProject.candidate.actors.length || 1 }"
         aria-label="选择队伍" aria-haspopup="dialog" :disabled="!!document?.baseline" @click="picker = 'team'" />
-      <button v-else type="button" class="selection-tile primary-slot" data-card-action="select" aria-haspopup="dialog" :disabled="!!document?.baseline" @click="picker = 'team'">
-        <span class="add-mark" aria-hidden="true">+</span><strong>选择队伍</strong>
+      <button v-else type="button" class="selection-tile primary-slot equipment-slot-card" data-density="compact" data-empty="true" data-card-action="select" aria-haspopup="dialog" :disabled="!!document?.baseline" @click="picker = 'team'">
+        <SlotPlaceholder label="选择队伍" />
       </button>
-      <CharacterConfigurationCard v-if="character?.build" class="primary-slot" compact
+      <CharacterConfigurationCard v-if="character?.build" class="slot-configuration equipment-slot-card" data-density="compact" compact truncate-name
         :character-name="character.name" :configuration-name="configurationName" :build="character.build" :entries="entries" :basis="basis"
         :effective-stats="effectiveStats(character.name)" :open-label="`查看${character.name}详情`"
         :replace-label="document?.baseline ? undefined : `更换${character.name}`" @open="openCharacterDetails" @replace="openCharacters" />
-      <button v-else type="button" class="selection-tile primary-slot" data-card-action="select" aria-haspopup="dialog"
+      <button v-else type="button" class="selection-tile primary-slot equipment-slot-card" data-density="compact" data-empty="true" data-card-action="select" aria-haspopup="dialog"
         :disabled="!!document?.baseline" @click="openCharacters">
-        <span class="add-mark" aria-hidden="true">+</span><strong>选择角色</strong>
+        <SlotPlaceholder label="选择角色" />
       </button>
-      <button type="button" class="selection-tile secondary-slot damage-slot" aria-label="选择伤害" aria-haspopup="dialog" :data-hit-id="damage.hit.hitId"
+      <button type="button" class="selection-tile damage-slot" data-density="compact" :data-empty="!hasDamageCard" :data-card-action="hasDamageCard ? undefined : 'select'" :class="{ 'equipment-slot-card': !hasDamageCard }" aria-label="选择伤害" aria-haspopup="dialog" :data-hit-id="damage.hit.hitId"
         :disabled="!queryCharacter || !!document?.baseline" @click="picker = 'damage'">
-        <CalculatorDamageCard v-if="selectedChoice || standalone || sceneDefinition" :hit="selectedChoice" :scene="sceneDefinition"
+        <CalculatorDamageCard v-if="hasDamageCard" class="equipment-slot-card" data-density="compact" :hit="selectedChoice" :scene="sceneDefinition"
           :family="standalone?.family" :element="standalone?.element" :coefficient="standalone?.coefficient" :rules="document?.project.reactionRules" />
-        <template v-else><span class="add-mark small" aria-hidden="true">+</span><strong>选择伤害</strong></template>
+        <SlotPlaceholder v-else label="选择伤害" />
       </button>
-      <button type="button" class="selection-tile secondary-slot buff-slot" data-card-action="select" aria-label="选择增益" aria-haspopup="dialog"
-        aria-describedby="calculator-buff-summary" :disabled="!queryCharacter || !!document?.baseline || !!sceneHit" @click="picker = 'buff'">
-        <span v-for="buff in buffIcons" :key="buff.id" class="buff-icon" :title="buff.label" aria-hidden="true">
-          <GameIcon :kind="buff.icon.kind" :id="buff.icon.id" :monochrome="buff.icon.kind === 'constellations'" :size="36"><template #fallback><GameIcon kind="stats" id="elementalMastery" :size="28" /></template></GameIcon>
+      <button type="button" class="selection-tile buff-slot equipment-slot-card" data-density="compact" :data-empty="!buffIcons.length" :class="{ 'filled-slot': buffIcons.length }" data-card-action="select" aria-label="选择增益" aria-haspopup="dialog"
+        :aria-describedby="buffIcons.length ? 'calculator-buff-summary' : undefined" :disabled="!queryCharacter || !!document?.baseline || !!sceneHit" @click="picker = 'buff'">
+        <span v-if="buffIcons.length" class="buff-icons" aria-hidden="true">
+          <span v-for="buff in buffIcons" :key="buff.id" class="buff-icon" :title="[buff.label, ...buff.rows.map(row => row.join(' '))].join('\n')">
+            <GameIcon :kind="buff.icon.kind" :id="buff.icon.id" :monochrome="buff.icon.kind === 'constellations'" :size="36"><template #fallback><GameIcon kind="stats" id="elementalMastery" :size="28" /></template></GameIcon>
+          </span>
         </span>
-        <span v-if="!buffIcons.length" class="add-mark small" title="选择增益" aria-hidden="true">+</span>
-        <span id="calculator-buff-summary" role="tooltip">{{ buffIcons.map(buff => buff.label).join('；') || '选择增益' }}</span>
+        <SlotPlaceholder v-if="!buffIcons.length" label="选择增益" />
+        <span v-else id="calculator-buff-summary" role="tooltip">
+          <span v-for="buff in buffIcons" :key="buff.id" class="buff-tip">
+            {{ buff.label }}
+            <span v-for="[name, value] in buff.rows" :key="name" class="buff-readout"><span>{{ name }}</span> <b>{{ value }}</b></span>
+          </span>
+        </span>
       </button>
     </div>
     <p v-if="error" role="alert">{{ error }}</p>
@@ -999,7 +1013,9 @@ defineExpose({ requestLeave: leaveCalculator });
               <dt>ElementLevelCo 系数</dt><dd>{{ number(point.real.sceneHit.elementLevelCo) }}</dd></dl>
             <p v-for="sourceRef in point.real.sceneHit.sourceRefs" :key="sourceRef">{{ sourceRef }}</p>
           </details>
-          <CalculatorFactorCards v-if="point?.real && !sceneHit" :real="point.real" :damage="damage" :buffs="buffs" />
+        </template>
+        <CalculatorFactorCards v-if="!sceneHit" :real="point?.real" :expected="expectedPoint?.real" :guaranteed-crit="!standalone && selectedHit?.critical === 'always'" :damage="damage" :buffs="buffs" />
+        <template v-if="result">
           <table v-if="response?.comparison"><thead><tr><th>基准</th><th>当前候选</th><th>差值</th></tr></thead><tbody><tr><td>{{ number(baselinePoint?.value) }}</td><td>{{ number(point?.value) }}</td><td data-testid="calculator-delta">{{ number(comparisonPoint?.delta) }}</td></tr></tbody></table>
           <details v-if="!sceneHit" class="result-support"><summary>配装属性与来源</summary>
             <dl><dt>{{ damage.crit ? critNames[damage.crit] + '命中伤害' : '本次命中伤害' }}</dt><dd><output data-testid="calculator-value">{{ point?.value != null ? number(point.value) : unavailable(result, point) }}</output></dd></dl>
@@ -1046,11 +1062,7 @@ defineExpose({ requestLeave: leaveCalculator });
               </select>
             </label>
           </div></details>
-          <details v-if="!sceneHit"><summary>目标与计算条件</summary><div class="calculator-fields">
-            <label>目标等级<input v-model.number="enemy.level" type="number" min="1" max="200"></label>
-            <label>减防比例<input v-model.number="enemy.defenseReduction" type="number" min="0" max="1" step="0.01"></label><label>无视防御比例<input v-model.number="enemy.defenseIgnore" type="number" min="0" max="1" step="0.01"></label>
-            <label v-for="element in elements" :key="element">{{ realElementLabel(element) }}抗性（比例）<input v-model.number="enemy.resistances[element]" type="number" step="0.01"></label>
-          </div></details></fieldset>
+      </fieldset>
           <fieldset class="calculator-scene-settings" :disabled="!!document.baseline"><BattleSceneSettings :selections="document.project.sceneEffects" @change="updateScenes" /></fieldset>
           <TalentHealingForm v-if="document && !document.baseline" :members="document.project.candidate.actors" @apply="(actor,recipient,heal,facts)=>recordBeforeHit((p,t)=>addTalentHeal(p,actor,recipient,heal,t,facts))" />
           <AuraObservationForm v-if="document && hitOwner && !document.baseline" :members="document.project.candidate.actors.filter(a=>a.build)" :actor="hitOwner.id" @apply="(actor,aura)=>recordBeforeHit((p,t)=>addAuraObservation(p,actor,t,aura))" />
@@ -1079,6 +1091,7 @@ defineExpose({ requestLeave: leaveCalculator });
     </section>
     <ArtifactDetail v-if="inspectedArtifact" :item="inspectedArtifact" readonly @close="inspectedArtifact = undefined" />
     <CombatChangeList v-if="document" :changes="result?.combatChanges" :team="document.project.candidate.actors" />
+    <CalculatorEnemySettings :enemy="enemy" :element="standalone?.element ?? hitElement" :disabled="!document || !!document.baseline" @change="enemy = $event" />
     <footer class="library-page-toolbar">
       <span v-if="dirty || document" class="library-page-status">{{ dirty ? '未保存' : '已保存' }}</span>
       <div class="library-page-actions">
@@ -1122,30 +1135,37 @@ defineExpose({ requestLeave: leaveCalculator });
 
 <style scoped>
 .damage-calculator,.calculator-result,.calculator-conditions,.calculator-build { display:grid; min-width:0; gap:12px; }
+.damage-calculator { container:calculator / inline-size; }
 .damage-toolbar { display:flex; align-items:center; justify-content:space-between; }
-.calculator-selections { display:grid; grid-auto-rows:1fr; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-.selection-tile { box-sizing:border-box; display:flex; align-items:center; justify-content:center; gap:12px; min-width:0; width:100%; padding:16px; background:var(--surface); color:var(--ink); }
-
-.primary-slot,.calculator-team { min-height:140px; }
-.selection-tile.primary-slot { flex-direction:column; border-style:dashed; }
-.secondary-slot:disabled:has(small),.calculator-team:disabled { opacity:1; }
+.calculator-selections { display:grid; grid-auto-rows:140px; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.calculator-selections > * { box-sizing:border-box; min-height:0; }
+.selection-tile { box-sizing:border-box; display:flex; align-items:center; min-width:0; width:100%; }
+.filled-slot:disabled,.calculator-team:disabled { opacity:1; }
 .selection-tile strong { display:block; overflow-wrap:anywhere; font-size:var(--font-control); }
 .selection-tile small,.damage-totals small { font-size:var(--font-body); color:var(--muted); font-weight:400; }
-.add-mark { display:grid; place-items:center; width:40px; height:40px; color:var(--element-anemo-deep); background:var(--element-anemo-light); border-radius:7px; font-size:var(--font-title); font-weight:400; }
-.add-mark.small { width:32px; height:32px; }
-.secondary-slot { justify-content:flex-start; padding:10px 16px; text-align:left; }
-.damage-slot { height:auto; border:1px solid var(--line); border-radius:10px; }
-.damage-slot strong { font-size:18px; }
-.damage-slot:enabled:hover { background:var(--surface-raised); border-color:var(--line); }
+.filled-slot { justify-content:flex-start; padding:10px 16px; text-align:left; }
+.damage-slot[data-empty=false] { display:grid; grid-template-rows:minmax(0,1fr); align-items:stretch; padding:0; border:0 solid transparent; border-radius:10px; background:transparent; --button-hover-border:transparent; --damage-slot-highlight:color-mix(in srgb,var(--element-hydro-primary) 14%,var(--surface-raised)); }
+.damage-slot :deep(.choice-card) { box-sizing:border-box; min-height:0; grid-template-rows:minmax(0,1fr); }
+.damage-slot:enabled:is(:active,:focus-visible) :deep(.choice-card) { background:var(--damage-slot-highlight); }
+@media (any-hover:hover) {
+  .damage-slot:enabled:hover :deep(.choice-card) { background:var(--damage-slot-highlight); }
+}
+.damage-slot :deep(.details) { grid-template-rows:auto minmax(0,1fr) auto; }
+.damage-slot :deep(.details > :first-child),.damage-slot :deep(.source),.damage-slot :deep(.code) { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.damage-slot :deep(.note) { overflow:hidden; }
+.damage-slot :deep(.value) { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
 .damage-slot:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
-.buff-slot { position:relative; flex-wrap:wrap; gap:6px; align-content:center; }
-.buff-slot:disabled { opacity:1; }
+.buff-slot { position:relative; }
+.buff-icons { display:flex; flex-wrap:wrap; gap:6px; max-height:100%; overflow-y:auto; }
 .buff-icon { display:inline-flex; }
 .buff-icon :deep(.game-icon) { pointer-events:none; }
 .buff-slot [role=tooltip] { display:none; position:absolute; top:100%; left:0; right:0; z-index:2; padding:8px 12px; border:1px solid var(--line); border-radius:7px; background:var(--surface); color:var(--ink); font-size:14px; }
-.buff-slot:focus-visible [role=tooltip] { display:block; }
-button.calculator-team { grid-template-columns:minmax(0,1fr) auto; gap:4px; }
-.calculator-team :deep(.team-row-members) { grid-row:2; grid-column:1/-1; }
+.buff-slot:focus-visible [role=tooltip] { display:grid; gap:6px; }
+.buff-tip,.buff-readout { display:block; overflow-wrap:anywhere; }
+button.calculator-team { container-type:inline-size; grid-template-columns:minmax(0,1fr) auto; align-content:center; gap:4px; --portrait-limit:var(--team-portrait-size); }
+.calculator-team :deep(strong) { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.calculator-team :deep(.team-row-members) { grid-row:2; grid-column:1/-1; flex-wrap:nowrap; gap:4px;
+  --team-portrait-size:min(var(--portrait-limit),calc((100cqi + 4px) / var(--member-count) - 4px)); }
 .calculator-team :deep(.team-row-trailing) { grid-row:1; grid-column:2; }
 .result-heading { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
 .result-heading { justify-content:space-between; }.damage-calculator h3 { margin:0; font-size:var(--font-control); }
@@ -1172,16 +1192,22 @@ fieldset { border:0; padding:0; margin:0; }
 th,td { padding:8px 4px; border-bottom:1px solid var(--line); text-align:left; overflow-wrap:anywhere; font-size:var(--font-body); }
 dl { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:8px 0; font-variant-numeric:tabular-nums; }
 dd { margin:0; text-align:right; }p,li { overflow-wrap:anywhere; }ul { margin:0; padding-left:20px; }
+@container (max-width:240px) {
+  .calculator-selections :deep(.configuration-title) { display:grid; grid-template-columns:minmax(0,1fr); gap:1px; }
+}
+@container calculator (max-width:800px) {
+  .calculator-selections :deep(.configuration-body > .effective-roll-summary.inline.readonly.stacked) { display:none; }
+  .calculator-build .mobile-rolls { display:block; }
+}
 @media(max-width:600px) {
-  .calculator-selections { gap:8px; }.primary-slot,.calculator-team { min-height:114px; }.secondary-slot { padding:8px; gap:6px; }
+  .calculator-selections { grid-auto-rows:114px; }.filled-slot { padding:8px; gap:6px; }
   .damage-slot :deep(.choice-card) { grid-template-columns:40px minmax(0,1fr); gap:6px; }
   .damage-slot :deep(.portrait) { width:40px; height:40px; }
   .damage-slot :deep(.portrait > *) { transform:scale(.84); }
+  .damage-slot :deep(.details) { gap:2px; line-height:1.25; }
+  .damage-slot :deep(.identity) { line-height:1.15; }
+  .damage-slot :deep(.source) { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; white-space:normal; }
   .damage-totals { padding:10px 4px; }
   .damage-totals > div + div { padding-left:8px; }
-  .calculator-selections :deep(.configuration-body > .effective-roll-summary.inline.readonly.stacked) { display:none; }
-  .calculator-build .mobile-rolls { display:block; }
-  .calculator-selections :deep(.configuration-portraits) { flex-wrap:wrap; min-width:0; }
-  .calculator-team :deep(.team-row-members) { gap:4px; }
 }
 </style>

@@ -134,7 +134,7 @@ function closeDeleted() {
     <LibraryListHeader v-model:page="page" :pages="pages" :count="matches.length" :total="saved.teams.length" unit="支队伍" />
     <ul v-if="visible.length" class="team-list">
       <li v-for="team in visible" :key="team.id">
-        <TeamCard :action="pick ? 'select' : 'detail'" :name="team.name" :members="team.project.candidate.actors" :favorite="team.favorite" :selected="pick && team.id === selectedId"
+        <TeamCard :class="{ 'equipment-slot-card': pick }" :data-density="pick ? 'compact' : undefined" :data-current="pick && team.id === selectedId" :action="pick ? 'select' : 'detail'" :name="team.name" :members="team.project.candidate.actors" :favorite="team.favorite" :selected="pick && team.id === selectedId"
           :data-team-id="team.id" :aria-label="`${pick ? '选择' : '查看'}队伍 ${team.name}`"
           @click="pick ? emit('select', team) : activeTeam = team" />
       </li>

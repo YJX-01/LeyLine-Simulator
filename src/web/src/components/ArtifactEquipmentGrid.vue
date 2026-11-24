@@ -4,6 +4,7 @@ import type { AccountArtifact, AccountSlot, LocalAccount } from '../domain/accou
 import { accountSlotLabels } from '../domain/account';
 import CardReplaceMark from './CardReplaceMark.vue';
 import ArtifactSummary from '../pages/ArtifactSummary.vue';
+import SlotPlaceholder from './SlotPlaceholder.vue';
 import GameIcon from './GameIcon.vue';
 withDefaults(defineProps<{ density?:'relaxed'|'compact'; entries:{slot:AccountSlot;item?:AccountArtifact}[]; account?:LocalAccount; effectiveStats?:readonly StatKey[]; readonly?:boolean; contextMenu?:boolean; busy?:boolean; wearers?:{name:string;id?:string;label?:string}[] }>(),{density:'compact'});
 const emit=defineEmits<{ change:[slot:AccountSlot]; inspect:[slot:AccountSlot]; menu:[slot:AccountSlot,event:MouseEvent|KeyboardEvent] }>();
@@ -19,13 +20,13 @@ function keyboard(event:KeyboardEvent,slot:AccountSlot,enabled?:boolean){if(enab
         </template>
       </ArtifactSummary>
     </template>
-    <button v-else class="empty-artifact card-action-trigger" :aria-label="`装备${accountSlotLabels[entry.slot]}`" :title="`${accountSlotLabels[entry.slot]} · 未装备`" :disabled="readonly || busy" @click="emit('change',entry.slot)"><GameIcon kind="artifactSlots" :id="entry.slot" :size="density==='compact'?40:48" /></button>
+    <button v-else class="empty-artifact card-action-trigger" :aria-label="`装备${accountSlotLabels[entry.slot]}`" :title="`${accountSlotLabels[entry.slot]} · 未装备`" :disabled="readonly || busy" @click="emit('change',entry.slot)"><SlotPlaceholder><GameIcon kind="artifactSlots" :id="entry.slot" :size="density==='compact'?40:48" /></SlotPlaceholder></button>
   </article></div></div>
 </template>
 <style scoped>
 .equipment-grid { container-type:inline-size; container-name:equipment; min-width:0; width:100%; }
 .equipment-list { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px; max-width:864px; margin-inline:auto; }.equipment-list article { grid-column:span 2; position:relative; min-height:132px; box-sizing:border-box; }.equipment-list article:nth-child(4) { grid-column:2/span 2; }.equipment-list article:nth-child(5) { grid-column:4/span 2; }
-.artifact-item-card[data-empty=true] { border-style:dashed; }.empty-artifact { display:flex; align-items:center; justify-content:center; width:100%; min-height:112px; height:112px; padding:0; border:0; background:transparent; color:var(--muted); }.empty-artifact:disabled { opacity:.6; }
+.empty-artifact { display:flex; align-items:center; justify-content:center; width:100%; min-height:112px; height:112px; padding:0; border:0; background:transparent; color:var(--muted); }.empty-artifact:disabled { opacity:.6; }
 @container equipment (max-width:863px) { .equipment-list { grid-template-columns:repeat(2,minmax(0,1fr)); max-width:572px; }.equipment-list article,.equipment-list article:nth-child(4),.equipment-list article:nth-child(5) { grid-column:auto; } }
 @container equipment (max-width:571px) { .equipment-list { grid-template-columns:minmax(0,1fr); max-width:280px; } }
 .equipment-grid.compact > .equipment-list { grid-template-columns:repeat(5,minmax(0,1fr)); max-width:none; gap:8px; }

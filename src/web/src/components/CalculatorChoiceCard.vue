@@ -5,13 +5,13 @@ defineProps<{ name: string; alias?: string; code?: string; source?: string; note
   <span class="choice-card">
     <span class="identity">
       <span v-if="$slots.icon" class="portrait"><slot name="icon" /></span>
-      <b v-if="code" class="code">{{ code }}</b>
-      <span v-if="source" class="source">{{ source }}</span>
+      <b v-if="code" class="code" :title="code">{{ code }}</b>
+      <span v-if="source" class="source" :title="source">{{ source }}</span>
     </span>
     <span class="details">
-      <span><strong>{{ alias || name }}</strong><span v-if="alias && alias !== name" class="official">（{{ name }}）</span></span>
-      <span class="note"><span v-if="note">{{ note }}</span><slot /></span>
-      <span class="value">{{ value }}</span>
+      <span :title="alias && alias !== name ? alias + '（' + name + '）' : name"><strong>{{ alias || name }}</strong><span v-if="alias && alias !== name" class="official">（{{ name }}）</span></span>
+      <span class="note" :title="note"><span v-if="note">{{ note }}</span><slot /></span>
+      <span class="value" :title="value">{{ value }}</span>
     </span>
   </span>
 </template>

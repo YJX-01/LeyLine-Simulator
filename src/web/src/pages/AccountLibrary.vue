@@ -202,7 +202,7 @@ function inventoryEquipment(entry: AccountCharacter) {
 
         <LibraryListHeader v-if="!props.pick" v-model:page="characterPage" :pages="characterPages" :count="visibleCharacters.length" :total="availableCharacters.length" unit="名角色" />
         <div v-if="galleryEntries.length" ref="characterGrid" class="character-cards">
-          <button v-for="entry in galleryEntries" :key="entry.galleryKey" class="character-card" :data-card-action="pick ? 'select' : 'detail'" :class="{ selected:props.pick ? props.selectedId===entry.id : characterId === entry.id && (detail?.presetId ?? '')===entry.presetId }" :aria-label="props.pick ? `选择${entry.name}` : `查看${entry.name}详情`" @click="openGallery(entry)" @contextmenu="openCharacterMenu($event,entry.id)">
+          <button v-for="entry in galleryEntries" :key="entry.galleryKey" class="character-card" :data-density="pick ? 'compact' : undefined" :data-current="pick && selectedId === entry.id" :data-card-action="pick ? 'select' : 'detail'" :class="{ 'equipment-slot-card': pick, selected:props.pick ? props.selectedId===entry.id : characterId === entry.id && (detail?.presetId ?? '')===entry.presetId }" :aria-label="props.pick ? `选择${entry.name}` : `查看${entry.name}详情`" @click="openGallery(entry)" @contextmenu="openCharacterMenu($event,entry.id)">
             <span class="character-card-header">
               <span class="character-card-status">
                 <StatusBadge :label="entry.ready ? '就绪' : '缺失'" :state="entry.ready ? 'complete' : 'missing'"
@@ -246,7 +246,7 @@ function inventoryEquipment(entry: AccountCharacter) {
 .character-card-header > strong { grid-column:2; grid-row:1; text-align:center; font-size:var(--font-control); line-height:22px; overflow-wrap:anywhere; }
 .character-card-status { grid-column:1; grid-row:1; justify-self:start; display:grid; grid-template-columns:repeat(auto-fill,minmax(36px,1fr)); gap:4px; width:var(--character-card-equipment-size); }
 .character-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,312px),1fr)); justify-content:center; gap:12px; margin:0; }
-.character-cards .character-card {
+:where(.character-cards) .character-card {
   --character-card-media-gap:8px;
   --character-card-media-width:min(280px,calc(100cqi - 2 * var(--character-card-media-gap)));
   --character-card-equipment-size:calc(var(--character-card-media-width) * 88 / 280);
@@ -256,7 +256,7 @@ function inventoryEquipment(entry: AccountCharacter) {
   align-items:flex-start; gap:6px; min-width:0; padding:10px 7px 12px; color:var(--ink); text-align:left;
   background:var(--surface);
 }
-@media(max-width:550px){.character-cards { grid-template-columns:minmax(0,1fr); }.character-cards .character-card { padding:10px 7px 12px; }}
+@media(max-width:550px){.character-cards { grid-template-columns:minmax(0,1fr); }:where(.character-cards) .character-card { padding:10px 7px 12px; }}
 
 .account-library { margin: 0 30px; color: var(--text, var(--ink)); }
 .account-toolbar { display: flex; align-items: end; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }

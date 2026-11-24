@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, nextTick, ref, shallowRef, toRaw } from 'vue';
 import type { Project } from '@leyline/schema';
+import SlotPlaceholder from '../components/SlotPlaceholder.vue';
+import LibraryNavIcon from '../components/LibraryNavIcon.vue';
 import CharacterConfigurationCard from '../components/CharacterConfigurationCard.vue';
 import ChoiceGroup from '../components/ChoiceGroup.vue';
 import ConfirmationDialog from '../components/ConfirmationDialog.vue';
@@ -32,6 +34,7 @@ const original = shallowRef(props.team);
 const accounts = useAccountStore();
 const loadouts = useCharacterLoadoutsStore();
 const saved = useSavedTeamsStore();
+const emptyBasis = buildRollBasis();
 
 interface TeamDraft { project: Project; roster: (TeamSlot | null)[] }
 function teamDraft(team?: SavedTeam): TeamDraft {
@@ -293,13 +296,18 @@ function removeTeam() {
       <p v-if="error" role="alert">{{ error }}</p>
       <ol class="team-slots" aria-label="队员槽" role="list">
         <li v-for="(slot, index) in slots" :key="index" :data-slot="index + 1" class="team-slot">
-          <CharacterConfigurationCard v-if="slot" class="team-configuration" compact :character-name="slot.name"
+          <CharacterConfigurationCard v-if="slot" class="team-configuration equipment-slot-card" data-density="compact" compact truncate-name :character-name="slot.name"
             :configuration-name="slot.label" :favorite="slot.favorite" :build="slot.member.build" :entries="slot.entries" :basis="slot.basis" :effective-stats="slot.stats"
             :open-label="`查看${slot.name}的配置详情`" :replace-label="`选择${slot.name}的角色配置`"
             @open="inspectSlot(index)" @replace="openPicker(index)" @contextmenu="openMenu($event, index)" @open-keydown="menuKey($event, index)" />
-          <button v-else type="button" class="team-add-slot" data-card-action="select" @click="openPicker(index)">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>选择队员{{ index + 1 }}
+          <button v-else type="button" class="team-add-slot equipment-slot-card" data-density="compact" data-empty="true" data-card-action="select" @click="openPicker(index)">
+            <SlotPlaceholder :label="'选择队员' + (index + 1)"><LibraryNavIcon kind="person" /></SlotPlaceholder>
           </button>
+        </li>
+        <!-- One noninteractive card sizes all rows, even when the team is empty. -->
+        <li class="team-slot-size" aria-hidden="true" inert>
+          <CharacterConfigurationCard class="team-configuration equipment-slot-card" data-density="compact"
+            compact truncate-name character-name="角色" :entries="[]" :basis="emptyBasis" />
         </li>
       </ol>
     </form>
@@ -341,16 +349,16 @@ function removeTeam() {
 
 <style scoped>
 .team-form { display:grid; gap:16px; min-width:0; }
-.team-slots { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:1fr; gap:12px; margin:0; padding:0; list-style:none; }
-.team-slot { display:grid; min-width:0; min-height:120px; }
+.team-slots { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:1fr; gap:8px; margin:0; padding:0; list-style:none; }
+.team-slot { display:grid; min-width:0; min-height:0; contain:size; }
+.team-slot[data-slot="1"], .team-slot-size { grid-area:1 / 1; }
+.team-slot-size { min-width:0; visibility:hidden; pointer-events:none; }
 .team-configuration { align-content:start; }
 .team-configuration :deep(.configuration-top) { min-height:var(--control-height-md); }
-.team-editor .team-add-slot {
-  display:flex; align-items:center; justify-content:center; gap:8px; min-height:var(--control-height-lg);
-  padding:12px; border-style:dashed; color:var(--element-hydro-deep);
-  background:var(--element-hydro-light); font-size:var(--font-control); font-weight:700;
-}
-.team-add-slot svg { width:16px; height:16px; }
+.team-configuration :deep(.configuration-title > span:first-child) { overflow:hidden; text-overflow:ellipsis; flex-shrink:0; max-width:100%; }
+.team-configuration :deep(.configuration-name) { max-width:none; }
+.team-slot .team-add-slot[data-empty] { min-height:0; }
+.team-add-slot .library-nav-icon { width:40px; height:40px; }
 .team-pick-error { padding-bottom:8px; }
 @media(max-width:850px) {
   .team-editor > :deep(header) { grid-template-columns:72px minmax(0,1fr) 72px; }
@@ -367,7 +375,6 @@ function removeTeam() {
   .team-configuration-picker > :deep(header .dialog-leading button) { padding-inline:5px; }
 }
 @media(max-width:520px) {
-  .team-slots { grid-template-columns:minmax(0,1fr); grid-auto-rows:auto; gap:8px; }
-  .team-slot { min-height:72px; }
+  .team-slots { grid-template-columns:minmax(0,1fr); }
 }
 </style>

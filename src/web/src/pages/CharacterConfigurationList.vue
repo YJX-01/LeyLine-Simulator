@@ -167,7 +167,7 @@ function confirmDelete(){const configuration=deleting.value;if(!configuration)re
     <p v-if="error || loadouts.error" role="alert">{{ error || loadouts.error }}</p>
     <LibraryListHeader v-model:page="page" :pages="pages" :count="configurations.length" :total="allConfigurations.length" unit="套配置" />
     <div v-if="visible.length" ref="grid" class="configuration-cards" :class="{compact:density==='compact'}">
-      <CharacterConfigurationCard v-for="{ configuration, presentation } in visible" :key="configuration.id"
+      <CharacterConfigurationCard v-for="{ configuration, presentation } in visible" :key="configuration.id" :class="{ 'equipment-slot-card': selectionOnly }" :data-density="selectionOnly ? 'compact' : undefined"
         :character-name="configuration.character.name" :build="configuration.character.build"
         :configuration-name="presentation.name" :truncate-name="selectable && !selectionOnly" :entries="presentation.entries" :basis="presentation.basis"
         :effective-stats="presentation.stats" :favorite="favoriteLevel(configuration)" :preferred="!configuration.presetId" :compact="density==='compact'"

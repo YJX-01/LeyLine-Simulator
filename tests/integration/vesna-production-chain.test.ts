@@ -1,7 +1,7 @@
 import { packDocument } from '../../src/web/src/domain/content-document';
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { evaluateDamage, evaluateTimeline, resolveBuild } from '@leyline/engine';
+import { evaluateDamage, evaluateTimeline, resolveEquipmentPanel } from '@leyline/engine';
 import { getCharacterActions, getReactionCalculationBundle } from '@leyline/game-data';
 import type { CalculationFact, DamageRequest, Value } from '@leyline/schema';
 import { createAccount } from '../../src/web/src/domain/account';
@@ -58,39 +58,52 @@ describe.skipIf(!existsSync(path))('recorded Vesna through the production calcul
     const flinsId = addActorFromBuild(project, flins), columbinaId = addActorFromBuild(project, columbina);
     const skill = flins.character.talents.find(talent => talent.category === 'burst')!;
     const middle = skill.hits.findIndex(hit => hit.id === 'flins.burst.param2'), final = skill.hits.findIndex(hit => hit.id === 'flins.burst.param3');
+    // Compare the equipped panels with no temporary weapon, set or Domain bonuses.
+    const facts: DamageRequest['facts'] = [
+      { subject: { kind: 'actor', id: flinsId }, values: {
+        'nightoftheskysunveiling.moonlightWindow': fact({ kind: 'boolean', value: false }),
+        'primordialjadewingedspear.eagleLayers': fact({ kind: 'quantity', unit: 'count', value: 0 }),
+      } },
+      { subject: { kind: 'actor', id: columbinaId }, values: {
+        'columbina.moonTemptation': fact({ kind: 'quantity', unit: 'count', value: 0 }),
+        'columbina.moonDomain': fact({ kind: 'boolean', value: false }),
+        'sacrificialjade.jadeActive': fact({ kind: 'boolean', value: false }),
+      } },
+    ];
     const pending = addSkillHit(project, flinsId, skill.id, middle, 0, { crit: null, reaction: null });
-    const direct = addSkillHit(project, flinsId, skill.id, final, 1000, { crit: 'noncritical', reaction: 'none' });
+    const direct = addSkillHit(project, flinsId, skill.id, final, 1000, { crit: 'noncritical', reaction: 'none', facts });
     const reacted = nextRecordId(project);
     project.enemy = defaultEnemy();
     project.reactionRules = await getReactionCalculationBundle();
     project.timeline.push({ id: reacted, actor: flinsId, kind: 'damage', definition: flinsId + '-real-damage', timeMs: 2000, order: 2,
-      reactionEvent: { family: 'lunar-charged', element: 'electro', contributors: [flinsId, columbinaId].map(actorId => ({ actorId, qualified: true, crit: 'expected' })) } });
+      reactionEvent: { family: 'lunar-charged', element: 'electro', facts, contributors: [flinsId, columbinaId].map(actorId => ({ actorId, qualified: true, crit: 'expected' })) } });
     const reopened = importProject(JSON.stringify(packDocument('axis', project)));
     const result = evaluateTimeline(reopened);
     const points = new Map(result.points.map(point => [point.id, point]));
     expect(points.get(pending)?.value).toBeNull();
     expect(result.totalValue).toBeNull();
-    const panels = [flins, columbina].map(build => resolveBuild(build).stats);
-    const lunarBonus = (em: number) => 1 + 6 * em / (em + 2000);
+    const panels = [flins, columbina].map(build => resolveEquipmentPanel(build).stats);
+    // Flins's first ascension passive adds 20% to his own Lunar-Charged damage at full Moonsign.
+    const lunarBonus = (em: number, index: number) => 1 + 6 * em / (em + 2000) + (index === 0 ? .2 : 0);
     const blessing = 1 + Math.min(.14, panels[0].attack! * .00007) + Math.min(.07, panels[1].hp! * .000002);
     const upstream = JSON.parse(readFileSync('tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json', 'utf8'));
     const multiplier = upstream.flins.combat3.param3[flins.talents.burst - 1];
-    expect(points.get(direct)?.value).toBeCloseTo(panels[0].attack! * multiplier * 3 * blessing * lunarBonus(panels[0].elementalMastery!) * 0.9, 8);
+    expect(points.get(direct)?.value).toBeCloseTo(panels[0].attack! * multiplier * 3 * blessing * lunarBonus(panels[0].elementalMastery!, 0) * 0.9, 8);
     const levels = JSON.parse(readFileSync('src/game-data/data/calculation/reactions.json', 'utf8')).rules.levelMultipliers;
     let expected = 0;
     for (const first of [false, true]) for (const second of [false, true]) {
       const flags = [first, second];
       const values = [flins, columbina].map((build, index) => {
         const panel = panels[index];
-        return levels[build.level] * 3 * blessing * lunarBonus(panel.elementalMastery!) * (1 + (flags[index] ? panel.critDamage! : 0)) * 0.9;
+        return levels[build.level] * 3 * blessing * lunarBonus(panel.elementalMastery!, index) * (1 + (flags[index] ? panel.critDamage! : 0)) * 0.9;
       }).sort((a, b) => b - a);
       const probability = flags.reduce((product, critical, index) => product * (critical ? panels[index].critRate! : 1 - panels[index].critRate!), 1);
       expected += (values[0] * 0.6 + values[1] * 0.3) * probability;
     }
     const outcome = points.get(reacted)?.real?.structured?.outputs[0];
     expect(outcome?.actorId).toBeNull();
-    expect(outcome?.aggregation?.states).toHaveLength(4);
-    expect(points.get(reacted)?.value).toBeCloseTo(expected, 8);
+    expect(outcome?.aggregation?.states, points.get(reacted)?.real?.diagnostics.join('\n')).toHaveLength(4);
+    expect(points.get(reacted)?.value, points.get(reacted)?.real?.diagnostics.join('\n')).toBeCloseTo(expected, 8);
   });
 
   it('reads the derived stance and stack count from explicit project actions after reopening', async () => {

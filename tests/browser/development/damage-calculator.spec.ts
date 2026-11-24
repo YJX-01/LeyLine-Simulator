@@ -51,10 +51,28 @@ test('damage cards fit their contents and applied buff icons retain searchable n
   const { calc } = await openSingleBuild(page, build);
   const damage = calc.getByRole('button', { name: '选择伤害', exact: true });
   const buffs = calc.getByRole('button', { name: '选择增益', exact: true });
-  const border = await damage.evaluate(node => getComputedStyle(node).borderTopColor);
-  await damage.hover();
-  await expect(damage).toHaveCSS('border-top-color', border);
-  await damage.click();
+  const face = damage.locator('.choice-card');
+  await face.scrollIntoViewIfNeeded();
+  await expect.poll(() => face.locator('.portrait img').evaluateAll(images =>
+    images.some(image => (image as HTMLImageElement).naturalWidth > 0))).toBe(true);
+  await page.mouse.move(0, 0);
+  const rest = await face.evaluate(node => {
+    const css = getComputedStyle(node);
+    return { image: css.backgroundImage, color: css.backgroundColor, border: css.borderTopColor };
+  });
+  const box = await face.boundingBox();
+  await face.screenshot({ path: info.outputPath('damage-home-rest.png') });
+  for (const part of ['.portrait', '.details strong', '.note', '.value']) {
+    await face.locator(part).hover();
+    await expect(face).not.toHaveCSS('background-color', rest.color);
+    await expect(face).toHaveCSS('border-top-color', rest.border);
+    expect(await face.boundingBox()).toEqual(box);
+  }
+  await face.screenshot({ path: info.outputPath('damage-home-hover.png') });
+  await page.mouse.move(0, 0);
+  await expect(face).toHaveCSS('background-image', rest.image);
+  await expect(face).toHaveCSS('background-color', rest.color);
+  await face.locator('.note').click();
   const picker = page.getByRole('dialog', { name: '选择伤害' });
   await expect.poll(() => picker.locator('.hit-options button').first().locator('img').evaluateAll(images =>
     images.some(image => (image as HTMLImageElement).naturalWidth > 0))).toBe(true);
@@ -109,10 +127,33 @@ test('damage cards fit their contents and applied buff icons retain searchable n
   await expect(buffs.locator('.buff-icon[title*="黑岩长剑"]')).toHaveCount(1);
   const firstTwo = await buffs.locator('.buff-icon').evaluateAll(nodes => nodes.slice(0, 2).map(node => node.getBoundingClientRect().y));
   expect(firstTwo[0]).toBe(firstTwo[1]);
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    const slots = calc.locator('.calculator-selections');
+    const heights = await slots.locator(':scope > *, .damage-slot .choice-card').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().height));
+    expect(heights).toEqual(Array(5).fill(width > 600 ? 140 : 114));
+    expect(await slots.locator(':scope > *').evaluateAll(nodes => nodes.every(node => node.scrollHeight <= node.clientHeight + 1))).toBe(true);
+    const lines = await damage.locator('.details > span').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().toJSON()));
+    expect(lines[0].bottom).toBeLessThanOrEqual(lines[1].top);
+    expect(lines[1].height).toBeGreaterThan(12);
+    expect(lines[1].bottom).toBeLessThanOrEqual(lines[2].top);
+    await slots.screenshot({ path: info.outputPath('filled-slots-' + width + '.png') });
+  }
   await damage.focus();
   await page.keyboard.press('Tab');
   await expect(buffs).toBeFocused();
   await expect(buffs.getByRole('tooltip')).toContainText('班尼特加攻');
+  await page.keyboard.press('Shift+Tab');
+  await expect(damage).toBeFocused();
+  await expect(damage).toHaveCSS('outline-style', 'solid');
+  await page.keyboard.press('Enter');
+  await expect(picker).toBeVisible();
+  await page.keyboard.press('Escape');
+  await calc.getByRole('button', { name: '设为比较基准', exact: true }).click();
+  await expect(damage).toBeDisabled();
+  await face.hover();
+  await expect(face).toHaveCSS('background-image', rest.image);
+  await expect(face).toHaveCSS('background-color', rest.color);
 });
 
 test('Xinyan’s two burst hits keep their own crit rules through the buff picker and Worker replay', async ({ page }, info) => {
@@ -127,6 +168,16 @@ test('Xinyan’s two burst hits keep their own crit rules through the buff picke
     const expected = attack * talentRatio * (101 / 291) * .9 * (1 + rate * .62);
     return expect.poll(async () => Number((await calc.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(expected, 5);
   };
+  const critCard = calc.locator('.factor-card').filter({ has: page.getByText('暴击区', { exact: true }) });
+  const factor = critCard.locator('summary strong');
+  await expect(factor).toHaveText('× 1.031');
+  await critCard.locator('summary').click();
+  for (const mode of ['noncritical', 'critical']) {
+    await crit.selectOption(mode);
+    await calc.getByRole('button', { name: '计算伤害', exact: true }).click();
+    await expect(factor).toHaveText('× 1.031');
+    await expect(critCard.locator('.subtotal strong')).toHaveText('1 + 5% × 62% = 1.031');
+  }
   await selectHit(calc, 'xinyan.burst');
   await crit.selectOption('expected');
   for (const enabled of [false, true]) {
@@ -136,7 +187,15 @@ test('Xinyan’s two burst hits keep their own crit rules through the buff picke
     await picker.getByRole('button', { name: '应用增益' }).click();
     await calc.getByRole('button', { name: '计算伤害', exact: true }).click();
     await check('param1', enabled ? 1 : .05);
+    await expect(factor).toHaveText(enabled ? '× 1.62' : '× 1.031');
+    await expect(critCard.locator('.column-heading strong')).toHaveText([enabled ? '100%' : '5%', '62%']);
+    await expect(critCard.locator('.stat-box .factor-chip').filter({ hasText: '基础面板' }).locator('dd')).toHaveText('5%');
+    await expect(critCard.locator('.stat-box .factor-chip').filter({ hasText: '开场即兴段' })).toHaveCount(enabled ? 1 : 0);
+    await expect(critCard.locator('.rate-box .factor-chip').filter({ hasText: '开场即兴段' })).toHaveCount(0);
+    if (enabled) await expect(critCard.locator('.stat-box .conversion')).toHaveText('合计 105%，按 100% 计算');
   }
+  if (!await critCard.locator('.subtotal').isVisible()) await critCard.locator('summary').click();
+  await critCard.screenshot({ path: info.outputPath('critical-breakdown.png') });
   const downloading = page.waitForEvent('download');
   await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
   const file = info.outputPath('xinyan-crit.json');
@@ -146,6 +205,24 @@ test('Xinyan’s two burst hits keep their own crit rules through the buff picke
   await check('param1', 1);
   await selectHit(calc, 'xinyan.burst', 1);
   await check('param2', .05);
+});
+
+test('Messenger’s weak-point hit uses its guaranteed crit in the expectation breakdown', async ({ page }) => {
+  const build: Build = { ...await catalogSnapshotFields('amber', 'messenger'), level: 1, ascension: 0, constellation: 0,
+    weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
+  const { calc } = await openSingleBuild(page, build);
+  await selectHit(calc, 'messenger');
+  await calc.getByRole('button', { name: '选择增益', exact: true }).click();
+  const picker = page.getByRole('dialog', { name: '选择增益' });
+  await picker.getByRole('combobox', { name: /重击命中要害/ }).selectOption('true');
+  await picker.getByRole('button', { name: '应用增益' }).click();
+  const card = calc.locator('.factor-card').filter({ has: page.locator('summary', { hasText: '暴击区' }) });
+  const cd = .5 + build.weapon!.baseStat * build.weapon!.statCurve[1];
+  const n = (value: number) => value.toLocaleString('zh-CN', { maximumFractionDigits: 6 });
+  await expect(card.locator('summary strong')).toHaveText('× ' + n(1 + cd));
+  await card.locator('summary').click();
+  await expect(card.locator('.stat-box')).toContainText('本击必定暴击');
+  await expect(card.locator('.subtotal strong')).toHaveText('1 + 100% × ' + n(cd * 100) + '% = ' + n(1 + cd));
 });
 
 test('calculator shares the team and character pickers and retains a four-member selection in its own file', async ({ page }, info) => {
@@ -220,7 +297,11 @@ test('calculator shares the team and character pickers and retains a four-member
   await expect(button('选择队伍').locator('.card-replace-mark')).toBeHidden();
   await button('选择队伍').hover();
   await expect(button('选择队伍').locator('.team-row-members > .card-replace-layer .card-replace-mark')).toBeVisible();
-  expect(await sizes(button('选择队伍'))).toEqual(mobileSizes);
+  const portraits = await button('选择队伍').locator('.team-row-members > .game-icon').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().toJSON()));
+  const teamBox = (await button('选择队伍').boundingBox())!;
+  expect(teamBox.height).toBe(114);
+  expect(portraits).toHaveLength(4);
+  expect(portraits.every(box => box.y === portraits[0].y && box.width === box.height && box.right <= teamBox.x + teamBox.width)).toBe(true);
   await page.setViewportSize({width:1280,height:960});
   expect(await sizes(button('选择队伍'))).toEqual(desktopSizes);
   await expect(button('选择角色')).toHaveText(/选择角色/);
@@ -296,12 +377,17 @@ test('calculator shares the team and character pickers and retains a four-member
   await page.setViewportSize({width:390,height:844});
   await expect(button('选择伤害')).toBeVisible();
   expect(await calculator.evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
-  const multiplier = calculator.locator('.factor-card').filter({ hasText: '反应增伤区' }).locator('summary strong');
+  const star = calculator.locator('.factor-card').filter({ has: page.locator('summary', { hasText: '星反应增伤区' }) });
+  const multiplier = star.locator('summary strong');
   expect(await multiplier.evaluate(node => {
     const range = document.createRange();
     range.selectNodeContents(node);
     return new Set(Array.from(range.getClientRects(), rect => rect.top)).size;
   })).toBe(1);
+  await star.locator('summary').click();
+  await expect(star.locator('.stat-box .factor-chip dd')).toHaveText(['159', '84', '75']);
+  await expect(star.locator('.rate-box .column-heading strong')).toHaveText('96%');
+  await star.screenshot({ path: info.outputPath('team-stellar-mobile.png') });
   await page.screenshot({path:info.outputPath('team-calculator-mobile.png')});
   expect(await storage()).toEqual(before);
   await page.reload();
@@ -365,6 +451,13 @@ test.describe('calculator character card on a touch-capable device', () => {
     await expect(creation).toHaveCount(0);
     await expect(calculator.getByRole('dialog', { name: '选择角色', exact: true })).toHaveCount(0);
     expect(await stored()).toEqual({ preferred: [0], alternates: [] });
+    const damage = button('选择伤害');
+    const damagePicker = calculator.getByRole('dialog', { name: '选择伤害', exact: true });
+    await damage.tap();
+    await chooseDamageCard(damagePicker.locator('button[data-hit-id]').first());
+    await damage.locator('.choice-card').tap();
+    await expect(damagePicker).toBeVisible();
+    await page.keyboard.press('Escape');
     const details = button('查看凯亚详情');
     const card = calculator.locator('.calculator-selections .configuration-row');
     const portrait = button('更换凯亚');
@@ -373,7 +466,7 @@ test.describe('calculator character card on a touch-capable device', () => {
     await expect(strip).toHaveAttribute('aria-label', '更换凯亚');
     await expect(strip.locator(':scope > .game-icon.characters')).toHaveCount(1);
     await expect(strip.locator(':scope > .card-sets')).toHaveCount(1);
-    let calculatorSize: { width: number; height: number } | undefined;
+    let desktopStripWidth = 0;
     for (const width of [1280, 451, 320, 390]) {
       await page.setViewportSize({ width, height: 844 });
       await portrait.hover({ position: { x: 3, y: 6 } });
@@ -381,7 +474,7 @@ test.describe('calculator character card on a touch-capable device', () => {
       await expect(layer).toBeVisible();
       const target = await portrait.boundingBox();
       expect(await layer.boundingBox()).toEqual(target);
-      if (width === 1280) calculatorSize = { width: target!.width, height: target!.height };
+      if (width === 1280) desktopStripWidth = target!.width;
       expect(await strip.evaluate(node => node.getBoundingClientRect().right <= node.closest('.configuration-row')!.getBoundingClientRect().right)).toBe(true);
     }
     await details.hover({ position: { x: 10, y: 8 } });
@@ -435,8 +528,8 @@ test.describe('calculator character card on a touch-capable device', () => {
     const teamLayer = teamPortraits.locator('.card-replace-layer');
     await expect(teamLayer).toBeVisible();
     const teamBounds = (await teamPortraits.boundingBox())!;
-    expect(teamBounds.width).toBeCloseTo(calculatorSize!.width, 0);
-    expect(teamBounds.height).toBeCloseTo(calculatorSize!.height, 0);
+    expect(teamBounds.width).toBeCloseTo(desktopStripWidth, 0);
+    expect(teamBounds.height).toBeGreaterThanOrEqual(48);
     expect(await teamLayer.boundingBox()).toEqual(teamBounds);
     await teamPortraits.click();
     await expect(page.getByRole('dialog', { name: '选择角色配置', exact: true })).toBeVisible();
@@ -544,15 +637,16 @@ test('calculator uses formal Beidou damage, isolated candidates and saved-file W
   await checkTiles();
   const grid = calculator.locator('.factor-grid');
   const bounds = await grid.locator('details').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().toJSON()));
-  expect(bounds[0].width).toBe((await grid.boundingBox())!.width);
-  expect(bounds[1].y).toBe(bounds[2].y);
+  const gridWidth = (await grid.boundingBox())!.width;
+  expect(bounds.every((box, index) => box.width === gridWidth && (!index || box.y >= bounds[index - 1].bottom))).toBe(true);
   await expect(calculator.locator('.calculator-build .equipment-list > article')).toHaveCount(5);
   const base = calculator.locator('.factor-card').filter({ hasText: '属性 × 倍率区' });
   await base.locator('summary').hover();
   await expect(base).toHaveCSS('border-top-width', '3px');
   await expect(base).toHaveCSS('border-top-color', 'rgb(76, 169, 139)');
   await base.locator('summary').click();
-  await expect(base).toContainText('攻击力 × 倍率');
+  await expect(base.locator('.scaling-term').first()).toContainText('攻击力');
+  await expect(base).toContainText('基础伤害小计');
   const defense = calculator.locator('.factor-card').filter({ hasText: '防御区' });
   await defense.locator('summary').click();
   await expect(defense).toContainText('目标等级');
@@ -1055,7 +1149,10 @@ test('a standalone swirl replaces the selected hit and reopens as one Worker occ
   await chooseDamageCard(swirl);
   const element = calc.getByRole('combobox', { name: '扩散元素', exact: true });
   await expect(element).toHaveValue('pyro');
+  const monster = calc.getByRole('region', { name: '怪物属性' });
+  await expect(monster.getByLabel('火基础抗性（%）')).toHaveValue('20');
   await element.selectOption('hydro');
+  await expect(monster.getByLabel('水基础抗性（%）')).toBeVisible();
   const homeCard = calc.getByRole('button', { name: '选择伤害', exact: true });
   await expect(homeCard.locator('[data-element="hydro"]')).toBeVisible();
   await expect(homeCard.locator('.value')).toContainText('等级系数');
@@ -1112,6 +1209,10 @@ test('Nahida C2 marked Bloom keeps its target condition and expected crit in a r
     await critical.selectOption(mode);
     await calc.getByRole('button', { name: '计算伤害', exact: true }).click();
     await expect.poll(async () => Number((await calc.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(17.165606 * 2 * .9 * factor, 4);
+    const card = calc.locator('.factor-card').filter({ has: page.locator('summary', { hasText: '暴击区' }) });
+    await expect(card.locator('summary strong')).toHaveText(mark === 'true' ? '× 1.2' : '× 1');
+    await expect(card.locator('.column-heading strong')).toHaveText(mark === 'true' ? ['20%', '100%'] : ['0%', '0%']);
+    await expect(card.locator('.subtotal strong')).toHaveText(mark === 'true' ? '1 + 20% × 100% = 1.2' : '1 + 0% × 0% = 1');
   }
   const waiting = page.waitForEvent('download');
   await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
@@ -1355,7 +1456,7 @@ for (const weapon of [
     const build: Build = { ...await catalogSnapshotFields(weapon.character, weapon.id), level: 1, ascension: 0, constellation: 0,
       weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
     const { calc, open } = await openSingleBuild(page, build);
-    const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
+    const values = calc.locator('#calculator-buff-summary');
     for (const [input, expected] of weapon.inputs) {
       await calc.getByRole('button', { name: '选择增益', exact: true }).click();
       const picker = page.getByRole('dialog', { name: '选择增益' });
@@ -1363,14 +1464,14 @@ for (const weapon of [
       await picker.getByRole('spinbutton', { name: weapon.amount }).first().fill(input);
       await picker.getByRole('combobox', { name: '站场', exact: true }).first().selectOption('true');
       await picker.getByRole('button', { name: '应用增益' }).click();
-      await expect(values.locator('dd', { hasText: expected })).toHaveText(expected);
+      await expect(values.locator('b', { hasText: expected })).toHaveText(expected);
     }
     const downloading = page.waitForEvent('download');
     await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
     const file = info.outputPath(weapon.id + '.json');
     await (await downloading).saveAs(file);
     await open.setInputFiles(file);
-    await expect(values.locator('dd', { hasText: weapon.inputs[1][1] })).toHaveText(weapon.inputs[1][1]);
+    await expect(values.locator('b', { hasText: weapon.inputs[1][1] })).toHaveText(weapon.inputs[1][1]);
   });
 }
 
@@ -1378,8 +1479,8 @@ test('Kaveh retains his burst attack speed when applying another condition and r
   const build: Build = { ...await catalogSnapshotFields('kaveh', 'wastergreatsword'), level: 1, ascension: 0, constellation: 2,
     weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
   const { calc, open } = await openSingleBuild(page, build, 'kaveh.burst');
-  const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-  const speed = values.locator('dl > div').filter({ has: page.locator('dt', { hasText: '御驿的径迹' }) }).locator('dd');
+  const values = calc.locator('#calculator-buff-summary');
+  const speed = values.locator('.buff-readout').filter({ has: page.locator('span', { hasText: '御驿的径迹' }) }).locator('b');
   await expect(speed).toHaveText('15%');
   await calc.getByRole('button', { name: '选择增益', exact: true }).click();
   const picker = page.getByRole('dialog', { name: '选择增益' });
@@ -1409,8 +1510,8 @@ test('Sword of Descension grants its platform bonus to both Travelers across for
     }
     await option.check();
     await picker.getByRole('button', { name: '应用增益' }).click();
-    const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-    await expect(values.locator('dl > div').filter({ has: page.locator('dt', { hasText: '固定攻击力' }) }).locator('dd')).toHaveText('66');
+    const values = calc.locator('#calculator-buff-summary');
+    await expect(values.locator('.buff-readout').filter({ has: page.locator('span', { hasText: '固定攻击力' }) }).locator('b')).toHaveText('66');
   }
 });
 
@@ -1432,8 +1533,8 @@ for (const item of [
     await picker.getByRole('combobox', { name: item.trigger }).selectOption('true');
     if (item.amount) await picker.getByRole('spinbutton', { name: item.amount }).fill('2');
     await picker.getByRole('button', { name: '应用增益' }).click();
-    const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-    const value = values.locator('dl > div').filter({ has: page.locator('dt', { hasText: item.label }) }).locator('dd');
+    const values = calc.locator('#calculator-buff-summary');
+    const value = values.locator('.buff-readout').filter({ has: page.locator('span', { hasText: item.label }) }).locator('b');
     const expected = item.expected.toLocaleString('zh-CN', { maximumFractionDigits: 6 });
     await expect(value).toHaveText(expected);
     const download = page.waitForEvent('download');
@@ -1458,8 +1559,8 @@ test('Alhaitham C1 saves the current projection hit and its one-second trigger i
   const interval = picker.getByRole('combobox', { name: /距上次触发此冷却缩减至少1秒/ });
   await interval.selectOption('true');
   await picker.getByRole('button', { name: '应用增益' }).click();
-  const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-  const reduction = values.locator('dl > div').filter({ has: page.locator('dt', { hasText: '元素战技冷却减少量' }) }).locator('dd');
+  const values = calc.locator('#calculator-buff-summary');
+  const reduction = values.locator('.buff-readout').filter({ has: page.locator('span', { hasText: '元素战技冷却减少量' }) }).locator('b');
   await expect(reduction).toHaveText('1.2 秒');
   const downloading = page.waitForEvent('download');
   await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
@@ -1489,13 +1590,13 @@ test('Yanfei selects a seal count for one charged hit and needs C6 for the fourt
       await expect(fourSeals).toBeDisabled();
       await expect(fourSeals).toContainText('需要命座 6');
       await chooseDamageCard(picker.locator('button[data-hit-id="yanfei.normal.param5"]'));
-      const cost = calc.locator('dl > div').filter({ has: page.locator('dt', { hasText: '本次重击体力消耗（点）' }) }).locator('dd');
+      const cost = calc.locator('.buff-readout').filter({ has: page.locator('span', { hasText: '本次重击体力消耗（点）' }) }).locator('b');
       await expect(cost).toHaveText('37.5');
     } else {
       await chooseDamageCard(fourSeals);
       await expect(calc.getByRole('button', { name: '选择伤害', exact: true })).toHaveAttribute('data-hit-id', 'yanfei.normal.param8');
       await expect.poll(async () => Number((await calc.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeGreaterThan(0);
-      const cost = calc.locator('dl > div').filter({ has: page.locator('dt', { hasText: '本次重击体力消耗（点）' }) }).locator('dd');
+      const cost = calc.locator('.buff-readout').filter({ has: page.locator('span', { hasText: '本次重击体力消耗（点）' }) }).locator('b');
       await expect(cost).toHaveText('0');
       await calc.getByRole('button', { name: '选择伤害', exact: true }).click();
       await chooseDamageCard(picker.locator('button[data-hit-id="yanfei.normal.param1"]'));
@@ -1517,7 +1618,7 @@ test('Freminet clears the recorded remaining cooldown once when the burst cast i
   await cast.selectOption('true');
   await picker.getByRole('spinbutton', { name: /重置前正在恢复的战技剩余冷却/ }).fill('3500');
   await picker.getByRole('button', { name: '应用增益' }).click();
-  const reduction = calc.locator('dl > div').filter({ has: page.locator('dt', { hasText: '本次清除的元素战技冷却' }) }).locator('dd');
+  const reduction = calc.locator('.buff-readout').filter({ has: page.locator('span', { hasText: '本次清除的元素战技冷却' }) }).locator('b');
   await expect(reduction).toHaveText('3.5 秒（重置后 0 秒）');
   await calc.getByRole('button', { name: '选择增益', exact: true }).click();
   await cast.selectOption('false');
@@ -1585,8 +1686,8 @@ test('Amber shows the range and crit rate of Fiery Rain on its own hit', async (
     weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
   const { calc } = await openSingleBuild(page, build);
   await selectHit(calc, 'amber.burst');
-  const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-  const row = (label: string) => values.locator('dl > div').filter({ has: page.locator('dt', { hasText: label }) }).locator('dd');
+  const values = calc.locator('#calculator-buff-summary');
+  const row = (label: string) => values.locator('.buff-readout').filter({ has: page.locator('span', { hasText: label }) }).locator('b');
   await expect(row('影响范围加成')).toHaveText('30%');
   await expect(row('暴击率')).toHaveText('10%');
   await selectHit(calc, 'amber.normal');
@@ -1606,7 +1707,7 @@ test('Ganyu can confirm the first Frostflake Arrow and keep its charge requireme
   const picker = page.getByRole('dialog', { name: '选择增益' });
   await picker.getByRole('checkbox', { name: /履虫/ }).check();
   await picker.getByRole('button', { name: '应用增益' }).click();
-  const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
+  const values = calc.locator('#calculator-buff-summary');
   await expect(values).toContainText('本次免蓄力');
   const download = page.waitForEvent('download');
   await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
@@ -1629,8 +1730,8 @@ test('Sigewinne refunds fractional energy from the actual Bond of Life cleared',
   await picker.getByRole('combobox', { name: /本次触发希格雯战技的生命之契完全清除回能/ }).selectOption('true');
   await picker.getByRole('spinbutton', { name: /本次清除前累计实际偿还的生命之契/ }).fill('2500');
   await picker.getByRole('button', { name: '应用增益' }).click();
-  const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-  const energy = values.locator('dl > div').filter({ has: page.locator('dt', { hasText: '本次直接恢复的元素能量' }) }).locator('dd');
+  const values = calc.locator('#calculator-buff-summary');
+  const energy = values.locator('.buff-readout').filter({ has: page.locator('span', { hasText: '本次直接恢复的元素能量' }) }).locator('b');
   await expect(energy).toHaveText('1.25');
   const download = page.waitForEvent('download');
   await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
@@ -1748,9 +1849,8 @@ test('Nicole takes Memory of Dust stacks from her skill cast and replays the rec
   await layers.fill('4');
   await layers.press('Tab');
   await source.getByRole('combobox', { name: /护盾存在/ }).selectOption('true');
-  const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-  await values.locator('summary').click();
-  const bonus = values.locator('dl > div').filter({ has: page.locator('dt').filter({ hasText: /圣言默示.* · 攻击力$/ }) }).locator('dd');
+  const values = calc.locator('#calculator-buff-summary');
+  const bonus = values.locator('.buff-readout').filter({ has: page.locator('span').filter({ hasText: /圣言默示.* · 攻击力$/ }) }).locator('b');
   const expected = (count: number) => ((26.6266 + 45.9364) * (1 + .108 + count * .04 * 2) * .0825).toLocaleString('zh-CN', { maximumFractionDigits: 6 });
   await expect(bonus).toHaveText(expected(4));
   await layers.fill('5');
@@ -1821,9 +1921,8 @@ test('Lisa hold resistance displays the sourced multiplier alongside unchanged o
   const picker = page.getByRole('dialog', { name: '选择增益' });
   await picker.getByRole('checkbox', { name: /空间电势结界/ }).check();
   await picker.getByRole('button', { name: '应用增益' }).click();
-  const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-  await values.locator('summary').click();
-  const multiplier = values.locator('dl > div').filter({ has: page.locator('dt').filter({ hasText: '受到削韧倍率' }) }).locator('dd');
+  const values = calc.locator('#calculator-buff-summary');
+  const multiplier = values.locator('.buff-readout').filter({ has: page.locator('span').filter({ hasText: '受到削韧倍率' }) }).locator('b');
   await expect(multiplier).toHaveText('× 0.5');
   await expect(damage).toHaveText(baseline!);
 
@@ -1848,9 +1947,8 @@ test('scene ranges and interruption resistance use the selected reaction and sta
   await scene.selectOption('scene.field.domainofblessingspringi.0');
   await calc.getByRole('button', { name: '选择伤害', exact: true }).click();
   await chooseDamageCard(page.getByRole('dialog', { name: '选择伤害' }).locator('button[data-reaction="electro-charged"]'));
-  const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-  await values.locator('summary').click();
-  const amount = (label: string) => values.locator('dl > div').filter({ has: page.locator('dt').filter({ hasText: label }) }).locator('dd');
+  const values = calc.locator('#calculator-buff-summary');
+  const amount = (label: string) => values.locator('.buff-readout').filter({ has: page.locator('span').filter({ hasText: label }) }).locator('b');
   await expect(amount('感电影响范围加成')).toHaveText('100%');
   await scene.selectOption('scene.field.domainofforgeryartisanshipi.0');
   await calc.getByRole('button', { name: '选择增益', exact: true }).click();
@@ -1877,9 +1975,8 @@ test('Prototype Amber shows one confirmed healing and energy tick after reopenin
   const picker = page.getByRole('dialog', { name: '选择增益' });
   await picker.getByRole('checkbox', { name: /试作金珀/ }).check();
   await picker.getByRole('button', { name: '应用增益' }).click();
-  const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-  await values.locator('summary').click();
-  const amount = (label: string) => values.locator('dl > div').filter({ has: page.locator('dt').filter({ hasText: label }) }).locator('dd');
+  const values = calc.locator('#calculator-buff-summary');
+  const amount = (label: string) => values.locator('.buff-readout').filter({ has: page.locator('span').filter({ hasText: label }) }).locator('b');
   const healing = (802.3761 * 1.09 * .04).toLocaleString('zh-CN', { maximumFractionDigits: 6 });
   await expect(amount('本次装备治疗量')).toHaveText(healing);
   await expect(amount('本次直接恢复的元素能量')).toHaveText('4');
@@ -1929,9 +2026,8 @@ test('Adventurer four-piece shows the full five-second base recovery and one tic
   await picker.getByRole('checkbox', { name: /装备效果全程基础回复量/ }).check();
   await picker.getByRole('checkbox', { name: /装备效果单次基础回复量/ }).check();
   await picker.getByRole('button', { name: '应用增益' }).click();
-  const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-  await values.locator('summary').click();
-  const amount = (label: string) => values.locator('dl > div').filter({ has: page.locator('dt').filter({ hasText: label }) }).locator('dd');
+  const values = calc.locator('#calculator-buff-summary');
+  const amount = (label: string) => values.locator('.buff-readout').filter({ has: page.locator('span').filter({ hasText: label }) }).locator('b');
   const expected = (rate: number) => ((1143.984 + 1000) * rate).toLocaleString('zh-CN', { maximumFractionDigits: 6 });
   await expect(amount('装备效果全程基础回复量')).toHaveText(expected(.3));
   await expect(amount('装备效果单次基础回复量')).toHaveText(expected(.06));
@@ -2133,4 +2229,106 @@ test('Ayato C6 keeps both independently timed slashes after reopening and exclud
   },readFileSync(file,'utf8'));
   expect(results.first).toBeNull();expect(results.firstMissing).toBe(true);expect(results.second).toBeCloseTo(expected,8);
   expect(results.third).toBe(0);expect(results.all).toBeCloseTo(results.subtotal!+expected,8);
+});
+
+test('monster settings and Shenhe’s quill feed separate parts of the same saved hit', async ({ page }, info) => {
+  const build: Build = { ...await catalogSnapshotFields('shenhe', 'beginnersprotector'), level: 1, ascension: 0, constellation: 0,
+    weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
+  const { calc, open } = await openSingleBuild(page, build);
+  const monster = calc.getByRole('region', { name: '怪物属性' });
+  await expect(monster.getByLabel('物理基础抗性（%）')).toBeVisible();
+  await selectHit(calc, 'shenhe.skill');
+  await expect(monster.getByLabel('冰基础抗性（%）')).toBeVisible();
+  expect(await monster.evaluate(node => node.nextElementSibling?.tagName)).toBe('FOOTER');
+  const base = calc.locator('.factor-card').filter({ hasText: '属性 × 倍率区' });
+  await base.locator('summary').click();
+  await expect(base.getByText('附加基础伤害（羽毛）')).toHaveCount(0);
+  const buffs = calc.getByRole('button', { name: '选择增益', exact: true });
+  await buffs.click();
+  const picker = page.getByRole('dialog', { name: '选择增益' });
+  await picker.getByRole('combobox', { name: /点按冰翎尚能生效/ }).first().selectOption('true');
+  await picker.getByRole('button', { name: '应用增益' }).click();
+  const attack = build.character.attributes.base.attack + build.weapon!.baseAttack;
+  const formatted = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 6 });
+  await expect(base.locator('.subtotal strong')).toHaveText(formatted(attack * 1.392));
+  const quill = base.locator('.factor-chip').filter({ hasText: '申鹤' });
+  await expect(quill.locator('dd')).toHaveText('+' + formatted(attack * .45656));
+  await expect(base.locator('summary strong')).toHaveText(formatted(attack * (1.392 + .45656)));
+  await monster.getByLabel('怪物等级').fill('100');
+  const ice = monster.getByLabel('冰基础抗性（%）');
+  await ice.fill('-20');
+  await ice.press('Tab');
+  await calc.getByRole('button', { name: '计算伤害', exact: true }).click();
+  const expected = attack * (1.392 + .45656) * 101 / 301 * 1.1;
+  const value = calc.getByTestId('calculator-value');
+  await expect(value).toHaveText(formatted(expected));
+  await expect(calc.getByText('本次增益数值', { exact: true })).toHaveCount(0);
+  const defense = calc.locator('.factor-card').filter({ hasText: '防御区' });
+  await defense.locator('summary').click();
+  await expect(defense.getByText('减防比例')).toHaveCount(0);
+  const colors = await defense.locator('.factor-chip').evaluateAll(nodes => nodes.map(node => getComputedStyle(node).backgroundColor));
+  expect(new Set(colors).size).toBe(colors.length);
+  const res = calc.locator('.factor-card').filter({ hasText: '抗性区' });
+  await res.locator('summary').click();
+  await expect(res.locator('.factor-chip dd')).toHaveText('-20%');
+  await base.locator('summary').click();
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    const grid = calc.getByRole('region', { name: '伤害乘区' });
+    expect(await grid.evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
+    const cards = await grid.locator('.factor-card').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().toJSON()));
+    const widthAvailable = (await grid.boundingBox())!.width;
+    expect(cards.every((box, index) => box.width === widthAvailable && (!index || box.y >= cards[index - 1].bottom))).toBe(true);
+    const [attribute, rate] = await base.locator('.scaling-box').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().toJSON()));
+    expect(attribute.y).toBe(rate.y);
+    expect(attribute.right).toBeLessThan(rate.left);
+    await expect(base.locator('.stat-box')).toContainText(formatted(attack));
+    await expect(base.locator('.rate-box')).toContainText('139.2%');
+    await grid.screenshot({ path: info.outputPath('factors-' + width + '.png') });
+  }
+  const downloading = page.waitForEvent('download');
+  await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
+  const file = info.outputPath('shenhe-negative-resistance.json');
+  await (await downloading).saveAs(file);
+  await open.setInputFiles(file);
+  await expect(ice).toHaveValue('-20');
+  await expect(monster.getByLabel('怪物等级')).toHaveValue('100');
+  await expect(value).toHaveText(formatted(expected));
+});
+
+test('calculator and party member slots use the new artifact combination card finish', async ({ page }, info) => {
+  await page.goto('/');
+  const finish = (slots: Locator) => slots.evaluateAll(nodes => nodes.map(node => {
+    const css = getComputedStyle(node);
+    return [css.backgroundImage, css.borderRadius, css.borderTopWidth, css.borderTopStyle, css.paddingTop, css.boxShadow];
+  }));
+  await page.getByTestId('workspace-nav-combinations').click();
+  await page.getByRole('button', { name: '新建组合', exact: true }).first().click();
+  const reference = page.getByRole('dialog', { name: '新建组合' });
+  const [style] = await finish(reference.locator('.equipment-list article').first());
+  await page.keyboard.press('Escape');
+  await page.getByTestId('workspace-nav-team').click();
+  await page.getByRole('button', { name: '新建队伍', exact: true }).first().click();
+  const team = page.getByRole('dialog', { name: '新建队伍' });
+  await expect(team.locator('.team-slot > button')).toHaveCount(4);
+  expect(await finish(team.locator('.team-slot > button'))).toEqual(Array(4).fill(style));
+  await expect(team.locator('.team-add-slot .library-nav-icon')).toHaveCount(4);
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    const heights = await team.locator('.team-add-slot').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().height));
+    expect(heights).toEqual(Array(4).fill(heights[0]));
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.keyboard.press('Escape');
+  await page.getByTestId('workspace-nav-calculator').click();
+  const slots = page.locator('.calculator-selections');
+  await expect(slots.locator(':scope > button')).toHaveCount(4);
+  expect(await finish(slots.locator(':scope > button'))).toEqual(Array(4).fill(style));
+  await expect(slots.locator('.slot-placeholder :is(svg,img)')).toHaveCount(0);
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    expect(await slots.locator(':scope > button').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().height)))
+      .toEqual(Array(4).fill(width > 600 ? 140 : 114));
+  }
+  await slots.screenshot({ path: info.outputPath('selection-slots.png') });
 });

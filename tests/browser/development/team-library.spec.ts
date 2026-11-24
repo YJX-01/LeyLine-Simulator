@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { expect, test } from '@playwright/test';
+import { expect, test, type Locator } from '@playwright/test';
 import type { LocalAccount } from '@leyline/schema';
 import type { SavedTeam } from '../../../src/web/src/stores/saved-teams';
 import { readDocument } from '../../helpers/browser-document';
@@ -56,6 +56,22 @@ test('recorded team library keeps slot positions and links saved character confi
   await expect(newDialog.locator('.team-slot')).toHaveCount(4);
   await expect(newDialog.getByRole('button', { name: /^选择队员[1-4]$/ })).toHaveCount(4);
   await expect(save).toBeDisabled();
+  const widths = [320, 390, 1280];
+  async function slotGeometry(dialog: Locator) {
+    const layouts = [];
+    for (const width of widths) {
+      await page.setViewportSize({ width, height: 760 });
+      layouts.push(await dialog.locator('.team-slot > *').evaluateAll(cards => {
+        const list = cards[0].closest('ol')!.getBoundingClientRect();
+        return cards.map(card => {
+          const rect = card.getBoundingClientRect();
+          return { x: rect.x - list.x, y: rect.y - list.y, width: rect.width, height: rect.height };
+        });
+      }));
+    }
+    return layouts;
+  }
+  const emptyLayout = await slotGeometry(newDialog);
   await page.screenshot({ path: info.outputPath('team-new-slots.png') });
   await newDialog.getByText('队伍名称', { exact: true }).click();
   await expect(name).toBeFocused();
@@ -78,6 +94,7 @@ test('recorded team library keeps slot positions and links saved character confi
   await page.keyboard.press('Escape');
   await expect(picker).toHaveCount(0);
   await expect(name).toHaveValue('行秋 / 安柏');
+  expect(await slotGeometry(newDialog)).toEqual(emptyLayout);
   await name.press('ControlOrMeta+A');
   await name.pressSequentially('录存配装');
   expect(await readTeams()).toHaveLength(0);
@@ -104,6 +121,27 @@ test('recorded team library keeps slot positions and links saved character confi
   await expect(savedCards.locator('.card-sets')).toHaveCount(2);
   await expect(savedCards.locator('.equipment-strip')).toHaveCount(0);
   await expect(savedCards.first().locator('.configuration-title')).toContainText(`|${build.weapon!.name}`);
+  for (const width of widths) {
+    await page.setViewportSize({ width, height: 760 });
+    for (const card of await savedCards.all()) {
+      const portraits = card.locator('.configuration-portraits');
+      const strip = (await portraits.boundingBox())!;
+      const stats = (await card.locator('.effective-roll-summary').boundingBox())!;
+      if (width === 1280) expect(stats.x).toBeGreaterThanOrEqual(strip.x + strip.width);
+      else expect(stats.y).toBeGreaterThanOrEqual(strip.y + strip.height);
+      const icons = await portraits.locator(':scope > :is(.game-icon, .card-sets)').evaluateAll(items =>
+        items.map(item => [item.getBoundingClientRect().width, item.getBoundingClientRect().height]));
+      expect(icons).toEqual(Array(3).fill([48, 48]));
+      expect(await card.locator('[data-roll-stat] dt .game-icon:visible').count()).toBe(7);
+      expect(await card.evaluate(node => {
+        const box = node.getBoundingClientRect();
+        return [...node.querySelectorAll('.configuration-title, .configuration-portraits, [data-roll-stat]')].every(item => {
+          const rect = item.getBoundingClientRect();
+          return rect.right <= box.right && rect.bottom <= box.bottom;
+        });
+      })).toBe(true);
+    }
+  }
   await expect(detail.getByRole('button', { name: '编辑队伍', exact: true })).toHaveCount(0);
   await expect(detail.getByRole('button', { name: '选择队员3', exact: true })).toBeEnabled();
   await expect(detail.getByRole('button', { name: '以此队伍新建轴', exact: true })).toHaveCount(0);
@@ -225,6 +263,7 @@ test('recorded team library keeps slot positions and links saved character confi
   await picker.getByRole('button', { name: '选择班尼特首选配置', exact: true }).click();
   const fourth = detail.locator('.team-slot[data-slot="4"]');
   await expect(fourth.locator('.configuration-title')).toContainText('班尼特');
+  expect(await slotGeometry(detail)).toEqual(emptyLayout);
   await fourth.getByRole('button', { name: '选择班尼特的角色配置', exact: true }).press('Shift+F10');
   await menu.getByRole('menuitem', { name: '替换', exact: true }).click();
   await switchRole.click();
@@ -255,11 +294,16 @@ test('recorded team library keeps slot positions and links saved character confi
   await pickerConfig.getByRole('button', { name: '移除队员', exact: true }).click();
   await expect(savedCards).toHaveCount(1);
   await expect(detail.getByRole('button', { name: '选择队员1', exact: true })).toBeFocused();
+  expect(await slotGeometry(detail)).toEqual(emptyLayout);
   await detail.getByRole('button', { name: '还原', exact: true }).click();
   await expect(savedCards).toHaveCount(2);
   await detail.getByRole('button', { name: '选择队员2', exact: true }).click();
   await picker.getByRole('button', { name: '选择班尼特首选配置', exact: true }).click();
   await expect(savedCards.locator('.configuration-title > span:first-child')).toHaveText(['行秋', '班尼特', '安柏']);
+  await detail.getByRole('button', { name: '选择队员3', exact: true }).click();
+  await picker.getByRole('button', { name: '选择甘雨首选配置', exact: true }).click();
+  await expect(savedCards).toHaveCount(4);
+  expect(await slotGeometry(detail)).toEqual(emptyLayout);
   await close.click();
   await unsaved.getByRole('button', { name: '放弃修改', exact: true }).click();
   await expect(detail).toHaveCount(0);

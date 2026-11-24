@@ -97,5 +97,13 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
 .configuration-portraits.replace-portrait:enabled:hover > :deep(.card-replace-layer) { visibility:visible; }
 .compact .effective-roll-summary { flex:1 1 232px; min-width:0; }
 .configuration-open[aria-current="true"]:focus-visible { outline:2px solid var(--element-anemo-deep); outline-offset:-4px; }
+.slot-configuration { box-sizing:border-box; container-type:inline-size; min-height:0; }
+.slot-configuration.compact { align-content:center; gap:4px; }
+.slot-configuration .configuration-top { min-height:0; }
+.slot-configuration .configuration-body { flex-wrap:nowrap; }
+.slot-configuration :deep(.configuration-title > span:first-child) { flex:none; max-width:100%; overflow:hidden; text-overflow:ellipsis; }
+.slot-configuration .configuration-portraits { min-width:0; --slot-portrait-size:min(48px,calc((100cqi - 12px) / 3)); }
+.slot-configuration .configuration-portraits > :is(.game-icon,.weapon-placeholder,.card-sets) { max-width:var(--slot-portrait-size); max-height:var(--slot-portrait-size); }
+.slot-configuration :deep(.effective-roll-summary.stacked > div) { line-height:18px; }
 @media(max-width:600px) { .configuration-top { align-items:start; }.configuration-row { padding:12px; } }
 </style>
