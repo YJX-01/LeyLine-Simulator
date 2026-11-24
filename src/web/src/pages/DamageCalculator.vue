@@ -5,7 +5,7 @@ import TalentHealingForm from '../components/TalentHealingForm.vue';
 import ReactionRecordForm from '../components/ReactionRecordForm.vue';
 import { addAuraObservation, addReactionObservation, addParticlePickup, addTalentHeal } from '../domain/real-project';
 import CombatChangeList from '../components/CombatChangeList.vue';
-import { grantedDamageChanges } from '@leyline/engine';
+import { grantedDamageChanges, resolveEquipmentPanel } from '@leyline/engine';
 import { definitionKey, matchingSceneHits, sceneHitInInterval, type SceneDefinition, type SceneHitRequest, type SceneSelection } from '@leyline/schema';
 import { combatFactDeclaration } from '@leyline/schema/buffs';
 import { ordinaryReactions } from '@leyline/schema/hit-bindings';
@@ -15,8 +15,8 @@ import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, ref, shallow
 import { getReactionCalculationBundle } from '@leyline/game-data';
 import type { TransformativeFamily, ProjectReaction } from '@leyline/schema';
 import { damageCalculatorSchema, projectSchema, type ValueType, elements, createTalentRankReader, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest, type StatKey } from '@leyline/schema';
-import type { AccountCharacter, LocalAccount } from '../domain/account';
-import { addCalculatorCapture, addCalculatorSceneHit, calculatorRequest, calculatorSceneHits, calculatorSnapshotDraft, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
+import type { AccountArtifact, AccountCharacter, LocalAccount } from '../domain/account';
+import { addCalculatorCapture, addCalculatorSceneHit, calculatorRequest, calculatorCritProject, calculatorSceneHits, calculatorSnapshotDraft, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
 import { addActorFromBuild, addTransformativeReaction, defaultEnemy } from '../domain/real-project';
 import { createEmptyProject, nextRecordId } from '../domain/workbench-project';
 import { teamArtifactEntries, type TeamConfigurationRef } from '../domain/team-members';
@@ -33,6 +33,10 @@ import { realElementLabel, realStatLabel, recordLabel, actorLabel, damageFamilyL
 import { useAccountStore } from '../stores/account';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
 import { useUnsavedChanges } from '../composables/use-unsaved-changes';
+import CharacterStatPanel from '../components/CharacterStatPanel.vue';
+import EffectiveRollSummary from '../components/EffectiveRollSummary.vue';
+import DisclosureHeading from '../components/DisclosureHeading.vue';
+import ArtifactEquipmentGrid from '../components/ArtifactEquipmentGrid.vue';
 import CharacterConfigurationCard from '../components/CharacterConfigurationCard.vue';
 import ChoiceGroup from '../components/ChoiceGroup.vue';
 import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
@@ -53,6 +57,7 @@ import { loadSavedDamage, saveDamageSnapshot } from '../platform/saved-damage';
 const SavedDamageList = defineAsyncComponent(() => import('../components/SavedDamageList.vue'));
 const TeamLibrary = defineAsyncComponent(() => import('./TeamLibrary.vue'));
 const CharacterSelectionDialog = defineAsyncComponent(() => import('../components/CharacterSelectionDialog.vue'));
+const ArtifactDetail = defineAsyncComponent(() => import('./ArtifactDetail.vue'));
 const CharacterDetailDialog = defineAsyncComponent(() => import('./CharacterDetailDialog.vue'));
 const ManualCharacterImport = defineAsyncComponent(() => import('./ManualCharacterImport.vue'));
 
@@ -64,6 +69,11 @@ const savedSignature = ref('');
 const listed = shallowRef<{ id: string; signature: string }>();
 const savingDamage = ref(false);
 const response = shallowRef<AxisResponse>();
+const resultExpanded = ref(true);
+const inspectedArtifact = shallowRef<AccountArtifact>();
+const criticalFormat = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 0 });
+const expectedFormat = new Intl.NumberFormat('zh-CN', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const criticalResult = shallowRef<AxisResponse['result']>();
 const expectedResult = shallowRef<AxisResponse['result']>();
 const picker = ref<'team' | 'character' | 'candidate' | 'damage' | 'buff' | 'list'>();
 const characterSource = ref<'local' | 'showcase' | 'catalog'>('local');
@@ -205,6 +215,13 @@ async function importMetadata(event: Event) {
 }
 const result = computed(() => response.value?.comparison?.candidates[0]?.result ?? response.value?.result);
 const point = computed(() => result.value?.points.find(point => point.id === document.value?.recordId));
+const criticalPoint = computed(() => criticalResult.value?.points.find(point => point.id === document.value?.recordId));
+const candidateBuild = computed(() => actor.value?.build);
+const equipmentPanel = computed(() => candidateBuild.value && resolveEquipmentPanel(candidateBuild.value));
+const candidatePanel = computed(() => {
+  if (!sceneHit.value && hitOwner.value?.id === actor.value?.id && point.value?.real) return point.value.real.panel;
+  return equipmentPanel.value;
+});
 const expectedPoint = computed(() => expectedResult.value?.points.find(point => point.id === document.value?.recordId));
 const baselinePoint = computed(() => response.value?.comparison?.baseline.points.find(point => point.id === document.value?.recordId));
 const comparisonPoint = computed(() => response.value?.comparison?.candidates[0]?.points.find(point => point.id === document.value?.recordId));
@@ -217,11 +234,11 @@ function diagnosticText(message: string) {
   const key = message.slice(prefix.length);
   return '需填写' + (factLabels[key] ?? factFields.value.find(field => field.key === key)?.label ?? key);
 }
-const missingBuff = computed(() => [point.value, expectedPoint.value].some(point => point?.real?.structured?.requiredInputs.some(input =>
+const missingBuff = computed(() => [point.value, criticalPoint.value, expectedPoint.value].some(point => point?.real?.structured?.requiredInputs.some(input =>
   input.requiredBy.length && (factFields.value.some(field => field.key === input.key) || ['onField', 'shielded', 'hpRatio'].includes(input.key)))));
 const diagnostics = computed(() => {
   const recordPath = document.value?.recordId && 'timeline.' + document.value.recordId;
-  const all = [...(result.value?.diagnostics ?? []), ...(expectedResult.value?.diagnostics ?? [])];
+  const all = [...(result.value?.diagnostics ?? []), ...(criticalResult.value?.diagnostics ?? []), ...(expectedResult.value?.diagnostics ?? [])];
   return [...new Set(all.filter(({ path }) => !recordPath || !path.startsWith('timeline.') || path === recordPath || path.startsWith(recordPath + '.'))
     .map(diagnostic => diagnosticText(diagnostic.message)))];
 });
@@ -349,7 +366,7 @@ function stop() {
   activeWorker?.terminate(); activeWorker = undefined; working.value = false;
   finishCalculation?.(); finishCalculation = undefined; calculationFinished = undefined;
 }
-function invalidate() { stop(); response.value = undefined; expectedResult.value = undefined; }
+function invalidate() { stop(); response.value = undefined; criticalResult.value = undefined; expectedResult.value = undefined; }
 watch(document, invalidate, { flush: 'sync' });
 watch([damage, enemy, hitTime], invalidate, { deep: true, flush: 'sync' });
 onBeforeUnmount(stop);
@@ -680,12 +697,15 @@ async function calculate() {
     activeWorker = worker;
     calculationFinished = new Promise<void>(resolve => { finishCalculation = resolve; });
     const recordId = next.recordId;
-    const expectedTask = ++taskId;
+    const modes = ['critical', 'expected'] as const;
+    type Mode = typeof modes[number];
+    const results = new Map<Mode, AxisResponse['result']>();
+    const tasks = new Map<number, Mode>();
     let actual: AxisResponse;
     let retry: Promise<void> | undefined;
-    function complete(expected: AxisResponse['result']) {
+    function complete(critical: AxisResponse['result'], expected: AxisResponse['result']) {
       const evaluation = actual.comparison?.candidates[0]?.result ?? actual.result;
-      const incomplete = [evaluation, expected].flatMap(result => {
+      const incomplete = [evaluation, critical, expected].flatMap(result => {
         const point = result.points.find(point => point.id === recordId);
         return point?.value == null && point?.real?.structured ? [point.real.structured] : [];
       });
@@ -718,29 +738,34 @@ async function calculate() {
         }
       }
       response.value = actual;
+      criticalResult.value = critical;
       expectedResult.value = expected;
       stop();
     }
     worker.onmessage = (event: MessageEvent<AxisResponse>) => {
       if (activeWorker !== worker) return;
       if (event.data.error) { error.value = event.data.error; stop(); return; }
-      if (event.data.taskId === expectedTask) { complete(event.data.result); return; }
-      if (event.data.taskId !== request.taskId) return;
-      actual = event.data;
-      if (sceneHit.value || standalone.value && !transformative.value || damage.value.crit === 'expected' || selectedHit.value?.critical === 'always') {
-        complete(actual.comparison?.candidates[0]?.result ?? actual.result);
-        return;
-      }
       try {
-        const evaluated = request.candidates ? calculatorWorkerRequest({ ...next, baseline: undefined }, expectedTask).project : request.project;
-        const timeline = evaluated.timeline.map(record => {
-          if (record.id !== recordId) return record;
-          if (record.damage) return { ...record, damage: { ...record.damage, crit: 'expected' as const } };
-          const reaction = record.reactionEvent;
-          return reaction && isTransformative(reaction.family) ? { ...record, reactionEvent: { ...reaction,
-            contributors: reaction.contributors.map(owner => ({ ...owner, crit: 'expected' as const })) } } : record;
-        });
-        worker.postMessage({ taskId: expectedTask, session: 1, revision: expectedTask, project: { ...evaluated, timeline } });
+        if (event.data.taskId === request.taskId) {
+          actual = event.data;
+          const evaluation = actual.comparison?.candidates[0]?.result ?? actual.result;
+          for (const mode of modes) {
+            const project = calculatorCritProject(next.project, recordId, mode);
+            if (project === next.project) {
+              results.set(mode, evaluation);
+            } else {
+              const id = ++taskId;
+              tasks.set(id, mode);
+              worker.postMessage({ taskId: id, session: 1, revision: id, project });
+            }
+          }
+        } else {
+          const mode = tasks.get(event.data.taskId);
+          if (!mode) return;
+          results.set(mode, event.data.result);
+        }
+        const critical = results.get('critical'), expected = results.get('expected');
+        if (critical && expected) complete(critical, expected);
       } catch (cause) { stop(); showError(cause); }
     };
     worker.onmessageerror = worker.onerror = () => { if (activeWorker === worker) { stop(); error.value = '计算进程未完成，请重新计算。'; } };
@@ -902,37 +927,45 @@ defineExpose({ requestLeave: leaveCalculator });
     </div>
     <p v-if="error" role="alert">{{ error }}</p>
     <section class="library-section calculator-result" aria-label="计算结果">
-      <header class="result-heading"><h3>伤害结果</h3><div class="library-page-actions">
+      <header class="result-heading"><DisclosureHeading title="伤害结果" controls="calculator-result-details" :expanded="resultExpanded" @toggle="resultExpanded = !resultExpanded" /><div class="library-page-actions">
         <button class="ui-action soft" v-if="!document?.baseline && point?.value != null" data-accent="anemo" :disabled="working" @click="pinBaseline">设为比较基准</button>
         <button v-if="document?.baseline" class="ui-action soft" data-accent="pyro" @click="endComparison">结束对照</button>
         <button class="ui-action" data-accent="anemo" :disabled="working || !selectedLabel" @click="calculate">{{ working ? '计算中' : document?.baseline ? '重算候选' : '计算伤害' }}</button>
       </div></header>
       <div class="damage-totals">
-        <div><span>{{ sceneHitDefinition?.recipient === 'character' ? '场上角色最终承伤' : sceneBaseOnly || point?.real?.status !== 'partial' ? '最终伤害值' : '模型估算伤害' }} <small v-if="!sceneHit && damage.crit">{{ critNames[damage.crit] }}</small></span>
+        <div v-if="sceneHit"><span>{{ sceneHitDefinition?.recipient === 'character' ? '场上角色最终承伤' : '最终伤害值' }}</span>
           <output v-if="result" data-testid="calculator-value">{{ point?.value != null ? number(point.value) : sceneBaseOnly && point?.real?.baseDamage != null ? '仅能计算减伤前基数' : unavailable(result, point) }}</output><strong v-else>—</strong></div>
         <div v-if="sceneBaseOnly"><span>减伤前基数</span><output v-if="result" data-testid="calculator-scene-base">{{ number(point?.real?.baseDamage) }}</output><strong v-else>—</strong></div>
-        <div v-if="!sceneHit"><span>{{ expectedPoint?.real?.status === 'partial' ? '模型估算期望' : '期望伤害值' }}</span><output v-if="result" data-testid="calculator-expected">{{ working && !expectedResult ? '…' : expectedPoint?.value == null ? unavailable(expectedResult, expectedPoint) : number(expectedPoint?.value) }}</output><strong v-else>—</strong></div>
+        <template v-if="!sceneHit">
+          <div class="critical-total"><span>暴击伤害值 <small v-if="criticalPoint?.real?.status === 'partial'">模型估算</small></span>
+            <output v-if="result" data-testid="calculator-critical">{{ criticalPoint?.value != null ? criticalFormat.format(criticalPoint.value) : unavailable(criticalResult, criticalPoint) }}</output><strong v-else>—</strong></div>
+          <div class="expected-total"><span>期望伤害值 <small v-if="expectedPoint?.real?.status === 'partial'">模型估算</small></span>
+            <output v-if="result" data-testid="calculator-expected">{{ expectedPoint?.value != null ? expectedFormat.format(expectedPoint.value) : unavailable(expectedResult, expectedPoint) }}</output><strong v-else>—</strong></div>
+        </template>
       </div>
-      <template v-if="result">
-        <details v-if="diagnostics.length" class="result-support"
-          :open="point?.value == null || !!expectedResult && expectedPoint?.value == null"><summary>计算条件与支持范围</summary>
-          <ul aria-label="未完成的计算条件"><li v-for="message in diagnostics" :key="message">{{ message }}</li></ul>
-          <button v-if="missingBuff && !document?.baseline" type="button" class="ui-action soft" data-size="md" @click="picker = 'buff'">补充增益条件</button>
-        </details>
-        <details v-if="point?.real?.sceneHit" class="result-support"><summary>场景冲击倍率与来源</summary>
-          <dl><dt>冲击倍率</dt><dd>{{ number(point.real.sceneHit.multiplier) }}</dd>
-            <dt>ElementLevelCo 系数</dt><dd>{{ number(point.real.sceneHit.elementLevelCo) }}</dd></dl>
-          <p v-for="sourceRef in point.real.sceneHit.sourceRefs" :key="sourceRef">{{ sourceRef }}</p>
-        </details>
-        <CalculatorFactorCards v-if="point?.real && !sceneHit" :real="point.real" :damage="damage" :buffs="buffs" />
-        <table v-if="response?.comparison"><thead><tr><th>基准</th><th>当前候选</th><th>差值</th></tr></thead><tbody><tr><td>{{ number(baselinePoint?.value) }}</td><td>{{ number(point?.value) }}</td><td data-testid="calculator-delta">{{ number(comparisonPoint?.delta) }}</td></tr></tbody></table>
-        <details v-if="point?.real && !sceneHit" class="result-support"><summary>配装属性与来源</summary>
-          <p v-if="queryCharacter?.origin === 'custom'">角色来源 / 自定义声明</p>
-          <p v-if="hitOwner?.build && skill">{{ skill.name }} / 天赋 {{ hitOwner.build.talents[skill.category] }} + {{ talentBonusLabel }}</p>
-          <dl><template v-for="(value, key) in point.real.panel.stats" :key="key"><dt>{{ realStatLabel(key) }}</dt><dd>{{ number(value) }}</dd></template></dl>
-          <p v-for="entry in point.real.panel.contributions" :key="entry.source + ':' + entry.stat + ':' + entry.value">{{ entry.source }} / {{ realStatLabel(entry.stat) }} {{ number(entry.value) }}</p>
-        </details>
-      </template>
+      <div id="calculator-result-details" v-show="result && resultExpanded" class="result-details">
+        <template v-if="result">
+          <details v-if="diagnostics.length" class="result-support"
+            :open="point?.value == null || criticalPoint?.value == null || expectedPoint?.value == null"><summary>计算条件与支持范围</summary>
+            <ul aria-label="未完成的计算条件"><li v-for="message in diagnostics" :key="message">{{ message }}</li></ul>
+            <button v-if="missingBuff && !document?.baseline" type="button" class="ui-action soft" data-size="md" @click="picker = 'buff'">补充增益条件</button>
+          </details>
+          <details v-if="point?.real?.sceneHit" class="result-support"><summary>场景冲击倍率与来源</summary>
+            <dl><dt>冲击倍率</dt><dd>{{ number(point.real.sceneHit.multiplier) }}</dd>
+              <dt>ElementLevelCo 系数</dt><dd>{{ number(point.real.sceneHit.elementLevelCo) }}</dd></dl>
+            <p v-for="sourceRef in point.real.sceneHit.sourceRefs" :key="sourceRef">{{ sourceRef }}</p>
+          </details>
+          <CalculatorFactorCards v-if="point?.real && !sceneHit" :real="point.real" :damage="damage" :buffs="buffs" />
+          <table v-if="response?.comparison"><thead><tr><th>基准</th><th>当前候选</th><th>差值</th></tr></thead><tbody><tr><td>{{ number(baselinePoint?.value) }}</td><td>{{ number(point?.value) }}</td><td data-testid="calculator-delta">{{ number(comparisonPoint?.delta) }}</td></tr></tbody></table>
+          <details v-if="!sceneHit" class="result-support"><summary>配装属性与来源</summary>
+            <dl><dt>{{ damage.crit ? critNames[damage.crit] + '命中伤害' : '本次命中伤害' }}</dt><dd><output data-testid="calculator-value">{{ point?.value != null ? number(point.value) : unavailable(result, point) }}</output></dd></dl>
+            <p v-if="queryCharacter?.origin === 'custom'">角色来源 / 自定义声明</p>
+            <p v-if="hitOwner?.build && skill">{{ skill.name }} / 天赋 {{ hitOwner.build.talents[skill.category] }} + {{ talentBonusLabel }}</p>
+            <dl><template v-for="(value, key) in point?.real?.panel.stats" :key="key"><dt>{{ realStatLabel(key) }}</dt><dd>{{ number(value) }}</dd></template></dl>
+            <p v-for="entry in point?.real?.panel.contributions" :key="entry.source + ':' + entry.stat + ':' + entry.value">{{ entry.source }} / {{ realStatLabel(entry.stat) }} {{ number(entry.value) }}</p>
+          </details>
+        </template>
+      </div>
     </section>
     <section v-if="document" class="library-section calculator-conditions"><h3>命中条件</h3>
       <label v-if="records.length > 1 && !document?.team">查看记录<select :value="document?.recordId" @change="selectRecord(($event.target as HTMLSelectElement).value)"><option v-for="record in records" :key="record.id" :value="record.id">{{ actorLabel(document!.project, record.actor) }} / {{ recordLabel(document!.project, record.id) }} / {{ record.timeMs / 1000 }}秒</option></select></label>
@@ -984,6 +1017,13 @@ defineExpose({ requestLeave: leaveCalculator });
       <header class="result-heading"><h3>角色配置</h3>
         <button v-if="document && !document.team && document.project.candidate.actors.length > 1" class="ui-action soft" data-size="md" @click="picker = 'candidate'">试配队员</button>
       </header>
+      <CharacterStatPanel v-if="candidatePanel" title="实时角色面板" :element="character.build.character.identity.element ?? 'physical'" :stats="candidatePanel.stats" />
+      <div class="mobile-rolls">
+        <EffectiveRollSummary inline stacked :basis="basis" :items="entries.flatMap(entry => entry.item ?? [])" :selected-stats="effectiveStats(character.name)" />
+      </div>
+      <h3>圣遗物</h3>
+      <ArtifactEquipmentGrid :entries="entries" readonly :effective-stats="effectiveStats(character.name)"
+        :wearers="[{name:character.name,id:character.build.character.id}]" @inspect="slot => inspectedArtifact = entries.find(entry => entry.slot === slot)?.item" />
       <details v-if="!document?.baseline" class="result-support"><summary>角色定义</summary>
         <div class="library-page-actions"><button class="ui-action soft" data-accent="hydro" :disabled="working" @click="reviewContent">检查当前内容</button>
           <button class="ui-action soft" data-accent="hydro" @click="exportMetadata">导出角色定义副本</button>
@@ -991,6 +1031,7 @@ defineExpose({ requestLeave: leaveCalculator });
         <input ref="metadataFile" hidden type="file" accept=".json,application/json" aria-label="导入计算器角色定义" @change="importMetadata">
       </details>
     </section>
+    <ArtifactDetail v-if="inspectedArtifact" :item="inspectedArtifact" readonly @close="inspectedArtifact = undefined" />
     <CombatChangeList v-if="document" :changes="result?.combatChanges" :team="document.project.candidate.actors" />
     <footer class="library-page-toolbar">
       <span v-if="dirty || document" class="library-page-status">{{ dirty ? '未保存' : '已保存' }}</span>
@@ -1035,7 +1076,7 @@ defineExpose({ requestLeave: leaveCalculator });
 <style scoped>
 .damage-calculator,.calculator-result,.calculator-conditions,.calculator-build { display:grid; min-width:0; gap:12px; }
 .damage-toolbar { display:flex; align-items:center; justify-content:space-between; }
-.calculator-selections { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.calculator-selections { display:grid; grid-auto-rows:1fr; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
 .selection-tile { box-sizing:border-box; display:flex; align-items:center; justify-content:center; gap:12px; min-width:0; width:100%; padding:16px; background:var(--surface); color:var(--ink); }
 
 .primary-slot,.calculator-team { min-height:140px; }
@@ -1045,7 +1086,7 @@ defineExpose({ requestLeave: leaveCalculator });
 .selection-tile small,.damage-totals small { font-size:var(--font-body); color:var(--muted); font-weight:400; }
 .add-mark { display:grid; place-items:center; width:40px; height:40px; color:var(--element-anemo-deep); background:var(--element-anemo-light); border-radius:7px; font-size:var(--font-title); font-weight:400; }
 .add-mark.small { width:32px; height:32px; }
-.secondary-slot { justify-content:flex-start; min-height:68px; padding:10px 16px; text-align:left; }
+.secondary-slot { justify-content:flex-start; padding:10px 16px; text-align:left; }
 button.calculator-team { grid-template-columns:minmax(0,1fr) auto; gap:4px; }
 .calculator-team :deep(.team-row-members) { grid-row:2; grid-column:1/-1; }
 .calculator-team :deep(.team-row-trailing) { grid-row:1; grid-column:2; }
@@ -1055,8 +1096,13 @@ button.calculator-team { grid-template-columns:minmax(0,1fr) auto; gap:4px; }
 .damage-totals > div { display:grid; gap:4px; min-width:0; padding-inline:8px; }
 .damage-totals > div + div { padding-left:24px; border-left:1px solid var(--line); }
 .damage-totals small { margin-left:4px; }
-.damage-totals output,.damage-totals strong { font-size:var(--font-title); font-weight:700; font-variant-numeric:tabular-nums; color:var(--element-anemo-deep); overflow-wrap:anywhere; }
-.damage-totals > div + div output { color:var(--ink); }
+.damage-totals output,.damage-totals strong { font-size:var(--font-title); font-weight:700; font-variant-numeric:tabular-nums; color:inherit; overflow-wrap:anywhere; }
+.critical-total { color:var(--element-pyro-deep); }
+.expected-total { color:var(--element-anemo-deep); }
+.result-details { display:grid; gap:12px; min-width:0; }
+.calculator-build { grid-template-columns:minmax(0,1fr); }
+.calculator-build .mobile-rolls { display:none; }
+.calculator-build .character-stats { margin:0; }
 .calculator-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr)); gap:12px; }
 label,input,select,fieldset { min-width:0; box-sizing:border-box; }
 fieldset { border:0; padding:0; margin:0; }
@@ -1071,12 +1117,11 @@ dl { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:8px 0; font-va
 dd { margin:0; text-align:right; }p,li { overflow-wrap:anywhere; }ul { margin:0; padding-left:20px; }
 @media(max-width:600px) {
   .calculator-selections { gap:8px; }.primary-slot,.calculator-team { min-height:114px; }.secondary-slot { padding:8px; gap:6px; }
-  .damage-totals { grid-template-columns:1fr; padding:4px 12px; }
-  .damage-totals > div,.damage-totals > div + div { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; padding:8px 0; border-left:0; }
-  .damage-totals > div + div { border-top:1px solid var(--line); }
+  .damage-totals { padding:10px 4px; }
+  .damage-totals > div + div { padding-left:8px; }
+  .calculator-selections :deep(.configuration-body > .effective-roll-summary.inline.readonly.stacked) { display:none; }
+  .calculator-build .mobile-rolls { display:block; }
+  .calculator-selections :deep(.configuration-portraits) { flex-wrap:wrap; min-width:0; }
   .calculator-team :deep(.team-row-members) { gap:4px; }
-}
-@media(max-width:480px) {
-  .calculator-selections:has(> .configuration-row) > :is(.primary-slot,.calculator-team) { grid-column:1/-1; }
 }
 </style>

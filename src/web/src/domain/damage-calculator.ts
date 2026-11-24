@@ -153,6 +153,26 @@ export function calculatorRequest(input: DamageCalculatorDocument, taskId: numbe
   return calculatorWorkerRequest(document, taskId);
 }
 
+/** Evaluate one headline using the candidate loadout and the same encounter and hit. */
+export function calculatorCritProject(project: Project, recordId: string, mode: 'critical' | 'expected'): Project {
+  const hit = project.timeline.find(record => record.id === recordId);
+  if (!hit) return project;
+  let variant = hit;
+  if (hit.damage && hit.damage.crit !== mode) {
+    const build = project.candidate.actors.find(actor => actor.id === hit.actor)?.build;
+    if (findBuildHit(build, hit.damage.hit)?.hit.critical === 'always') return project;
+    variant = { ...hit, damage: { ...hit.damage, crit: mode } };
+  } else if (hit.reactionEvent) {
+    const reaction = hit.reactionEvent;
+    // The supplied joint distribution already covers exactly the contributors using expectation.
+    if (mode === 'expected' && reaction.jointCrit || reaction.contributors.every(owner => owner.crit === mode)) return project;
+    variant = { ...hit, reactionEvent: { ...reaction, jointCrit: undefined,
+      contributors: reaction.contributors.map(owner => ({ ...owner, crit: mode })) } };
+  }
+  if (variant === hit) return project;
+  return { ...project, timeline: project.timeline.map(record => record === hit ? variant : record) };
+}
+
 /** The Worker prepares and validates the team when evaluating. File imports are checked before installation. */
 export function calculatorWorkerRequest(document: DamageCalculatorDocument, taskId: number): AxisRequest {
   if (!document.baseline) return { taskId, session: 1, revision: taskId, project: document.project };

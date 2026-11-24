@@ -53,7 +53,7 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   const number = (id: string) => expect.poll(async () => Number((await calculator.getByTestId(id).textContent())?.replaceAll(',', '')));
   const baseline = recordedVesnaDamage(1), candidate = recordedVesnaDamage(2);
   await button('计算伤害').click();
-  await number('calculator-expected').toBeCloseTo(baseline, 5);
+  await number('calculator-expected').toBe(Number(baseline.toFixed(1)));
   await number('calculator-value').toBeCloseTo(recordedVesnaDamage(1, 1, true, 'critical'), 5);
   await select('暴击').selectOption('expected');
   await button('选择增益').click();
@@ -79,7 +79,7 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await loyalWind.uncheck();
   await buffDialog.getByRole('button', { name: '应用增益' }).click();
   await button('计算伤害').click();
-  await number('calculator-expected').toBeCloseTo(recordedVesnaDamage(1,1,false), 5);
+  await number('calculator-expected').toBe(Number(recordedVesnaDamage(1,1,false).toFixed(1)));
   await button('选择增益').click();
   await loyalWind.check();
   await page.screenshot({ path: info.outputPath('buff-picker.png') });
@@ -166,5 +166,24 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await number('calculator-value').toBeCloseTo(recordedVesnaDamage(2, 1, false), 5);
   await button('选择增益').click();
   await expect(loyalWind).not.toBeChecked();
+  await page.keyboard.press('Escape');
+  const slots = calculator.locator('.calculator-build .equipment-list');
+  const hp = calculator.locator('.calculator-build [data-stat-value="hp"]');
+  const previousHp = Number((await hp.textContent())!.replaceAll(',', ''));
+  await expect(slots.locator('[data-empty="false"]')).toHaveCount(5);
+  const withoutFlower = await page.evaluate(async file => {
+    // @ts-expect-error Vite browser source URL.
+    const { packDocument } = await import('/src/domain/content-document.ts');
+    const build = file.project.candidate.actors.find(actor => actor.id === file.actorId)!.build!;
+    build.artifacts = build.artifacts.filter(piece => piece.slot !== 'flower');
+    return JSON.stringify(packDocument('damage-calculator', file));
+  }, document);
+  await calculator.getByLabel('打开伤害计算文件').setInputFiles({
+    name: '候选空花位.json', mimeType: 'application/json', buffer: Buffer.from(withoutFlower),
+  });
+  await expect(slots.getByRole('button', { name: '装备生之花' })).toBeDisabled();
+  await expect(slots.locator('[data-empty="false"]')).toHaveCount(4);
+  await expect.poll(async () => Number((await hp.textContent())!.replaceAll(',', ''))).toBeLessThan(previousHp);
+  expect(await storage()).toEqual(before);
   expect(errors).toEqual([]);
 });

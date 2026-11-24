@@ -413,7 +413,7 @@ defineExpose({ requestLeave });
 
 <style scoped>
 .character-detail-dialog { overflow-y:auto; scrollbar-gutter:stable both-edges; width:min(var(--dialog-width-editor),calc(100vw - 32px)); }
-.configuration-title { display:flex; align-items:center; justify-content:center; min-width:0; min-height:var(--control-height-md); margin:0; line-height:1.2; }
+.configuration-title { grid-column:2; grid-row:1; justify-self:center; display:flex; align-items:center; justify-content:center; min-width:0; min-height:var(--control-height-md); margin:0; line-height:1.2; }
 .character-header-tools,.combination-detail-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; min-width:0; }
 .equipment-view-tabs { display:flex; flex:none; padding:2px; box-sizing:border-box; height:var(--control-height-md); border:1px solid var(--line); border-radius:var(--control-radius); background:var(--neutral-canvas); }
 .equipment-view-tabs button { height:26px; min-height:26px; padding:0 8px; border:0; border-radius:4px; background:transparent; color:var(--muted); font-size:var(--font-control); font-weight:700; }

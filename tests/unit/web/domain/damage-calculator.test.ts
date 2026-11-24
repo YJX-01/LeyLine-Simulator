@@ -5,7 +5,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createAccount } from '../../../../src/web/src/domain/account';
 import { previewEnkaImport, confirmEnkaImport } from '../../../../src/web/src/domain/enka-import';
-import { calculatorSnapshotDraft, calculatorWorkerRequest, readCalculatorSource } from '../../../../src/web/src/domain/damage-calculator';
+import { calculatorCritProject, calculatorSnapshotDraft, calculatorWorkerRequest, readCalculatorSource } from '../../../../src/web/src/domain/damage-calculator';
 import { projectSchema, putHitFact, type DamageCalculatorDocument } from '@leyline/schema';
 import { recordedVaresaPlunge, vesnaRecording } from '../../../helpers/recorded-vesna';
 import { applyCalculatorBuffs, calculatorBuffChoices } from '../../../../src/web/src/domain/calculator-buffs';
@@ -14,6 +14,28 @@ import { createEmptyProject, nextRecordId } from '../../../../src/web/src/domain
 import { evaluateTimeline } from '@leyline/engine';
 import { getWeapon } from '@leyline/game-data';
 import { calculatorIntervals, setCalculatorCondition } from '../../../../src/web/src/domain/calculator-conditions';
+
+it('preserves a recorded joint expectation when evaluating the all-critical alternative', () => {
+  const project = createEmptyProject();
+  const reaction = {
+    family: 'lunar-charged' as const, element: 'electro' as const,
+    contributors: [
+      { actorId: 'first', qualified: true, crit: 'expected' as const },
+      { actorId: 'second', qualified: true, crit: 'noncritical' as const },
+    ],
+    jointCrit: [
+      { id: 'on', probability: 0.25, critical: { first: true } },
+      { id: 'off', probability: 0.75, critical: { first: false } },
+    ],
+  };
+  project.timeline.push({ id: 'hit', actor: 'first', kind: 'damage', definition: 'reaction', timeMs: 0, order: 0, reactionEvent: reaction });
+  const critical = calculatorCritProject(project, 'hit', 'critical').timeline[0].reactionEvent!;
+  expect(critical.contributors.map(owner => owner.crit)).toEqual(['critical', 'critical']);
+  expect(critical.jointCrit).toBeUndefined();
+  expect(calculatorCritProject(project, 'hit', 'expected')).toBe(project);
+  expect(project.timeline[0].reactionEvent).toEqual(reaction);
+  expect(reaction.contributors.map(owner => owner.crit)).toEqual(['expected', 'noncritical']);
+});
 
 const datedShowcase = '.references/enka/official-example-2026-11-13.json';
 it.skipIf(!existsSync(datedShowcase))('editing a calculator snapshot preserves owned references and leaves public gear unowned', async () => {

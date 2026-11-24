@@ -12,7 +12,7 @@ export const reactionNames = { none: '无反应', vaporize: '蒸发', melt: '融
 const percent = (value?: number | null) => value == null ? '—' : damageNumber(value * 100) + '%';
 const numeric = (entry?: EvaluatedValue | CalculationTraceNode) => entry?.state === 'known' && entry.value?.kind === 'quantity' ? entry.value.value : null;
 type Row = [string, string];
-export interface CalculatorFactor { label: string; value: number | null; multiplier: boolean; rows: Row[] }
+export interface CalculatorFactor { fullWidth?: boolean; label: string; value: number | null; multiplier: boolean; rows: Row[] }
 
 function buffRow(source: CalculatorBuff | undefined, modifierId: string, value: number | null, unit?: string): Row | undefined {
   const modifier = source?.modifiers.find(entry => entry.id === modifierId);
@@ -92,7 +92,7 @@ export function calculatorFactors(real: DamageResult, damage: DamageRequest, buf
     term.count?.value === 0 ? '计数为 0，贡献 0' : damageNumber(term.attribute) + ' × ' + damageNumber(term.multiplier) + (term.count ? ' × ' + damageNumber(term.count.value) : '') + ' = ' + damageNumber(term.contribution)]);
   const stageRow = (key: string, label: string): Row => [label, damageNumber(numeric(stages.get(key)))];
   if (stages.has('skill-base')) {
-    cards.push({ label: '数值 × 倍率区', value: numeric(rootNodes.get('base')), multiplier: false,
+    cards.push({ fullWidth: true, label: '属性 × 倍率区', value: numeric(rootNodes.get('base')), multiplier: false,
       rows: [...scaling, stageRow('skill-base','技能基础伤害'), stageRow('base-multiplier','基础伤害倍率'), stageRow('base-flat','附加基础伤害'), stageRow('reaction-base','反应基础加值'), ...contributions(rootNodes.get('base')?.id)] });
   } else {
     add('reaction-base', '反应基础伤害', [...scaling, ...inputs('reaction-base', [['skillBase','技能基础伤害'],['reactionCoefficient','反应系数'],['baseMultiplier','技能基数倍率']])], false);
