@@ -8,7 +8,7 @@ import { accountConfigurations, hasLocalConfiguration, planClearedConfiguration 
 import { effectiveStatGroups, characterLoadoutName, characterLoadoutLabel, equipmentConfigurationLabel } from '../domain/character-loadout-name';
 import { artifactValueSignature, matchingInventoryArtifact, planShowcaseInventory } from '../domain/showcase-inventory';
 import {buildRollBasis,type EffectiveRollBasis} from '../domain/effective-roll-basis';
-import { useAccountStore } from '../stores/account';
+import { markAccountDefinitionsRaw, useAccountStore } from '../stores/account';
 import { localDataErrorLabel } from '../domain/workbench-labels';
 import { loadAccountGameData } from '../domain/account-presentation';
 import { showcaseArtifact } from '../domain/enka-import';
@@ -19,6 +19,7 @@ import CharacterForm from './CharacterForm.vue';
 import ComparisonPanel from '../components/ComparisonPanel.vue';
 import CharacterStats from './CharacterStats.vue';
 import CharacterConfigurationList from './CharacterConfigurationList.vue';
+import PreferredConfigurationButton from '../components/PreferredConfigurationButton.vue';
 import CharacterFavorite from '../components/CharacterFavorite.vue';
 import EffectiveRollSummary from '../components/EffectiveRollSummary.vue';
 import DisclosureHeading from '../components/DisclosureHeading.vue';
@@ -107,13 +108,13 @@ async function openSaveAs() {
 }
 function restoreConfiguration() { const id=editingPresetId.value;resetDraft();if(id)tryPreset(id); }
 function selectConfiguration(id:string) {
-  if(id===editingPresetId.value)return;
+  if(id===editingPresetId.value && equipmentView.value==='local')return;
   requestLeave(()=>{equipmentView.value='local';resetDraft();if(id)tryPreset(id);});
 }
 function setCleanDraft(next: LocalAccount) {
   baselineCharacter = JSON.stringify(next.characters.find(entry => entry.id === characterId.value));
   baselineArtifacts = toRaw(next.artifacts);
-  draftAccount.value = next;
+  draftAccount.value = markAccountDefinitionsRaw(next);
 }
 function resetDraft() {
   equipmentPickerOpen.value=false;
@@ -298,9 +299,32 @@ const panelOpen = ref(false);
 const panelId = useId();
 watch(() => account.value.id, () => emit('close'));
 function closeCharacter() { emit('close'); }
-function guardPreferred(action:()=>void) {
+function guardConfigurationDeletion(action:()=>void) {
   const id=editingPresetId.value;
   requestLeave(()=>{if(detailDirty.value){resetDraft();if(id)tryPreset(id);}action();});
+}
+const preferredMenu = ref<{ x: number; y: number }>();
+const canPrefer = computed(() => !props.detached && !props.catalogCharacter && equipmentView.value === 'local' && !!editingPresetId.value);
+function showPreferredMenu(event: MouseEvent | KeyboardEvent) {
+  if (props.detached || props.catalogCharacter || equipmentView.value !== 'local' || !hasPreferred.value && !editingPresetId.value) return;
+  if (event instanceof KeyboardEvent && event.key !== 'ContextMenu' && !(event.shiftKey && event.key === 'F10')) return;
+  event.preventDefault();
+  const box = (event.currentTarget as HTMLElement).getBoundingClientRect();
+  preferredMenu.value = event instanceof MouseEvent ? { x: event.clientX, y: event.clientY } : { x: box.left, y: box.bottom };
+}
+function requestPreferred(id: string) {
+  preferredMenu.value = undefined;
+  requestLeave(() => {
+    try {
+      store.setPreferredConfiguration(characterId.value, id, catalog.value?.sets ?? []);
+      equipmentView.value = 'local';
+      configurationPickerOpen.value = false;
+      resetDraft();
+      emit('configurationSaved', characterId.value, '');
+    } catch (cause) {
+      detailError.value = cause instanceof Error ? cause.message : '设置首选配置失败。';
+    }
+  });
 }
 const clearTarget = ref<'local'|'showcase'>('local');
 function requestClearShowcase() {
@@ -359,11 +383,18 @@ defineExpose({ requestLeave });
 <template>
   <WorkbenchDialog editor class="character-detail-dialog" v-if="character" :title="character.name"
     :dirty="detailDirty" :before-close="requestLeave" @close="closeCharacter">
-    <template #title><h2 class="configuration-title">{{ character.name }}</h2></template>
-    <template v-if="!catalogCharacter && !detached" #header-trailing><CharacterFavorite :account-id="account.id" :character-id="character.id" :name="character.name"
-      :preset-id="configurationDetail || editingPresetId ? editingPresetId : undefined" /></template>
+    <template #title><h2 class="configuration-title" @contextmenu="showPreferredMenu">{{ character.name }}</h2></template>
     <template v-if="!catalogCharacter && !detached" #header-secondary>
-      <button class="configuration-title-button" :aria-label="`选择${character.name}配置`" @click="configurationPickerOpen=true">切换配置<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
+      <div class="configuration-actions">
+        <CharacterFavorite :account-id="account.id" :character-id="character.id" :name="character.name"
+          :preset-id="configurationDetail || editingPresetId ? editingPresetId : undefined" />
+        <PreferredConfigurationButton v-if="canPrefer" :name="character.name" @click="requestPreferred(editingPresetId)"
+          @keydown="showPreferredMenu" @contextmenu="showPreferredMenu" />
+        <button type="button" class="configuration-title-button" :aria-label="`选择${character.name}配置`" :aria-description="draftLabel"
+          :title="draftLabel" aria-haspopup="dialog" @contextmenu="showPreferredMenu" @keydown="showPreferredMenu" @click="configurationPickerOpen=true">
+          <span>{{ draftLabel }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+        </button>
+      </div>
     </template>
     <template #header-leading>
       <EditorActions v-if="detached" :dirty="detailDirty" :busy="detailBusy" allow-save-as
@@ -404,8 +435,15 @@ defineExpose({ requestLeave });
   <WorkbenchDialog v-if="combinationPickerOpen && character" title="选择圣遗物组合" @close="combinationPickerOpen=false"><ArtifactCombinationLibrary pick :stats="effectiveStats" :reference-name="character.name" @select="useCombination" /></WorkbenchDialog>
   <ArtifactCombinationEditor v-if="combinationEditorId || combinationSeed" :key="combinationEditorId || 'seed'" :combination="combinationStore.combinations.find(item=>item.id===combinationEditorId)" :seed="combinationSeed" :pending-artifacts="combinationPendingArtifacts" @close="closeCombination" @saved="combinationSaved" />
   <ConfirmationDialog v-if="pendingCombination" title="应用圣遗物组合？" :danger="false" confirm-label="应用到草稿" @cancel="pendingCombination=undefined" @confirm="useCombination(pendingCombination!,true)"><p v-if="pendingCombination.items.length<5">组合未满五件，缺少的部位将卸下。</p><p>保存角色后生效，库存物品保留。</p></ConfirmationDialog>
-  <WorkbenchDialog v-if="configurationPickerOpen && character" :title="`${character.name}的配置`" @close="configurationPickerOpen=false"><p v-if="detailDirty" class="detail-feedback">切换前会确认未保存的修改。</p><CharacterConfigurationList :character-id="character.id" selectable :current-preset-id="editingPresetId"  :before-adopt="guardPreferred" @adopted="resetDraft();configurationPickerOpen=false" @deleted="configurationDeleted" @select="chooseConfiguration" /></WorkbenchDialog>
+  <WorkbenchDialog v-if="configurationPickerOpen && character" :title="`${character.name}的配置`" @close="configurationPickerOpen=false">
+    <p v-if="detailError" role="alert">{{ detailError }}</p>
+    <p v-if="detailDirty" class="detail-feedback">切换前会确认未保存的修改。</p>
+    <CharacterConfigurationList :character-id="character.id" selectable :current-preset-id="equipmentView === 'local' ? editingPresetId : undefined"
+      :before-delete="guardConfigurationDeletion" @prefer="requestPreferred" @deleted="configurationDeleted" @select="chooseConfiguration" />
+  </WorkbenchDialog>
 
+  <ContextMenu v-if="preferredMenu" :x="preferredMenu.x" :y="preferredMenu.y" label="配置操作" :options="[{ id: 'prefer', label: canPrefer ? '设为首选' : '已是首选', disabled: !canPrefer }]"
+    @close="preferredMenu=undefined" @select="requestPreferred(editingPresetId)" />
   <UnsavedChangesDialog v-if="discardOpen" :busy="detailBusy" @save="saveAndLeave(()=>saveDetail())" @continue="cancelDiscard" @discard="discardChanges" />
   <ConfirmationDialog v-if="clearShowcaseOpen" :title="clearTarget==='local'?'清除本地配装？':'清除展柜信息？'" confirm-label="确认清除" @cancel="clearShowcaseOpen=false" @confirm="clearShowcase"><p>{{ clearTarget==='local'?'清除本地培养与穿戴，圣遗物保留在库存。':'清除该角色的展柜信息。' }}</p><p v-if="clearPreview?.promotedId">保存后由下一套备选接替首选。</p><p v-if="clearPreview?.removedCharacter">已无其他配置及展柜，保存后移除角色。</p><p>保存后生效。</p></ConfirmationDialog>
   <WorkbenchDialog v-if="saveAsOpen && character" title="另存角色配装方案" @close="saveAsOpen=false"><label>方案名称<input :value="`${character.name} | ${draftLabel}`" aria-label="配装方案名称" readonly></label><p>按角色、有效平均词条数、套装和武器自动命名。<template v-if="!detached || hasPreferred">首选配置和实际穿戴不变。</template></p><p v-if="!effectiveStats.length" role="alert">请先在详情中选择有效属性。</p><p v-if="detailError" role="alert">{{ detailError }}</p><button class="ui-action" data-accent="anemo" :disabled="detailBusy || !effectiveStats.length" @click="saveDetail(true)">确认另存</button></WorkbenchDialog>
@@ -420,7 +458,11 @@ defineExpose({ requestLeave });
 .equipment-view-tabs button.active[data-view=local] { background:var(--element-hydro-light); color:var(--element-hydro-deep); box-shadow:0 1px 3px #283a3620; }
 .equipment-view-tabs button.active[data-view=showcase] { background:var(--element-electro-light); color:var(--element-electro-deep); box-shadow:0 1px 3px #283a3620; }
 .equipment-view-tabs button:focus-visible { outline:2px solid var(--element-hydro-deep); outline-offset:1px; }
-.configuration-title-button { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-width:0; max-width:100%; height:var(--control-height-md); padding:0 8px; border:1px solid var(--line); border-radius:var(--control-radius); background:var(--surface-raised); color:var(--ink); --button-hover-border:var(--element-hydro-primary); font-size:var(--font-control); font-weight:700; }
+.configuration-actions { display:flex; align-items:center; justify-content:flex-end; gap:6px; min-width:0; max-width:100%; }
+.configuration-actions .character-favorite { flex:none; }
+.configuration-title-button > span { min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.configuration-actions :deep(.preferred-pin) { width:var(--control-height-sm); }
+.configuration-title-button { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-width:0; max-width:240px; height:var(--control-height-md); padding:0 8px; border:1px solid var(--line); border-radius:var(--control-radius); background:var(--surface-raised); color:var(--ink); --button-hover-border:var(--element-hydro-primary); font-size:var(--font-control); font-weight:700; }
 .configuration-title-button svg { flex:none; width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.8; }
 .detail-panel,.detail-artifacts { margin-top:14px; }
 .inline-section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:8px 0 12px; padding-bottom:10px; border-bottom:1px solid var(--line); text-align:left; }

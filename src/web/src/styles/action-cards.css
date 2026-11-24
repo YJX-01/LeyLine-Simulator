@@ -9,6 +9,10 @@
 .workspace-design [data-card-action='replace'] {
   --card-action-color: var(--element-hydro-primary);
 }
+.workspace-design [data-card-action][data-current='true'] {
+  --card-rest-edge: var(--element-anemo-primary);
+  --card-action-color: var(--element-anemo-primary);
+}
 .workspace-design button[data-card-action]:enabled:is(:hover, :active, :focus-visible),
 .workspace-design [data-card-action]:has(> :is(.card-detail-target, .card-action-trigger):not(:disabled):is(:hover, :active, :focus-visible)),
 .workspace-design [data-card-action]:has(> .card-action-trigger :focus-visible) {

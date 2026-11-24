@@ -53,6 +53,16 @@ describe('account repository', () => {
     store.account.name = '继续编辑';
     expect(JSON.parse(memory.get('leyline-account-0.2.0')!).document.name).toBe('继续编辑');
   });
+  it('writes a committed replacement once and still autosaves later edits', () => {
+    const setItem = vi.fn();
+    vi.stubGlobal('localStorage', { getItem: () => null, setItem });
+    const store = useAccountStore();
+    store.commitEdit({ ...store.account, name: '已提交的账号' });
+    expect(setItem).toHaveBeenCalledTimes(1);
+    store.account.name = '继续编辑';
+    expect(setItem).toHaveBeenCalledTimes(2);
+    expect(JSON.parse(setItem.mock.lastCall![1]).document.name).toBe('继续编辑');
+  });
   it('roundtrips an independent file and preserves existing account on invalid import', async () => {
     const store = useAccountStore();
     store.account.name = '测试账号';

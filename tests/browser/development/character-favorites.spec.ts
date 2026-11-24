@@ -23,7 +23,12 @@ test('real showcase: character favorites persist, filter and sort independently 
     return {horizontal:Math.abs((header.left+header.right)-(title.left+title.right))/2,vertical:Math.abs((header.top+header.bottom)-(title.top+title.bottom))/2};
   });
   expect(alignment.horizontal).toBeLessThan(.5);expect(alignment.vertical).toBeLessThanOrEqual(.5);
-  const picker=role.getByRole('button',{name:'选择甘雨配置',exact:true});await expect(picker).toHaveText('切换配置');
+  const picker=role.getByRole('button',{name:'选择甘雨配置',exact:true});
+  await expect(picker).toHaveText(/词条/);
+  await expect(picker).toHaveAttribute('title', (await picker.innerText()).trim());
+  await expect(picker.locator('span')).toHaveCSS('text-overflow', 'ellipsis');
+  expect(await picker.evaluate(button => button.getBoundingClientRect().width)).toBeLessThanOrEqual(240);
+  await expect(page.locator('.character-card-open')).toHaveCount(0);
   for(const width of [900,760,390]) {
     await page.setViewportSize({width,height:900});
     await expect.poll(()=>role.evaluate(node=>node.scrollWidth>node.clientWidth)).toBe(false);
@@ -112,10 +117,78 @@ test('preferred and alternate configurations keep separate ratings across sortin
   await expect(rows).toHaveCount(1);
   await expect(alternate).toBeVisible();
   await page.getByRole('button', { name: '清除筛选和排序条件', exact: true }).click();
+  await first.click({ button: 'right' });
+  await expect(page.getByRole('menuitem', { name: '已是首选' })).toBeDisabled();
+  await page.keyboard.press('Escape');
   await first.click();
-  await role.getByRole('button', { name: '选择安柏配置', exact: true }).click();
-  await page.getByRole('button', { name: '设安柏此配置为首选', exact: true }).click();
-  await page.getByRole('button', { name: '确认设为首选', exact: true }).click();
+  const switchButton = role.getByRole('button', { name: '选择安柏配置', exact: true });
+  await switchButton.press('Shift+F10');
+  await expect(page.getByRole('menuitem', { name: '已是首选' })).toBeDisabled();
+  await page.keyboard.press('Escape');
+  await switchButton.click();
+  const chooser = page.getByRole('dialog', { name: '安柏的配置' });
+  const selected = chooser.locator('article[data-current="true"]');
+  await expect(selected).toHaveCSS('border-top-color', 'rgb(76, 169, 139)');
+  expect(await selected.evaluate(node => {
+    const style = getComputedStyle(node);
+    return style.borderLeftColor === style.borderRightColor && style.borderLeftColor === style.borderBottomColor &&
+      style.borderLeftColor !== style.borderTopColor;
+  })).toBe(true);
+  await expect(selected.getByText('当前', { exact: true })).toHaveCount(0);
+  await chooser.screenshot({ path: 'artifacts/character-configuration-choice.png' });
+  await page.setViewportSize({ width: 360, height: 844 });
+  const alternateCard = chooser.locator('article[data-preset-id]:not([data-preset-id=""])');
+  const popupName = alternateCard.locator('.configuration-name');
+  await expect(popupName).toHaveCSS('text-overflow', 'ellipsis');
+  expect(await popupName.evaluate(node => node.clientWidth < node.scrollWidth && node.clientWidth <= 240)).toBe(true);
+  await expect(alternateCard.locator('.configuration-open')).toHaveAttribute('title', await popupName.innerText());
+  expect(await chooser.evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
+  const pinBounds = (await alternateCard.locator('.preferred-pin').boundingBox())!;
+  const cardBounds = (await alternateCard.boundingBox())!;
+  expect(pinBounds.x + pinBounds.width).toBeLessThanOrEqual(cardBounds.x + cardBounds.width);
+  await chooser.screenshot({ path: 'artifacts/character-configuration-choice-mobile.png' });
+  await selected.click({ button: 'right' });
+  await expect(page.getByRole('menuitem', { name: '已是首选' })).toBeDisabled();
+  await page.keyboard.press('Escape');
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const chooseAlternate = chooser.getByRole('button', { name: '选择安柏备选配置', exact: true });
+  const pin = (container: typeof role) => container.getByRole('button', { name: '设安柏此配置为首选', exact: true });
+  await pin(chooser).hover();
+  await expect(pin(chooser)).toHaveCSS('color', 'rgb(36, 107, 88)');
+  await expect(pin(chooser)).toHaveCSS('background-color', 'rgb(229, 244, 237)');
+  await chooseAlternate.click({ button: 'right' });
+  await page.getByRole('menuitem', { name: '设为首选' }).click();
+  await expect(chooser).toHaveCount(0);
+  await expect(rating).toHaveAccessibleDescription('2级收藏');
+  await switchButton.click();
+  await pin(chooser).click();
+  await expect(chooser).toHaveCount(0);
+  await expect(rating).toHaveAccessibleDescription('1级收藏');
+  await switchButton.click();
+  await chooseAlternate.click();
+  for (const width of [1280, 760, 360]) {
+    await page.setViewportSize({ width, height: 844 });
+    const favoriteBox = (await rating.boundingBox())!, pinBox = (await pin(role).boundingBox())!, switchBox = (await switchButton.boundingBox())!;
+    expect(favoriteBox.x + favoriteBox.width).toBeLessThanOrEqual(pinBox.x + 1);
+    expect(pinBox.x + pinBox.width).toBeLessThanOrEqual(switchBox.x + 1);
+    expect(Math.abs(pinBox.y + pinBox.height / 2 - switchBox.y - switchBox.height / 2)).toBeLessThan(1);
+    expect(switchBox.width).toBeLessThanOrEqual(240);
+  }
+  expect(await switchButton.locator('span').evaluate(node => node.clientWidth < node.scrollWidth)).toBe(true);
+  await role.locator('header').screenshot({ path: 'artifacts/character-configuration-header.png' });
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await role.getByRole('button', { name: '选择安柏配置' }).press('Shift+F10');
+  await page.getByRole('menuitem', { name: '设为首选' }).click();
+  await expect(pin(role)).toHaveCount(0);
+  await expect(rating).toHaveAccessibleDescription('2级收藏');
+  // Promote twice from the detail header, returning to the two-star preferred configuration.
+  for (const level of [1, 2]) {
+    await switchButton.click();
+    await chooseAlternate.click();
+    await pin(role).click();
+    await expect(pin(role)).toHaveCount(0);
+    await expect(rating).toHaveAccessibleDescription(`${level}级收藏`);
+  }
   await role.getByRole('button', { name: '关闭安柏', exact: true }).click();
   await expect(preferredRow.getByRole('img', { name: '2级收藏' })).toBeVisible();
   await expect(alternateRow.getByRole('img', { name: '1级收藏' })).toBeVisible();
@@ -128,5 +201,18 @@ test('preferred and alternate configurations keep separate ratings across sortin
   await expect(rows).toHaveCount(0);
   await expect(page.getByLabel('搜索角色配置', { exact: true })).toBeFocused();
   await page.getByTestId('workspace-nav-characters').click();
-  await expect(page.getByRole('button', { name: '查看安柏详情', exact: true }).locator('.favorite-mark')).toHaveCount(0);
+  const amber = page.getByRole('button', { name: '查看安柏详情', exact: true });
+  await expect(amber.locator('.card-favorite')).toHaveAttribute('aria-label', '3级收藏');
+  await page.reload();
+  await expect(amber.locator('.card-favorite')).toHaveAttribute('aria-label', '3级收藏');
+  await amber.click();
+  await role.getByRole('button', { name: '设置安柏收藏' }).click();
+  await role.getByRole('button', { name: '关闭安柏' }).click();
+  await nav.click();
+  await expect(preferredRow.locator('.configuration-favorite')).toHaveCount(0);
+  await alternate.click({ button: 'right' });
+  await page.getByRole('menuitem', { name: '设为首选' }).click();
+  await expect(preferredRow.getByRole('img', { name: '1级收藏' })).toBeVisible();
+  await page.getByTestId('workspace-nav-characters').click();
+  await expect(amber.locator('.card-favorite')).toHaveAttribute('aria-label', '1级收藏');
 });

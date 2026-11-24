@@ -293,7 +293,6 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(roleDetail.getByRole('button',{name:'设为首选',exact:true})).toHaveCount(0);
   await page.getByRole('button',{name:'选择琴配置',exact:true}).click();
   await page.getByRole('dialog',{name:'琴的配置',exact:true}).getByRole('button',{name:'设琴此配置为首选',exact:true}).click();
-  await page.getByRole('button', { name:'确认设为首选', exact:true }).click();
   const adoptedRoleAccount = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document);
   expect(adoptedRoleAccount.characters.find((entry:{name:string}) => entry.name==='琴').equipment.flower).toBeUndefined();
   expect(adoptedRoleAccount.artifacts).toHaveLength(458);
@@ -307,10 +306,10 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await chooseConfigurationRole(page, '琴');
   await expect(page.locator('.configuration-row')).toHaveCount(2);
   await page.getByRole('button',{name:'查看琴备选配置',exact:true}).click();
-  await page.getByRole('button',{name:'选择琴配置',exact:true}).click();
-  await page.getByRole('button',{name:'设琴此配置为首选',exact:true}).click();
-  await expect(page.getByRole('dialog',{name:'设为首选配置？',exact:true})).toBeVisible();
-  await page.getByRole('button',{name:'取消',exact:true}).click();await page.keyboard.press('Escape');
+  await unloadFlower();
+  await roleDetail.getByRole('button',{name:'设琴此配置为首选',exact:true}).click();
+  await page.getByRole('dialog',{name:'有未保存的修改',exact:true}).getByRole('button',{name:'继续编辑',exact:true}).click();
+  await roleDetail.getByRole('button',{name:'还原',exact:true}).click();
   expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document)).toEqual(adoptedRoleAccount);
   await expect(page.getByRole('dialog',{name:'琴',exact:true}).getByRole('button',{name:'选择琴配置',exact:true})).toBeVisible();
   await expect(page.getByRole('dialog',{name:'琴',exact:true}).locator('.equipment-list .artifact-summary')).toHaveCount(5);

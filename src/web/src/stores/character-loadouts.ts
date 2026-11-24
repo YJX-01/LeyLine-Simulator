@@ -1,7 +1,7 @@
 import { storageKeyFor } from '@leyline/schema/version';
 import { packDocument, unpackDocument } from '../domain/content-document';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, shallowRef } from 'vue';
 import type { StatKey } from '@leyline/schema';
 import { configurationSignature, effectiveStatOptions, defaultEffectiveStats, effectiveStatGroups } from '../domain/character-loadout-name';
 import { parseAccount, type AccountCharacter, type LocalAccount } from '../domain/account';
@@ -22,7 +22,7 @@ function writePreferences(storageKey: string, next: Record<string, number | Stat
   }
 }
 export const useCharacterLoadoutsStore = defineStore('character-loadouts', () => {
-  const loadouts = ref<CharacterLoadout[]>([]);
+  const loadouts = shallowRef<CharacterLoadout[]>([]);
   const error = ref('');
   const favorites=ref<Record<string,number>>({});
   try {
@@ -31,10 +31,15 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
       if(typeof level==='number' && Number.isInteger(level) && level>=0 && level<=3)favorites.value[id]=level;
     }
   }catch { /* Invalid preferences never replace account data. */ }
-  function favoriteLevel(accountId: string, characterId: string, presetId?: string) {
-    const characterLevel = favorites.value[`${accountId}/${characterId}`] ?? 0;
-    if (presetId === undefined) return characterLevel;
-    return favorites.value[configurationKey(accountId, characterId, presetId)] ?? (presetId ? 0 : characterLevel);
+  function favoriteLevel(accountId: string, characterId: string, presetId = '') {
+    const level = favorites.value[configurationKey(accountId, characterId, presetId)] ?? 0;
+    if (presetId) return level;
+    // Older versions stored a second, independent rating on the character card.
+    return Math.max(level, favorites.value[`${accountId}/${characterId}`] ?? 0);
+  }
+  function setPreferredMark(marks: Record<string, number>, accountId: string, characterId: string, level: number) {
+    delete marks[`${accountId}/${characterId}`];
+    marks[configurationKey(accountId, characterId, '')] = level;
   }
   function writeFavorites(next: Record<string, number>, commit?: () => void) {
     writePreferences(favoriteKey, next, commit);
@@ -43,12 +48,13 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
   function setFavorite(accountId:string,characterId:string,level:number,presetId?:string) {
     if(!Number.isInteger(level) || level<0 || level>3)throw new Error('收藏等级无效。');
     const next={...favorites.value};
-    const preferred = configurationKey(accountId, characterId, '');
-    // Earlier detail views shared the role mark. Keep its last value on the preferred configuration.
-    if (presetId === undefined) next[preferred] ??= favoriteLevel(accountId, characterId);
-    const id = presetId === undefined ? `${accountId}/${characterId}` : configurationKey(accountId, characterId, presetId);
-    if (level || presetId === '') next[id] = level;
-    else delete next[id];
+    if (presetId) {
+      const id = configurationKey(accountId, characterId, presetId);
+      if (level) next[id] = level;
+      else delete next[id];
+    } else {
+      setPreferredMark(next, accountId, characterId, level);
+    }
     writeFavorites(next);
   }
 
@@ -86,8 +92,7 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     const marks = { ...favorites.value };
     for (const id of plan.removedIds) delete marks[configurationKey(accountId, characterId, id)];
     if (!presetId) {
-      const preferred = configurationKey(accountId, characterId, '');
-      marks[preferred] = plan.promotedId ? favoriteLevel(accountId, characterId, plan.promotedId) : 0;
+      setPreferredMark(marks, accountId, characterId, plan.promotedId ? favoriteLevel(accountId, characterId, plan.promotedId) : 0);
     }
     writeFavorites(marks, () => next.length === loadouts.value.length ? commit() : replaceAll(next, commit));
   }
@@ -152,13 +157,16 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
   }
   function adoptPreferred(account: LocalAccount, current: AccountCharacter, name: string, selectedId: string, commit: () => void) {
     if (error.value) throw new Error(error.value);
-    const previous = loadouts.value.find(item => item.accountId === account.id && item.characterId === current.id
-      && configurationSignature(item.snapshot.characters[0]) === configurationSignature(current));
+    const currentSignature = configurationSignature(current);
+    const presets = loadouts.value;
+    const previous = presets.find(item => item.accountId === account.id && item.characterId === current.id
+      && configurationSignature(item.snapshot.characters[0]) === currentSignature);
+    if (previous?.id === selectedId) return;
     const alternate = previous ?? newLoadout(name, account, current);
     const marks = { ...favorites.value };
     marks[configurationKey(account.id, current.id, alternate.id)] = favoriteLevel(account.id, current.id, '');
-    marks[configurationKey(account.id, current.id, '')] = favoriteLevel(account.id, current.id, selectedId);
-    writeFavorites(marks, () => previous ? commit() : replaceAll([...loadouts.value, alternate], commit));
+    setPreferredMark(marks, account.id, current.id, favoriteLevel(account.id, current.id, selectedId));
+    writeFavorites(marks, () => previous ? commit() : replaceAll([...presets, alternate], commit));
   }
   return { loadouts, error, favoriteLevel, setFavorite, save, update, adoptPreferred, removeConfigurations, removeCharacter, replaceAll, effectiveStats, setEffectiveStats };
 });

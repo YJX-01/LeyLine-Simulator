@@ -30,6 +30,7 @@ describe.skipIf(!hasRecordedReference(path))('configuration removal from recorde
       expect(()=>planConfigurationRemoval(account,store.loadouts,target.id,'missing')).toThrow('配置已不存在');
       store.removeConfigurations(account.id,target.id,'',preferred,()=>{});
       expect(store.favoriteLevel(account.id,target.id,'')).toBe(3);
+      expect(store.favoriteLevel(account.id,target.id)).toBe(3);
       expect(store.favoriteLevel(account.id,target.id,id)).toBe(0);
     }finally{vi.unstubAllGlobals();}
   });

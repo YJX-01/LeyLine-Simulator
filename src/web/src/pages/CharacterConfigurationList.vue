@@ -3,11 +3,12 @@ import {buildRollBasis} from '../domain/effective-roll-basis';
 import { computed, onMounted, ref, watch, nextTick } from 'vue';
 import { useAccountStore } from '../stores/account';
 import { useCharacterLoadoutsStore } from '../stores/character-loadouts';
-import { accountConfigurations, preparePreferredConfiguration, type AccountConfiguration } from '../domain/account-configurations';
+import { accountConfigurations, type AccountConfiguration } from '../domain/account-configurations';
 import { accountSlots } from '../domain/account';
-import { characterLoadoutName,equipmentConfigurationLabel } from '../domain/character-loadout-name';
+import { equipmentConfigurationLabel } from '../domain/character-loadout-name';
 import { loadAccountGameData } from '../domain/account-presentation';
 import ArtifactDensitySwitch from '../components/ArtifactDensitySwitch.vue';
+import PreferredConfigurationButton from '../components/PreferredConfigurationButton.vue';
 import CharacterConfigurationCard from '../components/CharacterConfigurationCard.vue';
 import LibraryEmptyState from '../components/LibraryEmptyState.vue';
 import LibraryToolbar from '../components/LibraryToolbar.vue';
@@ -28,26 +29,10 @@ import {configurationSortDefaults,useLibraryViewStore} from '../stores/library-v
 import {effectiveTotal} from '../domain/artifact-combinations';
 import {hasLocalConfiguration,planConfigurationRemoval} from '../domain/account-configurations';
 import ConfirmationDialog from '../components/ConfirmationDialog.vue';
-const props=defineProps<{characterId?:string;selectable?:boolean;selectionOnly?:boolean;currentPresetId?:string;beforeAdopt?:(action:()=>void)=>void}>();
-const emit=defineEmits<{select:[characterId:string,presetId:string];pickRole:[];create:[];adopted:[];deleted:[characterId:string,presetId:string]}>();
+const props=defineProps<{characterId?:string;selectable?:boolean;selectionOnly?:boolean;currentPresetId?:string;beforeDelete?:(action:()=>void)=>void}>();
+const emit=defineEmits<{select:[characterId:string,presetId:string];pickRole:[];create:[];prefer:[presetId:string];deleted:[characterId:string,presetId:string]}>();
 const account=useAccountStore(),loadouts=useCharacterLoadoutsStore();
 const data=ref<Awaited<ReturnType<typeof loadAccountGameData>>>(),error=ref('');
-const pendingPreferred=ref<AccountConfiguration>();
-let adoptionBaseline='';
-function requestPreferred(configuration:AccountConfiguration) {
-  const open=()=>{try{preparePreferredConfiguration(account.account,configuration);adoptionBaseline=JSON.stringify(account.account);pendingPreferred.value=configuration;error.value='';}catch(cause){error.value=cause instanceof Error?cause.message:'配置不可采用。';}};
-  if(props.beforeAdopt)props.beforeAdopt(open);else open();
-}
-function confirmPreferred() {
-  const configuration=pendingPreferred.value;if(!configuration)return;
-  try {
-    if(JSON.stringify(account.account)!==adoptionBaseline)throw new Error('账号已变化，请重新核对配置。');
-    const {next,current}=preparePreferredConfiguration(account.account,configuration);
-    const name = characterLoadoutName(current, account.account, loadouts.effectiveStats(account.account.id, current.id, current.name), data.value?.catalog.sets ?? []);
-    loadouts.adoptPreferred(account.account, current, name, configuration.presetId, () => account.commitEdit(next));
-    pendingPreferred.value=undefined;emit('adopted');
-  }catch(cause){error.value=cause instanceof Error?cause.message:'未更改首选。';pendingPreferred.value=undefined;}
-}
 onMounted(async()=>{try{data.value=await loadAccountGameData();}catch{error.value='套装目录加载失败，请重新打开。';}});
 const listRoot=ref<HTMLElement>();
 const views=useLibraryViewStore();
@@ -140,10 +125,27 @@ function open(configuration:AccountConfiguration){if(!(props.selectable && props
 const menu=ref<{configuration:AccountConfiguration;x:number;y:number}>();
 function openMenu(event:MouseEvent,configuration:AccountConfiguration){if(!props.selectionOnly)menu.value={configuration,x:event.clientX,y:event.clientY};}
 function menuKey(event:KeyboardEvent,configuration:AccountConfiguration){if(!props.selectionOnly && (event.key==='ContextMenu' || event.shiftKey && event.key==='F10')){event.preventDefault();const box=(event.currentTarget as HTMLElement).getBoundingClientRect();menu.value={configuration,x:box.left+12,y:box.top+12};}}
-function menuAction(id:string){const configuration=menu.value?.configuration;menu.value=undefined;if(!configuration)return;if(id==='details')open(configuration);else requestDelete(configuration);}
+function menuAction(id: string) {
+  const configuration = menu.value?.configuration;
+  menu.value = undefined;
+  if (!configuration) return;
+  if (id === 'details') emit('select', configuration.character.id, configuration.presetId);
+  if (id === 'delete') requestDelete(configuration);
+  if (id === 'prefer' && configuration.presetId) {
+    if (props.selectable) emit('prefer', configuration.presetId);
+    else {
+      try {
+        account.setPreferredConfiguration(configuration.character.id, configuration.presetId, data.value?.catalog.sets ?? []);
+        error.value = '';
+      } catch (cause) {
+        error.value = cause instanceof Error ? cause.message : '设置首选配置失败。';
+      }
+    }
+  }
+}
 const deleting=ref<AccountConfiguration>(),deletePlan=ref<ReturnType<typeof planConfigurationRemoval>>();let deleteBaseline='';let deleteFocus:HTMLButtonElement|undefined;
 function cancelDelete(){deleting.value=undefined;nextTick(()=>{if(deleteFocus?.isConnected)deleteFocus.focus();});}
-function requestDelete(configuration:AccountConfiguration){const action=()=>{try{deleteFocus=Array.from(listRoot.value?.querySelectorAll<HTMLElement>('.configuration-row') ?? []).find(row=>row.dataset.configurationId===configuration.id)?.querySelector<HTMLButtonElement>('.configuration-open') ?? undefined;deletePlan.value=planConfigurationRemoval(account.account,loadouts.loadouts,configuration.character.id,configuration.presetId);deleteBaseline=JSON.stringify([account.account,loadouts.loadouts]);deleting.value=configuration;error.value='';}catch(cause){error.value=cause instanceof Error?cause.message:'配置无法清除。';}};if(props.beforeAdopt)props.beforeAdopt(action);else action();}
+function requestDelete(configuration:AccountConfiguration){const action=()=>{try{deleteFocus=Array.from(listRoot.value?.querySelectorAll<HTMLElement>('.configuration-row') ?? []).find(row=>row.dataset.configurationId===configuration.id)?.querySelector<HTMLButtonElement>('.configuration-open') ?? undefined;deletePlan.value=planConfigurationRemoval(account.account,loadouts.loadouts,configuration.character.id,configuration.presetId);deleteBaseline=JSON.stringify([account.account,loadouts.loadouts]);deleting.value=configuration;error.value='';}catch(cause){error.value=cause instanceof Error?cause.message:'配置无法清除。';}};if(props.beforeDelete)props.beforeDelete(action);else action();}
 function confirmDelete(){const configuration=deleting.value;if(!configuration)return;try{if(JSON.stringify([account.account,loadouts.loadouts])!==deleteBaseline)throw new Error('资料已变化，请重新确认清除。');const plan=planConfigurationRemoval(account.account,loadouts.loadouts,configuration.character.id,configuration.presetId);loadouts.removeConfigurations(account.account.id,configuration.character.id,configuration.presetId,plan,()=>{if(plan.accountChanged)account.commitEdit(plan.next);});deleting.value=undefined;emit('deleted',configuration.character.id,configuration.presetId);nextTick(()=>listRoot.value?.querySelector<HTMLInputElement>('[aria-label="搜索角色配置"]')?.focus());}catch(cause){error.value=cause instanceof Error?cause.message:'清除失败，原配置保持不变。';deleting.value=undefined;}}
 </script>
 <template>
@@ -167,7 +169,7 @@ function confirmDelete(){const configuration=deleting.value;if(!configuration)re
     <div v-if="visible.length" ref="grid" class="configuration-cards" :class="{compact:density==='compact'}">
       <CharacterConfigurationCard v-for="{ configuration, presentation } in visible" :key="configuration.id"
         :character-name="configuration.character.name" :build="configuration.character.build"
-        :configuration-name="presentation.name" :entries="presentation.entries" :basis="presentation.basis"
+        :configuration-name="presentation.name" :truncate-name="selectable && !selectionOnly" :entries="presentation.entries" :basis="presentation.basis"
         :effective-stats="presentation.stats" :favorite="favoriteLevel(configuration)" :preferred="!configuration.presetId" :compact="density==='compact'"
         :current="selectable && currentPresetId === configuration.presetId"
         :action="selectable ? 'select' : 'detail'"
@@ -175,17 +177,15 @@ function confirmDelete(){const configuration=deleting.value;if(!configuration)re
         :data-preset-id="configuration.presetId" :data-configuration-id="configuration.id"
         @open="open(configuration)" @open-keydown="menuKey($event,configuration)" @contextmenu.prevent="openMenu($event,configuration)">
         <template v-if="selectable && !selectionOnly && configuration.presetId" #actions>
-          <button type="button" class="ui-action soft configuration-prefer" data-size="md"
-            :aria-label="`设${configuration.character.name}此配置为首选`" @click="requestPreferred(configuration)">设为首选</button>
+          <PreferredConfigurationButton :name="configuration.character.name" @keydown="menuKey($event,configuration)" @click="emit('prefer',configuration.presetId)" />
         </template>
       </CharacterConfigurationCard>
     </div>
     <LibraryEmptyState v-else title="还没有本地角色配置" filtered-title="没有匹配的配置" :filtered="!!allConfigurations.length"
       :create-label="selectable ? undefined : '新建角色配置'" @create="emit('create')" @clear="query='';resetFilters()" />
     <LibraryPagination v-model:page="page" :pages="pages" always position="底部" full />
-    <ContextMenu v-if="menu" :x="menu.x" :y="menu.y" label="配置操作" :options="[{id:'details',label:'查看详情'},{id:'delete',label:'删除',danger:true}]" @close="menu=undefined" @select="menuAction" />
+    <ContextMenu v-if="menu" :x="menu.x" :y="menu.y" label="配置操作" :options="[{id:'details',label:'查看详情'},{id:'prefer',label:menu.configuration.presetId?'设为首选':'已是首选',disabled:!menu.configuration.presetId},{id:'delete',label:'删除',danger:true}]" @close="menu=undefined" @select="menuAction" />
     <ConfirmationDialog v-if="deleting" title="清除配置？" confirm-label="确认清除" @cancel="cancelDelete" @confirm="confirmDelete"><p>清除「{{ deleting.character.name }}」的{{ deleting.presetId?'这份备选':'首选' }}配置。</p><p v-if="deletePlan?.promotedId">下一份备选将接替首选。</p><p>圣遗物库存与展柜信息保留。</p></ConfirmationDialog>
-    <ConfirmationDialog v-if="pendingPreferred" title="设为首选配置？" :danger="false" confirm-label="确认设为首选" @cancel="pendingPreferred=undefined" @confirm="confirmPreferred"><p>采用此配置，原首选保留为备选。</p></ConfirmationDialog>
     <WorkbenchDialog v-if="filterOpen" title="筛选角色配置" size="filter" @close="filterOpen=false">
       <FilterPanel>
         <section><h3>配置类型</h3><ChoiceGroup stretch v-model="filter" label="配置类型" :options="[{value:'all',label:'全部'},{value:'preferred',label:'首选'},{value:'alternate',label:'备选'}]" /></section>
@@ -207,7 +207,7 @@ function confirmDelete(){const configuration=deleting.value;if(!configuration)re
 .configuration-role-picker > svg { flex:none; width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.8; }
 .configuration-density { margin-inline-start:auto; }
 .configuration-cards { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; min-width:0; }
-.configuration-cards.compact { gap:10px; align-items:start; }
+.configuration-cards.compact { gap:10px; }
 @container configuration-list (max-width:390px) {
   .configuration-role-picker { max-width:112px; }
   .configuration-density :deep(svg) { display:none; }
@@ -215,5 +215,4 @@ function confirmDelete(){const configuration=deleting.value;if(!configuration)re
 @container configuration-list (min-width:640px) {
   .configuration-cards.compact { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
-.configuration-prefer { position:relative; z-index:2; font-size:var(--font-control); font-weight:700; }
 </style>

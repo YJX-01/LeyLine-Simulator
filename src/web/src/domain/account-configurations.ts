@@ -29,15 +29,15 @@ export function preparePreferredConfiguration(account:LocalAccount,configuration
   if(!configuration.presetId || configuration.source.id!==account.id)throw new Error('请选择当前账号的备选配置。');
   const current=account.characters.find(item=>item.id===configuration.character.id);
   if(!current)throw new Error('角色已不存在，请重新打开。');
-  const next=cloneAccount(account),snapshot=JSON.parse(JSON.stringify(configuration.character)) as AccountCharacter;
+  // Only the target character and newly introduced local pieces change. parseAccount detaches the result.
+  const snapshot = { ...configuration.character, equipment: {}, showcase: current.showcase };
+  const next = { ...account, characters: account.characters.map(item => item.id === current.id ? snapshot : item), artifacts: [...account.artifacts] };
   for(const item of configuration.source.artifacts) {
     const physical=next.artifacts.find(candidate=>candidate.id===item.id);
     if(!physical && item.inventoryId===null)next.artifacts.push(item);
     else if(!physical || physical.inventoryId!==item.inventoryId || artifactValueSignature(physical)!==artifactValueSignature(item))throw new Error('方案实物已缺失或词条已变化，请核对库存。');
   }
-  const equipment={...snapshot.equipment};snapshot.equipment={};snapshot.showcase=current.showcase;
-  next.characters[next.characters.findIndex(item=>item.id===snapshot.id)]=snapshot;
-  for(const id of Object.values(equipment))if(id) equipArtifact(next,snapshot.id,id);
+  for (const id of Object.values(configuration.character.equipment)) if (id) equipArtifact(next, snapshot.id, id);
   return {next:parseAccount(next),current};
 }
 

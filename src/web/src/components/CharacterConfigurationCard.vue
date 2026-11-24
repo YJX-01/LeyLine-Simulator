@@ -15,6 +15,7 @@ import WeaponPlaceholder from './WeaponPlaceholder.vue';
 const props = withDefaults(defineProps<{
   characterName: string;
   configurationName?: string;
+  truncateName?: boolean;
   build?: Build;
   entries: { slot: AccountSlot; item?: AccountArtifact }[];
   basis: EffectiveRollBasis;
@@ -32,10 +33,10 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
 </script>
 
 <template>
-  <article class="configuration-row" :data-card-action="openLabel ? action : undefined" :class="{ current, compact }">
+  <article class="configuration-row" :data-card-action="openLabel ? action : undefined" :data-current="current || undefined" :class="{ compact }">
     <div class="configuration-top">
       <div class="configuration-heading">
-        <ConfigurationTitle :character-name="characterName" :name="configurationName" :preferred="preferred" :current="current" />
+        <ConfigurationTitle :character-name="characterName" :name="configurationName" :truncate-name="truncateName" :preferred="preferred" />
         <template v-if="!compact">
           <span v-if="build" class="configuration-cultivation">
             <span>{{ build.level }}级</span><span>{{ build.constellation }}命</span>
@@ -45,8 +46,8 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
           <span v-else class="configuration-cultivation">培养资料缺失，未配置武器</span>
         </template>
       </div>
-      <slot name="actions" />
       <span v-if="favorite" class="configuration-favorite" role="img" :aria-label="`${favorite}级收藏`" :title="`${favorite}级收藏`"><FavoriteMark :level="favorite" /></span>
+      <slot name="actions" />
     </div>
     <div class="configuration-body">
       <component v-if="compact" :is="replaceLabel ? 'button' : 'div'" class="configuration-portraits"
@@ -72,18 +73,17 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
       </EquipmentStrip>
       <EffectiveRollSummary inline :stacked="compact" :basis="basis" :items="items" :selected-stats="effectiveStats" />
     </div>
-    <button v-if="openLabel" type="button" class="configuration-open card-detail-target" :aria-label="openLabel" :disabled="current"
-      @click="emit('open')" @keydown="emit('openKeydown', $event)"></button>
+    <button v-if="openLabel" type="button" class="configuration-open card-detail-target" :aria-label="openLabel" :title="truncateName ? configurationName : undefined" :aria-current="current || undefined" :aria-disabled="current || undefined"
+      @click="!current && emit('open')" @keydown="emit('openKeydown', $event)"></button>
   </article>
 </template>
 
 <style scoped>
 .configuration-row {
-  position:relative; display:grid; gap:12px; min-width:0; padding:16px;
-  border:1px solid var(--line); border-top:3px solid var(--line); border-radius:10px; background:var(--surface);
+  position:relative; display:grid; grid-template-columns:minmax(0,1fr); gap:12px; min-width:0; padding:16px;
+  border:1px solid var(--line); border-top:3px solid var(--card-rest-edge, var(--line)); border-radius:10px; background:var(--surface);
 }
-.configuration-row.current { border-color:var(--element-hydro-primary); }
-.configuration-top { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
+.configuration-top { display:flex; flex-wrap:wrap; align-items:center; gap:12px; min-height:var(--control-height-sm); }
 .configuration-heading { display:flex; align-items:baseline; flex-wrap:wrap; flex:1; min-width:0; gap:8px 12px; }
 .configuration-favorite { flex:none; align-self:flex-start; margin-inline-start:auto; }
 .configuration-cultivation { display:flex; flex-wrap:wrap; gap:4px 12px; color:var(--muted); font-size:var(--font-body); }
@@ -96,6 +96,6 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
 }
 .configuration-portraits.replace-portrait:enabled:hover > :deep(.card-replace-layer) { visibility:visible; }
 .compact .effective-roll-summary { flex:1 1 232px; min-width:0; }
-.configuration-open:disabled { opacity:1; }
+.configuration-open[aria-current="true"]:focus-visible { outline:2px solid var(--element-anemo-deep); outline-offset:-4px; }
 @media(max-width:600px) { .configuration-top { align-items:start; }.configuration-row { padding:12px; } }
 </style>
