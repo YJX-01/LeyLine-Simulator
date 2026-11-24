@@ -1153,5 +1153,12 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "calculator": {
+    "buffs": {
+      "rosaria.swift-stride": {
+        "scope": "exploration"
+      }
+    }
+  }
 }

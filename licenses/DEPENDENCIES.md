@@ -1,6 +1,6 @@
 # 依赖与许可证清单
 
-由 `pnpm licenses:capture` 从实际依赖树、package.json 和原始许可文本生成。生产依赖闭包与实际入包模块分别记录，构建产物提供 `bundled-packages.json`。
+由 `node tools/scripts/licenses/third-party-notices.mjs --capture` 从实际依赖树、package.json 和原始许可文本生成。生产依赖闭包与实际入包模块分别记录，构建产物提供 `bundled-packages.json`。
 
 共 196 个名称/版本组合，12 个直接依赖。
 

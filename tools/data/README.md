@@ -135,7 +135,7 @@ KQM 反应等级曲线收录1至100级，0级为 null。与固定 Mona 社区1�
 
 addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩家生成模板，不能扩大正式rarityList。已采用KQM的初始条目与每四级强化语义；合法部位来自匹配固定genshin-db提交的实际piece字段，不依据效果件数或图标猜测。旧LunaGC缺heartofthefurnace、scarletproof掉落配置，不以旧模板证明新套装掉落规则。
 
-候选工具为 `node tools/scripts/data/prepare-artifact-rarity.mjs --out=artifacts/content-candidates/<新目录>`，输出analysis.json；首份审阅位置为 artifacts/content-candidates/artifact-rarity-2026-11-13。普通生成使用已采用输入。
+首份调查记录位于 artifacts/content-candidates/artifact-rarity-2026-11-13/analysis.json。普通生成使用已采用输入。
 
 #### 直接消费者
 
@@ -162,7 +162,7 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 ### 计算支持与内容绑定
 
-`pnpm data:coverage --report artifacts/round-after.json --gaps artifacts/round-after.md` 遍历正式角色、武器、套装的伤害菜单、解锁门槛、受益对象和条件控件。JSON 的 `calculator` 保存逐项入口，`evaluatedHits` 保存实际值、独立期望、关闭增益后的基础对照和排除情形。各专项的 `rows` 保存具体设定与结果，`verified` 按实体和字段记录已经核验的条款。武器、套装、场景与共鸣使用各自的来源表。运行 `--check --require-complete` 另外检查完整机制与证据缺口。
+`node tools/scripts/data/audit-calculation-coverage.mjs --report artifacts/round-after.json --gaps artifacts/round-after.md` 遍历正式角色、武器、套装的伤害菜单、解锁门槛、受益对象和条件控件。JSON 的 `calculator` 保存逐项入口，`evaluatedHits` 保存实际值、独立期望、关闭增益后的基础对照和排除情形。各专项的 `rows` 保存具体设定与结果，`verified` 按实体和字段记录已经核验的条款。武器、套装、场景与共鸣使用各自的来源表。运行 `--check --require-complete` 另外检查完整机制与证据缺口。
 
 `currentClauseInventory` 按原文字段和修饰项记录证据，`currentSceneGaps` 列出仍影响当次数值的场景字段。`--require-current` 在计算器专项仍有缺项时返回非零退出码。惊蛰的范围增加 100%，匠理等场地满五层增加 0.3 抗打断参数。传播到哪些目标及最终是否中断仍需位置和受击记录。哥伦比娅的复苏以受益者生命上限为基数，每级好感取 10%。[场地条款](sources/catalog/battle-scenes.json) · [月的守望复苏配置](sources/catalog/columbina-revival.json)
 
@@ -180,9 +180,9 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 数值审计核对 TS 固定算法和 JSON 参数。防御与抗性常数采用 KQM 公式事实，增幅与激化采用 reaction-facts，模板常数通过 `describeCalculationTemplate` 核对。[KQM 公式事实](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/calculation-formula-facts.json)
 
-`pnpm data:coverage --json` 编译正式目录的依赖闭包，按输出列出证书命座范围、来源和缺口。完整命座、角色和装备分支分别判断，外部 `declared` 证据仍待本地采用，未闭合条目标记 `unavailable`。报告同时包含命中绑定和效果，`--require-complete` 用于全目录验收。[内容包说明](../../src/game-data/README.md)
+`node tools/scripts/data/audit-calculation-coverage.mjs --json` 编译正式目录的依赖闭包，按输出列出证书命座范围、来源和缺口。完整命座、角色和装备分支分别判断，外部 `declared` 证据仍待本地采用，未闭合条目标记 `unavailable`。报告同时包含命中绑定和效果，`--require-complete` 用于全目录验收。[内容包说明](../../src/game-data/README.md)
 
-逐项报告可用 `pnpm data:coverage --report artifacts/roster-calculation-acceptance.json --gaps artifacts/roster-calculation-gaps.md --check --require-complete` 生成。每个命中保留本地倍率的独立算式期望和引擎结果。有非零增益的命中另存关闭增益后的对照。祝赐覆盖持有者属性、受益队员、伤害族以及封顶前后，共鸣覆盖队伍人数、触发对象和到期。场景与装备分别记录持续时间和合法精炼或件数门槛的结果。角斗士与乐团按五类武器测试，冰风按命中前的附冰或冻结判定，深林按命中的敌人和八秒有效期判定。千岩四件核对战技命中护盾时的零伤害、后台触发及两名持有者刷新同一增益。花海四件按持有者实际受伤逐层计时。守护之心按队伍元素去重并区分四元素共鸣自身的抗性。[战斗条款](sources/catalog/combat-lifecycle.json)
+逐项报告可用 `node tools/scripts/data/audit-calculation-coverage.mjs --report artifacts/roster-calculation-acceptance.json --gaps artifacts/roster-calculation-gaps.md --check --require-complete` 生成。每个命中保留本地倍率的独立算式期望和引擎结果。有非零增益的命中另存关闭增益后的对照。祝赐覆盖持有者属性、受益队员、伤害族以及封顶前后，共鸣覆盖队伍人数、触发对象和到期。场景与装备分别记录持续时间和合法精炼或件数门槛的结果。角斗士与乐团按五类武器测试，冰风按命中前的附冰或冻结判定，深林按命中的敌人和八秒有效期判定。千岩四件核对战技命中护盾时的零伤害、后台触发及两名持有者刷新同一增益。花海四件按持有者实际受伤逐层计时。守护之心按队伍元素去重并区分四元素共鸣自身的抗性。[战斗条款](sources/catalog/combat-lifecycle.json)
 
 菲林斯在 90 级零命、十级爆发、一级精一新手长枪、无圣遗物和敌方 10% 雷抗的条件下，攻击力为 374.8372196，固有天赋按攻击力的 8% 提供 29.986977568 元素精通。满辉且附近有雷暴云时，计入满辉的 20% 月感电增伤后，两段非暴击对照值约为 1677.438474、2439.910509。再计入月兆祝赐每 100 攻击力增加的 0.7% 月感电基础伤害，两段分别约为 1721.452121、2503.930358。关闭附近雷暴云条件仅排除额外一击。
 

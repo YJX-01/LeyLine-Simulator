@@ -9,7 +9,7 @@ export async function auditCalculatorEntries(entities, results) {
   const { calculatorBuffChoices } = await loadContentSchema('/src/web/src/domain/calculator-buffs.ts');
   const { createEmptyProject } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
   const { addActorFromBuild } = await loadContentSchema('/src/web/src/domain/real-project.ts');
-  const { findBuildHit } = await loadContentSchema();
+  const { findBuildHit, isCalculatorCombatModifier } = await loadContentSchema();
   const hits = [], equipmentHits = [], buffs = [], clauses = [], failures = [];
   const readings = new Map(results.evaluatedHits.map(row => [row.entity + '/' + row.hit, row]));
   const equipmentChecks = [...results.currentEquipment.rows, ...results.additionalEquipment.rows, ...results.remainingEquipment.rows, ...results.triggeredStrikes.rows];
@@ -84,6 +84,8 @@ export async function auditCalculatorEntries(entities, results) {
           continue;
         }
         for (const [i, modifier] of buff.modifiers.entries()) {
+          const card = metadata.calculator?.buffs?.[buff.id];
+          if (!isCalculatorCombatModifier(modifier.target, card)) continue;
           const role = modifier.recipient ?? buff.recipient ?? 'owner';
           const allowed = metadata.kind === 'character-definition' ? [entity] : entities.characters;
           const supplier = allowed.find(c => (metadata.kind === 'character-definition' || c.talents.some(talent => talent.category === 'skill') && c.talents.some(talent => talent.category === 'burst'))

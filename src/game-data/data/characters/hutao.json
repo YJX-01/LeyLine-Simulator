@@ -1391,5 +1391,15 @@
       },
       "label": "进入彼岸蝶舞时的生命值上限"
     }
+  },
+  "calculator": {
+    "hits": {
+      "hutao.normal.param8": {
+        "alias": "重击"
+      },
+      "hutao.burst.param2": {
+        "alias": "半血大招"
+      }
+    }
   }
 }

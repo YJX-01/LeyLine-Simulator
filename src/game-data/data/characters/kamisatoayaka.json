@@ -980,5 +980,12 @@
       },
       "label": "薄冰舞踏尚未消耗或重击命中后未超过半秒"
     }
+  },
+  "calculator": {
+    "hits": {
+      "kamisatoayaka.burst.param1": {
+        "alias": "大招切割"
+      }
+    }
   }
 }

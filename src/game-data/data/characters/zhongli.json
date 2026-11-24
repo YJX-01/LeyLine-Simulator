@@ -1225,5 +1225,12 @@
       },
       "label": "本次玉璋护盾触发回复所采用的伤害量"
     }
+  },
+  "calculator": {
+    "buffs": {
+      "zhongli.shield-absorption": {
+        "alias": "玉璋护盾"
+      }
+    }
   }
 }

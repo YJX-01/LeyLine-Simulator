@@ -13,18 +13,18 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm data:build
       - run: pnpm data:check
-      - run: pnpm docs:check
+      - run: node tools/scripts/checks/check-docs.mjs
       - run: pnpm architecture:check
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm test:content
       - run: pnpm build
       - run: pnpm build:check
-      - run: pnpm perf:engine
+      - run: node tests/performance/timeline.mjs
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:e2e
-      - run: pnpm build:subpath
-      - run: pnpm test:production
+      - run: pnpm data:build && pnpm --filter @leyline/web build --base=/leyline/ --outDir=dist-subpath
+      - run: pnpm exec playwright test --config playwright.production.config.ts
       - uses: actions/upload-artifact@v4
         if: always()
         with:

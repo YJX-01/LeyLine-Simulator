@@ -30,7 +30,7 @@ Use `CharacterMetadata` for built-in and custom characters. Preserve IDs, units,
 
 Run `pnpm test` for Vitest (`tests/unit/**/*.test.ts` and TypeScript integration tests). Run `pnpm test:content` for Node integration checks. Derive mechanics expectations independently from traceable sources. Use authorized recordings and skip dependent checks when originals are missing. [Evidence standard](docs/evidence-and-validation.md)
 
-For browser or Worker changes, build resources and run relevant Playwright `*.spec.ts` cases. Use `pnpm test:ui` for inventory and `pnpm test:desktop` for packaged desktop changes. Run browser and desktop acceptance serially with one worker. [Test commands](tests/README.md)
+For browser or Worker changes, build resources and run relevant Playwright `*.spec.ts` cases. Use `pnpm exec playwright test tests/browser/development/inventory.spec.ts --project=chromium --workers=1` for inventory and `node tests/desktop/workspace.mjs` for packaged desktop changes. Run browser and desktop acceptance serially with one worker. [Test commands](tests/README.md)
 
 ## UI and storage
 

@@ -1,4 +1,4 @@
-import { expect, test as base } from '@playwright/test';
+import { expect, test as base, type Locator } from '@playwright/test';
 
 /** Check the live calculator throughout each scenario, including dialogs that close before the final assertion. */
 export const test = base.extend({
@@ -42,3 +42,13 @@ export const test = base.extend({
     expect([...violations], '伤害计算界面约定').toEqual([]);
   },
 });
+
+export async function revealDamageCard(card: Locator) {
+  const toggle = card.locator('xpath=ancestor::section[1]').getByRole('heading').getByRole('button');
+  if (await toggle.getAttribute('aria-expanded') === 'false') await toggle.click();
+  return card;
+}
+
+export async function chooseDamageCard(card: Locator) {
+  await (await revealDamageCard(card)).click();
+}

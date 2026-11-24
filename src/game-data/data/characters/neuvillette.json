@@ -1215,5 +1215,17 @@
       },
       "label": "正在进行重击蓄力·诉论心证或重击·衡平推裁"
     }
+  },
+  "calculator": {
+    "hits": {
+      "neuvillette.normal.param5": {
+        "alias": "水柱"
+      }
+    },
+    "buffs": {
+      "neuvillette.underwater-sprint-speed": {
+        "scope": "exploration"
+      }
+    }
   }
 }

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import type { CombatConditions, DamageRequest, FactSubject, Value } from '@leyline/schema';
-import { calculatorBuffChecked, calculatorLayerSeconds, enableCalculatorBuff, resolveBuffSelection, type CalculatorBuff } from '../domain/calculator-buffs';
+import { buffDisplayName, calculatorBuffChecked, calculatorLayerSeconds, enableCalculatorBuff, resolveBuffSelection, type CalculatorBuff } from '../domain/calculator-buffs';
 import { calculatorFactPreset, hpMatches, setCalculatorFact, calculatorFactValue, withCurrentConditions, type CalculatorFactSetting, type CalculatorFactField } from '../domain/calculator-conditions';
+import CalculatorChoiceCard from './CalculatorChoiceCard.vue';
 import GameIcon from './GameIcon.vue';
 import LibraryToolbar from './LibraryToolbar.vue';
 import WorkbenchDialog from './WorkbenchDialog.vue';
@@ -18,7 +19,12 @@ const times = ref(new Map<string, string[]>());
 const draft = ref<DamageRequest>(JSON.parse(JSON.stringify(props.damage)));
 const current = computed(() => withCurrentConditions(draft.value, props.intervals, props.actorId));
 const query = ref('');
-const visible = computed(() => props.choices.filter(item => [item.name,item.description,item.source].some(text => text.includes(query.value.trim()))));
+const visible = computed(() => {
+  const term = query.value.trim().toLowerCase();
+  // Use applied state so checking an item never moves it away from its inputs.
+  return props.choices.filter(item => [buffDisplayName(item), item.code, item.intro, item.description, item.note, item.source].some(text => text?.toLowerCase().includes(term)))
+    .sort((a, b) => Number(b.checked) - Number(a.checked) || Number(!!b.relevant) - Number(!!a.relevant));
+});
 const enumLabels: Record<string, string> = { none: '无', left: '左手', right: '右手', 'stellar-conduct': '星超导', 'stellar-swirl': '星扩散',
   burning: '燃烧', burgeon: '烈绽放', other: '其他',
   'world-or-room': '大世界或普通室内', domain: '秘境', 'trounce-domain': '征讨领域', 'spiral-abyss': '深境螺旋', 'other-scene': '其他场景',
@@ -86,16 +92,18 @@ function apply() {
 <template>
   <WorkbenchDialog title="选择增益" center-title sticky-footer @close="emit('close')">
     <div class="buff-picker">
-      <LibraryToolbar v-model="query" search-only label="搜索增益" placeholder="搜索增益或来源…" />
+      <LibraryToolbar v-model="query" search-only label="搜索增益" placeholder="搜索增益名称、别名或来源…" />
       <div v-if="cards.length" class="buff-options">
         <div v-for="{ id, item, fields: inputs } in cards" :key="id" class="buff-entry" data-card-action="select" :class="{ chosen: item && checked(item) }">
           <label v-if="item" class="card-action-trigger">
-            <GameIcon :kind="item.icon.kind" :id="item.icon.id" :monochrome="item.icon.kind === 'constellations'" :size="44" />
-            <span><strong>{{ item.name }}</strong><small>{{ item.source }} / {{ item.description }}</small>
+            <CalculatorChoiceCard :name="item.name" :alias="item.alias" :code="item.code" :source="item.source"
+              :note="[item.intro, item.note].filter(Boolean).join(' ')" :value="item.description">
+              <template #icon><GameIcon :kind="item.icon.kind" :id="item.icon.id" :monochrome="item.icon.kind === 'constellations'" :size="42"><template #fallback><GameIcon kind="stats" id="elementalMastery" :size="32" /></template></GameIcon></template>
               <small v-if="item.stacks && !checked(item)">勾选取满层 {{ item.stacks.max }}</small>
               <small v-if="item.hp">生命比例 {{ { gt:'>', gte:'≥', lt:'<', lte:'≤', eq:'=' }[item.hp.relation] }} {{ item.hp.threshold * 100 }}%<template v-if="!hpMatches(item.hp, calculatorFactValue(current, 'hpRatio', item.ownerId))">，勾选取 {{ item.hp.preset * 100 }}%</template></small>
-              <small v-if="item.triggerSkill && !times.get(item.id)?.some(Boolean)">在命中时刻 {{ time }} 秒施放</small></span>
-            <input type="checkbox" :aria-label="item.source + ' / ' + item.name + ' / ' + item.description" :checked="checked(item)"
+              <small v-if="item.triggerSkill && !times.get(item.id)?.some(Boolean)">在命中时刻 {{ time }} 秒施放</small>
+            </CalculatorChoiceCard>
+            <input type="checkbox" :aria-label="[item.source, buffDisplayName(item), item.description, item.note].filter(Boolean).join(' / ')" :checked="checked(item)"
               @change="toggle(item,($event.target as HTMLInputElement).checked)">
           </label>
           <h3 v-else>本击条件</h3>
@@ -130,17 +138,16 @@ function apply() {
 </template>
 <style scoped>
 .buff-picker { display:grid; gap:16px; }
-.buff-options { display:grid; gap:12px; }
-.buff-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr)); gap:10px; padding:0 12px 12px; }
+.buff-options { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr)); align-items:start; gap:12px; }
+.buff-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr)); gap:10px; border-top:1px solid var(--line); padding:10px 12px 12px; }
 .buff-fields label { display:grid; align-content:start; gap:4px; }
 .buff-fields :is(input, select) { width:100%; min-width:0; }
-.buff-entry { display:grid; align-content:start; }
+.buff-entry { display:grid; align-content:start; min-width:0; font-size:16px; background:var(--surface-raised); }
 .buff-entry.chosen { background:var(--element-hydro-light); }
-.buff-entry .card-action-trigger { display:grid; grid-template-columns:44px 1fr auto; align-items:center; gap:10px; padding:10px 12px; cursor:pointer; }
-.buff-entry strong,.buff-entry small { display:block; overflow-wrap:anywhere; }
-.buff-entry small { font-size:var(--font-body); color:var(--muted); line-height:1.5; font-weight:400; }
+.buff-entry .card-action-trigger { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:start; gap:10px; padding:12px; cursor:pointer; line-height:1.45; overflow-wrap:anywhere; }
+.buff-entry small { display:block; font-size:var(--font-body); color:var(--muted); line-height:1.5; font-weight:400; }
 .buff-entry input[type=checkbox] { width:18px; height:18px; min-height:0; accent-color:var(--element-hydro-deep); }
-.layer-times { display:grid; gap:6px; padding:0 12px 10px; }
+.layer-times { display:grid; gap:6px; border-top:1px solid var(--line); padding:10px 12px; }
 .layer-times label { display:grid; align-items:center; gap:8px; grid-template-columns:1fr minmax(76px,100px); padding:0; }
 .buff-entry button { justify-self:end; margin:0 12px 10px; }.buff-fields label { min-width:0; }
 h3 { margin:12px; font-size:var(--font-control); }.buff-actions { display:flex; justify-content:flex-end; }

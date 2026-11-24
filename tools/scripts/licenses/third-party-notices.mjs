@@ -106,7 +106,7 @@ if (process.argv.includes('--capture')) {
   await mkdir(canonical, { recursive:true });
   await writeFile(resolve(canonical, 'dependencies.json'), JSON.stringify(inventory, null, 2) + '\n');
   await writeFile(resolve(canonical, 'npm-LICENSES.txt'), blocks.join(''));
-  const table = ['# 依赖与许可证清单', '', '由 `pnpm licenses:capture` 从实际依赖树、package.json 和原始许可文本生成。生产依赖闭包与实际入包模块分别记录，构建产物提供 `bundled-packages.json`。', '', `共 ${records.length} 个名称/版本组合，${inventory.summary.directPackages} 个直接依赖。`, '', '| 包 / 版本 | 声明协议 | 使用情况 | 原始许可文本 |', '| --- | --- | --- | --- |'];
+  const table = ['# 依赖与许可证清单', '', '由 `node tools/scripts/licenses/third-party-notices.mjs --capture` 从实际依赖树、package.json 和原始许可文本生成。生产依赖闭包与实际入包模块分别记录，构建产物提供 `bundled-packages.json`。', '', `共 ${records.length} 个名称/版本组合，${inventory.summary.directPackages} 个直接依赖。`, '', '| 包 / 版本 | 声明协议 | 使用情况 | 原始许可文本 |', '| --- | --- | --- | --- |'];
   for (const item of records) table.push(`| ${item.id} | ${item.license} | ${item.desktopRuntime ? '桌面运行时' : item.direct.length && item.direct.every(usage => usage.group === 'devDependencies') ? '构建 / 测试工具' : item.productionDependencyClosure ? '生产依赖闭包' : '构建 / 测试 / 可选平台工具'}${item.direct.length ? '；直接声明' : '；间接依赖'}${item.modified.length ? '；有本地补丁' : ''} | ${item.noticeStatus === 'declaration-only' ? '仅包声明 / README，原文缺口' : `[许可与声明](npm-LICENSES.txt)${item.noticeSource ? '（同版本上游家族）' : ''}`} |`);
   await writeFile(resolve(canonical, 'DEPENDENCIES.md'), table.join('\n') + '\n');
   for (const [file, key] of [['sources.json', 'sources'], ['tooling.json', 'pythonTools']]) {
@@ -117,7 +117,7 @@ if (process.argv.includes('--capture')) {
 }
 
 const inventory = await json(resolve(canonical, 'dependencies.json'));
-if (JSON.stringify(inventory.inputs) !== JSON.stringify(await fingerprint())) throw new Error('Third-party inventory is stale; run pnpm licenses:capture.');
+if (JSON.stringify(inventory.inputs) !== JSON.stringify(await fingerprint())) throw new Error('Third-party inventory is stale; run node tools/scripts/licenses/third-party-notices.mjs --capture.');
 for (const [file, expected] of Object.entries(inventory.archives)) if (hash(await readFile(resolve(canonical, file))) !== expected) throw new Error(`License archive checksum mismatch: ${file}`);
 const legalFiles = ['THIRD_PARTY_NOTICES.md', 'CREDITS.md'];
 const sources = await json(resolve(canonical, 'sources.json'));

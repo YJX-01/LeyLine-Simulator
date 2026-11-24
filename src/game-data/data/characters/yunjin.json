@@ -1349,5 +1349,12 @@
       },
       "label": "云堇正在长按战技蓄力格挡"
     }
+  },
+  "calculator": {
+    "buffs": {
+      "yunjin.flying-cloud-base.base": {
+        "alias": "飞云旗阵"
+      }
+    }
   }
 }

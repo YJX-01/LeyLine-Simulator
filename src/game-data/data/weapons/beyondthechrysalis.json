@@ -365,5 +365,15 @@
       }
     }
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "calculator": {
+    "buffs": {
+      "beyondthechrysalis.loyalWind": {
+        "alias": "忠忱之风"
+      },
+      "beyondthechrysalis.betrayalWind": {
+        "alias": "叛弃之风"
+      }
+    }
+  }
 }

@@ -1239,5 +1239,12 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "calculator": {
+    "hits": {
+      "yelan.burst.param2": {
+        "alias": "骰子协同"
+      }
+    }
+  }
 }

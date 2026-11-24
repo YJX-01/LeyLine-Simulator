@@ -1,6 +1,6 @@
 import { definitionKey, type CalculationTraceNode, type DamageRequest, type DamageResult, type EvaluatedValue } from '@leyline/schema';
 import { realStatLabel } from './workbench-labels';
-import { buffTargetLabel, type CalculatorBuff } from './calculator-buffs';
+import { buffDisplayName, buffTargetLabel, type CalculatorBuff } from './calculator-buffs';
 
 export const damageNumber = (value?: number | null) => value == null || !Number.isFinite(value) ? '—' : value.toLocaleString('zh-CN', { maximumFractionDigits: 6 });
 /** Current-format files can carry support notes written by earlier catalog revisions. */
@@ -17,7 +17,8 @@ export interface CalculatorFactor { fullWidth?: boolean; label: string; value: n
 function buffRow(source: CalculatorBuff | undefined, modifierId: string, value: number | null, unit?: string): Row | undefined {
   const modifier = source?.modifiers.find(entry => entry.id === modifierId);
   if (!source || !modifier) return;
-  const name = (source.source === source.name ? source.name : source.source + ' / ' + source.name) + ' · ' + buffTargetLabel(modifier.target);
+  const label = buffDisplayName(source);
+  const name = (source.source === label ? label : source.source + ' / ' + label) + ' · ' + buffTargetLabel(modifier.target);
   const target = modifier.target.replace(/^attribute\./, '');
   const isMultiplier = target.endsWith('baseMultiplier') || target.endsWith('elevationFactor')
     || target === 'lohenWillGainMultiplier' || target === 'incomingPoiseDamageMultiplier';

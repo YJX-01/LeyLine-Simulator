@@ -8,15 +8,15 @@
 | `pnpm exec vitest run tests/unit/web/domain/calculator-catalog-defaults.test.ts` | 遍历正式目录的命中与增益，检查默认值、命座限制和计算页文案 |
 | `pnpm test:content` | Node 内容、目录及文件工具检查 |
 | `node --test tests/integration/single-hit-modifier-matrix.test.mjs` | 离线核验五类直伤与套装、武器、队友增益的交叉组合，以及生命阈值和层数边界 |
-| `pnpm test:ui` | Chromium 真实库存流程 |
-| `pnpm test:ui:contracts` | Chromium 真实样式、焦点与窄屏 |
+| `pnpm exec playwright test tests/browser/development/inventory.spec.ts --project=chromium --workers=1` | Chromium 真实库存流程 |
+| `pnpm exec playwright test tests/browser/development/ui-contracts.spec.ts --project=chromium --workers=1` | Chromium 真实样式、焦点与窄屏 |
 | `pnpm test:e2e` | 完整 Chromium 开发回归 |
 | `pnpm exec playwright test tests/browser/development/roster-replay.spec.ts --project=chromium --workers=1` | 把正式目录的角色命中、武器精炼档、套装件数门槛和场景通过计算器文件与时间轴文件分别保存、重开并交给 Worker 求值 |
-| `pnpm test:production` | 根路径和子路径的 Chromium 生产检查 |
-| `pnpm test:desktop` | 独立用户目录下的桌面库存和原生文件往返 |
-| `pnpm perf:engine`、`pnpm perf:ui` | 可独立运行的[性能测量](performance/README.md) |
+| `pnpm exec playwright test --config playwright.production.config.ts` | 根路径和子路径的 Chromium 生产检查 |
+| `node tests/desktop/workspace.mjs` | 独立用户目录下的桌面库存和原生文件往返 |
+| `node tests/performance/timeline.mjs`、`pnpm exec playwright test --config playwright.performance.config.ts` | 可独立运行的[性能测量](performance/README.md) |
 
-桌面验收可通过 `pnpm test:desktop --recorded` 重放已保存的展柜响应。原始响应经桌面 IPC 和导入确认流程处理。
+桌面验收可通过 `node tests/desktop/workspace.mjs --recorded` 重放已保存的展柜响应。原始响应经桌面 IPC 和导入确认流程处理。
 
 浏览器与桌面串行、单工作线程执行。开发浏览器检查前先运行 `pnpm data:build`，生产检查前先构建根路径和子路径。安装 Chromium 使用 `pnpm exec playwright install chromium`，Linux 可加 `--with-deps`。按需复查 Safari 交互时，安装 WebKit 后用 `pnpm exec playwright test --config playwright.webkit.config.ts <相关用例文件>`。完整操作见[交付流程](../tools/README.md#构建与验证)。
 

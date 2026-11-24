@@ -8,8 +8,8 @@ import CombatChangeList from '../components/CombatChangeList.vue';
 import { grantedDamageChanges, resolveEquipmentPanel } from '@leyline/engine';
 import { definitionKey, matchingSceneHits, sceneHitInInterval, type SceneDefinition, type SceneHitRequest, type SceneSelection } from '@leyline/schema';
 import { combatFactDeclaration } from '@leyline/schema/buffs';
-import { ordinaryReactions } from '@leyline/schema/hit-bindings';
-import { putHitFact, subjectFacts, findBuildHit, isTransformative, partyInfusionFact, talentInputMaximum } from '@leyline/schema';
+import { absorbedElements, ordinaryReactions } from '@leyline/schema/hit-bindings';
+import { putHitFact, subjectFacts, findBuildHit, isTransformative, partyInfusionFact, talentInputMaximum, transformativeElements } from '@leyline/schema';
 import { APP_VERSION } from '@leyline/schema/version';
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, ref, shallowRef, toRaw, watch } from 'vue';
 import { getReactionCalculationBundle } from '@leyline/game-data';
@@ -45,11 +45,12 @@ import WorkbenchDialog from '../components/WorkbenchDialog.vue';
 import CharacterCatalogBrowser from '../components/CharacterCatalogBrowser.vue';
 import GameIcon from '../components/GameIcon.vue';
 import TeamCard from '../components/TeamCard.vue';
+import CalculatorDamageCard from '../components/CalculatorDamageCard.vue';
 import CalculatorDamagePicker from '../components/CalculatorDamagePicker.vue';
 import CalculatorBuffPicker from '../components/CalculatorBuffPicker.vue';
 import CalculatorFactorCards from '../components/CalculatorFactorCards.vue';
 import { calculatorHitChoices, type CalculatorHitChoice } from '../domain/calculator-hits';
-import { applyCalculatorBuffs, buffFactNames, calculatorBuffChoices, resolveBuffSelection } from '../domain/calculator-buffs';
+import { applyCalculatorBuffs, buffDisplayName, buffFactNames, calculatorBuffChoices, resolveBuffSelection } from '../domain/calculator-buffs';
 import { presetCalculatorHitInputs, missingCalculatorPresets, calculatorFactPreset, calculatorHitElement, calculatorIntervals, calculatorOnFieldActor, calculatorHitFactFields, calculatorPartyInfusionOptions, type CalculatorFactField, selectionFacts, setCalculatorFact } from '../domain/calculator-conditions';
 import { calculatorSupportText, damageNumber as number, reactionNames, critNames } from '../domain/calculator-factors';
 import type { SavedTeam } from '../stores/saved-teams';
@@ -118,7 +119,8 @@ const selectedHit = computed(() => selectedBinding.value?.hit);
 const hitInputs = computed(() => (skill.value?.inputs ?? []).filter(input => input.usage !== 'healing'));
 const selectedOutput = computed(() => Object.values(selectedHit.value?.damage ?? {})[0]);
 const hitFacts = computed(() => selectedBinding.value ? selectionFacts(selectedOutput.value?.predicate, selectedBinding.value.entity.calculation.bundle) : []);
-const hitChoices = computed(() => queryCharacter.value ? calculatorHitChoices(queryCharacter.value, hitOwner.value?.build) : []);
+const hitChoices = computed(() => queryCharacter.value && document.value ? calculatorHitChoices(queryCharacter.value, hitOwner.value?.build,
+  createTalentRankReader(document.value.project.candidate.actors)) : []);
 const selectedChoice = computed(() => hitChoices.value.find(choice => choice.ref.definition.group === damage.value.hit.definition.group
   && choice.ref.definition.namespace === damage.value.hit.definition.namespace
   && choice.ref.definition.id === damage.value.hit.definition.id && choice.ref.definition.revision === damage.value.hit.definition.revision && choice.hitId === damage.value.hit.hitId));
@@ -129,13 +131,22 @@ const sceneDefinition = computed(() => sceneHit.value && matchingSceneHits(docum
 const sceneHitDefinition = computed(() => sceneDefinition.value?.hits?.[0]);
 const sceneBaseOnly = computed(() => sceneHitDefinition.value && 'settlement' in sceneHitDefinition.value);
 const transformative = computed(() => !!standalone.value && isTransformative(standalone.value.family));
-const selectedLabel = computed(() => sceneHit.value ? sceneHitLabel(sceneDefinition.value) : standalone.value ? damageFamilyLabel(standalone.value.family)+' · '+realElementLabel(standalone.value.element) :
-  selectedChoice.value ? selectedChoice.value.alias+'　'+selectedChoice.value.name : '');
+const selectedLabel = computed(() => {
+  if (sceneHit.value) return sceneHitLabel(sceneDefinition.value);
+  if (standalone.value) return damageFamilyLabel(standalone.value.family);
+  const row = selectedChoice.value;
+  if (!row) return '';
+  const name = row.alias && row.alias !== row.name ? row.alias + '（' + row.name + '）' : row.name;
+  return row.code + ' ' + name;
+});
 const intervals = computed(() => document.value && hitOwner.value
   ? calculatorIntervals(document.value.project, hitOwner.value.id, Math.round(hitTime.value * 1000), document.value.recordId) : {});
 const buffs = computed(() => document.value && hitOwner.value ? calculatorBuffChoices(document.value.project, hitOwner.value.id, damage.value,
   Math.round(hitTime.value * 1000), document.value.recordId, intervals.value) : []);
 const includedBuffs = computed(() => buffs.value.filter(buff => buff.checked));
+const buffIcons = computed(() => includedBuffs.value.map(buff => ({
+  id: buff.id, icon: buff.icon, label: buffDisplayName(buff) + '，' + buff.source + '，' + buff.description,
+})));
 const factFields = computed(() => {
   const hit = selectedHit.value;
   const owner = hitOwner.value?.id;
@@ -265,6 +276,17 @@ const partyInfusion = computed({
   set: (value: string) => {
     putHitFact(damage.value.facts ??= [], { kind: 'event' }, partyInfusionFact, { kind: 'enum', value });
     if (reactionType.value && !reactionChoices.value.some(choice => choice === reactionType.value)) damage.value.reaction = 'none';
+  },
+});
+const absorbedElement = computed({
+  get: () => {
+    const record = document.value?.project.timeline.find(row => row.id === document.value?.recordId);
+    const value = (subjectFacts(damage.value.facts, { kind: 'event' })?.absorbedElement ?? record?.facts?.absorbedElement)?.value;
+    return value?.kind === 'enum' ? value.value : 'none';
+  },
+  set: (value: string) => {
+    putHitFact(damage.value.facts ??= [], { kind: 'event' }, 'absorbedElement', { kind: 'enum', value });
+    if (reactionType.value && !reactionChoices.value.some(kind => kind === reactionType.value)) damage.value.reaction = 'none';
   },
 });
 const hitElement = computed(() => {
@@ -515,9 +537,26 @@ function selectSceneHit(definition: SceneDefinition) {
     void calculate();
   } catch (cause) { showError(cause); }
 }
-async function selectReaction(family:TransformativeFamily,element:ProjectReaction['element']) {
+function setReactionElement(event: Event) {
+  const current = document.value, reaction = standalone.value;
+  const element = (event.target as HTMLSelectElement).value as ProjectReaction['element'];
+  if (!current || current.baseline || !reaction || !isTransformative(reaction.family) || !transformativeElements[reaction.family].includes(element)) return;
+  const timeline = current.project.timeline.map(record => record.id === current.recordId
+    ? { ...record, reactionEvent: { ...reaction, element } } : record);
+  document.value = { ...current, project: { ...current.project, timeline } };
+  void calculate();
+}
+function defaultReactionElement(family: TransformativeFamily) {
+  const allowed = transformativeElements[family];
+  const partyElements = new Set(document.value?.project.candidate.actors.map(actor => actor.build?.character.identity.element ?? actor.element));
+  const matching = allowed.filter(element => partyElements.has(element));
+  return matching.length === 1 ? matching[0] : allowed[0];
+}
+async function selectReaction(family: TransformativeFamily) {
   const current=document.value, owner=hitOwner.value?.id;
   if (!current || !owner || current.baseline) return;
+  if (standalone.value?.family === family) { picker.value = undefined; return; }
+  const element = defaultReactionElement(family);
   try {
     const before=signature(), rules=current.project.reactionRules ?? await getReactionCalculationBundle();
     if (before!==signature()) return;
@@ -823,7 +862,8 @@ async function saveDamage() {
     if (before === listed.value?.signature) return true;
     const value = point.value?.value ?? undefined;
     const id = await saveDamageSnapshot({
-      name: sceneHit.value ? selectedLabel.value : [roleName.value,...(standalone.value ? [selectedLabel.value] : [selectedChoice.value!.alias,selectedChoice.value!.name])].join(' / '),
+      name: sceneHit.value ? selectedLabel.value : [roleName.value, selectedLabel.value,
+        ...(standalone.value?.family === 'swirl' ? [realElementLabel(standalone.value.element)] : [])].join(' / '),
       team: next.team?.name, value, verification: point.value?.real?.status === 'partial' ? 'pending' : undefined,
     }, next);
     if (signature() !== before) return false;
@@ -914,15 +954,19 @@ defineExpose({ requestLeave: leaveCalculator });
         :disabled="!!document?.baseline" @click="openCharacters">
         <span class="add-mark" aria-hidden="true">+</span><strong>选择角色</strong>
       </button>
-      <button type="button" class="selection-tile secondary-slot" :data-card-action="selectedLabel ? 'replace' : 'select'" aria-label="选择伤害" aria-haspopup="dialog" :data-hit-id="damage.hit.hitId"
+      <button type="button" class="selection-tile secondary-slot damage-slot" aria-label="选择伤害" aria-haspopup="dialog" :data-hit-id="damage.hit.hitId"
         :disabled="!queryCharacter || !!document?.baseline" @click="picker = 'damage'">
-        <GameIcon v-if="selectedChoice" :kind="selectedChoice.iconKind ?? 'skills'" :id="selectedChoice.icon" :size="32" :replaceable="!document?.baseline" /><span v-else-if="!standalone && !sceneHit" class="add-mark small" aria-hidden="true">+</span>
-        <span><small v-if="selectedLabel">伤害</small><strong>{{ selectedLabel || '选择伤害' }}</strong></span>
+        <CalculatorDamageCard v-if="selectedChoice || standalone || sceneDefinition" :hit="selectedChoice" :scene="sceneDefinition"
+          :family="standalone?.family" :element="standalone?.element" :coefficient="standalone?.coefficient" :rules="document?.project.reactionRules" />
+        <template v-else><span class="add-mark small" aria-hidden="true">+</span><strong>选择伤害</strong></template>
       </button>
-      <button type="button" class="selection-tile secondary-slot" data-card-action="select" aria-label="选择增益" aria-haspopup="dialog" :disabled="!queryCharacter || !!document?.baseline || !!sceneHit" @click="picker = 'buff'">
-        <GameIcon v-if="includedBuffs.length" :kind="includedBuffs[0].icon.kind" :id="includedBuffs[0].icon.id" :monochrome="includedBuffs[0].icon.kind === 'constellations'" :size="32" />
-        <span v-else class="add-mark small" aria-hidden="true">+</span>
-        <span><small v-if="includedBuffs.length">增益</small><strong>{{ includedBuffs.length ? includedBuffs[0].name + (includedBuffs.length > 1 ? ' 等 ' + includedBuffs.length + ' 项' : '') : '选择增益' }}</strong></span>
+      <button type="button" class="selection-tile secondary-slot buff-slot" data-card-action="select" aria-label="选择增益" aria-haspopup="dialog"
+        aria-describedby="calculator-buff-summary" :disabled="!queryCharacter || !!document?.baseline || !!sceneHit" @click="picker = 'buff'">
+        <span v-for="buff in buffIcons" :key="buff.id" class="buff-icon" :title="buff.label" aria-hidden="true">
+          <GameIcon :kind="buff.icon.kind" :id="buff.icon.id" :monochrome="buff.icon.kind === 'constellations'" :size="36"><template #fallback><GameIcon kind="stats" id="elementalMastery" :size="28" /></template></GameIcon>
+        </span>
+        <span v-if="!buffIcons.length" class="add-mark small" title="选择增益" aria-hidden="true">+</span>
+        <span id="calculator-buff-summary" role="tooltip">{{ buffIcons.map(buff => buff.label).join('；') || '选择增益' }}</span>
       </button>
     </div>
     <p v-if="error" role="alert">{{ error }}</p>
@@ -981,6 +1025,8 @@ defineExpose({ requestLeave: leaveCalculator });
             </template>
             <label v-else-if="!standalone || transformative">暴击<select v-model="damage.crit" :disabled="selectedHit?.critical === 'always'"><option value="noncritical">非暴击</option><option value="critical">暴击</option><option value="expected">期望伤害</option></select></label>
             <label v-if="infusionChoices.length">本击队伍附魔<select v-model="partyInfusion"><option value="none">无</option><option v-for="[element, sources] in infusionChoices" :key="element" :value="element">{{ realElementLabel(element) }}元素（{{ sources.join('、') }}）</option></select></label>
+            <label v-if="selectedHit?.elementBy === 'absorbedElement'">转化元素<select v-model="absorbedElement"><option value="none">无</option><option v-for="element in absorbedElements" :key="element" :value="element">{{ realElementLabel(element) }}</option></select></label>
+            <label v-if="standalone?.family === 'swirl'">扩散元素<select :value="standalone.element" @change="setReactionElement"><option v-for="element in transformativeElements.swirl" :key="element" :value="element">{{ realElementLabel(element) }}</option></select></label>
             <label v-if="!standalone && !sceneHit">反应<select v-model="reactionType"><option v-for="reaction in reactionChoices" :key="reaction" :value="reaction">{{ reactionNames[reaction] }}</option></select></label>
             <label v-for="input in hitInputs" :key="input.id">{{ inputNames[input.id] ?? queryCharacter?.metadata.facts?.[input.id]?.label ?? buffFactNames[input.id] ?? input.id }}
               <select v-if="input.id === 'counterCharge'" :value="subjectFacts(damage.facts, { kind: 'event' })?.[input.id]?.value?.value ?? ''" @change="setInput(input.id, $event)"><option :value="0">0 / 无反击加成</option><option :value="1">1 / 一档反击</option><option :value="2">2 / 满档／完美反击</option></select>
@@ -1060,7 +1106,8 @@ defineExpose({ requestLeave: leaveCalculator });
           @saved="useSavedCharacter" @close="catalogCharacter = undefined" />
       </template>
     </CharacterSelectionDialog>
-    <CalculatorDamagePicker v-if="picker === 'damage'" :choices="hitChoices" :selected="damage.hit.hitId ?? undefined" :scenes="sceneChoices"
+    <CalculatorDamagePicker v-if="picker === 'damage'" :choices="hitChoices" :group-settings="queryCharacter?.metadata.calculator?.groups" :selected="selectedChoice" :scenes="sceneChoices"
+      :swirl-element="standalone?.family === 'swirl' ? standalone.element : defaultReactionElement('swirl')" :selected-reaction="standalone?.family" :reaction-rules="document?.project.reactionRules"
       :selected-scene="sceneHit && definitionKey(sceneHit.scene)" @close="picker = undefined" @select="selectDamage" @reaction="selectReaction" @scene="selectSceneHit" />
     <CalculatorBuffPicker v-if="picker === 'buff' && hitOwner" :choices="buffs" :damage="damage" :actor-id="hitOwner.id" :intervals="intervals"
       :fields="factFields" :hit-facts="hitFacts" :time="hitTime" @close="picker = undefined" @apply="applyBuffs" />
@@ -1087,6 +1134,16 @@ defineExpose({ requestLeave: leaveCalculator });
 .add-mark { display:grid; place-items:center; width:40px; height:40px; color:var(--element-anemo-deep); background:var(--element-anemo-light); border-radius:7px; font-size:var(--font-title); font-weight:400; }
 .add-mark.small { width:32px; height:32px; }
 .secondary-slot { justify-content:flex-start; padding:10px 16px; text-align:left; }
+.damage-slot { height:auto; border:1px solid var(--line); border-radius:10px; }
+.damage-slot strong { font-size:18px; }
+.damage-slot:enabled:hover { background:var(--surface-raised); border-color:var(--line); }
+.damage-slot:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.buff-slot { position:relative; flex-wrap:wrap; gap:6px; align-content:center; }
+.buff-slot:disabled { opacity:1; }
+.buff-icon { display:inline-flex; }
+.buff-icon :deep(.game-icon) { pointer-events:none; }
+.buff-slot [role=tooltip] { display:none; position:absolute; top:100%; left:0; right:0; z-index:2; padding:8px 12px; border:1px solid var(--line); border-radius:7px; background:var(--surface); color:var(--ink); font-size:14px; }
+.buff-slot:focus-visible [role=tooltip] { display:block; }
 button.calculator-team { grid-template-columns:minmax(0,1fr) auto; gap:4px; }
 .calculator-team :deep(.team-row-members) { grid-row:2; grid-column:1/-1; }
 .calculator-team :deep(.team-row-trailing) { grid-row:1; grid-column:2; }
@@ -1117,6 +1174,9 @@ dl { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:8px 0; font-va
 dd { margin:0; text-align:right; }p,li { overflow-wrap:anywhere; }ul { margin:0; padding-left:20px; }
 @media(max-width:600px) {
   .calculator-selections { gap:8px; }.primary-slot,.calculator-team { min-height:114px; }.secondary-slot { padding:8px; gap:6px; }
+  .damage-slot :deep(.choice-card) { grid-template-columns:40px minmax(0,1fr); gap:6px; }
+  .damage-slot :deep(.portrait) { width:40px; height:40px; }
+  .damage-slot :deep(.portrait > *) { transform:scale(.84); }
   .damage-totals { padding:10px 4px; }
   .damage-totals > div + div { padding-left:8px; }
   .calculator-selections :deep(.configuration-body > .effective-roll-summary.inline.readonly.stacked) { display:none; }

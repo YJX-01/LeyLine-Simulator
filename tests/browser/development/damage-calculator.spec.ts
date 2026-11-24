@@ -3,7 +3,7 @@ import { readDocument } from '../../helpers/browser-document';
 import { catalogSnapshotFields } from '../../helpers/catalog-snapshot-fields';
 import { createRuntimeCatalog } from '../../../tools/lib/runtime-catalog.mjs';
 import { existsSync, readFileSync } from 'node:fs';
-import { test } from '../../helpers/calculator-browser';
+import { chooseDamageCard, revealDamageCard, test } from '../../helpers/calculator-browser';
 import { expect, type Locator, type Page } from '@playwright/test';
 import type { AxisResponse, Build, DamageCalculatorDocument, LocalAccount, Project } from '@leyline/schema';
 import { recordedVaresaPlunge, recordedVesnaDamage, vesnaRecording } from '../../helpers/recorded-vesna';
@@ -41,8 +41,79 @@ async function openSingleBuild(page: Page, build: Build, castSkill?: string) {
 async function selectHit(calculator: Locator, skill: string, index = 0) {
   await calculator.getByRole('button', { name: '选择伤害', exact: true }).click();
   const dialog = calculator.getByRole('dialog', { name: '选择伤害', exact: true });
-  await dialog.locator('button[data-skill-id="' + skill + '"][data-hit-id]').nth(index).click();
+  await chooseDamageCard(dialog.locator('button[data-skill-id="' + skill + '"][data-hit-id]').nth(index));
 }
+
+test('damage cards fit their contents and applied buff icons retain searchable names', async ({ page }, info) => {
+  test.setTimeout(60000);
+  const build: Build = { ...await catalogSnapshotFields('bennett', 'blackclifflongsword'), level: 80, ascension: 5, constellation: 1,
+    weaponLevel: 80, weaponAscension: 5, refinement: 1, talents: { normal: 3, skill: 5, burst: 7 }, artifacts: [], sets: [] };
+  const { calc } = await openSingleBuild(page, build);
+  const damage = calc.getByRole('button', { name: '选择伤害', exact: true });
+  const buffs = calc.getByRole('button', { name: '选择增益', exact: true });
+  const border = await damage.evaluate(node => getComputedStyle(node).borderTopColor);
+  await damage.hover();
+  await expect(damage).toHaveCSS('border-top-color', border);
+  await damage.click();
+  const picker = page.getByRole('dialog', { name: '选择伤害' });
+  await expect.poll(() => picker.locator('.hit-options button').first().locator('img').evaluateAll(images =>
+    images.some(image => (image as HTMLImageElement).naturalWidth > 0))).toBe(true);
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    const cards = picker.locator('.hit-options button');
+    expect(await cards.evaluateAll(nodes => nodes.every(card => card.scrollHeight <= card.clientHeight + 1
+      && card.scrollWidth <= card.clientWidth + 1))).toBe(true);
+    await picker.screenshot({ path: info.outputPath('damage-' + width + '.png') });
+  }
+  await picker.getByRole('textbox', { name: '搜索伤害', exact: true }).fill('美妙旅程');
+  const burst = picker.locator('[data-hit-id="bennett.burst.param1"]');
+  const skillToggle = picker.getByRole('region', { name: '元素战技' }).getByRole('heading').getByRole('button');
+  const burstToggle = picker.getByRole('region', { name: '元素爆发' }).getByRole('heading').getByRole('button');
+  await expect(burst).toBeVisible();
+  await picker.getByRole('textbox', { name: '搜索伤害', exact: true }).fill('');
+  await expect(picker.getByRole('region', { name: '常用', exact: true })).toHaveCount(0);
+  await expect(skillToggle).toHaveAttribute('aria-expanded', 'true');
+  await expect(burstToggle).toHaveAttribute('aria-expanded', 'false');
+  await skillToggle.click();
+  await burstToggle.click();
+  await picker.getByRole('textbox', { name: '搜索伤害', exact: true }).fill('元素战技');
+  await expect(skillToggle).toHaveAttribute('aria-expanded', 'true');
+  await picker.getByRole('textbox', { name: '搜索伤害', exact: true }).fill('');
+  await expect(skillToggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(burstToggle).toHaveAttribute('aria-expanded', 'true');
+  const ratio = build.character.talents.find(t => t.category === 'burst')!.parameters.find(p => p.id === 'param1')!.values[6];
+  await expect(burst).toContainText(new Intl.NumberFormat('zh-CN', { style: 'percent', maximumFractionDigits: 4 }).format(ratio));
+  const picked = await burst.locator('.choice-card').innerText();
+  const note = burst.locator('.note');
+  await expect(note).toBeEmpty();
+  expect((await note.boundingBox())!.height).toBeGreaterThan(12);
+  await burst.click();
+  await expect(damage.locator('.choice-card')).toBeVisible();
+  expect(await damage.locator('.choice-card').innerText()).toBe(picked);
+  await buffs.click();
+  const dialog = page.getByRole('dialog', { name: '选择增益' });
+  const search = dialog.getByRole('textbox', { name: '搜索增益', exact: true });
+  await search.fill('班尼特加攻');
+  const inspiration = dialog.getByRole('checkbox', { name: /班尼特加攻（美妙旅程）/ });
+  await inspiration.check();
+  await search.fill('');
+  await dialog.getByRole('checkbox', { name: /黑岩长剑/ }).check();
+  await expect.poll(() => dialog.locator('.buff-entry .game-icon').evaluateAll(icons => icons.every(icon =>
+    (icon.querySelector('img')?.naturalWidth ?? 0) > 0))).toBe(true);
+  await search.scrollIntoViewIfNeeded();
+  await dialog.screenshot({ path: info.outputPath('buff-390.png') });
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await dialog.screenshot({ path: info.outputPath('buff-1280.png') });
+  await dialog.getByRole('button', { name: '应用增益' }).click();
+  await expect(buffs.locator('.buff-icon[title*="班尼特加攻"]')).toHaveCount(1);
+  await expect(buffs.locator('.buff-icon[title*="黑岩长剑"]')).toHaveCount(1);
+  const firstTwo = await buffs.locator('.buff-icon').evaluateAll(nodes => nodes.slice(0, 2).map(node => node.getBoundingClientRect().y));
+  expect(firstTwo[0]).toBe(firstTwo[1]);
+  await damage.focus();
+  await page.keyboard.press('Tab');
+  await expect(buffs).toBeFocused();
+  await expect(buffs.getByRole('tooltip')).toContainText('班尼特加攻');
+});
 
 test('Xinyan’s two burst hits keep their own crit rules through the buff picker and Worker replay', async ({ page }, info) => {
   const build: Build = { ...await catalogSnapshotFields('xinyan', 'blackcliffslasher'), level: 1, ascension: 0, constellation: 2,
@@ -159,12 +230,20 @@ test('calculator shares the team and character pickers and retains a four-member
   await roles.getByRole('button',{name:'选择瓦雷莎'}).click();
   await button('选择伤害').click();
   const hits = page.getByRole('dialog',{name:'选择伤害',exact:true});
-  await expect(hits.getByRole('region',{name:'元素爆发'})).toContainText('小q');
-  await expect(hits.getByRole('region',{name:'元素爆发'})).toContainText('大Q');
+  const common = hits.getByRole('region', { name: '常用', exact: true });
+  await expect(common.locator('.hit-options button').first()).toContainText('小q');
+  await expect(common.locator('.hit-options button').first()).toContainText('攻击力 ×');
+  await expect(hits.getByRole('region',{name:'元素爆发'})).toContainText('大q');
+  await expect(hits.locator('section').first()).toHaveAttribute('aria-label', '常用');
+  await expect(hits.locator('section').nth(1)).toHaveAttribute('aria-label', '下落攻击');
+  await expect(hits.locator('[data-hit-id="varesa.burst.param5"]')).toHaveCount(1);
+  await expect(common.locator('.hit-options button').first()).toContainText('按下落攻击伤害计算');
+  await hits.screenshot({ path: info.outputPath('varesa-damage.png') });
   await hits.getByLabel('搜索伤害').pressSequentially('小q');
   await expect(hits.locator('.hit-options button')).toHaveCount(1);
   await expect(hits.locator('.hit-options button')).toContainText('大火山崩落');
   await hits.getByRole('button', { name: /大火山崩落/ }).click();
+  await button('选择伤害').screenshot({ path: info.outputPath('varesa-home-card.png') });
   await button('保存伤害').click();
   const calculatorFactValue = () => expect.poll(async () => Number((await calculator.getByTestId('calculator-value').textContent())?.replaceAll(',', '')));
   const expectedValue = () => expect.poll(async () => Number((await calculator.getByTestId('calculator-expected').textContent())?.replaceAll(',', '')));
@@ -177,7 +256,7 @@ test('calculator shares the team and character pickers and retains a four-member
   const normal = hits.getByRole('region',{name:'普通攻击'});
   await expect(normal).toContainText('a1');
   await page.screenshot({path:info.outputPath('damage-picker.png')});
-  await hits.locator('button[data-hit-id="vesna.skill.param5"]').click();
+  await chooseDamageCard(hits.locator('button[data-hit-id="vesna.skill.param5"]'));
   await button('选择增益').click();
   for (const option of await page.getByRole('dialog', { name: '选择增益' }).getByRole('checkbox').all()) await option.check();
   await button('应用增益').click();
@@ -953,7 +1032,39 @@ test('a standalone swirl replaces the selected hit and reopens as one Worker occ
   const open=calc.getByLabel('打开伤害计算文件',{exact:true});
   await open.setInputFiles({name:'砂糖.json',mimeType:'application/json',buffer:Buffer.from(content)});
   await calc.getByRole('button',{name:'选择伤害',exact:true}).click();
-  await calc.locator('button[data-reaction="swirl"][data-element="pyro"]').click();
+  const swirl = calc.locator('button[data-reaction="swirl"]');
+  const reactionGroup = calc.getByRole('region', { name: '剧变反应', exact: true });
+  await revealDamageCard(swirl);
+  const ingredients = {
+    shatter: ['cryo','physical'], superconduct: ['cryo','electro'], swirl: ['anemo','pyro'],
+    burning: ['dendro','pyro'], overloaded: ['pyro','electro'], 'electro-charged': ['hydro','electro'],
+    bloom: ['hydro','dendro'], burgeon: ['hydro','dendro','pyro'], hyperbloom: ['hydro','dendro','electro'],
+  };
+  for (const [family, elements] of Object.entries(ingredients)) {
+    const card = reactionGroup.locator('[data-reaction="' + family + '"]');
+    await card.scrollIntoViewIfNeeded();
+    expect(await card.locator('[data-element]').evaluateAll(nodes => nodes.map(node => node.getAttribute('data-element')))).toEqual(elements);
+    await expect.poll(() => card.locator('img').evaluateAll(images => images.filter(image => image instanceof HTMLImageElement && image.naturalWidth > 0).length)).toBe(elements.length);
+  }
+  const picker = calc.getByRole('dialog', { name: '选择伤害' });
+  const search = picker.getByRole('textbox', { name: '搜索伤害' });
+  await page.setViewportSize({ width: 1280, height: 1080 });
+  await search.fill('剧变反应');
+  await search.scrollIntoViewIfNeeded();
+  await picker.screenshot({ path: info.outputPath('reaction-cards.png') });
+  await chooseDamageCard(swirl);
+  const element = calc.getByRole('combobox', { name: '扩散元素', exact: true });
+  await expect(element).toHaveValue('pyro');
+  await element.selectOption('hydro');
+  const homeCard = calc.getByRole('button', { name: '选择伤害', exact: true });
+  await expect(homeCard.locator('[data-element="hydro"]')).toBeVisible();
+  await expect(homeCard.locator('.value')).toContainText('等级系数');
+  await homeCard.click();
+  await revealDamageCard(swirl);
+  await expect(swirl.locator('[data-element="hydro"]')).toBeVisible();
+  await swirl.click();
+  await expect.poll(async () => Number((await calc.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(17.165606 * .6 * .9, 5);
+  await element.selectOption('pyro');
   const check=()=>expect.poll(async()=>Number((await calc.getByTestId('calculator-value').textContent())?.replaceAll(',',''))).toBeCloseTo(17.165606*.6*.8,5);
   await check();
   const waiting=page.waitForEvent('download');
@@ -989,7 +1100,7 @@ test('Nahida C2 marked Bloom keeps its target condition and expected crit in a r
   const open = calc.getByLabel('打开伤害计算文件', { exact: true });
   await open.setInputFiles({ name: '纳西妲.json', mimeType: 'application/json', buffer: Buffer.from(content) });
   await calc.getByRole('button', { name: '选择伤害', exact: true }).click();
-  await calc.locator('button[data-reaction="bloom"]').click();
+  await chooseDamageCard(calc.locator('button[data-reaction="bloom"]'));
   const critical = calc.getByRole('combobox', { name: '暴击', exact: true });
   for (const [mark, mode, factor] of [['false', 'expected', 1], ['true', 'critical', 2], ['true', 'expected', 1.2]] as const) {
     await calc.getByRole('button', { name: '选择增益', exact: true }).click();
@@ -1339,7 +1450,7 @@ test('Alhaitham C1 saves the current projection hit and its one-second trigger i
     weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
   const { calc, open } = await openSingleBuild(page, build);
   await calc.getByRole('button', { name: '选择伤害', exact: true }).click();
-  await page.getByRole('dialog', { name: '选择伤害' }).locator('button[data-hit-id="alhaitham.skill.param4"]').click();
+  await chooseDamageCard(page.getByRole('dialog', { name: '选择伤害' }).locator('button[data-hit-id="alhaitham.skill.param4"]'));
   const picker = page.getByRole('dialog', { name: '选择增益' });
   await calc.getByRole('button', { name: '选择增益', exact: true }).click();
   await picker.getByRole('checkbox', { name: /直观.*元素战技冷却减少量/ }).check();
@@ -1372,21 +1483,22 @@ test('Yanfei selects a seal count for one charged hit and needs C6 for the fourt
     const picker = page.getByRole('dialog', { name: '选择伤害' });
     await expect(picker.locator('button[data-hit-id="yanfei.normal.param4"]')).toContainText('消耗0枚丹火印');
     const fourSeals = picker.locator('button[data-hit-id="yanfei.normal.param8"]');
+    await revealDamageCard(fourSeals);
     await expect(fourSeals).toContainText('消耗4枚丹火印');
     if (constellation === 5) {
       await expect(fourSeals).toBeDisabled();
       await expect(fourSeals).toContainText('需要命座 6');
-      await picker.locator('button[data-hit-id="yanfei.normal.param5"]').click();
+      await chooseDamageCard(picker.locator('button[data-hit-id="yanfei.normal.param5"]'));
       const cost = calc.locator('dl > div').filter({ has: page.locator('dt', { hasText: '本次重击体力消耗（点）' }) }).locator('dd');
       await expect(cost).toHaveText('37.5');
     } else {
-      await fourSeals.click();
+      await chooseDamageCard(fourSeals);
       await expect(calc.getByRole('button', { name: '选择伤害', exact: true })).toHaveAttribute('data-hit-id', 'yanfei.normal.param8');
       await expect.poll(async () => Number((await calc.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeGreaterThan(0);
       const cost = calc.locator('dl > div').filter({ has: page.locator('dt', { hasText: '本次重击体力消耗（点）' }) }).locator('dd');
       await expect(cost).toHaveText('0');
       await calc.getByRole('button', { name: '选择伤害', exact: true }).click();
-      await picker.locator('button[data-hit-id="yanfei.normal.param1"]').click();
+      await chooseDamageCard(picker.locator('button[data-hit-id="yanfei.normal.param1"]'));
       await expect(cost).toHaveCount(0);
     }
   }
@@ -1397,7 +1509,7 @@ test('Freminet clears the recorded remaining cooldown once when the burst cast i
     weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
   const { calc } = await openSingleBuild(page, build);
   await calc.getByRole('button', { name: '选择伤害', exact: true }).click();
-  await page.getByRole('dialog', { name: '选择伤害' }).locator('button[data-hit-id="freminet.burst.param1"]').click();
+  await chooseDamageCard(page.getByRole('dialog', { name: '选择伤害' }).locator('button[data-hit-id="freminet.burst.param1"]'));
   await calc.getByRole('button', { name: '选择增益', exact: true }).click();
   const picker = page.getByRole('dialog', { name: '选择增益' });
   await picker.getByRole('checkbox', { name: /本次清除的元素战技冷却/ }).check();
@@ -1441,7 +1553,7 @@ test('Xiangling saves the ordinal of a repeated hit and replays its single-hit a
   const { calc, open } = await openSingleBuild(page, build);
   const choose = async (id: string) => {
     await calc.getByRole('button', { name: '选择伤害', exact: true }).click();
-    await page.getByRole('dialog', { name: '选择伤害' }).locator('button[data-hit-id="' + id + '"]').click();
+    await chooseDamageCard(page.getByRole('dialog', { name: '选择伤害' }).locator('button[data-hit-id="' + id + '"]'));
   };
   await choose('xiangling.normal.param4');
   const ordinal = calc.getByRole('combobox', { name: '本次命中序号' });
@@ -1487,7 +1599,7 @@ test('Ganyu can confirm the first Frostflake Arrow and keep its charge requireme
   const { calc, open } = await openSingleBuild(page, build);
   const choose = async (id: string) => {
     await calc.getByRole('button', { name: '选择伤害', exact: true }).click();
-    await page.getByRole('dialog', { name: '选择伤害' }).locator('button[data-hit-id="' + id + '"]').click();
+    await chooseDamageCard(page.getByRole('dialog', { name: '选择伤害' }).locator('button[data-hit-id="' + id + '"]'));
   };
   await choose('ganyu.normal.param9');
   await calc.getByRole('button', { name: '选择增益', exact: true }).click();
@@ -1679,27 +1791,22 @@ test('Columbina revives the selected local character using the entered friendshi
   await expect(changes).toContainText('571.992 点治疗');
 });
 
-test('Iansan terrain leap applies full fall immunity to the stated fall in the calculator and Worker', async ({ page }, info) => {
-  const build: Build = { ...await catalogSnapshotFields('iansan', 'beginnersprotector'), level: 1, ascension: 0, constellation: 0,
+for (const [id, weapon, excluded] of [
+  ['varesa', 'apprenticesnotes', /炽心，一往直前|夜域赐礼|食物.*燃素|非战斗冲刺/],
+  ['iansan', 'beginnersprotector', /勉力传动|坠落伤害/],
+  ['ifa', 'apprenticesnotes', /温敷战术包扎|受魂附的龙/],
+] as const) test(id + ' omits exploration buffs and their controls', async ({ page }) => {
+  const build: Build = { ...await catalogSnapshotFields(id, weapon), level: 80, ascension: 5, constellation: 0,
     weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
-  const { calc, open } = await openSingleBuild(page, build);
-  await calc.getByRole('button', { name: '选择增益', exact: true }).click();
+  const { calc } = await openSingleBuild(page, build);
+  const buffSlot = calc.getByRole('button', { name: '选择增益', exact: true });
+  await buffSlot.click();
   const picker = page.getByRole('dialog', { name: '选择增益' });
-  await picker.getByRole('checkbox', { name: /夜域赐礼.*勉力传动/ }).check();
-  for (const label of [/当前区域位于纳塔且存在燃素机制/, /本次受到的是坠落伤害/, /本次坠落由伊安珊利用地形差进行的飞跃造成/]) {
-    await picker.getByRole('combobox', { name: label }).selectOption('true');
-  }
+  await expect(picker).toBeVisible();
+  await expect(picker).not.toContainText(excluded);
+  if (id === 'varesa') await expect(picker.getByRole('checkbox', { name: /英雄，二度归来/ })).toHaveCount(1);
   await picker.getByRole('button', { name: '应用增益' }).click();
-  const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-  await values.locator('summary').click();
-  const value = values.locator('dl > div').filter({ has: page.locator('dt').filter({ hasText: '坠落伤害减免' }) }).locator('dd');
-  await expect(value).toHaveText('100%');
-  const download = page.waitForEvent('download');
-  await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
-  const file = info.outputPath('iansan-fall.json');
-  await (await download).saveAs(file);
-  await open.setInputFiles(file);
-  await expect(value).toHaveText('100%');
+  await expect(buffSlot).not.toContainText(excluded);
 });
 
 test('Lisa hold resistance displays the sourced multiplier alongside unchanged outgoing damage', async ({ page }, info) => {
@@ -1740,7 +1847,7 @@ test('scene ranges and interruption resistance use the selected reaction and sta
   const scene = calc.getByRole('combobox', { name: '场地', exact: true });
   await scene.selectOption('scene.field.domainofblessingspringi.0');
   await calc.getByRole('button', { name: '选择伤害', exact: true }).click();
-  await page.getByRole('dialog', { name: '选择伤害' }).locator('button[data-reaction="electro-charged"]').click();
+  await chooseDamageCard(page.getByRole('dialog', { name: '选择伤害' }).locator('button[data-reaction="electro-charged"]'));
   const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
   await values.locator('summary').click();
   const amount = (label: string) => values.locator('dl > div').filter({ has: page.locator('dt').filter({ hasText: label }) }).locator('dd');
@@ -1790,7 +1897,8 @@ test('Ifa sends the entered team Nightsoul and beneficiary to a saved Swirl reac
     weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
   const { calc, open } = await openSingleBuild(page, build);
   await calc.getByRole('button', { name: '选择伤害', exact: true }).click();
-  await calc.locator('button[data-reaction="swirl"][data-element="pyro"]').click();
+  await chooseDamageCard(calc.locator('button[data-reaction="swirl"]'));
+  await calc.getByRole('combobox', { name: '扩散元素', exact: true }).selectOption('pyro');
   await calc.getByRole('button', { name: '选择增益', exact: true }).click();
   const picker = page.getByRole('dialog', { name: '选择增益' });
   await picker.getByRole('checkbox', { name: /场中医者视野/ }).check();
@@ -2025,43 +2133,4 @@ test('Ayato C6 keeps both independently timed slashes after reopening and exclud
   },readFileSync(file,'utf8'));
   expect(results.first).toBeNull();expect(results.firstMissing).toBe(true);expect(results.second).toBeCloseTo(expected,8);
   expect(results.third).toBe(0);expect(results.all).toBeCloseTo(results.subtotal!+expected,8);
-});
-
-test('Ifa indwelt Saurian healing uses the explicit vehicle health in the calculator', async ({ page }, info) => {
-  const build: Build = { ...await catalogSnapshotFields('ifa', 'apprenticesnotes'), level: 1, ascension: 0, constellation: 0,
-    weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
-  const { calc, open } = await openSingleBuild(page, build);
-  const openPicker = () => calc.getByRole('button', { name: '选择增益', exact: true }).click();
-  await openPicker();
-  const picker = page.getByRole('dialog', { name: '选择增益' });
-  for (const label of [/当前区域位于纳塔且存在燃素机制/, /本次处于大世界或普通室内/,
-    /本次受益者是当前由自己魂附的龙/, /温敷战术包扎的队伍共用限次已就绪/]) {
-    await picker.getByRole('combobox', { name: label }).selectOption('true');
-  }
-  // The pinned level-90 vehicle 45003011 uses these GadgetProp and GadgetCurve inputs.
-  const maxHp = 135.648 * 151.52367;
-  const ratio = picker.getByRole('spinbutton', { name: /本次受魂附的龙的当前生命值比例/ });
-  await ratio.fill('0.39');
-  await picker.getByRole('spinbutton', { name: /本次受魂附的龙的生命值上限/ }).fill(String(maxHp));
-  await picker.getByRole('spinbutton', { name: /本次伊法治疗前的队伍燃素点数/ }).fill('10');
-  const apply = picker.getByRole('button', { name: '应用增益' });
-  await apply.click();
-
-  const values = calc.locator('details').filter({ has: page.getByText('本次增益数值', { exact: true }) });
-  await values.locator('summary').click();
-  const recovery = values.locator('dl > div').filter({ has: page.locator('dt').filter({ hasText: '受魂附的龙基础回复量' }) }).locator('dd');
-  const expected = (maxHp * .4).toLocaleString('zh-CN', { maximumFractionDigits: 6 });
-  await expect(recovery).toHaveText(expected);
-  const download = page.waitForEvent('download');
-  await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
-  const file = info.outputPath('ifa-indwelt-saurian.json');
-  await (await download).saveAs(file);
-  await open.setInputFiles(file);
-  await expect(recovery).toHaveText(expected);
-
-  await openPicker();
-  await expect(ratio).toHaveValue('0.39');
-  await ratio.fill('0.4');
-  await apply.click();
-  await expect(recovery).toHaveCount(0);
 });

@@ -1,5 +1,5 @@
 import { authoredHit } from '@leyline/schema/hit-bindings';
-import { buffEventSelectors, findBuildHit, isTransformative, subjectFacts } from '@leyline/schema';
+import { isCalculatorCombatModifier, buffEventSelectors, createTalentRankReader, findBuildHit, isTransformative, subjectFacts, talentParameterAt } from '@leyline/schema';
 import { buffEndMs, calculationEffectInstanceId, effectRecipientMatches, grantedBuildEffects, grantedGleamEffects, grantedResonances, hitMatches, instanceActive, projectBuffContext, stackExpiryUncertain } from '@leyline/engine';
 import { projectSchema, definitionKey, type Build, type CalculationBundle, type CalculationBinding, type CalculationFact, type CombatConditions, type CombatFrame, type DamageRequest, type DefinitionRef, type EffectDefinition, type Project } from '@leyline/schema';
 import { addConfirmedBuff, addSkillAction } from './real-project';
@@ -12,7 +12,12 @@ export interface CalculatorBuff {
   effect: DefinitionRef;
   source: string;
   name: string;
+  alias?: string;
+  code?: string;
+  intro?: string;
+  relevant?: boolean;
   description: string;
+  note?: string;
   target: string;
   modifiers: { id: string; target: string }[];
   icon: { kind: 'characters' | 'weapons' | 'artifacts' | 'skills' | 'constellations'; id: string };
@@ -83,13 +88,9 @@ export function buffTargetLabel(id: string) {
   if (group === 'reaction' && stat && reactionStats[stat]) return (family === 'lunar' ? '月反应' : damageFamilyLabel(family)) + reactionStats[stat];
   return realStatLabels[target] ?? effectLabels[target] ?? target;
 }
-const effectNames: Record<string, string> = {
-  'diona.shield-absorption.tap': '猫爪冻冻（点按）', 'diona.shield-absorption.hold': '猫爪冻冻（长按）',
-  'xinyan.shield-absorption.level-1': '散序节拍护盾', 'xinyan.shield-absorption.level-2': '歌头节拍护盾', 'xinyan.shield-absorption.level-3': '舞遍节拍护盾',
-  'thoma.shield-absorption.skill': '烈烧佑命护盾（战技）', 'thoma.shield-absorption.burst': '烈烧佑命护盾（炽火崩破）',
-  'beyondthechrysalis.loyalWind': '忠忱之风', 'beyondthechrysalis.betrayalWind': '叛弃之风',
-  'yunjin.flying-cloud-base.base': '飞云旗阵', 'xingqiu.static-hydroBonus': '虚实工笔',
-};
+export function buffDisplayName(item: Pick<CalculatorBuff, 'name' | 'alias'>) {
+  return item.alias && item.alias !== item.name ? item.alias + '（' + item.name + '）' : item.name;
+}
 export const buffFactNames: Record<string, string> = {
   targetsHit: '命中敌人数', 'bennett.inField': '受益队员处于鼓舞领域内',
   strikingHand: '出手侧',
@@ -184,29 +185,43 @@ export function enableCalculatorBuff(item: Pick<CalculatorBuff, 'ownerId' | 'fie
   }
 }
 
-function magnitude(binding: CalculationBinding, build: Build, entity: Entity) {
+function magnitude(binding: CalculationBinding, build: Build, entity: Entity, rank: ReturnType<typeof createTalentRankReader>) {
   if (binding.kind === 'constant' && binding.value.kind === 'quantity') return binding.value;
   if (binding.kind === 'refinement-parameter') return { value: binding.values[build.refinement - 1], unit: binding.type.unit };
+  if (binding.kind === 'talent-parameter' && binding.actor.role === 'owner' && binding.type.kind === 'quantity') {
+    const talent = build.character.talents.find(talent => talent.id === binding.skillId);
+    const value = talent && talentParameterAt(talent, binding.parameterId, rank(build, talent.category));
+    if (value !== undefined) return { value, unit: binding.type.unit };
+  }
   if (binding.kind === 'formula') {
     const formula = entity.calculation.bundle.formulas.find(entry => definitionKey(entry.identity) === definitionKey(binding.formula));
     if (formula?.template.id === 'constant-bonus' && formula.template.value.kind === 'quantity') return formula.template.value;
   }
 }
-function bindingInputs(binding: CalculationBinding): string[] {
-  if (binding.kind === 'attribute') return [realStatLabels[binding.key.id.replace(/^attribute\./,'')] ?? binding.key.id];
-  if (binding.kind === 'fact') return [buffFactNames[binding.key] ?? binding.key];
+function bindingInputs(binding: CalculationBinding, entity: Entity): string[] {
+  if (binding.kind === 'attribute') return [buffTargetLabel(binding.key.id)];
+  if (binding.kind === 'fact') return [entity.metadata.facts?.[binding.key]?.label ?? buffFactNames[binding.key] ?? binding.key];
   if (binding.kind === 'team-count') return [(binding.match === 'exclude' ? '非' : '') + binding.elements.map(realElementLabel).join('、') + (binding.distinctElements ? '的元素种数' : '元素队员人数')];
   if (binding.kind === 'team-region') return [(binding.match === 'exclude' ? '非' : '') + binding.region + '队员人数'];
-  return binding.kind === 'formula' ? Object.values(binding.inputs).flatMap(bindingInputs) : [];
+  return binding.kind === 'formula' ? Object.values(binding.inputs).flatMap(input => bindingInputs(input, entity)) : [];
 }
 function sourceAttributes(binding: CalculationBinding): string[] {
   if (binding.kind === 'attribute' && binding.at.kind === 'source-event') return [binding.key.id];
   return binding.kind === 'formula' ? Object.values(binding.inputs).flatMap(sourceAttributes) : [];
 }
-function describe(effect: EffectDefinition, build: Build, entity: Entity) {
+function describe(effect: EffectDefinition, build: Build, entity: Entity, rank: ReturnType<typeof createTalentRankReader>) {
   const target = effect.target.kind === 'port' ? effect.target.port : effect.target.attribute.id.replace(/^attribute\./, '');
   const label = buffTargetLabel(target);
-  const amount = magnitude(effect.value, build, entity);
+  const binding = effect.value, amount = magnitude(binding, build, entity, rank);
+  if (binding.kind === 'formula' && binding.inputs.basis && binding.inputs.rate
+    && entity.calculation.bundle.formulas.find(f => definitionKey(f.identity) === definitionKey(binding.formula))?.template.id === 'stat-product') {
+    const rate = magnitude(binding.inputs.rate, build, entity, rank);
+    const basis = binding.inputs.basis;
+    if (rate?.unit === 'scalar' && (basis.kind === 'attribute' || basis.kind === 'fact')) {
+      return (effect.recipient.role === 'team' ? '队伍' : '') + label + ' +' + bindingInputs(basis, entity)[0]
+        + ' × ' + (rate.value * 100).toLocaleString('zh-CN', { maximumFractionDigits: 4 }) + '%';
+    }
+  }
   if (amount && target === 'aimChargeInstant') return '本次免蓄力';
   if (amount && target === 'confirmedSkillChargesRestored') return label + ' ' + amount.value.toLocaleString('zh-CN') + ' 次';
   if (amount && (target === 'aimChargeTimeReductionPerEnergy' || target === 'aimChargeTimeReductionMs')) {
@@ -220,7 +235,7 @@ function describe(effect: EffectDefinition, build: Build, entity: Entity) {
   const value = amount ? (target === 'lohenWillGainMultiplier' || target === 'incomingPoiseDamageMultiplier' ? ' ×' + amount.value.toLocaleString('zh-CN') :
     ' +' + (amount.unit === 'scalar' && !['actorEndureDelta', 'lohenWillLimit'].includes(target)
       ? (amount.value * 100).toLocaleString('zh-CN') + '%' : amount.value.toLocaleString('zh-CN'))) : '';
-  const inputs = value ? [] : [...new Set(bindingInputs(effect.value))];
+  const inputs = value ? [] : [...new Set(bindingInputs(effect.value, entity))];
   return (effect.recipient.role === 'team' ? '队伍' : '') + label + value
     + (inputs.length ? '，按' + inputs.join('、') + '计算' : '');
 }
@@ -228,6 +243,7 @@ function describe(effect: EffectDefinition, build: Build, entity: Entity) {
 export function calculatorBuffChoices(project: Project, sourceId: string, damage: DamageRequest, timeMs: number, recordId?: string,
   intervals = calculatorIntervals(project, sourceId, timeMs, recordId)): CalculatorBuff[] {
   const members = project.candidate.actors;
+  const rank = createTalentRankReader(members);
   const builds = new Map(members.map(member => [member.id, member.build]));
   const context = projectBuffContext(project, true);
   if (!context) return [];
@@ -249,6 +265,20 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
     element: dealer?.build?.character.identity.element ?? dealer?.element ?? calculatorHitElement(project, current, selected, sourceId, timeMs, recordId, family),
     family, origin: hit.origin, reactionId: damage.reaction && damage.reaction !== 'none' ? damage.reaction.type : null } : null;
   const order = project.timeline.find(record => record.id === recordId)?.order ?? Infinity;
+  const hitTargets = new Set<string>();
+  function readTargets(binding: CalculationBinding) {
+    if (binding.kind === 'attribute' || binding.kind === 'enemy') hitTargets.add(binding.key.id);
+    if (binding.kind === 'formula') Object.values(binding.inputs).forEach(readTargets);
+  }
+  for (const [key, output] of Object.entries(hit?.damage ?? {})) {
+    if (!family || key === family) Object.values(output.bindings).forEach(readTargets);
+  }
+  if (frame?.element) hitTargets.add('target.resistance.' + frame.element);
+  if (reaction) {
+    hitTargets.add('attribute.elementalMastery');
+    hitTargets.add('attribute.reaction.' + family + '.damageBonus');
+    hitTargets.add('attribute.reaction.' + reaction.family + '.coefficient');
+  }
   const disabled = new Set(project.effectRevisions?.filter(entry => entry.disabled).map(entry => entry.instanceId));
   const applications = new Map(damage.effectApplications?.map(entry => [entry.instanceId, entry.active]));
   const choices: CalculatorBuff[] = [];
@@ -283,20 +313,26 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
       const target = effect.target.kind === 'attribute' ? effect.target.attribute.id : effect.target.port;
       if (family && target.startsWith('attribute.reaction.stellar-') && !target.startsWith('attribute.reaction.' + family + '.')) continue;
       const source = scene ? '场景效果' : resonance ? '元素共鸣' : character.identity.name;
-      const name = scene?.name ?? resonance ?? gleam ?? effectNames[effect.identity.id] ?? passive?.name ?? constellation?.name ?? talent?.name
+      const name = scene?.name ?? resonance ?? gleam ?? passive?.name ?? constellation?.name ?? talent?.name
         ?? (entity.kind === 'character-definition' ? source : entity.name + (set ? ' ' + set.pieces + '件套' : ''));
+      const card = scene || resonance || gleam ? undefined : entity.metadata.calculator?.buffs?.[effect.buff?.id ?? effect.identity.id];
+      if (!isCalculatorCombatModifier(target, card)) continue;
+      const relevant = hitTargets.has(target) || hitTargets.has(target.replace(/Percent$/, ''))
+        || target === 'base-flat' && !!hit?.damage.ordinary;
       const icon: CalculatorBuff['icon'] = entity.kind === 'weapon-definition' ? { kind: 'weapons', id: entity.id }
         : entity.kind === 'artifact-set-definition' ? { kind: 'artifacts', id: entity.id }
         : constellation ? { kind: 'constellations', id: portrait + '-c' + constellation.rank }
         : passive ? { kind: 'skills', id: portrait + '-passive' + (character.passives.indexOf(passive) + 1) }
+        : talent ? { kind: 'skills', id: portrait + '-combat' + ({ normal: 1, skill: 2, burst: 3 }[talent.category]) }
         : { kind: 'characters', id: portrait };
-      const description = describe(effect, build, entity);
+      const description = describe(effect, build, entity, rank);
       const controls = calculatorEffectControls(effect, entity.calculation.bundle, ownerId, recipientId, sourceId);
       const declarations = scene ? interval?.definition.facts : entity.metadata.facts;
       const fields = controls.fields.filter(field => field.key !== scene?.id).map(field => ({ ...field, label: declarations?.[field.key]?.label,
         inherited: inherited.get(JSON.stringify(field.subject))?.[field.key]?.value ?? undefined }));
       const counterFacts = effect.counter && [effect.counter.fact, ...(effect.counter.overflowFact ? [effect.counter.overflowFact] : [])];
-      const common = { ownerId, effect: effect.buff ?? effect.identity, name, source, description, icon, target, derivedFacts: derived?.[ownerId],
+      const common = { ownerId, effect: effect.buff ?? effect.identity, name, alias: card?.alias, code: card?.code, intro: card?.note,
+        relevant, source, description, icon, target, derivedFacts: derived?.[ownerId],
         modifiers: [{ id: effect.identity.id, target }], explicit: effect.application === 'explicit', ...controls, fields, counterFacts };
       const trigger = effect.trigger;
       const timing = effect.lifetime.kind === 'interval' ? { durationMs: effect.lifetime.durationMs, maxLayers: effect.stacking.maxStacks } : undefined;
@@ -310,10 +346,10 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
         const skill = character.talents.find(talent => castSelectors.some(branch => (!branch.skillIds || branch.skillIds.includes(talent.id))
           && (!branch.categories || branch.categories.includes(talent.category))));
         if (skill) choices.push({ ...common, id: calculationEffectInstanceId(ownerId,effect.buff ?? effect.identity,null), checked: false, disabled:false, triggerSkill: skill.id, timing: nextLayer,
-          description: description + '，施放' + skill.name + '后' + (effect.lifetime.kind === 'interval' ? '持续' + effect.lifetime.durationMs / 1000 + '秒' : '生效') });
+          note: '施放' + skill.name + '后' + (effect.lifetime.kind === 'interval' ? '持续' + effect.lifetime.durationMs / 1000 + '秒' : '生效') });
       } else if (nextLayer && trigger.kind === 'event' && effect.lifetime.kind === 'interval') {
         choices.push({ ...common, id: calculationEffectInstanceId(ownerId,effect.buff ?? effect.identity,null), checked: false, disabled: false, confirmTrigger: true, timing: nextLayer,
-          description: description + '，确认命中前已触发，持续' + effect.lifetime.durationMs / 1000 + '秒' });
+          note: '确认命中前已触发，持续' + effect.lifetime.durationMs / 1000 + '秒' });
       }
       for (const instance of sources) {
         const event = instance.source;
@@ -326,7 +362,7 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
             && buffConditionsMet(common, current),
           triggerTime: event?.timeMs, ...(event?.confirmedBuff && event.timeMs === timeMs && timing ? { timing: { ...timing, maxLayers: 1, source: event.id, remainingMs: endMs-timeMs } } : {}),
           ...(event && captured.length ? { capturedStats: { recordId: event.id, attributes: captured } } : {}),
-          description: description + (unknownExpiry ? '（缺少本层的刷新记录）' : event && timing ? '（剩余' + (endMs-timeMs) / 1000 + '秒）' : '') });
+          note: unknownExpiry ? '缺少本层的刷新记录' : event && timing ? '剩余' + (endMs-timeMs) / 1000 + '秒' : undefined });
       }
     }
   }
@@ -334,6 +370,7 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
   for (const choice of choices) {
     const previous = grouped.get(choice.id);
     if (previous) {
+      previous.relevant ||= choice.relevant;
       previous.description += '；' + choice.description;
       previous.fields.push(...choice.fields);
       previous.modifiers.push(...choice.modifiers);

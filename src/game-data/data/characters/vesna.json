@@ -2296,5 +2296,23 @@
       ]
     }
   },
-  "contextSupport": "context-complete"
+  "contextSupport": "context-complete",
+  "calculator": {
+    "hits": {
+      "vesna.skill.param5": {
+        "alias": "二阶灵剑星扩散"
+      },
+      "vesna.skill.param9": {
+        "alias": "三阶灵剑尾段"
+      }
+    },
+    "buffs": {
+      "vesna.discipline.ordinary.effect": {
+        "alias": "律令直伤"
+      },
+      "vesna.discipline.stellar-swirl.effect": {
+        "alias": "律令星扩散"
+      }
+    }
+  }
 }

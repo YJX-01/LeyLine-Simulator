@@ -1311,5 +1311,15 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "calculator": {
+    "buffs": {
+      "thoma.shield-absorption.skill": {
+        "alias": "烈烧佑命护盾（战技）"
+      },
+      "thoma.shield-absorption.burst": {
+        "alias": "烈烧佑命护盾（炽火崩破）"
+      }
+    }
+  }
 }

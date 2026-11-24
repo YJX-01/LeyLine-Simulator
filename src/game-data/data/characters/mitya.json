@@ -1331,5 +1331,15 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "calculator": {
+    "hits": {
+      "mitya.skill.param4": {
+        "alias": "稳态消耗信标"
+      },
+      "mitya.skill.param5": {
+        "alias": "稳态引爆"
+      }
+    }
+  }
 }

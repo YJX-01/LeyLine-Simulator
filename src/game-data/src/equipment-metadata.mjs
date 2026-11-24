@@ -3,7 +3,7 @@ import { assembleHit } from './character-hits.mjs';
 import { expression, all, grantBuffs } from '@leyline/schema/buffs';
 
 export function assembleEquipment(metadata) {
-  const { buffs, facts = {}, formulas = [], effects: pieces, support, ...fields } = metadata;
+  const { buffs, facts = {}, formulas = [], effects: pieces, support, calculator, ...fields } = metadata;
   if (fields.schemaVersion !== APP_VERSION) throw new Error('不支持的装备版本。');
   const { namespace, id, revision } = fields;
   const entity = { namespace, id, revision };

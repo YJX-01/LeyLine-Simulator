@@ -1386,5 +1386,17 @@
         "threshold": 800
       }
     }
-  ]
+  ],
+  "calculator": {
+    "hits": {
+      "kinich.skill.param2": {
+        "alias": "贯鳞炮"
+      }
+    },
+    "buffs": {
+      "kinich.special-gathering-speed": {
+        "scope": "exploration"
+      }
+    }
+  }
 }

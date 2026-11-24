@@ -2,7 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve, sep } from 'node:path';
 const directory = process.argv.find(arg => arg.startsWith('--dir='))?.slice(6);
-if (!directory) throw new Error('Usage: pnpm release:verify --dir=artifacts/releases/<candidate>');
+if (!directory) throw new Error('Usage: node tools/scripts/release/verify-release.mjs --dir=artifacts/releases/<candidate>');
 const root = resolve(directory), site = resolve(root, 'site');
 const manifest = JSON.parse(await readFile(resolve(root, 'manifest.json'), 'utf8'));
 if (manifest.formatVersion !== 1 || !Array.isArray(manifest.files)) throw new Error('Unknown release manifest.');

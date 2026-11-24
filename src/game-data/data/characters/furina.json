@@ -1974,5 +1974,12 @@
         "cap": 0.28
       }
     }
-  ]
+  ],
+  "calculator": {
+    "buffs": {
+      "furina.fanfare": {
+        "alias": "气氛值"
+      }
+    }
+  }
 }

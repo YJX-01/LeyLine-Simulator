@@ -1660,5 +1660,12 @@
       },
       "label": "本次普攻或重击触发业障除"
     }
+  },
+  "calculator": {
+    "hits": {
+      "nahida.skill.param3": {
+        "alias": "灭净三业"
+      }
+    }
   }
 }

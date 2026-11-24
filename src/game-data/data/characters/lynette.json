@@ -1304,5 +1304,12 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "calculator": {
+    "buffs": {
+      "lynette.recovery-orb-stamina": {
+        "scope": "exploration"
+      }
+    }
+  }
 }

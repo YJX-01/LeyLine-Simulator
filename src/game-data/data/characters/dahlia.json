@@ -1135,5 +1135,12 @@
       },
       "label": "游戏时间（午夜起的分钟数，0–1439）"
     }
+  },
+  "calculator": {
+    "buffs": {
+      "dahlia.swift-stride": {
+        "scope": "exploration"
+      }
+    }
   }
 }

@@ -992,5 +992,15 @@
       },
       "label": "末段普通攻击留下的内爆标记已满两秒"
     }
+  },
+  "calculator": {
+    "hits": {
+      "xiangling.skill.param1": {
+        "alias": "锅巴喷火"
+      },
+      "xiangling.burst.param4": {
+        "alias": "风火轮"
+      }
+    }
   }
 }

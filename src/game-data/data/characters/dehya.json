@@ -1507,5 +1507,12 @@
         "threshold": 0.4
       }
     }
-  ]
+  ],
+  "calculator": {
+    "buffs": {
+      "dehya.swift-stride": {
+        "scope": "exploration"
+      }
+    }
+  }
 }

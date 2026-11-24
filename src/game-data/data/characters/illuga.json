@@ -1718,5 +1718,12 @@
         "maxInput": 3
       }
     }
-  ]
+  ],
+  "calculator": {
+    "buffs": {
+      "illuga.swift-stride": {
+        "scope": "exploration"
+      }
+    }
+  }
 }

@@ -1776,5 +1776,42 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "calculator": {
+    "groups": [
+      {
+        "type": "plunge",
+        "expanded": true
+      },
+      {
+        "type": "burst",
+        "expanded": true
+      },
+      {
+        "type": "skill",
+        "expanded": false
+      }
+    ],
+    "pinnedHits": [
+      "varesa.burst.param5",
+      "varesa.normal.param16"
+    ],
+    "hits": {
+      "varesa.normal.param16": {
+        "alias": "强化高空下落",
+        "note": "炽热激情状态下，从高处下落并击中地面。"
+      },
+      "varesa.burst.param1": {
+        "code": "大q"
+      },
+      "varesa.burst.param2": {
+        "code": "大q"
+      },
+      "varesa.burst.param5": {
+        "code": "小q",
+        "alias": "大火山崩落",
+        "note": "施放元素爆发，按下落攻击伤害计算。"
+      }
+    }
+  }
 }

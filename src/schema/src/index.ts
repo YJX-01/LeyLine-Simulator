@@ -50,3 +50,4 @@ export * from './content/artifact-rarity';
 export * from './content/hit-ref';
 export * from './project/hit-facts';
 export * from './content/equipment-metadata';
+export * from './content/calculator-display';

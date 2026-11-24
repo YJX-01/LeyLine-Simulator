@@ -1286,5 +1286,12 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "calculator": {
+    "hits": {
+      "navia.skill.param1": {
+        "alias": "玫瑰晶弹"
+      }
+    }
+  }
 }

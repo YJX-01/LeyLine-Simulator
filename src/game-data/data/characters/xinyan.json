@@ -1399,5 +1399,18 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "calculator": {
+    "buffs": {
+      "xinyan.shield-absorption.level-1": {
+        "alias": "散序节拍护盾"
+      },
+      "xinyan.shield-absorption.level-2": {
+        "alias": "歌头节拍护盾"
+      },
+      "xinyan.shield-absorption.level-3": {
+        "alias": "舞遍节拍护盾"
+      }
+    }
+  }
 }

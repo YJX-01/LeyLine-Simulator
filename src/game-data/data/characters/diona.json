@@ -1341,5 +1341,15 @@
         "cap": 1
       }
     }
-  ]
+  ],
+  "calculator": {
+    "buffs": {
+      "diona.shield-absorption.tap": {
+        "alias": "猫爪冻冻（点按）"
+      },
+      "diona.shield-absorption.hold": {
+        "alias": "猫爪冻冻（长按）"
+      }
+    }
+  }
 }

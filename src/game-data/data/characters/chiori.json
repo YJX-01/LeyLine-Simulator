@@ -1172,5 +1172,12 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "calculator": {
+    "buffs": {
+      "chiori.swift-stride": {
+        "scope": "exploration"
+      }
+    }
+  }
 }

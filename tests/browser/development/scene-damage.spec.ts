@@ -1,4 +1,4 @@
-import { test } from '../../helpers/calculator-browser';
+import { chooseDamageCard, revealDamageCard, test } from '../../helpers/calculator-browser';
 import { expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import type { DamageCalculatorDocument } from '@leyline/schema';
@@ -30,7 +30,7 @@ test('scene shockwave uses the selected difficulty, explicit coefficient and ene
   async function chooseScene(id: string, excluded: string) {
     await button('选择伤害').click();
     await expect(picker.locator(`[data-scene-hit="${excluded}"]`)).toHaveCount(0);
-    await picker.locator(`[data-scene-hit="${id}"]`).click();
+    await chooseDamageCard(picker.locator(`[data-scene-hit="${id}"]`));
   }
   const hitTime = calculator.getByLabel('命中时刻（秒）');
   const coefficient = calculator.getByRole('spinbutton', { name: 'ElementLevelCo 系数' });
@@ -100,7 +100,8 @@ test('scene shockwave uses the selected difficulty, explicit coefficient and ene
   await calculator.getByText('场景效果', { exact: true }).click();
   await field.selectOption(energyBlast);
   await button('选择伤害').click();
-  await expect(picker.locator(`[data-scene-hit="${energyBlast}"]`)).toBeVisible();
+  const sceneCard = await revealDamageCard(picker.locator(`[data-scene-hit="${energyBlast}"]`));
+  await expect(sceneCard).toBeVisible();
   await picker.locator(`[data-scene-hit="${penalty}"]`).click();
   await expect(hitTime).toHaveValue('0.1');
   await trigger.selectOption({ label: '已满足' });

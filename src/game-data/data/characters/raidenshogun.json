@@ -1711,5 +1711,15 @@
       },
       "label": "受益队员在雷电将军附近"
     }
+  },
+  "calculator": {
+    "hits": {
+      "raidenshogun.skill.param2": {
+        "alias": "雷眼协同"
+      },
+      "raidenshogun.burst.param1": {
+        "alias": "梦想一刀"
+      }
+    }
   }
 }

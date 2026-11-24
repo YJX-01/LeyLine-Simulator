@@ -1145,5 +1145,18 @@
         "per": 1
       }
     }
-  ]
+  ],
+  "calculator": {
+    "buffs": {
+      "xingqiu.rain-sword-reduction": {
+        "alias": "雨帘剑减伤"
+      },
+      "xingqiu.static-hydroBonus": {
+        "alias": "虚实工笔"
+      },
+      "xingqiu.c2.raincutter-shred": {
+        "alias": "二命减水抗"
+      }
+    }
+  }
 }

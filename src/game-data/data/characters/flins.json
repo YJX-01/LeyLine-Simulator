@@ -1568,5 +1568,26 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "calculator": {
+    "hits": {
+      "flins.burst.param1": {
+        "code": "大q"
+      },
+      "flins.burst.param2": {
+        "code": "大q"
+      },
+      "flins.burst.param3": {
+        "code": "大q",
+        "alias": "大招尾段"
+      },
+      "flins.burst.symphony": {
+        "code": "小q",
+        "alias": "雷霆交响"
+      },
+      "flins.burst.symphony-extra": {
+        "code": "小q"
+      }
+    }
+  }
 }

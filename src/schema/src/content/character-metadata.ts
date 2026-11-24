@@ -12,6 +12,7 @@ import { calculationCoverageRecordSchema, coverageImpactSchema } from '../calcul
 import { combatExpressionSchema as expression } from './combat-expression';
 import { metadataAcquisitionPath } from './metadata-fields.mjs';
 import { directLunarFamilies } from './reactions';
+import { characterCalculatorDisplaySchema, validateCalculatorDisplay } from './calculator-display';
 
 const ids = z.array(idSchema).max(1000);
 const scaling = z.object({ stat: damageScalingStatSchema, parameter: idSchema.optional(), skill: idSchema.optional(), ratio: finiteSchema.optional(),
@@ -71,6 +72,7 @@ export function validateMetadataFields(value:unknown, validation:z.RefinementCtx
 }
 export const characterMetadataSchema = characterFieldsSchema.pick({ kind: true, id: true, revision: true, identity: true, attributes: true, derivedFrom: true }).extend({
   schemaVersion: z.literal(APP_VERSION), namespace: definitionRefSchema.shape.namespace,
+  calculator: characterCalculatorDisplaySchema.optional(),
   progression: z.object({ curveIds: z.object({ hp: idSchema, attack: idSchema, defense: idSchema }).strict(), promotion: characterFieldsSchema.shape.progression.shape.promotion }).strict(),
   talents: z.array(talentFieldsSchema.extend({ hits: z.array(hit).max(1000), buffs })).max(30),
   passives: z.array(passiveSchema.extend({ buffs, hits: grantedHits })).max(30),
@@ -81,6 +83,7 @@ export const characterMetadataSchema = characterFieldsSchema.pick({ kind: true, 
   formulas: z.array(z.object({ id: idSchema, template: formulaDefinitionSchema.shape.template }).strict()).optional(), buffs,
 }).strict().superRefine((character, validation) => {
   validateMetadataFields(character,validation);
+  validateCalculatorDisplay(character.calculator, [character, ...character.talents, ...character.passives, ...character.constellations], validation);
   const unique = (ids: string[], field: string) => {
     if (new Set(ids).size !== ids.length) validation.addIssue({ code: 'custom', path: [field], message: '身份重复。' });
   };

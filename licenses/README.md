@@ -9,7 +9,7 @@
 - [sources.json](sources.json)、`sources/`：实际复用的代码、数据、图像及对应原始许可证。
 - [tooling.json](tooling.json)、`tooling/`：离线素材工具 Pillow 及其随轮子附带的组件声明。
 
-更新依赖或补丁后运行 `pnpm licenses:capture`；仅同步网页副本运行 `pnpm licenses:sync`；校验快照和分发副本运行 `pnpm licenses:check`。生成器读取已安装包及其原始许可文件。
+更新依赖或补丁后运行 `node tools/scripts/licenses/third-party-notices.mjs --capture`；仅同步网页副本运行 `node tools/scripts/licenses/third-party-notices.mjs`；校验快照和分发副本运行 `node tools/scripts/licenses/third-party-notices.mjs --check`。生成器读取已安装包及其原始许可文件。
 
 `.cache/public/licenses/` 保存分发副本，供网页、子路径构建和桌面渲染器使用。Vite 另生成 `licenses/bundled-packages.json`，列出进入产物的包。桌面打包器将 Electron 自带的 `LICENSE` 和 `LICENSES.chromium.html` 原样保留在应用根目录。
 

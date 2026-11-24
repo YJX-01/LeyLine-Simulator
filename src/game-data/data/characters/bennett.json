@@ -1390,5 +1390,15 @@
       },
       "label": "本次施放热情过载时位于美妙旅程领域内"
     }
+  },
+  "calculator": {
+    "buffs": {
+      "bennett.inspiration": {
+        "alias": "班尼特加攻"
+      },
+      "bennett.c6.inspiration-pyro": {
+        "alias": "六命火伤"
+      }
+    }
   }
 }

@@ -1457,5 +1457,12 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "calculator": {
+    "hits": {
+      "eula.burst.param2": {
+        "alias": "光剑爆炸"
+      }
+    }
+  }
 }

@@ -1137,5 +1137,12 @@
         "equals": "burst"
       }
     }
-  ]
+  ],
+  "calculator": {
+    "hits": {
+      "fischl.skill.param1": {
+        "alias": "奥兹攻击"
+      }
+    }
+  }
 }
