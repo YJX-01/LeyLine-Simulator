@@ -898,31 +898,66 @@
       },
       "10000126": {
         "id": "zibai",
-        "skills": []
+        "skills": [
+          11261,
+          11262,
+          11265
+        ],
+        "skillDepotId": 12601
       },
       "10000127": {
         "id": "illuga",
-        "skills": []
+        "skills": [
+          11271,
+          11272,
+          11275
+        ],
+        "skillDepotId": 12701
       },
       "10000128": {
         "id": "varka",
-        "skills": []
+        "skills": [
+          11281,
+          11282,
+          11285
+        ],
+        "skillDepotId": 12801
       },
       "10000129": {
         "id": "lohen",
-        "skills": []
+        "skills": [
+          11291,
+          11292,
+          11295
+        ],
+        "skillDepotId": 12901
       },
       "10000130": {
         "id": "linnea",
-        "skills": []
+        "skills": [
+          11301,
+          11302,
+          11305
+        ],
+        "skillDepotId": 13001
       },
       "10000131": {
         "id": "nicole",
-        "skills": []
+        "skills": [
+          11311,
+          11312,
+          11315
+        ],
+        "skillDepotId": 13101
       },
       "10000132": {
         "id": "prune",
-        "skills": []
+        "skills": [
+          11321,
+          11322,
+          11325
+        ],
+        "skillDepotId": 13201
       },
       "10000133": {
         "id": "sandrone",
@@ -935,11 +970,21 @@
       },
       "10000136": {
         "id": "mitya",
-        "skills": []
+        "skills": [
+          11361,
+          11362,
+          11364
+        ],
+        "skillDepotId": 13601
       },
       "10000137": {
         "id": "valeriy",
-        "skills": []
+        "skills": [
+          30601,
+          30602,
+          30605
+        ],
+        "skillDepotId": 13701
       },
       "10000140": {
         "id": "vodyanitsa",
@@ -961,7 +1006,12 @@
       },
       "10000148": {
         "id": "alyosha",
-        "skills": []
+        "skills": [
+          11481,
+          11482,
+          11485
+        ],
+        "skillDepotId": 14801
       },
       "10000150": {
         "id": "odette",
@@ -971,6 +1021,13 @@
           11505
         ],
         "skillDepotId": 15001
+      },
+      "10000005-501": {
+        "id": "aether",
+        "skills": [
+          100540
+        ],
+        "skillDepotId": 501
       },
       "10000005-502": {
         "id": "aether-pyro",
@@ -999,6 +1056,15 @@
         ],
         "skillDepotId": 504
       },
+      "10000005-505": {
+        "id": "aether-cryo",
+        "skills": [
+          100544,
+          10127,
+          10128
+        ],
+        "skillDepotId": 505
+      },
       "10000005-506": {
         "id": "aether-geo",
         "skills": [
@@ -1025,6 +1091,13 @@
           10118
         ],
         "skillDepotId": 508
+      },
+      "10000007-701": {
+        "id": "lumine",
+        "skills": [
+          100550
+        ],
+        "skillDepotId": 701
       },
       "10000007-702": {
         "id": "lumine-pyro",
@@ -1053,6 +1126,15 @@
         ],
         "skillDepotId": 704
       },
+      "10000007-705": {
+        "id": "lumine-cryo",
+        "skills": [
+          100554,
+          10127,
+          10128
+        ],
+        "skillDepotId": 705
+      },
       "10000007-706": {
         "id": "lumine-geo",
         "skills": [
@@ -1079,6 +1161,146 @@
           10118
         ],
         "skillDepotId": 708
+      },
+      "10000117-11701": {
+        "id": "manekin",
+        "skills": [
+          11171
+        ],
+        "skillDepotId": 11701
+      },
+      "10000117-11702": {
+        "id": "manekin-pyro",
+        "skills": [
+          11171,
+          11172,
+          111751
+        ],
+        "skillDepotId": 11702
+      },
+      "10000117-11703": {
+        "id": "manekin-hydro",
+        "skills": [
+          11171,
+          11172,
+          111752
+        ],
+        "skillDepotId": 11703
+      },
+      "10000117-11704": {
+        "id": "manekin-electro",
+        "skills": [
+          11171,
+          11172,
+          111753
+        ],
+        "skillDepotId": 11704
+      },
+      "10000117-11705": {
+        "id": "manekin-cryo",
+        "skills": [
+          11171,
+          11172,
+          111754
+        ],
+        "skillDepotId": 11705
+      },
+      "10000117-11706": {
+        "id": "manekin-anemo",
+        "skills": [
+          11171,
+          11172,
+          111755
+        ],
+        "skillDepotId": 11706
+      },
+      "10000117-11707": {
+        "id": "manekin-geo",
+        "skills": [
+          11171,
+          11172,
+          111756
+        ],
+        "skillDepotId": 11707
+      },
+      "10000117-11708": {
+        "id": "manekin-dendro",
+        "skills": [
+          11171,
+          11172,
+          111757
+        ],
+        "skillDepotId": 11708
+      },
+      "10000118-11801": {
+        "id": "manekina",
+        "skills": [
+          11171
+        ],
+        "skillDepotId": 11801
+      },
+      "10000118-11802": {
+        "id": "manekina-pyro",
+        "skills": [
+          11171,
+          11172,
+          111751
+        ],
+        "skillDepotId": 11802
+      },
+      "10000118-11803": {
+        "id": "manekina-hydro",
+        "skills": [
+          11171,
+          11172,
+          111752
+        ],
+        "skillDepotId": 11803
+      },
+      "10000118-11804": {
+        "id": "manekina-electro",
+        "skills": [
+          11171,
+          11172,
+          111753
+        ],
+        "skillDepotId": 11804
+      },
+      "10000118-11805": {
+        "id": "manekina-cryo",
+        "skills": [
+          11171,
+          11172,
+          111754
+        ],
+        "skillDepotId": 11805
+      },
+      "10000118-11806": {
+        "id": "manekina-anemo",
+        "skills": [
+          11171,
+          11172,
+          111755
+        ],
+        "skillDepotId": 11806
+      },
+      "10000118-11807": {
+        "id": "manekina-geo",
+        "skills": [
+          11171,
+          11172,
+          111756
+        ],
+        "skillDepotId": 11807
+      },
+      "10000118-11808": {
+        "id": "manekina-dendro",
+        "skills": [
+          11171,
+          11172,
+          111757
+        ],
+        "skillDepotId": 11808
       }
     },
     "weapons": {

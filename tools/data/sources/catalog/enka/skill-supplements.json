@@ -1,6 +1,6 @@
 {
   "formatVersion": 1,
-  "capturedOn": "2026-11-07",
+  "capturedOn": "2026-11-24",
   "method": "Release page numeric talent IDs matched by exact combat1/combat2/combat3 names from the pinned game catalog; not inferred from a player skillLevelMap or sorted IDs.",
   "characters": {
     "10000125": {
@@ -36,6 +36,41 @@
         "repository": "theBowja/genshin-db",
         "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
         "path": "src/data/English/talents/columbina.json"
+      }
+    },
+    "10000130": {
+      "id": "linnea",
+      "skillDepotId": 13001,
+      "skills": [
+        11301,
+        11302,
+        11305
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Capture Protocol",
+          "id": 11301
+        },
+        {
+          "category": "skill",
+          "name": "Countermeasure: Lumi's Battle Cry!",
+          "id": 11302
+        },
+        {
+          "category": "burst",
+          "name": "Memo: Survival Guide in Extreme Conditions",
+          "id": 11305
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000130/linnea/release?lang=en",
+        "localPath": ".references/enka/linnea-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/linnea.json"
       }
     },
     "10000133": {
@@ -143,6 +178,41 @@
         "path": "src/data/English/talents/vesna.json"
       }
     },
+    "10000148": {
+      "id": "alyosha",
+      "skillDepotId": 14801,
+      "skills": [
+        11481,
+        11482,
+        11485
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Skirmishing Spear",
+          "id": 11481
+        },
+        {
+          "category": "skill",
+          "name": "Thunderbolt Strike",
+          "id": 11482
+        },
+        {
+          "category": "burst",
+          "name": "Hunter's Advance",
+          "id": 11485
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000148/alyosha/release?lang=en",
+        "localPath": ".references/enka/alyosha-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/alyosha.json"
+      }
+    },
     "10000150": {
       "id": "odette",
       "skillDepotId": 15001,
@@ -176,6 +246,356 @@
         "repository": "theBowja/genshin-db",
         "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
         "path": "src/data/English/talents/odette.json"
+      }
+    },
+    "10000005-505": {
+      "id": "aether-cryo",
+      "skillDepotId": 505,
+      "skills": [
+        100544,
+        10127,
+        10128
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Foreign Frostglint",
+          "id": 100544
+        },
+        {
+          "category": "skill",
+          "name": "Ice Fog Piercer",
+          "id": 10127
+        },
+        {
+          "category": "burst",
+          "name": "Frostbound Javelin",
+          "id": 10128
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000005/505/aether/release?lang=en",
+        "localPath": ".references/enka/aether-cryo-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/travelercryo.json"
+      }
+    },
+    "10000007-705": {
+      "id": "lumine-cryo",
+      "skillDepotId": 705,
+      "skills": [
+        100554,
+        10127,
+        10128
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Foreign Frostglint",
+          "id": 100554
+        },
+        {
+          "category": "skill",
+          "name": "Ice Fog Piercer",
+          "id": 10127
+        },
+        {
+          "category": "burst",
+          "name": "Frostbound Javelin",
+          "id": 10128
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000007/705/lumine/release?lang=en",
+        "localPath": ".references/enka/lumine-cryo-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/travelercryo.json"
+      }
+    },
+    "10000126": {
+      "id": "zibai",
+      "skillDepotId": 12601,
+      "skills": [
+        11261,
+        11262,
+        11265
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Golden Blade's Petaled Touch",
+          "id": 11261
+        },
+        {
+          "category": "skill",
+          "name": "Heaven and Earth Made Manifest",
+          "id": 11262
+        },
+        {
+          "category": "burst",
+          "name": "Tri-Sphere Eminence",
+          "id": 11265
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000126/zibai/release?lang=en",
+        "localPath": ".references/enka/zibai-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/zibai.json"
+      }
+    },
+    "10000127": {
+      "id": "illuga",
+      "skillDepotId": 12701,
+      "skills": [
+        11271,
+        11272,
+        11275
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Oathkeeper's Spear",
+          "id": 11271
+        },
+        {
+          "category": "skill",
+          "name": "Dawnbearing Songbird",
+          "id": 11272
+        },
+        {
+          "category": "burst",
+          "name": "Shadowless Reflection",
+          "id": 11275
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000127/illuga/release?lang=en",
+        "localPath": ".references/enka/illuga-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/illuga.json"
+      }
+    },
+    "10000128": {
+      "id": "varka",
+      "skillDepotId": 12801,
+      "skills": [
+        11281,
+        11282,
+        11285
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Favonius Bladework: Dancing Radiance",
+          "id": 11281
+        },
+        {
+          "category": "skill",
+          "name": "Windbound Execution",
+          "id": 11282
+        },
+        {
+          "category": "burst",
+          "name": "Northwind Avatar",
+          "id": 11285
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000128/varka/release?lang=en",
+        "localPath": ".references/enka/varka-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/varka.json"
+      }
+    },
+    "10000129": {
+      "id": "lohen",
+      "skillDepotId": 12901,
+      "skills": [
+        11291,
+        11292,
+        11295
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Spear of Favonius — Broken Oath",
+          "id": 11291
+        },
+        {
+          "category": "skill",
+          "name": "Unforeseen Strike",
+          "id": 11292
+        },
+        {
+          "category": "burst",
+          "name": "Manifest Judgment",
+          "id": 11295
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000129/lohen/release?lang=en",
+        "localPath": ".references/enka/lohen-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/lohen.json"
+      }
+    },
+    "10000131": {
+      "id": "nicole",
+      "skillDepotId": 13101,
+      "skills": [
+        11311,
+        11312,
+        11315
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Allegoria",
+          "id": 11311
+        },
+        {
+          "category": "skill",
+          "name": "Revelation: Uncreated Light",
+          "id": 11312
+        },
+        {
+          "category": "burst",
+          "name": "Revelation: Ladder of Divine Ascent",
+          "id": 11315
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000131/nicole/release?lang=en",
+        "localPath": ".references/enka/nicole-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/nicole.json"
+      }
+    },
+    "10000132": {
+      "id": "prune",
+      "skillDepotId": 13201,
+      "skills": [
+        11321,
+        11322,
+        11325
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Badaboom! Hexbuster Hammer",
+          "id": 11321
+        },
+        {
+          "category": "skill",
+          "name": "Ring-A-Ding-Ding! Hexhunter Chime",
+          "id": 11322
+        },
+        {
+          "category": "burst",
+          "name": "The Bell Tolls! The Hunt Is On!",
+          "id": 11325
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000132/prune/release?lang=en",
+        "localPath": ".references/enka/prune-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/prune.json"
+      }
+    },
+    "10000136": {
+      "id": "mitya",
+      "skillDepotId": 13601,
+      "skills": [
+        11361,
+        11362,
+        11364
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Chain Reaction",
+          "id": 11361
+        },
+        {
+          "category": "skill",
+          "name": "Principle: Variable Detection",
+          "id": 11362
+        },
+        {
+          "category": "burst",
+          "name": "Analysis: Gradient Theory",
+          "id": 11364
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000136/mitya/release?lang=en",
+        "localPath": ".references/enka/mitya-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/mitya.json"
+      }
+    },
+    "10000137": {
+      "id": "valeriy",
+      "skillDepotId": 13701,
+      "skills": [
+        30601,
+        30602,
+        30605
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Guard Tactics: Sword and Shield",
+          "id": 30601
+        },
+        {
+          "category": "skill",
+          "name": "Active Defense: Bastion Charge",
+          "id": 30602
+        },
+        {
+          "category": "burst",
+          "name": "Focused Fire: Lightning Salvo",
+          "id": 30605
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000137/valeriy/release?lang=en",
+        "localPath": ".references/enka/valeriy-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/valeriy.json"
       }
     }
   }

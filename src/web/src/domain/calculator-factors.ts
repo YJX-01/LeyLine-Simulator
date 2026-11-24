@@ -28,7 +28,7 @@ export interface CalculatorFactor {
   multiplier: boolean;
   rows: FactorItem[];
   scaling?: BaseScaling;
-  detail?: { columns: FactorColumn[]; equation: string };
+  detail?: { columns: FactorColumn[]; equation: string; label?: string };
 }
 
 function buffRow(source: CalculatorBuff | undefined, modifierId: string, value: number | null, unit?: string): Row | undefined {
@@ -112,7 +112,7 @@ export function calculatorFactors(real: DamageResult, damage: DamageRequest, buf
       return keepZero && value === 0 ? [{ id, label, value: format(value) }] : item(id, label, value, format);
     });
   }
-  function contributions(traceId?: string, targets?: readonly string[], nodes = dependencies(traceId)): FactorItem[] {
+  function contributions(traceId?: string, targets?: readonly string[], nodes = dependencies(traceId, true)): FactorItem[] {
     const rows = new Map<string, FactorItem>();
     for (const node of nodes) {
       const instance = node.context?.effectInstanceId;
@@ -167,10 +167,38 @@ export function calculatorFactors(real: DamageResult, damage: DamageRequest, buf
         flat: flatRows.map(row => ({ ...row, value: /^\d/.test(row.value) ? '+' + row.value : row.value })),
         reaction: [...stageItems('reaction-base', '反应基础加值'), ...contributions(stages.get('reaction-base')?.traceId)] },
     });
-  } else {
-    add('reaction-base', '反应基础伤害', inputs('reaction-base', [['skillBase','技能基础伤害'],['reactionCoefficient','反应系数'],['baseMultiplier','技能基数倍率']]), false,
-      real.scaling.length ? { terms, attributes: [], multipliers: [], subtotal: numeric(rootNodes.get('scaledSkillBase') ?? rootNodes.get('skillBase')), flat: [], reaction: [] } : undefined);
-    add('reaction-base-factor','反应基础倍率区', inputs('reaction-base-factor', [['one','基础倍率'],['reactionBaseBonus','反应基础加成',true]]));
+  } else if (stages.has('reaction-base')) {
+    const scaled = rootNodes.get('scaledBase');
+    // Stellar direct hits bind scaledBase to the skill base times the reaction-specific base multiplier.
+    const product = dependencies(scaled?.dependencies[0], true);
+    const wrapped = output.family.startsWith('stellar-') && product[0]?.definition.id === 'product.damage';
+    const port = (id: string) => wrapped ? product.find(node => node.nodeId === id
+      && definitionKey(node.definition) === definitionKey(product[0].definition)) : undefined;
+    const skill = port('basis') ?? scaled ?? rootNodes.get('levelMultiplier');
+    const rate = port('rate');
+    const multiplier = rootNodes.get('baseMultiplier');
+    const coefficient = rootNodes.get('reactionCoefficient');
+    const base = stages.get('reaction-base')!;
+    const factors: [CalculationTraceNode | undefined, string][] = [[rate, '反应基数倍率'], [multiplier, '技能基数倍率'], [coefficient, '反应系数']];
+    const rows = [
+      ...(!real.scaling.length && skill ? [{ id: skill.id, label: scaled ? '技能基础伤害' : '等级基数', value: damageNumber(numeric(skill)) }] : []),
+      ...factors.flatMap(([node, label]) => node
+        ? [{ id: node.id, label, value: '× ' + damageNumber(numeric(node)) }, ...contributions(node.id)] : []),
+    ];
+    const operands = [skill, ...factors.map(([node]) => node)].filter(node => node !== undefined);
+    cards.push({ id: 'reaction-base', label: '反应基础伤害', value: numeric(base), multiplier: false, rows,
+      detail: skill && coefficient ? { columns: [], label: '反应基础伤害', equation:
+        operands.map(node => damageNumber(numeric(node))).join(' × ') + ' = ' + damageNumber(numeric(base)) } : undefined,
+      scaling: real.scaling.length ? { terms, attributes: contributions(skill?.id), multipliers: [],
+        subtotal: numeric(skill), flat: [], reaction: [] } : undefined });
+    const factor = stages.get('reaction-base-factor');
+    if (factor) {
+      const bonusInput = rootNodes.get('reactionBaseBonus');
+      const bonus = percent(numeric(bonusInput));
+      cards.push({ id: 'reaction-base-factor', label: '反应基础倍率区', value: numeric(factor), multiplier: true, rows: [],
+        detail: { columns: [{ title: '反应基础加成', total: bonus, rows: contributions(bonusInput?.id) }],
+          label: '反应基础倍率', equation: '1 + ' + bonus + ' = ' + damageNumber(numeric(factor)) } });
+    }
   }
   add('bonus','增伤区', inputs('bonus', [['one','基础倍率'],['elementBonus','元素或物理伤害加成',true],['hitBonus','命中伤害加成',true],['targetReduction','目标减伤',true]]));
   const reactionStage = stages.get('reaction-bonus');

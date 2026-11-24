@@ -22,6 +22,8 @@
 
 游戏资料验收直接读取获授权的 `.references/artifacts_mona.json` 与 [Enka 展柜原件](../tools/data/README.md#验证资料与独立计算记录)。记录依赖的检查在原件缺失时明确跳过。版本、错误和边界从原件派生，保存与取消等行为可用当前空文档。机制期望按来源独立推导，游戏观测单独登记。详见[测试规范](../docs/evidence-and-validation.md#测试与验证)。
 
+展柜构筑作为计算或文件用例的准备数据时，由 [recorded-project](helpers/recorded-project.ts) 复用原件解析结果，每次返回独立的构筑副本。核对展柜导入、确认和入库的用例各自通过实际入口执行。
+
 Playwright 辅助代码的运行时映射在 `browser/playwright-runtime.json`，类型检查使用仓库根 `tsconfig.json`。
 
 ## 伤害计算器回归

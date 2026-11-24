@@ -13,6 +13,7 @@ import { compareTimelineLoadouts } from '@leyline/engine';
 import { applyCharacterDefinition, copyCharacterDefinition, parseCharacterDefinition } from '../../src/web/src/domain/character-definition';
 import { exportCharacterSnapshot } from '../../src/web/src/domain/structured-character-import';
 import { recordedVesnaDamage } from '../helpers/recorded-vesna';
+import { recordedShowcaseBuild } from '../helpers/recorded-project';
 
 const path = '.references/enka/uid-107590923.json';
 const fact = (value: Value): CalculationFact => ({ value, provenance: 'explicit', sourceRefs: [] });
@@ -22,19 +23,13 @@ const request = (): DamageRequest => ({ hit: { definition: { group: 'characters'
     'beyondthechrysalis.loyalWind': fact({ kind: 'boolean', value: true }), 'beyondthechrysalis.betrayalWind': fact({ kind: 'boolean', value: true }),
     'scarletproof.stellarWindow': fact({ kind: 'boolean', value: true }) } }] });
 
-async function recordedBuilds() {
-  const raw = JSON.parse(readFileSync(path, 'utf8'));
-  const preview = await previewEnkaImport(raw, String(raw.uid), createAccount());
-  return new Map(preview.rows.map(row => [row.character.showcase!.build.character.id, row.character.showcase!.build]));
-}
-
 // Gear/cultivation are from the original public response. Battle conditions above are
 // explicit calculator inputs, not recorded battle events, party or damage observations.
 describe.skipIf(!existsSync(path))('recorded Vesna through the production calculator', () => {
   it('keeps known candidate math through coverage gaps and missing unrelated equipment', async () => {
-    const builds = await recordedBuilds();
-    const document = createDamageCalculation(builds.get('vesna')!, request(), defaultEnemy());
-    const teammate = addActorFromBuild(document.project, builds.get('varesa')!);
+    const [vesna, varesa] = await Promise.all(['vesna', 'varesa'].map(id => recordedShowcaseBuild(id, path)));
+    const document = createDamageCalculation(vesna, request(), defaultEnemy());
+    const teammate = addActorFromBuild(document.project, varesa);
     const expected = (rank: 1 | 2) => recordedVesnaDamage(rank, 1, true, 'expected', 1);
     const baseline = evaluateTimeline(document.project);
     expect(baseline.totalValue).toBeCloseTo(expected(1), 8);
@@ -53,7 +48,7 @@ describe.skipIf(!existsSync(path))('recorded Vesna through the production calcul
   }, 20_000);
 
   it('reopens pending, direct lunar and explicitly ranked reaction records', async () => {
-    const builds = await recordedBuilds(), flins = builds.get('flins')!, columbina = builds.get('columbina')!;
+    const [flins, columbina] = await Promise.all(['flins', 'columbina'].map(id => recordedShowcaseBuild(id, path)));
     const project = createEmptyProject();
     const flinsId = addActorFromBuild(project, flins), columbinaId = addActorFromBuild(project, columbina);
     const skill = flins.character.talents.find(talent => talent.category === 'burst')!;
@@ -107,7 +102,7 @@ describe.skipIf(!existsSync(path))('recorded Vesna through the production calcul
   });
 
   it('reads the derived stance and stack count from explicit project actions after reopening', async () => {
-    const build = (await recordedBuilds()).get('vesna')!;
+    const build = await recordedShowcaseBuild('vesna', path);
     const damage = request();
     delete damage.facts![0].values['vesna.stance'];
     delete damage.facts![0].values['vesna.disciplineStacks'];

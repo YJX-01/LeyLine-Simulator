@@ -47,7 +47,7 @@ export function damageBreakdown(data: CompiledData, request: DamageRequest, hit:
         ...(count?.kind === 'fact' ? { count: { input: count.key, value: numeric(nodes.get(term.count!)) } } : {}) });
     }
   }
-  if (hit) walk(hit.base.formula, hit.base.bindings, rootNode('skillBase')?.dependencies[0]);
+  if (hit) walk(hit.base.formula, hit.base.bindings, (rootNode('skillBase') ?? rootNode('scaledBase'))?.dependencies[0]);
   const parts = { bonus: stage('bonus') ?? stage('reaction-bonus'), crit: stage('crit'), defense: stage('defense'), resistance: stage('resistance') };
   const reaction = request.reaction && request.reaction !== 'none' && hit ? request.reaction : undefined;
   let detail: DamageResult['reaction'];

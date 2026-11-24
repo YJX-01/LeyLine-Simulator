@@ -1,14 +1,13 @@
+import { recordedShowcaseBuild } from '../../../helpers/recorded-project';
 import { officialShowcase } from '../../../helpers/recorded-reference';
 import { selectCatalogHit } from '../../../helpers/catalog-calculation';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
 import { elements, type Build, type Enemy, type Project, type StatKey } from '@leyline/schema';
 import { compileStructuredCharacter, evaluateDamage, evaluateTimeline, resolveBuild, resolveEquipmentPanel } from '@leyline/engine';
 import { addActorFromBuild } from '../../../../src/web/src/domain/real-project';
 import { createEmptyProject } from '../../../../src/web/src/domain/workbench-project';
-import { createAccount } from '../../../../src/web/src/domain/account';
-import { previewEnkaImport } from '../../../../src/web/src/domain/enka-import';
 
 const hilichurl: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function setting(id: string, weapon: string): Promise<Build> {
@@ -120,8 +119,7 @@ describe('existing passive effects through the current panel', () => {
 
 describe.skipIf(!existsSync(officialShowcase))('Noblesse format queries derived from the recorded Bennett build', () => {
   it('independently calculates the 20% base-ATK increase with recorded artifacts in a theoretical Jean configuration', async () => {
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
-    const recorded = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
+    const recorded = await recordedShowcaseBuild('bennett');
     const build = await setting('jean', 'primordialjadecutter');
     // Legal theoretical equipment using original observed artifact values; never claimed as player wearing.
     build.artifacts = recorded.artifacts;
@@ -145,8 +143,7 @@ describe.skipIf(!existsSync(officialShowcase))('Noblesse format queries derived 
   });
 
   it.each([0, 11999, 12000])('applies only after an explicit burst action and before 12s at %i ms', async timeMs => {
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
-    const build = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
+    const build = await recordedShowcaseBuild('bennett');
     expect(build.artifacts.filter(item => item.setId === 'noblesseoblige')).toHaveLength(5);
     // Derive a single legal Jean query with the original recorded artifacts.
     const recipient = await setting('jean', 'primordialjadecutter');
@@ -155,15 +152,17 @@ describe.skipIf(!existsSync(officialShowcase))('Noblesse format queries derived 
     // Action and hit are explicit query inputs. No observed battle sequence is claimed.
     project.timeline.unshift({ id: 'explicit-burst', actor, timeMs: 0, order: 0, kind: 'action', definition: actor + '-character', skillId: 'jean.burst' });
     const evaluate = () => evaluateTimeline(project);
-    const instance = evaluate().effectInstances!.find(instance => instance.effect === 'noblesseoblige.burst-team-attack.team-attack');
+    const initial = evaluate();
+    const instance = initial.effectInstances!.find(instance => instance.effect === 'noblesseoblige.burst-team-attack.team-attack');
     expect(instance?.content?.entity).toBe('noblesseoblige');
     const applied = () => evaluate().points[0].formula.effects.some(effect => effect.effect === instance!.effect);
-    expect(applied()).toBe(timeMs < 12000);
+    expect(initial.points[0].formula.effects.some(effect => effect.effect === instance!.effect)).toBe(timeMs < 12000);
     project.timeline[0].order = 2;
     if (timeMs === 0) expect(applied()).toBe(false);
     project.timeline[0].order = 0;
     delete project.timeline[0].skillId;
-    expect(evaluate().effectInstances?.some(instance => instance.effect === 'noblesseoblige.burst-team-attack.team-attack' && instance.unconfirmed)).toBe(true);
-    if (timeMs < 12000) expect(evaluate().status).toBe('partial');
+    const unconfirmed = evaluate();
+    expect(unconfirmed.effectInstances?.some(instance => instance.effect === 'noblesseoblige.burst-team-attack.team-attack' && instance.unconfirmed)).toBe(true);
+    if (timeMs < 12000) expect(unconfirmed.status).toBe('partial');
   });
 });

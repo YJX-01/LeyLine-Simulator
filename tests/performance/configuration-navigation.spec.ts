@@ -3,14 +3,29 @@ import {existsSync,mkdirSync,readFileSync,writeFileSync} from 'node:fs';
 import {test,expect,type Page,type BrowserContext} from '@playwright/test';
 import {restoreRecordedNoteSetup} from '../helpers/recorded-note-setup';
 
+const mona = '.references/artifacts_mona.json';
+
+async function restoreMonaCharacters(page: Page) {
+  await page.getByTestId('workspace-nav-artifacts').click();
+  await page.getByRole('button', { name: '莫娜导入', exact: true }).click();
+  await page.getByLabel('导入莫娜圣遗物文件', { exact: true }).setInputFiles(recordedJsonFile(mona));
+  await page.getByRole('button', { name: '确认导入 458 件圣遗物', exact: true }).click();
+  await restoreRecordedNoteSetup(page);
+}
+
 function writeReport(name: string, report: object) {
   mkdirSync('artifacts/performance', { recursive: true });
   const phase = process.env.LEYLINE_PROFILE_PHASE === 'before' ? 'before' : 'after';
   writeFileSync(`artifacts/performance/${name}-${phase}.json`, JSON.stringify(report, null, 2) + '\n');
 }
 test('configuration navigation on the actual note-linked inventory records click-to-paint and CPU samples',async({page,context,browserName})=>{
-  test.skip(!existsSync('.references/artifacts_mona.json'),'Requires actual recorded Mona inventory.');
-  test.setTimeout(45000);await page.setViewportSize({width:1440,height:1000});await page.goto('/');await page.getByTestId('workspace-nav-artifacts').click();await page.getByRole('button',{name:'莫娜导入',exact:true}).click();await page.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles(recordedJsonFile('.references/artifacts_mona.json'));await page.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();await restoreRecordedNoteSetup(page);await page.getByTestId('workspace-nav-characters').click();await expect(page.locator('.character-cards > button').first()).toBeVisible();
+  test.skip(!existsSync(mona),'Requires actual recorded Mona inventory.');
+  test.setTimeout(45000);
+  await page.setViewportSize({width:1440,height:1000});
+  await page.goto('/');
+  await restoreMonaCharacters(page);
+  await page.getByTestId('workspace-nav-characters').click();
+  await expect(page.locator('.character-cards > button').first()).toBeVisible();
   const original=await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0')),session=browserName==='chromium'?await context.newCDPSession(page):undefined,timings:number[]=[];if(session){await session.send('Profiler.enable');await session.send('Profiler.start');}
   for(let index=0;index<3;index++){
     const start=await page.evaluate(()=>performance.now());await page.getByTestId('workspace-nav-loadouts').click();await expect(page.locator('.configuration-row')).toHaveCount(10);await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));timings.push(await page.evaluate(()=>performance.now())-start);await page.getByTestId('workspace-nav-characters').click();
@@ -63,7 +78,7 @@ async function sampleCharacterDetail(page:Page,context:BrowserContext,browserNam
 }
 
 test('warm character detail opens on recorded Mona inventory and Enka builds',async({page,context,browserName},info)=>{
-  const mona='.references/artifacts_mona.json',enka='.references/enka/official-example.json';
+  const enka='.references/enka/official-example.json';
   test.skip(!existsSync(enka),'Requires the recorded public showcase.');
   test.setTimeout(90000);
   await page.setViewportSize({width:1440,height:1000});
@@ -72,11 +87,7 @@ test('warm character detail opens on recorded Mona inventory and Enka builds',as
     const inventoryPage=await context.browser()!.newPage({viewport:page.viewportSize()!});
     try{
       await inventoryPage.goto(new URL('/',String(info.project.use.baseURL)).href);
-      await inventoryPage.getByTestId('workspace-nav-artifacts').click();
-      await inventoryPage.getByRole('button',{name:'莫娜导入',exact:true}).click();
-      await inventoryPage.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles(recordedJsonFile(mona));
-      await inventoryPage.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();
-      await restoreRecordedNoteSetup(inventoryPage);
+      await restoreMonaCharacters(inventoryPage);
       report.mona={source:mona,...await sampleCharacterDetail(inventoryPage,inventoryPage.context(),browserName)};
     }finally{await inventoryPage.close();}
   }else report.mona={status:'skipped',source:mona};

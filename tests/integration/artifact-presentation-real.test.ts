@@ -29,9 +29,19 @@ describe.skipIf(!existsSync(path))('Actual showcase artifact presentation',()=>{
 });
 
 const monaPath='.references/artifacts_mona.json';
+async function prepareMona() {
+ const data=await loadAccountGameData();
+ const preview=await previewMonaImport(readFileSync(monaPath,'utf8'),createAccount(),data.catalog.sets,data.main);
+ return {data,preview};
+}
+let monaPromise: ReturnType<typeof prepareMona> | undefined;
+async function recordedMona() {
+ const {data,preview}=await (monaPromise ??= prepareMona());
+ return {data,preview:structuredClone(preview)};
+}
 describe.skipIf(!existsSync(monaPath))('Actual Mona inventory enhancement inference',()=>{
  it('infers the first real item without changing rounded export values',async()=>{
-  const data=await loadAccountGameData();const preview=await previewMonaImport(readFileSync(monaPath,'utf8'),createAccount(),data.catalog.sets,data.main);
+  const {data,preview}=await recordedMona();
   const piece=preview.additions.find(item=>item.real?.source?.key==='id:8770563143816081')!.real!;const before=JSON.stringify(piece);
   expect(piece.substats.map(sub=>sub.value)).toEqual([.058,.11,.109,.179]);
   const counts=upgradeCounts(piece);expect(counts.map(count=>count?.min)).toEqual([0,1,2,2]);expect(counts.map(count=>count?.max)).toEqual([0,1,2,2]);expect(counts.every(count=>count&&!count.recorded)).toBe(true);
@@ -76,9 +86,9 @@ describe.skipIf(!existsSync(monaPath))('Actual Mona inventory enhancement infere
 
 describe.skipIf(!existsSync(monaPath))('Preferred configuration from actual inventory operations',()=>{
  it('adopts an unequipped-flower draft without cloning inventory and rejects missing referenced physical items',async()=>{
-  const data=await loadAccountGameData();
+  const {preview}=await recordedMona();
   const original=createAccount();
-  original.artifacts=(await previewMonaImport(readFileSync(monaPath,'utf8'),original,data.catalog.sets,data.main)).additions;
+  original.artifacts=preview.additions;
   const {organizeMonaWearNotes}=await import('../../src/web/src/domain/mona-wear-notes');
   const {preparePreferredConfiguration}=await import('../../src/web/src/domain/account-configurations');
   organizeMonaWearNotes(original);

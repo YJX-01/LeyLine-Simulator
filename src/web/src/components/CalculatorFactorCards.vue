@@ -55,20 +55,20 @@ function hue(factor: string, item: string) {
           </div>
           <div class="subtotal"><span>基础伤害小计</span><strong>{{ damageNumber(card.scaling.subtotal) }}</strong></div>
         </template>
+        <div v-for="group in groups(card)" :key="group.title">
+          <h4 v-if="group.title">{{ group.title }}</h4>
+          <CalculatorFactorItems :rows="group.rows" :hue="id => hue(card.id,id)" />
+        </div>
         <template v-if="card.detail">
-          <div v-if="card.detail.columns.length" class="scaling-pair">
+          <div v-if="card.detail.columns.length" :class="{ 'scaling-pair': card.detail.columns.length > 1 }">
             <section v-for="(column, index) in card.detail.columns" :key="column.title" class="scaling-box" :class="index ? 'rate-box' : 'stat-box'">
               <h4 class="column-heading"><span>{{ column.title }}</span><strong>{{ column.total }}</strong></h4>
               <CalculatorFactorItems :rows="column.rows" :hue="id => hue(card.id + column.title,id)" />
               <p v-if="column.formula" class="conversion">{{ column.formula }}</p>
             </section>
           </div>
-          <div class="subtotal"><span>{{ card.id === 'crit' ? '期望暴击倍率' : '增伤倍率' }}</span><strong>{{ card.detail.equation }}</strong></div>
+          <div class="subtotal"><span>{{ card.detail.label ?? (card.id === 'crit' ? '期望暴击倍率' : '增伤倍率') }}</span><strong>{{ card.detail.equation }}</strong></div>
         </template>
-        <div v-for="group in groups(card)" :key="group.title">
-          <h4 v-if="group.title">{{ group.title }}</h4>
-          <CalculatorFactorItems :rows="group.rows" :hue="id => hue(card.id,id)" />
-        </div>
       </div>
     </details>
   </section>

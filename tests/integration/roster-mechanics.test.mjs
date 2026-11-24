@@ -10,6 +10,12 @@ import { auditBuild, auditHit } from '../../tools/lib/roster-evaluation.mjs';
 import { auditVarkaChargedHands } from '../../tools/lib/varka-charged-hands-audit.mjs';
 
 const catalog = await createRuntimeCatalog(), engine = await loadContentSchema('/src/engine/src/index.ts');
+const fixtureModules = new Map();
+function loadFixtureModule(path) {
+  if (!fixtureModules.has(path)) fixtureModules.set(path, loadContentSchema(path));
+  return fixtureModules.get(path);
+}
+
 test('an unknown party element preserves a rank-invariant cooldown and identifies the missing damage rank', async () => {
   const sword = await catalog.get('weapons','dullblade');
   const kaeya = auditBuild(await catalog.get('characters','kaeya'), sword);
@@ -34,9 +40,9 @@ test('an unknown party element preserves a rank-invariant cooldown and identifie
   assert.equal(JSON.stringify(inputs),baseline);
 });
 test('recorded talent heals validate the saved count and remove the recipient without mutating the original build', async () => {
-  const { createEmptyProject, removeProjectActor } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
-  const { addActorFromBuild, addTalentHeal } = await loadContentSchema('/src/web/src/domain/real-project.ts');
-  const { projectSchema } = await loadContentSchema('/src/schema/src/index.ts');
+  const { createEmptyProject, removeProjectActor } = await loadFixtureModule('/src/web/src/domain/workbench-project.ts');
+  const { addActorFromBuild, addTalentHeal } = await loadFixtureModule('/src/web/src/domain/real-project.ts');
+  const { projectSchema } = await loadFixtureModule('/src/schema/src/index.ts');
   const project = createEmptyProject();
   const healer = addActorFromBuild(project, auditBuild(await catalog.get('characters','lyney'), await catalog.get('weapons','huntersbow')));
   const ally = addActorFromBuild(project, auditBuild(await catalog.get('characters','kaeya'), await catalog.get('weapons','dullblade')));
@@ -55,7 +61,7 @@ test('recorded talent heals validate the saved count and remove the recipient wi
   assert.equal(projectSchema.safeParse(project).success,true);
 });
 test('authored talents reject duplicate parameters, legacy hits and ambiguous damage declarations', async () => {
-  const schema=await loadContentSchema('/src/schema/src/index.ts');
+  const schema=await loadFixtureModule('/src/schema/src/index.ts');
   const metadata=(await catalog.get('characters','kaeya')).metadata;
   assert.ok(schema.characterMetadataSchema.safeParse(metadata).success);
   for (const revision of ['ab12cde', 'a'.repeat(32), 'b'.repeat(40), 'c'.repeat(64)]) {
@@ -156,8 +162,8 @@ test('Bennett uses owner white attack, recipient HP and on-field interval', asyn
   }
 });
 test('Ayato gains Namisen after impact, refreshes the cap on water illusion burst and clears it on departure or expiry', async () => {
-  const {createEmptyProject}=await loadContentSchema('/src/web/src/domain/workbench-project.ts');
-  const {addActorFromBuild,addFieldChange,addSkillAction,addSkillHit,defaultEnemy}=await loadContentSchema('/src/web/src/domain/real-project.ts');
+  const {createEmptyProject}=await loadFixtureModule('/src/web/src/domain/workbench-project.ts');
+  const {addActorFromBuild,addFieldChange,addSkillAction,addSkillHit,defaultEnemy}=await loadFixtureModule('/src/web/src/domain/real-project.ts');
   for(const rank of [0,2])for(const leave of [false,true]) {
     const b=await build('kamisatoayato','dullblade'); b.constellation=rank;
     const project=createEmptyProject(); project.enemy=defaultEnemy();project.enemy.level=90;project.enemy.resistances.hydro=.1;
@@ -188,10 +194,10 @@ test('Furina grants both rank-ten contributions for one duration', async () => {
   }
 });
 test('confirmed Buff snapshots persist Fanfare and individual Blackcliff expiries from time zero', async () => {
-  const { createEmptyProject, importProject } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
-  const { addActorFromBuild, addCombatObservation, addSkillHit, defaultEnemy } = await loadContentSchema('/src/web/src/domain/real-project.ts');
+  const { createEmptyProject, importProject } = await loadFixtureModule('/src/web/src/domain/workbench-project.ts');
+  const { addActorFromBuild, addCombatObservation, addSkillHit, defaultEnemy } = await loadFixtureModule('/src/web/src/domain/real-project.ts');
   const { calculatorBuffChoices, applyCalculatorBuffs } = await loadContentSchema('/src/web/src/domain/calculator-buffs.ts', [catalogPlugin()]);
-  const { packDocument } = await loadContentSchema('/src/web/src/domain/content-document.ts');
+  const { packDocument } = await loadFixtureModule('/src/web/src/domain/content-document.ts');
   const project = createEmptyProject(), mode = { crit: 'noncritical', reaction: 'none' };
   project.enemy = defaultEnemy();
   const kaeya = addActorFromBuild(project, await build('kaeya', 'blackclifflongsword'));
@@ -231,11 +237,11 @@ test('confirmed Buff snapshots persist Fanfare and individual Blackcliff expirie
   near(engine.evaluateTimeline(edited).points.find(p=>p.id===ids[1]).real.panel.stats.attack-base.stats.attack,.12*base.baseStats.attack);
 });
 test('Xiao, Kaveh, Yanfei and Kokomi use the correct base, element, recipient and cast window, including failed casts', async () => {
-  const { assembleCalculationLibrary } = await loadContentSchema('/src/game-data/src/calculation-library.mjs');
+  const { assembleCalculationLibrary } = await loadFixtureModule('/src/game-data/src/calculation-library.mjs');
   const local = name => readContentSource(new URL('../../src/game-data/data/calculation/'+name+'.json',import.meta.url));
   const rules = assembleCalculationLibrary(local('common'),local('reactions'),[]);
-  const { createEmptyProject } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
-  const { addActorFromBuild, addFieldChange, addSkillAction, addSkillHit, addTransformativeReaction, defaultEnemy } = await loadContentSchema('/src/web/src/domain/real-project.ts');
+  const { createEmptyProject } = await loadFixtureModule('/src/web/src/domain/workbench-project.ts');
+  const { addActorFromBuild, addFieldChange, addSkillAction, addSkillHit, addTransformativeReaction, defaultEnemy } = await loadFixtureModule('/src/web/src/domain/real-project.ts');
   const mode = {crit:'noncritical',reaction:'none'};
   for (const [id,weapon,infused,duration,energy] of [['xiao','beginnersprotector','anemo',15000,70],['kaveh','wastergreatsword','dendro',12000,80],['yanfei','apprenticesnotes','pyro',15000,80],['sangonomiyakokomi','apprenticesnotes','hydro',10000,70]]) {
     const p = createEmptyProject(), b = auditBuild(await catalog.get('characters',id),await catalog.get('weapons',weapon));
@@ -308,8 +314,8 @@ test('Nicole refreshes one shared attack bonus and uses the increased C3 skill r
 });
 test('Adventurer gains 1000 HP only after its second occupied slot', async () => {
   const b = await build('kaeya', 'dullblade'), set = await catalog.get('sets', 'adventurer');
-  const { createEmptyProject } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
-  const { addActorFromBuild } = await loadContentSchema('/src/web/src/domain/real-project.ts');
+  const { createEmptyProject } = await loadFixtureModule('/src/web/src/domain/workbench-project.ts');
+  const { addActorFromBuild } = await loadFixtureModule('/src/web/src/domain/real-project.ts');
   const traveler = auditBuild(await catalog.get('characters', 'aether'), await catalog.get('weapons', 'dullblade'), [set]);
   for (const [pieces, verified] of [[0, true], [2, true], [3, true], [4, false]]) {
     const project = createEmptyProject();
@@ -421,8 +427,8 @@ test('Furina accumulates signed HP changes from the team and applies her constel
 });
 
 test('recorded healing creates one bubble per window and preserves authored impacts and inputs', async () => {
-  const { createEmptyProject } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
-  const { addActorFromBuild, addCombatObservation, addSelectedHit, defaultEnemy } = await loadContentSchema('/src/web/src/domain/real-project.ts');
+  const { createEmptyProject } = await loadFixtureModule('/src/web/src/domain/workbench-project.ts');
+  const { addActorFromBuild, addCombatObservation, addSelectedHit, defaultEnemy } = await loadFixtureModule('/src/web/src/domain/real-project.ts');
   const project = createEmptyProject(), b = await build('barbara', 'apprenticesnotes'), set = await catalog.get('sets', 'oceanhuedclam');
   project.enemy = defaultEnemy();
   project.enemy.resistances.physical = .1;
@@ -471,8 +477,8 @@ test('Lohen uses skill ranks for Cryo normals and distinct Will multipliers on e
 });
 
 test('Yae resolves 14-second independent Sakura clocks, only destroys nearby summons and de-duplicates a manual strike', async () => {
-  const { createEmptyProject } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
-  const { addActorFromBuild, addSkillAction, addSkillHit, defaultEnemy } = await loadContentSchema('/src/web/src/domain/real-project.ts');
+  const { createEmptyProject } = await loadFixtureModule('/src/web/src/domain/workbench-project.ts');
+  const { addActorFromBuild, addSkillAction, addSkillHit, defaultEnemy } = await loadFixtureModule('/src/web/src/domain/real-project.ts');
   const p = createEmptyProject(), b = await build('yaemiko', 'apprenticesnotes'), id = addActorFromBuild(p, b);
   p.enemy = defaultEnemy();
   const range = nearby => ({ nearby, targetInRange: true, crit: 'noncritical', reaction: 'none' });
@@ -591,7 +597,7 @@ const inventoryFile = new URL('../../.references/artifacts_mona.json', import.me
 test('two recorded equipment selections give Nahida a real team maximum of 800 and 1200', { skip: !existsSync(inventoryFile) }, async () => {
   const { createAccount } = await loadContentSchema('/src/web/src/domain/account.ts');
   const { previewMonaImport } = await loadContentSchema('/src/web/src/domain/mona-import.ts', [catalogPlugin()]);
-  const { calculationArtifact } = await loadContentSchema('/src/web/src/domain/build-snapshot.ts');
+  const { calculationArtifact } = await loadContentSchema('/src/web/src/domain/build-snapshot.ts', [catalogPlugin()]);
   const catalogSets = await Promise.all(catalog.inventory.sets.map(id => catalog.get('sets', id)));
   const holder = { ...await build('kaedeharakazuha', 'silverlight'), refinement: 5 };
   const contents = readFileSync(inventoryFile, 'utf8'), recording = JSON.parse(contents);
@@ -742,9 +748,9 @@ test('Nicole projections use the dealer’s ATK, level, element and crit, and Ni
 });
 
 test('Nicole shares four projections per cast across dealers, separates C1, and replays a manual impact once', async () => {
-  const { createEmptyProject, importProject } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
-  const { packDocument } = await loadContentSchema('/src/web/src/domain/content-document.ts');
-  const { addActorFromBuild, addFieldChange, addSkillAction, addSkillHit, defaultEnemy } = await loadContentSchema('/src/web/src/domain/real-project.ts');
+  const { createEmptyProject, importProject } = await loadFixtureModule('/src/web/src/domain/workbench-project.ts');
+  const { packDocument } = await loadFixtureModule('/src/web/src/domain/content-document.ts');
+  const { addActorFromBuild, addFieldChange, addSkillAction, addSkillHit, defaultEnemy } = await loadFixtureModule('/src/web/src/domain/real-project.ts');
   const project = createEmptyProject();
   project.enemy = { ...defaultEnemy(), level: 1 };
   const n = await build('nicole','apprenticesnotes');
@@ -799,9 +805,9 @@ test('Nicole shares four projections per cast across dealers, separates C1, and 
 });
 
 test('Favonius particles follow the collector and each party member’s recharge, energy cap and seed on replay', async () => {
-  const { createEmptyProject, importProject } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
-  const { packDocument } = await loadContentSchema('/src/web/src/domain/content-document.ts');
-  const { addActorFromBuild, addSkillHit, addParticlePickup, defaultEnemy } = await loadContentSchema('/src/web/src/domain/real-project.ts');
+  const { createEmptyProject, importProject } = await loadFixtureModule('/src/web/src/domain/workbench-project.ts');
+  const { packDocument } = await loadFixtureModule('/src/web/src/domain/content-document.ts');
+  const { addActorFromBuild, addSkillHit, addParticlePickup, defaultEnemy } = await loadFixtureModule('/src/web/src/domain/real-project.ts');
   const p = createEmptyProject();
   p.enemy = defaultEnemy();
   p.seed = 0;
@@ -836,8 +842,8 @@ test('Favonius particles follow the collector and each party member’s recharge
 });
 
 test('Sacrificial Fragments frees one recovering Sucrose charge and preserves the next recharge duration', async () => {
-  const { createEmptyProject } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
-  const { addActorFromBuild, addSkillHit, addSkillAction, defaultEnemy } = await loadContentSchema('/src/web/src/domain/real-project.ts');
+  const { createEmptyProject } = await loadFixtureModule('/src/web/src/domain/workbench-project.ts');
+  const { addActorFromBuild, addSkillHit, addSkillAction, defaultEnemy } = await loadFixtureModule('/src/web/src/domain/real-project.ts');
   const p = createEmptyProject();
   p.enemy = defaultEnemy();
   const source = addActorFromBuild(p,{ ...await build('sucrose','sacrificialfragments'), constellation: 1 });
@@ -856,11 +862,11 @@ test('Sacrificial Fragments frees one recovering Sucrose charge and preserves th
 });
 
 test('all nine transformative reactions use the owner level and EM, the damage element and the field’s reaction filter', async () => {
-  const { assembleCalculationLibrary } = await loadContentSchema('/src/game-data/src/calculation-library.mjs');
+  const { assembleCalculationLibrary } = await loadFixtureModule('/src/game-data/src/calculation-library.mjs');
   const local = name => readContentSource(new URL('../../src/game-data/data/calculation/' + name + '.json',import.meta.url));
-  const { createEmptyProject, importProject } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
-  const { packDocument } = await loadContentSchema('/src/web/src/domain/content-document.ts');
-  const { addActorFromBuild, addTransformativeReaction, defaultEnemy } = await loadContentSchema('/src/web/src/domain/real-project.ts');
+  const { createEmptyProject, importProject } = await loadFixtureModule('/src/web/src/domain/workbench-project.ts');
+  const { packDocument } = await loadFixtureModule('/src/web/src/domain/content-document.ts');
+  const { addActorFromBuild, addTransformativeReaction, defaultEnemy } = await loadFixtureModule('/src/web/src/domain/real-project.ts');
   const p = createEmptyProject(), rules = assembleCalculationLibrary(local('common'),local('reactions'),[]);
   p.enemy = defaultEnemy();
   p.enemy.resistances.hydro = .4; p.enemy.resistances.dendro = .2;

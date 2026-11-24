@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { loadContentSchema } from '../../tools/lib/load-content-schema.mjs';
 
 const engine = await loadContentSchema('/src/engine/src/index.ts');
+const sourceLibrary = readCalculationLibrary();
 
 function closureFor(library, roots) {
   const result = engine.collectCalculationRoots(library, { roots, sourceIds: [], families: [] });
@@ -13,7 +14,7 @@ function closureFor(library, roots) {
 }
 
 test('a real lunar aggregate exports just its exact reachable formula/source snapshot', () => {
-  const library = readCalculationLibrary();
+  const library = structuredClone(sourceLibrary);
   const closure = closureFor(library, [{ namespace: 'builtin', id: 'lunar-charged', revision: '1' }]);
   assert.deepEqual(closure.formulas.map(formula => formula.identity.id).sort(), ['lunar-charged-individual', 'lunar-em-bonus']);
   assert.equal(closure.aggregates.length, 1);
@@ -26,9 +27,8 @@ test('a real lunar aggregate exports just its exact reachable formula/source sna
 });
 
 test('a real Nahida formula closure compiles and evaluates after an offline JSON round trip', () => {
-  const library = readCalculationLibrary();
   const reference = { namespace: 'builtin', id: 'nahida.skill.tri-karma.base', revision: '1' };
-  const closure = JSON.parse(JSON.stringify(closureFor(library, [reference])));
+  const closure = JSON.parse(JSON.stringify(closureFor(sourceLibrary, [reference])));
   assert.equal(closure.formulas.length, 1);
   assert.equal(closure.sources.length, 1);
   const compiled = engine.compileCalculation(closure);
@@ -43,9 +43,8 @@ test('a real Nahida formula closure compiles and evaluates after an offline JSON
 });
 
 test('Jade Cutter effect roots retain their exact transitive HP and ATK attribute dependencies offline', () => {
-  const library = readCalculationLibrary();
   const roots = ['primordialjadecutter.static-hpPercent', 'primordialjadecutter.hp-to-attack.attack'].map(id => ({ namespace: 'builtin', id, revision: '1' }));
-  const closure = closureFor(library, roots);
+  const closure = closureFor(sourceLibrary, roots);
   assert.equal(closure.effects.length, 2);
   assert.ok(closure.attributes.some(attribute => attribute.identity.id === 'attribute.whiteHp'));
   assert.ok(closure.attributes.some(attribute => attribute.identity.id === 'attribute.attackPercent'));

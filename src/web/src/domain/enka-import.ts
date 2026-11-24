@@ -33,11 +33,14 @@ export async function previewEnkaImport(input:unknown,uid:string,account:LocalAc
     try {
       const value=enkaAvatarSchema.parse(raw);
       const base=characterMap[String(value.avatarId)];
-      const entry=['aether','lumine'].includes(base?.id)?characterMap[`${value.avatarId}-${value.skillDepotId}`]:base;
+      const multiForm=['aether','lumine','manekin','manekina'].includes(base?.id);
+      const entry=multiForm?characterMap[`${value.avatarId}-${value.skillDepotId}`]:base;
       label=data.catalog.characters.find(character=>character.id===entry?.id)?.name??`角色 ${value.avatarId}`;
-      if (!entry) throw new Error(['aether','lumine'].includes(base?.id)?'该旅行者元素形态尚缺可靠的展柜技能映射，暂不能导入。':'当前角色目录尚未收录，暂不能导入。');
-      if (['aether','lumine','manekin','manekina'].includes(entry.id)) throw new Error('该角色的多元素形态暂未适配，暂不能导入。');
+      if (!entry && multiForm) throw new Error(value.skillDepotId === undefined
+        ? '展柜未提供角色形态编号，无法识别天赋。' : `角色形态编号 ${value.skillDepotId} 尚缺已核验的展柜技能映射。`);
+      if (!entry) throw new Error('当前角色目录尚未收录，暂不能导入。');
       if (entry.skillDepotId!==undefined && value.skillDepotId!==entry.skillDepotId) throw new Error('该角色的天赋形态与已核验资料不一致，暂不能导入。');
+      if (entry.skills.length > 0 && entry.skills.length < 3) throw new Error('该形态没有完整的三项战斗天赋，当前培养数据无法表达不存在的天赋，暂不能导入。');
       if (entry.skills.length!==3) throw new Error('当前导入器尚缺该角色的天赋编号适配，暂不能导入；无需调整游戏内的展柜设置。');
       if (seen.has(entry.id)) throw new Error('展柜中角色身份重复。'); seen.add(entry.id);
       const weaponEntry=value.equipList.find(item=>item.weapon); const weaponId=weaponEntry&&weaponMap[String(weaponEntry.itemId)];
@@ -68,7 +71,8 @@ export async function previewEnkaImport(input:unknown,uid:string,account:LocalAc
       const refinements=Object.values(weaponEntry.weapon.affixMap??{});
       if (!refinements.length && weaponRefinementLimit(weapon) > 1) throw new Error('缺少武器精炼等级。');
       if (refinements.some(value => value + 1 > weaponRefinementLimit(weapon))) throw new Error('武器精炼超出该武器的可用档位。');
-      const current=account.characters.find(item=>item.build?.character.id===entry.id||item.name===character.identity.name);
+      const current=account.characters.find(item=>item.build?.character.id===entry.id)
+        ?? account.characters.find(item=>!item.build && item.name===character.identity.name);
       const prior = current?.showcase?.uid === uid ? current.showcase : undefined;
       const priorId = prior?.build.sources.find(source => source.kind === 'recording')?.id;
       const revision = Number(/\.r(\d+)$/.exec(priorId ?? '')?.[1] ?? 0);

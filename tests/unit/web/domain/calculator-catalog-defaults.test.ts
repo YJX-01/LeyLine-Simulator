@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest';
+import { beforeAll, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { getCharacter, loadBattleScenes } from '@leyline/game-data';
 import { grantBuffs } from '@leyline/schema/buffs';
@@ -10,6 +10,9 @@ import { calculatorBuffChecked, calculatorEffectControls, calculatorLayerSeconds
 import { calculatorFactPreset, calculatorHitFactFields, missingCalculatorPresets, presetCalculatorHitInputs,
   setCalculatorFact, type CalculatorFactField } from '../../../../src/web/src/domain/calculator-conditions';
 import { calculatorSupportText } from '../../../../src/web/src/domain/calculator-factors';
+
+let library: ReturnType<typeof readCalculationLibrary>;
+beforeAll(() => { library = readCalculationLibrary(); });
 
 // Inspect the bindings independently of the picker's field collector. A dropped field must fail the audit.
 function editableFacts(binding?: CalculationBinding, owner = 'owner'): CalculatorFactField[] {
@@ -37,7 +40,6 @@ function checkField(field: CalculatorFactField, source: string) {
 }
 
 it('provides initial and enabled card values for every modifier in the calculation library and every battle scene', async () => {
-  const library = readCalculationLibrary();
   const effects = [...library.effects];
   for (const scene of await loadBattleScenes()) grantBuffs(scene, effects, [scene.id], scene.facts ?? {});
   const character = await getCharacter('kaeya');
@@ -81,7 +83,7 @@ it('provides initial and enabled card values for every modifier in the calculati
 
 it('checks every catalog hit and validates talent input defaults against its limits at every constellation', () => {
   const inventory = catalogInventory();
-  const modifierIds = new Set(readCalculationLibrary().effects.map(effect => effect.identity.id));
+  const modifierIds = new Set(library.effects.map(effect => effect.identity.id));
   for (const group of ['characters', 'weapons', 'sets'] as const) {
     for (const id of inventory[group]) {
       const folder = group === 'sets' ? 'artifact-sets' : group;
@@ -150,7 +152,7 @@ it('guards calculator copy in the page and its imported Vue components, includin
 
 it('presents current catalog evidence and older calculator notes without pending-status placeholders', () => {
   const forbidden = /待核实|待核验|待确认|需补充条件/;
-  const notes = readCalculationLibrary().coverage.flatMap(record => [record.reason, ...record.mechanisms.map(mechanism => mechanism.reason)]);
+  const notes = library.coverage.flatMap(record => [record.reason, ...record.mechanisms.map(mechanism => mechanism.reason)]);
   for (const note of new Set(notes)) expect(calculatorSupportText(note)).not.toMatch(forbidden);
   for (const wording of ['待核实', '待核验', '待确认']) {
     expect(calculatorSupportText('伤害元素' + wording)).toBe('伤害元素尚无验证结论');

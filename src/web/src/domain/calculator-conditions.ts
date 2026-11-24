@@ -140,6 +140,31 @@ export function selectionFacts(binding: CalculationBinding | undefined, bundle: 
   return [];
 }
 
+/** Choose a valid value only when a single enum condition excludes one value. */
+export function selectionEnumFallback(binding: CalculationBinding | undefined, bundle: CalculationBundle, fields: CalculatorFactField[], facts: DamageRequest['facts'], actorId: string): CalculatorFactSetting[] {
+  function singleCondition(term: CalculationBinding | undefined): boolean {
+    if (term?.kind !== 'formula') return false;
+    const template = bundle.formulas.find(entry => definitionKey(entry.identity) === definitionKey(term.formula))?.template;
+    if (template?.id === 'enum-condition') return true;
+    const terms = Object.values(term.inputs);
+    return template?.id === 'condition-group' && template.terms === 1 && terms.length === 1 && singleCondition(terms[0]);
+  }
+  if (!singleCondition(binding)) return [];
+  const excluded = selectionFacts(binding, bundle, false);
+  if (excluded.length !== 1 || excluded[0].value.kind !== 'enum') return [];
+  const setting = excluded[0];
+  const field = fields.find(candidate => candidate.key === setting.key && candidate.subject?.kind === 'actor'
+    && candidate.subject.id === actorId && candidate.type.kind === 'enum');
+  if (!field || field.type.kind !== 'enum') return [];
+  const valid = (value: Value | undefined) => value?.kind === 'enum' && field.type.kind === 'enum'
+    && field.type.values.includes(value.value) && value.value !== setting.value.value;
+  const current = subjectFacts(facts, field.subject!)?.[field.key]?.value ?? undefined;
+  if (valid(current)) return [];
+  const value = valid(field.inherited) ? field.inherited : field.type.values.find(candidate => candidate !== setting.value.value);
+  return value === undefined ? [] : [{ key: field.key, subject: field.subject,
+    value: typeof value === 'string' ? { kind: 'enum', value } : value! }];
+}
+
 export function stackChoice(binding: CalculationBinding, bundle: CalculationBundle) {
   if (binding.kind !== 'formula') return;
   const template = bundle.formulas.find(entry => definitionKey(entry.identity) === definitionKey(binding.formula))?.template;

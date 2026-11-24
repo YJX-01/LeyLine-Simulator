@@ -53,7 +53,7 @@ import SlotPlaceholder from '../components/SlotPlaceholder.vue';
 import CalculatorFactorCards from '../components/CalculatorFactorCards.vue';
 import { calculatorHitChoices, type CalculatorHitChoice } from '../domain/calculator-hits';
 import { applyCalculatorBuffs, buffDisplayName, buffFactNames, calculatorBuffChoices, resolveBuffSelection } from '../domain/calculator-buffs';
-import { presetCalculatorHitInputs, missingCalculatorPresets, calculatorFactPreset, calculatorHitElement, calculatorIntervals, calculatorOnFieldActor, calculatorHitFactFields, calculatorPartyInfusionOptions, type CalculatorFactField, selectionFacts, setCalculatorFact } from '../domain/calculator-conditions';
+import { presetCalculatorHitInputs, missingCalculatorPresets, calculatorFactPreset, calculatorHitElement, calculatorIntervals, calculatorOnFieldActor, calculatorHitFactFields, calculatorPartyInfusionOptions, type CalculatorFactField, selectionFacts, selectionEnumFallback, setCalculatorFact } from '../domain/calculator-conditions';
 import { calculatorBuffReadouts, calculatorSupportText, damageNumber as number, reactionNames, critNames } from '../domain/calculator-factors';
 import type { SavedTeam } from '../stores/saved-teams';
 import { loadSavedDamage, saveDamageSnapshot } from '../platform/saved-damage';
@@ -232,6 +232,25 @@ async function importMetadata(event: Event) {
 }
 const result = computed(() => response.value?.comparison?.candidates[0]?.result ?? response.value?.result);
 const point = computed(() => result.value?.points.find(point => point.id === document.value?.recordId));
+const inactiveHit = computed(() => {
+  const evaluation = point.value?.real?.structured;
+  const output = evaluation?.outputs.find(row => row.outputId === damage.value.hit.hitId);
+  if (output?.value.state !== 'known' || output.value.value.value !== 0
+    || !evaluation?.trace.some(node => node.id === output.value.traceId && node.nodeId === 'predicate')) return;
+  const binding = selectedBinding.value;
+  const excluded = binding && selectionFacts(binding.hit.damage[output.family]?.predicate, binding.entity.calculation.bundle, false);
+  return excluded?.some(setting => setting.key === 'radiance' && setting.value.value === 'none')
+    ? '需要辉映·星超导或辉映·星扩散' : '当前条件下不会触发此命中';
+});
+const radianceStatus = computed(() => {
+  if (!result.value || !selectedBinding.value || !hitOwner.value || !document.value) return;
+  const excluded = selectionFacts(selectedOutput.value?.predicate, selectedBinding.value.entity.calculation.bundle, false);
+  if (excluded.length !== 1 || excluded[0].key !== 'radiance' || excluded[0].value.value !== 'none') return;
+  const fact = point.value?.real?.structured?.trace.find(node => node.nodeId === 'radiance'
+    && node.state === 'known' && node.value?.kind === 'enum');
+  const labels: Record<string, string> = { none: '无', 'stellar-conduct': '星超导', 'stellar-swirl': '星扩散' };
+  return fact?.value?.kind === 'enum' ? labels[fact.value.value] : undefined;
+});
 const criticalPoint = computed(() => criticalResult.value?.points.find(point => point.id === document.value?.recordId));
 const candidateBuild = computed(() => actor.value?.build);
 const equipmentPanel = computed(() => candidateBuild.value && resolveEquipmentPanel(candidateBuild.value));
@@ -501,6 +520,11 @@ function selectDamage(choice: CalculatorHitChoice) {
   if (previousSkill !== choice.skillId && priorFacts) for (const input of previousInputs) delete priorFacts[input.id];
   delete damage.value.capture;
   if (hitOwner.value) for (const setting of hitFacts.value) setCalculatorFact(damage.value, setting, hitOwner.value.id);
+  if (hitOwner.value && selectedBinding.value) {
+    const settings = selectionEnumFallback(selectedOutput.value?.predicate, selectedBinding.value.entity.calculation.bundle,
+      factFields.value, damage.value.facts, hitOwner.value.id);
+    for (const setting of settings) setCalculatorFact(damage.value, setting, hitOwner.value.id);
+  }
   if (previousReaction && !reactionChoices.value.some(kind => kind === previousReaction)) damage.value.reaction = 'none';
   if (damage.value.effectApplications?.length) {
     const applicable = new Set(buffs.value.filter(option => option.explicit && !option.triggerSkill && !option.confirmTrigger).map(option => option.id));
@@ -1000,6 +1024,13 @@ defineExpose({ requestLeave: leaveCalculator });
           <div class="expected-total"><span>期望伤害值 <small v-if="expectedPoint?.real?.status === 'partial'">模型估算</small></span>
             <output v-if="result" data-testid="calculator-expected">{{ expectedPoint?.value != null ? expectedFormat.format(expectedPoint.value) : unavailable(expectedResult, expectedPoint) }}</output><strong v-else>—</strong></div>
         </template>
+      </div>
+      <div v-if="radianceStatus" class="library-page-actions" data-testid="calculator-radiance">
+        星辉状态：{{ radianceStatus }}
+      </div>
+      <div v-if="inactiveHit" class="library-page-actions" role="status">
+        <span>{{ inactiveHit }}</span>
+        <button v-if="!document?.baseline" type="button" class="ui-action soft" @click="picker = 'buff'">调整命中条件</button>
       </div>
       <div id="calculator-result-details" v-show="result && resultExpanded" class="result-details">
         <template v-if="result">

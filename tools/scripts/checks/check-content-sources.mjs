@@ -40,6 +40,17 @@ for (const value of Object.values(displayData('effective-roll-basis').defaults))
   if (!Number.isFinite(value) || value <= 0) throw new Error('Invalid effective roll fallback.');
 }
 const enka = displayData('enka-catalog');
+const characters = read('tools/data/sources/catalog/genshin-db/characters.json');
+const formSource = read('tools/data/sources/character-text/base-and-manekin.json');
+for (const [id, binding] of Object.entries(formSource.bindings)) {
+  const avatarId = characters[binding.baseId].metadata.id;
+  const depot = formSource.skillDepots[binding.skillDepotId];
+  const skills = [...depot.skills, depot.energySkill].filter(skill => skill !== 0);
+  const entry = enka.characters[`${avatarId}-${binding.skillDepotId}`];
+  if (entry?.id !== id || entry.skillDepotId !== binding.skillDepotId || JSON.stringify(entry.skills) !== JSON.stringify(skills)) {
+    throw new Error(`Enka form differs from the adopted skill depot: ${id}/${binding.skillDepotId}`);
+  }
+}
 for (const [avatarId, item] of Object.entries(read('tools/data/sources/catalog/enka/skill-supplements.json').characters)) {
   const entry = enka.characters[avatarId];
   if (entry?.id !== item.id || JSON.stringify(entry.skills) !== JSON.stringify(item.skills) || entry.skillDepotId !== item.skillDepotId) {

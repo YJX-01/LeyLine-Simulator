@@ -1,17 +1,15 @@
 import { officialShowcase } from '../helpers/recorded-reference';
 import { packDocument } from '../../src/web/src/domain/content-document';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { projectSchema, type Project } from '@leyline/schema';
 import { evaluateDamage, evaluateTimeline } from '@leyline/engine';
 import { getWeapon } from '@leyline/game-data';
 import { createCombatStateReader } from '../../src/engine/src/timeline/combat-state';
-import { createAccount } from '../../src/web/src/domain/account';
-import { previewEnkaImport } from '../../src/web/src/domain/enka-import';
 import { addActorFromBuild } from '../../src/web/src/domain/real-project';
 import { importProject, removeProjectActor } from '../../src/web/src/domain/workbench-project';
 import { setCombatStateInterval, setDamageStateOverride } from '../../src/web/src/domain/combat-state';
-import { recordedProject } from '../helpers/recorded-project';
+import { recordedProject, recordedShowcaseBuild } from '../helpers/recorded-project';
 
 // Format/error derivatives of an actual showcase, not an observed team or combat axis.
 // Each hit is a single query context; its time and state are explicit test annotations.
@@ -50,8 +48,7 @@ describe.skipIf(!existsSync(officialShowcase))('combat-state format derivatives 
 
   it('keeps owner overrides separate from another recorded character and from source-action reads', async () => {
     const project = queryProject();
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
-    const bennett = preview.rows.find(row => row.character.showcase!.build.character.id === 'bennett')!.character.showcase!.build;
+    const bennett = await recordedShowcaseBuild('bennett', officialShowcase);
     const other = addActorFromBuild(project, bennett);
     const owner = project.candidate.actors[0].id;
     setCombatStateInterval(project, { id: 'other-hp', actor: other, startMs: 0, endMs: 2000, values: { hpRatio: 1 } });
@@ -85,8 +82,7 @@ describe.skipIf(!existsSync(officialShowcase))('combat-state format derivatives 
 
   it('validates field and actor conflicts after merging hit overrides with intervals', async () => {
     const project = queryProject();
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
-    const other = addActorFromBuild(project, preview.rows.find(row => row.character.showcase!.build.character.id === 'bennett')!.character.showcase!.build);
+    const other = addActorFromBuild(project, await recordedShowcaseBuild('bennett', officialShowcase));
     const owner = project.candidate.actors[0].id;
     setCombatStateInterval(project, { id: 'on-field', actor: owner, startMs: 0, endMs: 2000, values: { onField: true } });
     expect(() => setCombatStateInterval(project, { id: 'other-field', actor: other, startMs: 0, endMs: 2000, values: { onField: true } })).toThrow();

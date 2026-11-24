@@ -18,7 +18,7 @@ import { useAxisWorkspaceStore } from '../../src/web/src/stores/axis-workspace';
 
 afterEach(() => vi.unstubAllGlobals());
 
-async function recordedDocuments() {
+async function prepareRecordedDocuments() {
   const account=createAccount();
   const response=JSON.parse(readFileSync('.references/enka/official-example.json','utf8'));
   const preview=await previewEnkaImport(response,'618285856',account);
@@ -28,6 +28,11 @@ async function recordedDocuments() {
   addActorFromBuild(project,build);
   const library={schemaVersion:'0.2.0',kind:'definition-library',id:project.id,name:'公开展柜定义快照',definitions:project.definitions};
   return {account,build,project,library};
+}
+
+let recordedDocumentsPromise: ReturnType<typeof prepareRecordedDocuments> | undefined;
+async function recordedDocuments() {
+  return structuredClone(await (recordedDocumentsPromise ??= prepareRecordedDocuments()));
 }
 
 it.skipIf(!existsSync('.references/enka/official-example.json'))('accepts current documents and rejects old version tags without converting recorded snapshots', async () => {

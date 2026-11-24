@@ -13,9 +13,9 @@ const editBuild = (calculator: Locator) => calculator.locator('.calculator-selec
 const saveBuild = (calculator: Locator) => buildEditor(calculator).getByRole('button', { name: '保存', exact: true }).click();
 const saveCatalogCharacter = (calculator: Locator, name: string) => calculator.getByRole('dialog', { name, exact: true }).getByRole('button', { name: '保存', exact: true }).click();
 
-async function openSingleBuild(page: Page, build: Build, castSkill?: string) {
+async function openSingleBuild(page: Page, build: Build, castSkill?: string, observedRadiance = false) {
   await page.goto('/');
-  const content = await page.evaluate(async ({ build, castSkill }) => {
+  const content = await page.evaluate(async ({ build, castSkill, observedRadiance }) => {
     // @ts-expect-error Vite browser source URL.
     const { createDamageCalculation } = await import('/src/domain/damage-calculator.ts');
     // @ts-expect-error Vite browser source URL.
@@ -29,8 +29,19 @@ async function openSingleBuild(page: Page, build: Build, castSkill?: string) {
       file.project.timeline[0].timeMs = 1000;
       addSkillAction(file.project, file.actorId, castSkill, 0);
     }
+    if (observedRadiance) {
+      const current = file.project.timeline[0];
+      current.timeMs = 1000;
+      const prior = structuredClone(current);
+      prior.id = 'prior-radiance';
+      prior.timeMs = 0;
+      prior.damage!.facts = [{ subject: { kind: 'actor', id: file.actorId }, values: {
+        radiance: { value: { kind: 'enum', value: 'stellar-swirl' }, provenance: 'explicit', sourceRefs: [] },
+      } }];
+      file.project.timeline.unshift(prior);
+    }
     return JSON.stringify(packDocument('damage-calculator', file));
-  }, { build, castSkill });
+  }, { build, castSkill, observedRadiance });
   await page.getByTestId('workspace-nav-calculator').click();
   const calc = page.getByRole('region', { name: '伤害计算', exact: true });
   const open = calc.getByLabel('打开伤害计算文件', { exact: true });
@@ -43,6 +54,85 @@ async function selectHit(calculator: Locator, skill: string, index = 0) {
   const dialog = calculator.getByRole('dialog', { name: '选择伤害', exact: true });
   await chooseDamageCard(dialog.locator('button[data-skill-id="' + skill + '"][data-hit-id]').nth(index));
 }
+
+for (const id of ['odette', 'sandrone']) test(id + ' shows the active radiance hit and talent scaling', async ({ page }) => {
+  test.setTimeout(90000);
+  const odette = id === 'odette';
+  const build: Build = { ...await catalogSnapshotFields(id, odette ? 'dullblade' : 'wolfsgravestone'), level: 80, ascension: 5,
+    constellation: 0, weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
+  const { calc } = await openSingleBuild(page, build);
+  if (odette) await selectHit(calc, 'odette.skill', 2);
+  await selectHit(calc, odette ? 'odette.skill' : 'sandrone.burst', odette ? 5 : 1);
+  if (odette) {
+    await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：星超导');
+    await expect(calc.getByTestId('calculator-critical')).toHaveText(/[1-9]/);
+  } else {
+    const ordinary = calc.locator('.factor-card').filter({ has: page.locator('summary', { hasText: '属性 × 倍率区' }) });
+    await ordinary.locator('summary').click();
+    await expect(ordinary.locator('.rate-box')).toContainText('330.8%');
+  }
+  for (const mode of ['stellar-conduct', 'stellar-swirl']) {
+    if (!odette || mode !== 'stellar-conduct') {
+      await calc.getByRole('button', { name: '选择增益', exact: true }).click();
+      await calc.getByRole('dialog').getByLabel(/星辉状态/).first().selectOption(mode);
+      await calc.getByRole('button', { name: '应用增益' }).click();
+    }
+    const card = calc.locator('.factor-card').filter({ has: page.locator('summary', { hasText: '反应基础伤害' }) });
+    await expect(card).toBeVisible();
+    if (await card.getAttribute('open') === null) await card.locator('summary').click();
+    const ratio = mode === 'stellar-swirl' ? (odette ? 0.40528 : 3.308) : (odette ? 0.27024 : 2.205333);
+    await expect(card.locator('.rate-box')).toContainText((ratio * 100).toFixed(4).replace(/0+$/, '').replace(/\.$/, '') + '%');
+    const number = (s: string) => Number(s.replace(/[×,\s]/g, ''));
+    const attack = number(await card.locator('.stat-box .scaling-term strong').innerText());
+    const factors = await card.locator('.factor-chip dd').allTextContents();
+    const product = factors.filter(value => value.startsWith('×')).reduce((total, value) => total * number(value), attack * ratio);
+    expect(number(await card.locator('summary strong').innerText())).toBeCloseTo(product, 4);
+    if (!odette) {
+      await expect(card.locator('.stat-box')).toContainText('狼的末路');
+      const factor = calc.locator('.factor-card').filter({ has: page.locator('summary', { hasText: '反应基础倍率区' }) });
+      if (await factor.getAttribute('open') === null) await factor.locator('summary').click();
+      await expect(factor).not.toContainText('狼的末路');
+      // Sandrone's talent grants 0.7% per 100 ATK, capped at 14%.
+      expect(number(await factor.locator('summary strong').innerText())).toBeCloseTo(1 + Math.min(attack * 0.00007, 0.14), 5);
+    }
+    await expect(calc.getByText('需要辉映·星超导或辉映·星扩散')).toHaveCount(0);
+    if (odette) await expect(calc.getByTestId('calculator-radiance')).toContainText(mode === 'stellar-swirl' ? '星扩散' : '星超导');
+  }
+  if (odette) {
+    await selectHit(calc, 'odette.skill', 6);
+    await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：星扩散');
+    await selectHit(calc, 'odette.skill', 5);
+    await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：星扩散');
+    await calc.getByRole('button', { name: '选择增益', exact: true }).click();
+    await calc.getByRole('dialog').getByLabel(/星辉状态/).first().selectOption('none');
+    await calc.getByRole('button', { name: '应用增益' }).click();
+    await expect(calc.getByText('需要辉映·星超导或辉映·星扩散')).toBeVisible();
+    await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：无');
+    await expect(calc.getByTestId('calculator-critical')).toHaveText('0');
+    const downloadPromise = page.waitForEvent('download');
+    await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
+    const content = readFileSync((await (await downloadPromise).path())!, 'utf8');
+    const saved = await readDocument<DamageCalculatorDocument>(page, 'damage-calculator', content);
+    expect(saved.project.timeline.find(entry => entry.id === saved.recordId)?.damage?.facts).toBeDefined();
+    await calc.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles({ name: 'radiance.json', mimeType: 'application/json', buffer: Buffer.from(content) });
+    await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：无');
+    await calc.getByRole('button', { name: '计算伤害', exact: true }).click();
+    await expect(calc.getByText('需要辉映·星超导或辉映·星扩散')).toBeVisible();
+    await expect(calc.getByTestId('calculator-critical')).toHaveText('0');
+    await selectHit(calc, 'odette.skill', 2);
+    await expect(calc.getByTestId('calculator-critical')).toHaveText(/[1-9]/);
+    await expect(calc.getByText('需要辉映·星超导或辉映·星扩散')).toHaveCount(0);
+  }
+});
+
+test('radiance selection does not inherit a prior hit fact', async ({ page }) => {
+  const build: Build = { ...await catalogSnapshotFields('odette', 'dullblade'), level: 80, ascension: 5,
+    constellation: 0, weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
+  const { calc } = await openSingleBuild(page, build, undefined, true);
+  await selectHit(calc, 'odette.skill', 5);
+  await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：星超导');
+  await expect(calc.getByText('需要辉映·星超导或辉映·星扩散')).toHaveCount(0);
+});
 
 test('damage cards fit their contents and applied buff icons retain searchable names', async ({ page }, info) => {
   test.setTimeout(60000);

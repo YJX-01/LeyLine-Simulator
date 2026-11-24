@@ -1,19 +1,29 @@
 import { recordedJsonFile } from '../../helpers/recorded-reference';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 
-test.skip(!existsSync('.references/artifacts_mona.json'),'Requires the actual recorded Mona file.');
+const inventory = '.references/artifacts_mona.json';
+test.skip(!existsSync(inventory),'Requires the actual recorded Mona file.');
 test('actual Mona import: bounded preview, cancellation, recovery and duplicate handling',async({page})=>{
+  const original = recordedJsonFile(inventory);
   await page.setViewportSize({width:1280,height:900});await page.goto('/');
   await expect(page.locator('.nav-group[data-domain=account] .library-nav-icon')).toHaveCount(5);
   await page.getByTestId('workspace-nav-artifacts').click();
   const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'));
-  await page.getByTestId('workspace-nav-artifacts').click();
   await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
   const dialog=page.getByRole('dialog',{name:'导入莫娜圣遗物',exact:true});
   await expect(dialog.getByRole('heading',{name:'导入莫娜圣遗物',exact:true})).toHaveCount(1);
-  await dialog.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles(recordedJsonFile('.references/artifacts_mona.json'));
-  await expect(dialog.getByLabel('莫娜导入预览',{exact:true})).toContainText('新增 458 件');
+  const file=dialog.getByLabel('导入莫娜圣遗物文件',{exact:true});
+  // File inputs emit a bubbling cancel event when the native chooser is dismissed.
+  await file.dispatchEvent('cancel', { bubbles: true });
+  await expect(dialog).toBeVisible();
+  await file.setInputFiles(original);
+  const preview = dialog.getByLabel('莫娜导入预览', { exact: true });
+  await expect(preview).toContainText('新增 458 件');
+  await file.dispatchEvent('cancel', { bubbles: true });
+  await expect(dialog).toBeVisible();
+  await expect(preview).toContainText('新增 458 件');
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'))).toBe(baseline);
   await expect(dialog.locator('.preview-item')).toHaveCount(6);
   // Source item 8770563143816081: HP flower, with these four observed substats.
   const first=dialog.locator('.preview-item').first();
@@ -52,8 +62,8 @@ test('actual Mona import: bounded preview, cancellation, recovery and duplicate 
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'))).toBe(baseline);
   await page.setViewportSize({width:1280,height:900});await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
   // An invalid-input boundary derived by truncating the recorded file, not invented player data.
-  const bytes=readFileSync('.references/artifacts_mona.json');
-  await dialog.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles({name:'truncated-mona.json',mimeType:'application/json',buffer:bytes.subarray(0,Math.floor(bytes.length/2))});
+  const bytes = original.buffer;
+  await file.setInputFiles({name:'truncated-mona.json',mimeType:'application/json',buffer:bytes.subarray(0,Math.floor(bytes.length/2))});
   await expect(dialog.getByRole('alert')).toBeVisible();
   await dialog.getByLabel('莫娜圣遗物 JSON',{exact:true}).fill(bytes.toString('utf8'));
   await dialog.getByRole('button',{name:'预览莫娜导入',exact:true}).click();
@@ -65,11 +75,12 @@ test('actual Mona import: bounded preview, cancellation, recovery and duplicate 
   expect(JSON.parse(imported!).document.artifacts).toHaveLength(458);
   await page.getByTestId('workspace-nav-artifacts').click();
   await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
-  await dialog.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles(recordedJsonFile('.references/artifacts_mona.json'));
+  await file.setInputFiles(original);
   await expect(dialog.getByLabel('莫娜导入预览',{exact:true})).toContainText('已存在 458 件');
   await expect(dialog.getByRole('button',{name:'确认导入 0 件圣遗物',exact:true})).toBeDisabled();
   await page.screenshot({path:'artifacts/mona-import-duplicates.png',fullPage:false});
-  await dialog.getByRole('button',{name:'取消',exact:true}).click();
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'))).toBe(imported);
   await page.screenshot({path:'artifacts/library-nav-icons.png',fullPage:false});
 });

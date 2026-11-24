@@ -18,6 +18,7 @@ describe('fixed real game snapshot', () => {
   it('keeps each traveler and Manekin form and its evaluated support scope distinct', async () => {
     const catalog=await loadCatalog();
     for(const base of ['aether','lumine','manekin','manekina']) {
+      const baseCharacter = await getCharacter(base);
       const forms=catalog.characters.filter(entry=>entry.id.startsWith(base+'-'));
       expect(new Set(forms.map(entry=>entry.element))).toEqual(new Set(['anemo','geo','electro','dendro','hydro','pyro','cryo']));
       for(const form of forms) {
@@ -26,7 +27,7 @@ describe('fixed real game snapshot', () => {
         expect(character.talents[1].element).toBe(form.element);
         const resolution=base.startsWith('manekin')?'complete':'unavailable';
         expect(Object.values(character.metadata.support).every(scope => scope.resolution === resolution)).toBe(true);
-        expect(character.attributes.base).toEqual((await getCharacter(base)).attributes.base);
+        expect(character.attributes.base).toEqual(baseCharacter.attributes.base);
       }
     }
     expect((await getCharacter('aether-anemo')).talents.map(skill=>skill.name)).toEqual(['异邦铁风','风涡剑','风息激荡']);

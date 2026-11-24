@@ -19,6 +19,7 @@ const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
 const app=await electron.launch({executablePath:executable,args:['--smoke',`--user-data-dir=${userData}`],env,timeout:30000});
 try {
   const page=await app.firstWindow({ timeout: 30000 }),errors=[];
+  const readAccount = () => page.evaluate(() => JSON.parse(localStorage.getItem('leyline-account-0.2.0')).document);
   page.setDefaultTimeout(15000);
   await app.evaluate(({ BrowserWindow }) => {
     for (const window of BrowserWindow.getAllWindows()) window.webContents.setBackgroundThrottling(false);
@@ -31,12 +32,12 @@ try {
   await expect(page.getByLabel('莫娜导入预览',{exact:true})).toContainText('新增 458 件');
   await page.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
-  const before=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0')).document);
+  const before=await readAccount();
   if(before.artifacts.length!==458 || before.characters.length)throw new Error('Actual inventory import changed source counts or invented characters.');
   await expect.poll(()=>page.locator('.inventory-card .game-icon > img').first().evaluate(image=>image.complete && image.naturalWidth>0 && image.src.startsWith('leyline://app/assets/game/'))).toBe(true);
   await page.screenshot({path:resolve(directory,'actual-inventory.png'),fullPage:true});
 
-  const file=resolve(directory,'actual-account.json');
+  const file=resolve(userData,'actual-account.json');
   await app.evaluate(({dialog},file)=>{dialog.showSaveDialog=async()=>({canceled:false,filePath:file});dialog.showOpenDialog=async()=>({canceled:false,filePaths:[file]});},file);
   await page.getByRole('button',{name:'导航 账号',exact:true}).click();
   await page.getByRole('button',{name:'保存账号资料',exact:true}).click();
@@ -45,7 +46,7 @@ try {
   if(!content.endsWith('\n') || JSON.stringify(JSON.parse(content).document)!==JSON.stringify(before))throw new Error('Native account export changed the actual snapshot or JSON formatting.');
   await page.getByRole('button',{name:'打开 / 切换账号',exact:true}).click();
   await expect(page.getByLabel('账号管理',{exact:true})).toContainText('458 件圣遗物');
-  if(await page.evaluate(()=>JSON.stringify(JSON.parse(localStorage.getItem('leyline-account-0.2.0')).document))!==JSON.stringify(before))throw new Error('Native account round-trip changed inventory IDs or values.');
+  if(JSON.stringify(await readAccount())!==JSON.stringify(before))throw new Error('Native account round-trip changed inventory IDs or values.');
   const nameField = page.getByRole('textbox', {name:'账号名称', exact:true});
   const draftName = before.name + '（编辑中）';
   await nameField.fill(draftName);
@@ -86,10 +87,10 @@ try {
   await expect.poll(()=>enka.locator('.import-row').count(),{timeout:25000}).toBeGreaterThan(0);
   const imported=await enka.locator('.import-row[aria-pressed=true]').count();
   await enka.getByRole('button',{name:'仅保存展柜',exact:true}).click();
-  if(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0')).document.characters.length)!==0)throw new Error('Showcase preview wrote before confirmation.');
+  if((await readAccount()).characters.length!==0)throw new Error('Showcase preview wrote before confirmation.');
   await enka.getByRole('button',{name:`确认导入 ${imported} 位角色`,exact:true}).click();
   await expect(enka).toHaveCount(0);
-  const publicAccount=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0')).document);
+  const publicAccount=await readAccount();
   if(publicAccount.id===before.id || publicAccount.artifacts.length || publicAccount.characters.length!==imported)throw new Error('Showcase snapshots crossed account or physical-inventory boundaries.');
   await page.screenshot({path:resolve(directory,'enka-showcase.png'),fullPage:true});
   if(errors.length)throw new Error(errors.join('\n'));

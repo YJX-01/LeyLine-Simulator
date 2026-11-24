@@ -77,7 +77,7 @@
       "commit": "b94bc40528941126590e0eefb0f03278e7a44ec8",
       "localPath": ".references/enka",
       "canonicalSnapshot": "tools/data/sources/catalog/enka/catalog.json",
-      "purpose": "Official character skill metadata for public UID showcase mapping; pinned files, not a Git checkout; public example is a separate input case"
+      "purpose": "Official character skill metadata for public UID showcase mapping. The independent SkillOrder and traveler Element extract in tools/data/sources/catalog/enka/pinned-skill-orders.json records the SHA-256 of the pinned characters.json."
     },
     {
       "id": "enka-skill-supplements",
@@ -85,7 +85,7 @@
       "url": "https://gi.gachabase.net/",
       "localPath": ".references/enka",
       "canonicalSnapshot": "tools/data/sources/catalog/enka/skill-supplements.json",
-      "purpose": "Five character release-page skill IDs matched to pinned genshin-db combat talent names; exact page URLs and hashes recorded per character; player exports are not mapping sources"
+      "purpose": "Release-page skill IDs matched to pinned genshin-db combat talent names, with form-specific pages for Cryo Travelers; exact sources recorded per entry"
     },
     {
       "id": "artifact-affix-values",

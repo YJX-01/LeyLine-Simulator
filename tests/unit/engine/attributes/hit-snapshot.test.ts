@@ -1,14 +1,13 @@
+import { recordedShowcaseBuild } from '../../../helpers/recorded-project';
 import { hpFacts } from '../../../helpers/catalog-calculation';
 import { officialShowcase } from '../../../helpers/recorded-reference';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
 import { characterDefinitionSchema, elements, projectSchema, type Build, type Enemy, type Project, type StatKey } from '@leyline/schema';
 import { evaluateDamage, evaluateTimeline, resolveBuild } from '@leyline/engine';
 import { addActorFromBuild, addAttributeCapture, addSkillAction, addSkillHit } from '../../../../src/web/src/domain/real-project';
 import { createEmptyProject } from '../../../../src/web/src/domain/workbench-project';
-import { previewEnkaImport } from '../../../../src/web/src/domain/enka-import';
-import { createAccount } from '../../../../src/web/src/domain/account';
 
 const enemy: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function setting(id = 'kaeya', weapon = 'favoniussword'): Promise<Build> {
@@ -144,8 +143,7 @@ describe('hit attribute captures reuse the existing event dependency graph', () 
 
 describe.skipIf(!existsSync(officialShowcase))('capture calculations using actual recorded Noblesse artifact values', () => {
   it('does not activate the real Noblesse burst trigger merely by adding an independent read anchor', async () => {
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
-    const recorded = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
+    const recorded = await recordedShowcaseBuild('bennett');
     const build = await setting();
     // Explicit theoretical reuse of the original equipment, never claimed as Kaeya's player build.
     build.artifacts = structuredClone(recorded.artifacts);
@@ -168,8 +166,7 @@ describe.skipIf(!existsSync(officialShowcase))('capture calculations using actua
     expect(triggered.totalValue! - result.totalValue!).toBeCloseTo(white * 0.2 * 1.3192 * 1.2 * 0.45, 7);
   });
   it('captures before/after Noblesse at the source and recalculates a weapon candidate', async () => {
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
-    const recorded = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
+    const recorded = await recordedShowcaseBuild('bennett');
     const original = JSON.stringify(recorded);
     const build = await setting();
     // Explicit theoretical wearing of the original Bennett artifacts by Kaeya, not an account or combat observation.
@@ -210,8 +207,7 @@ describe.skipIf(!existsSync(officialShowcase))('capture calculations using actua
   });
 
   it('retains a captured team buff after expiry within Kaeya burst duration', async () => {
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
-    const recorded = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
+    const recorded = await recordedShowcaseBuild('bennett');
     const jean = await setting('jean');
     // Explicit theoretical Jean wearing of the original artifacts; Kaeya has none, avoiding duplicate physical references.
     jean.artifacts = structuredClone(recorded.artifacts);
