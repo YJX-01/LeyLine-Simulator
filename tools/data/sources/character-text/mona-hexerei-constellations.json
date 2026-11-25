@@ -1,0 +1,15 @@
+{
+  "character": "mona",
+  "scope": "Constellation upgrades after Mona completes Witch's Homework; separate from the two-character Secret Rite.",
+  "accessed": "2026-11-25",
+  "sources": [
+    {
+      "url": "https://wiki.hoyolab.com/pc/genshin/entry/9347?lang=en-us",
+      "description": "Mona's awakened second constellation grants nearby party members 80 elemental mastery for 12 seconds when her charged attack hits; her fourth constellation grants Hexerei party members 15% critical damage against an opponent affected by Omen."
+    },
+    {
+      "url": "https://library.keqingmains.com/characters/hydro/mona",
+      "description": "Character constellation descriptions distinguish the Witch's Homework upgrade and Secret Rite and describe the 80 elemental mastery grant."
+    }
+  ]
+}

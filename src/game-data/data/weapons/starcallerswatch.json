@@ -228,7 +228,7 @@
   "support": {
     "resolution": "complete",
     "evidence": "adopted",
-    "reason": "已采用当次条件、合法精炼及输出适用范围。",
+    "reason": "记录装备者创造护盾后，当前场上队员获得照夜之镜，持续15秒，每14秒至多触发一次。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
@@ -245,7 +245,7 @@
             "revision": "1"
           }
         ],
-        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+        "reason": "记录装备者创造护盾后，当前场上队员获得照夜之镜，持续15秒，每14秒至多触发一次。"
       }
     ]
   },
@@ -271,8 +271,26 @@
     },
     {
       "id": "starcallerswatch.night-mirror",
-      "condition": {
-        "fact": "starcallerswatch.night-mirrorActive"
+      "windowFact": "starcallerswatch.night-mirrorActive",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "state-change"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "observation": {
+            "key": "shieldCreated",
+            "test": "true"
+          }
+        },
+        "cooldownMs": 14000
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 15000,
+        "phase": "after"
       },
       "recipient": "team",
       "modifiers": [

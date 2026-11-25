@@ -551,12 +551,51 @@
             }
           ],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "mualani.skill.shark-missile",
+          "name": "鲨鲨飞弹伤害（单枚）",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "hp",
+              "parameter": "param1"
+            },
+            {
+              "stat": "hp",
+              "parameter": "param2",
+              "count": "mualani.waveMomentum"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "mualani.sharkMissileTriggered",
+            {
+              "call": "mualani.missile-targets-valid",
+              "inputs": {
+                "count": {
+                  "fact": "mualani.biteTargets"
+                }
+              },
+              "output": "active"
+            }
+          ]
         }
       ],
       "inputs": [
         {
           "id": "mualani.waveMomentum",
           "min": 0,
+          "max": 3,
+          "integer": true,
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          }
+        },
+        {
+          "id": "mualani.biteTargets",
+          "min": 1,
           "max": 3,
           "integer": true,
           "type": {
@@ -570,7 +609,8 @@
           "id": "mualani.full-charge-base",
           "appliesTo": {
             "hitIds": [
-              "mualani.skill.param1"
+              "mualani.skill.param1",
+              "mualani.skill.shark-missile"
             ]
           },
           "condition": {
@@ -597,6 +637,28 @@
                   }
                 },
                 "output": "base"
+              }
+            }
+          ]
+        },
+        {
+          "id": "mualani.bite-target-decay",
+          "appliesTo": {
+            "hitIds": [
+              "mualani.skill.param1",
+              "mualani.skill.shark-missile"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elevationFactor",
+              "value": {
+                "call": "mualani.bite-target-factor",
+                "inputs": {
+                  "input": {
+                    "fact": "mualani.biteTargets"
+                  }
+                }
               }
             }
           ]
@@ -815,7 +877,8 @@
           },
           "appliesTo": {
             "hitIds": [
-              "mualani.skill.param1"
+              "mualani.skill.param1",
+              "mualani.skill.shark-missile"
             ]
           },
           "modifiers": [
@@ -969,6 +1032,21 @@
         "kind": "boolean"
       },
       "label": "玛拉妮本次获得豚豚球"
+    },
+    "mualani.biteTargets": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次鲨鲨撕咬及飞弹的目标数（3表示3名及以上）"
+    },
+    "mualani.sharkMissileTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "撕咬命中后，本枚飞弹已锁定其他有猎物标记的目标"
     }
   },
   "formulas": [
@@ -1025,6 +1103,33 @@
         "threshold": 0,
         "output": "value",
         "revision": "1"
+      }
+    },
+    {
+      "id": "mualani.bite-target-factor",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": -0.14,
+        "offset": 1,
+        "threshold": 1,
+        "output": "value",
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "mualani.missile-targets-valid",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "count",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 2,
+        "maxInput": 3
       }
     }
   ]

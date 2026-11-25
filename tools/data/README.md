@@ -178,6 +178,10 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 核对进度时，保留两次 `--mona-report` 的结果，用 `node tools/scripts/data/report-mona-progress.mjs 上批.json 本批.json` 按稳定 ID 比较新增、已复核、归入参考及移除的条目。`batches` 保存各机制的输入、独立期望和实算，`packets` 按机制列出待处理 ID。同一映射在多个等级下核算时，映射计一次，算例分别计数。
 
+玛拉妮的技能可分别选择撕咬和单枚鲨鲨飞弹。目标数填 1、2 或 3，3 表示三名及以上。飞弹还需确认锁定了另一名有标记的敌人。目标数回归用例在三层浪势下核对零命和一命、三档目标数及飞弹的触发条件。[天赋原文](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/mualani.json) · [多目标系数的独立实现](https://github.com/genshinsim/gcsim/blob/main/internal/characters/mualani/attack.go#L138-L160)
+
+在时间轴的“战斗事件记录”选择“创造护盾”，由当前选中队员在光标处记一次造盾。祭星者之望、尘光七谕和碧落之珑从这个时刻计算效果持续时间。碧落之珑也接受其持有者施放爆发的记录。[武器精炼原文](sources/catalog/genshin-db/weapons.json)
+
 从仓库根目录运行 `node tools/scripts/data/audit-calculation-coverage.mjs --check --require-current --mona-report artifacts/mona-single-hit-final.json`。Mona 发布内核从 `.references/mona-community` 的 `589ac6919057709924c0c20d5a9d673fe9b0be1a` 读取，LeyLine 起始目录为 `829d19df0b96113c22016e5bde9ad5744817a260`。正式目录、双向差集和复核引用都闭合时，专项命令返回零。常规 `pnpm data:check` 可以离线运行。
 
 报告的 `mona`、`leyline` 和 `links` 按条目标识互相引用。候选根据目录身份、天赋组、名称、伤害族或修饰属性提出。复核记录绑定正式字段与实体修订，附上适用条件和独立数值。`ordinaryScaling` 保留逐级倍率对照，`buffProbes` 保留启用、锁定和参数变化，`equipment` 保留精炼和触发场景，`transformative` 使用实际独立反应入口复算。默认配置下的结果、未触发的零值、版本差异和待核条件均可从条目追溯。[代表机制与复核记录](sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/single-hit-pilot.json)

@@ -228,7 +228,7 @@
   "support": {
     "resolution": "complete",
     "evidence": "adopted",
-    "reason": "已采用当次条件、合法精炼及输出适用范围。",
+    "reason": "装备者施放战技后，生命值上限加成持续10秒，每15秒可触发一次。水元素人数按队伍取值，最多计两人。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
@@ -245,7 +245,7 @@
             "revision": "1"
           }
         ],
-        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+        "reason": "装备者施放战技后，生命值上限加成持续10秒，每15秒可触发一次。水元素人数按队伍取值，最多计两人。"
       }
     ]
   },
@@ -262,8 +262,25 @@
   "buffs": [
     {
       "id": "waveridingwhirl.whirl-hp",
-      "condition": {
-        "fact": "waveridingwhirl.whirlWindow"
+      "windowFact": "waveridingwhirl.whirlWindow",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "action"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "categories": [
+            "skill"
+          ]
+        },
+        "cooldownMs": 15000
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 10000,
+        "phase": "after"
       },
       "modifiers": [
         {
@@ -283,8 +300,25 @@
     },
     {
       "id": "waveridingwhirl.hydro-hp",
-      "condition": {
-        "fact": "waveridingwhirl.whirlWindow"
+      "windowFact": "waveridingwhirl.whirlWindow",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "action"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "categories": [
+            "skill"
+          ]
+        },
+        "cooldownMs": 15000
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 10000,
+        "phase": "after"
       },
       "modifiers": [
         {

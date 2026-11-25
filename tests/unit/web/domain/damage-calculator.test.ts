@@ -12,7 +12,8 @@ import { applyCalculatorBuffs, calculatorBuffChoices } from '../../../../src/web
 import { addActorFromBuild, addSkillHit, defaultEnemy } from '../../../../src/web/src/domain/real-project';
 import { createEmptyProject, nextRecordId } from '../../../../src/web/src/domain/workbench-project';
 import { evaluateTimeline } from '@leyline/engine';
-import { getWeapon } from '@leyline/game-data';
+import { getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
+import { calculatorHitChoices } from '../../../../src/web/src/domain/calculator-hits';
 import { calculatorIntervals, setCalculatorCondition } from '../../../../src/web/src/domain/calculator-conditions';
 
 it('preserves a recorded joint expectation when evaluating the all-critical alternative', () => {
@@ -173,4 +174,31 @@ it.skipIf(!existsSync(officialShowcase))('selecting the recorded Bennett Nobless
   expect(onPanel.stats.attack! - offPanel.stats.attack!, [...onPanel.diagnostics, ...offPanel.diagnostics].join(' / ')).toBeCloseTo(offPanel.baseStats!.attack * 0.20, 6);
   expect(off.project.timeline).toEqual(active.project.timeline);
   expect(active.project.effectRevisions).toBeUndefined();
+});
+
+
+it('exposes new character hits and explicit weapon windows in calculator controls', async () => {
+  const [mualani, artifactMain, sources] = await Promise.all([getCharacter('mualani'), getArtifactMain(), getBuildSources()]);
+  const makeBuild = async (characterId: string, weaponId: string) => {
+    const [character, weapon] = await Promise.all([getCharacter(characterId), getWeapon(weaponId)]);
+    return { ...sources, character, weapon, artifactMain, sets: [], artifacts: [], schemaVersion: character.schemaVersion,
+      dataVersion: character.dataVersion, kind: 'calculation-build' as const, level: 1, ascension: 0, constellation: 0,
+      weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 } };
+  };
+  const mualaniBuild = await makeBuild('mualani', 'apprenticesnotes');
+  expect(calculatorHitChoices(mualani, mualaniBuild).find(row => row.hitId === 'mualani.skill.param1')?.available).toBe(true);
+  expect(calculatorHitChoices(mualani, mualaniBuild).some(row => row.hitId === 'mualani.skill.shark-missile')).toBe(true);
+  expect(mualani.talents.find(row => row.id === 'mualani.skill')?.inputs?.find(field => field.id === 'mualani.biteTargets')).toMatchObject({ min: 1, max: 3, integer: true });
+  for (const [characterId, weaponId, key] of [
+    ['kaeya', 'athameartis', 'athameartis.daybreakWindow'],
+    ['neuvillette', 'waveridingwhirl', 'waveridingwhirl.whirlWindow'],
+  ]) {
+    const build = await makeBuild(characterId, weaponId), project = createEmptyProject(); project.enemy = defaultEnemy();
+    const actor = addActorFromBuild(project, build);
+    const talent = build.character.talents.find(row => row.category === (characterId === 'neuvillette' ? 'skill' : 'normal') && row.hits.length)!;
+    const id = addSkillHit(project, actor, talent.id, 0, 1000, { crit: 'noncritical', reaction: 'none' });
+    const request = project.timeline.find(row => row.id === id)!.damage!;
+    const fields = calculatorBuffChoices(project, actor, request, 1000, id).filter(row => row.effect.id.startsWith(weaponId + '.')).flatMap(row => row.fields);
+    expect(fields).toContainEqual(expect.objectContaining({ key, fromTrigger: true, subject: { kind: 'actor', id: actor } }));
+  }
 });

@@ -7,7 +7,7 @@ import { definitionRefSchema } from './values';
 import { elements } from '../content/stats';
 
 export const confirmedBuffSchema = definitionRefSchema.extend({ remainingMs: millisecondsSchema.positive().optional() });
-export const combatObservationUnits = { hpRatioChange:'scalar', damageTaken:'hp', healingDone:'hp', healingReceived:'hp', bondOfLifeChange:'hp', nightsoulChange:'scalar', nightsoulBurst:'boolean' } as const;
+export const combatObservationUnits = { hpRatioChange:'scalar', damageTaken:'hp', healingDone:'hp', healingReceived:'hp', bondOfLifeChange:'hp', nightsoulChange:'scalar', nightsoulBurst:'boolean', shieldCreated:'boolean' } as const;
 export type CombatObservation = keyof typeof combatObservationUnits;
 export function validateCombatObservations(kind:string, facts:Record<string,CalculationFact>|undefined, validation:z.RefinementCtx, path:(string|number)[] = []) {
   if (!facts) return;

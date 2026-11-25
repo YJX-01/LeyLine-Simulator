@@ -6,8 +6,8 @@ import { createRuntimeCatalog } from '../../tools/lib/runtime-catalog.mjs';
 
 test('talent details verify the contribution on the selected recipient or hit', async () => {
   const [catalog, engine] = await Promise.all([createRuntimeCatalog(), loadContentSchema('/src/engine/src/index.ts')]);
-  const ids = ['kaeya', 'eula', 'iansan', 'furina', 'kamisatoayato', 'raidenshogun', 'aether-cryo', 'nicole'];
-  const weaponIds = ['dullblade', 'wastergreatsword', 'beginnersprotector', 'apprenticesnotes', 'vortexvanquisher'];
+  const ids = ['kaeya', 'eula', 'iansan', 'furina', 'kamisatoayato', 'raidenshogun', 'aether-cryo', 'nicole', 'valeriy', 'fischl', 'sandrone'];
+  const weaponIds = ['dullblade', 'wastergreatsword', 'beginnersprotector', 'apprenticesnotes', 'vortexvanquisher', 'huntersbow'];
   const [characters, weapons] = await Promise.all([
     Promise.all(ids.map(id => catalog.get('characters', id))),
     Promise.all(weaponIds.map(id => catalog.get('weapons', id))),
@@ -40,4 +40,7 @@ test('talent details verify the contribution on the selected recipient or hit', 
   assert.ok(audit.verified.has('aether-cryo/talents/2/details/3'));
   assert.ok(audit.verified.has('kamisatoayato/talents/1/details/4'));
   assert.ok(audit.verified.has('nicole/talents/1/details/3'));
+  const inactiveFischl = find('valeriy', '/talents/0/details/6', row => row.probe.peerValues?.['fischl.hexereiSecretRite'] === false
+    && row.probe.recipient === 'actor' && row.probe.hit === 'normal.param5' && row.probe.values['valeriy.assaultOrder']);
+  assert.equal(inactiveFischl?.status, 'known');
 });

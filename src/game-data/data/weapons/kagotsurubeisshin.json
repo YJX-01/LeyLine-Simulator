@@ -228,7 +228,7 @@
   "support": {
     "resolution": "complete",
     "evidence": "adopted",
-    "reason": "已采用当次条件、合法精炼及输出适用范围。切落风按独立输出计算。",
+    "reason": "装备者普攻、重击或下落命中后，攻击力提升15%，持续8秒，每8秒至多触发一次。切落风按独立命中计算。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
@@ -240,7 +240,7 @@
             "revision": "1"
           }
         ],
-        "reason": "已采用当次条件、合法精炼及输出适用范围。切落风按独立输出计算。"
+        "reason": "装备者普攻、重击或下落命中后，攻击力提升15%，持续8秒，每8秒至多触发一次。切落风按独立命中计算。"
       }
     ]
   },
@@ -286,8 +286,28 @@
   "buffs": [
     {
       "id": "kagotsurubeisshin.wind-attack",
-      "condition": {
-        "fact": "kagotsurubeisshin.wind-attackActive"
+      "windowFact": "kagotsurubeisshin.wind-attackActive",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ],
+          "allowZeroDamage": true
+        },
+        "cooldownMs": 8000
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 8000,
+        "phase": "after"
       },
       "modifiers": [
         {

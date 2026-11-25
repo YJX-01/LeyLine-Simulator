@@ -7,7 +7,7 @@ import GameIcon from '../components/GameIcon.vue';
 import ChoiceGroup from '../components/ChoiceGroup.vue';
 import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
-import { buffEventSelectors, equipmentHits, putHitFact, transformativeElements, transformativeFamilies, type TransformativeFamily, type HitRef, type HitFacts } from '@leyline/schema';
+import { buffEventSelectors, combatObservationUnits, equipmentHits, putHitFact, transformativeElements, transformativeFamilies, type TransformativeFamily, type HitRef, type HitFacts } from '@leyline/schema';
 import { getReactionCalculationBundle } from '@leyline/game-data';
 import { grantedDamageChanges } from '@leyline/engine';
 import { ordinaryReactions } from '@leyline/schema/hit-bindings';
@@ -82,8 +82,9 @@ function setSeed(event: Event) {
 }
 const defeated = ref(''), remainingCooldown = ref<number | ''>('');
 watch([() => axis.actorId, skillId], () => { hitTargets.value = ''; criticalTargets.value = ''; triggerRoll.value = ''; defeated.value = ''; remainingCooldown.value = ''; });
-const observationLabels: Record<CombatObservation,string> = {hpRatioChange:'生命变化（%）',damageTaken:'实际受到的伤害',healingDone:'治疗量（含溢出）',healingReceived:'受到治疗量（含溢出）',bondOfLifeChange:'生命之契变化量',nightsoulChange:'夜魂值变化量',nightsoulBurst:'触发夜魂迸发'};
+const observationLabels: Record<CombatObservation,string> = {hpRatioChange:'生命变化（%）',damageTaken:'实际受到的伤害',healingDone:'治疗量（含溢出）',healingReceived:'受到治疗量（含溢出）',bondOfLifeChange:'生命之契变化量',nightsoulChange:'夜魂值变化量',nightsoulBurst:'触发夜魂迸发',shieldCreated:'创造护盾'};
 const healthField = ref<CombatObservation>('hpRatioChange'), healthValue = ref<number | string>('');
+const booleanObservation = computed(() => combatObservationUnits[healthField.value] === 'boolean');
 const energyReading=ref<number|''>(''), exitCrit=ref<NonNullable<Project['timeline'][number]['fieldSwitch']>['crit']>(null);
 function recordField(enter:boolean) {
   const id=axis.actor?.id;
@@ -94,8 +95,8 @@ function recordField(enter:boolean) {
 }
 function recordHealth() {
   const actor = axis.actor;
-  if (!actor || healthField.value !== 'nightsoulBurst' && (healthValue.value === '' || !Number.isFinite(Number(healthValue.value)))) { error.value = '请填写所选事件的变化量。'; return; }
-  const value = healthField.value === 'nightsoulBurst' ? true : Number(healthValue.value) / (healthField.value === 'hpRatioChange' ? 100 : 1);
+  if (!actor || !booleanObservation.value && (healthValue.value === '' || !Number.isFinite(Number(healthValue.value)))) { error.value = '请填写所选事件的变化量。'; return; }
+  const value = booleanObservation.value ? true : Number(healthValue.value) / (healthField.value === 'hpRatioChange' ? 100 : 1);
   try {
     axis.command(project => { axis.selectedId = addCombatObservation(project, actor.id, Math.round(cursor.value), healthField.value, value); });
     error.value = '';
@@ -265,7 +266,7 @@ onBeforeUnmount(() => { pause(); window.removeEventListener('keydown', key); });
       @pickup="(actor,source,effect)=>axis.command(draft=>{axis.selectedId=addParticlePickup(draft,actor,source,Math.round(cursor),effect);})" />
     <details v-if="axis.actor?.build"><summary>战斗事件记录</summary>
       <div class="skill-palette"><label>记录类型<select v-model="healthField"><option v-for="(name,id) in observationLabels" :key="id" :value="id">{{ name }}</option></select></label>
-        <label v-if="healthField !== 'nightsoulBurst'">{{ observationLabels[healthField] }}<input v-model="healthValue" type="number" step="any"></label>
+        <label v-if="!booleanObservation">{{ observationLabels[healthField] }}<input v-model="healthValue" type="number" step="any"></label>
         <button class="ui-action" @click="recordHealth">在光标处记录</button></div>
     </details>
     <details v-if="axis.actor?.build && layer === 'action'"><summary>换人与能量</summary><div class="skill-palette">

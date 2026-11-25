@@ -293,9 +293,6 @@
     },
     {
       "id": "angelosheptades.leading-light",
-      "condition": {
-        "fact": "angelosheptades.leading-lightActive"
-      },
       "recipient": "team",
       "modifiers": [
         {
@@ -334,21 +331,32 @@
             "of": "recipient"
           }
         }
-      ]
+      ],
+      "windowFact": "angelosheptades.leading-lightActive",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "state-change"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "observation": {
+            "key": "shieldCreated",
+            "test": "true"
+          }
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 20000,
+        "phase": "after"
+      }
     },
     {
       "id": "angelosheptades.leading-light-backstage",
       "condition": {
-        "call": "condition.all",
-        "inputs": {
-          "term0": {
-            "fact": "angelosheptades.leading-lightActive"
-          },
-          "term1": {
-            "fact": "angelosheptades.hexereiRecipient"
-          }
-        },
-        "output": "active"
+        "fact": "angelosheptades.hexereiRecipient"
       },
       "recipient": "team",
       "modifiers": [
@@ -394,7 +402,27 @@
             "output": "active"
           }
         }
-      ]
+      ],
+      "windowFact": "angelosheptades.leading-lightActive",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "state-change"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "observation": {
+            "key": "shieldCreated",
+            "test": "true"
+          }
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 20000,
+        "phase": "after"
+      }
     },
     {
       "id": "angelosheptades.directEnergy",

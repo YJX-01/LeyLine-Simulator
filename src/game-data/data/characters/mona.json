@@ -918,6 +918,42 @@
             "mona.c2Charged"
           ]
         }
+      ],
+      "buffs": [
+        {
+          "id": "mona.c2.hexerei-mastery",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "categories": [
+                "charged"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "condition": {
+            "fact": "mona.hexereiAwakened"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 80,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -947,6 +983,41 @@
             {
               "target": "attribute.critRate",
               "value": 0.15
+            }
+          ]
+        },
+        {
+          "id": "mona.c4.hexerei-omen-crit-damage",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "mona.hexereiAwakened"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "mona.omen"
+                  },
+                  "term1": {
+                    "fact": "mona.recipientHexerei",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
             }
           ]
         }
@@ -1077,6 +1148,20 @@
         "unit": "count"
       },
       "label": "虚实流动用于厄运的修辞的秒数"
+    },
+    "mona.hexereiAwakened": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "莫娜已完成魔女的课业"
+    },
+    "mona.recipientHexerei": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受益者是魔导角色"
     }
   },
   "formulas": [

@@ -112,14 +112,16 @@ function prepare(members) {
   const p = engine.prepareStructuredBuilds(members);
   assert.ok(p.ok, JSON.stringify(p.diagnostics)); return p.team;
 }
-function panel(team, b, name, key, actorFacts = {}, ownerFacts = {}, time = 1, cast, changes = [], allowUnknown = false) {
+function panel(team, b, name, key, actorFacts = {}, ownerFacts = {}, time = 1, cast, changes = [], allowUnknown = false, extraEvents = [], targetFacts = {}, castActor = 'support') {
   const t = b.character.talents[0], h = t.hits[0], { setup, request } = auditHit(b.character, t, h, 90);
   setup.events[0].timeMs = time;
-  if (cast) setup.events.unshift({ id: 'cast', kind: 'action', actorId: 'support', skillId: cast, category: 'burst', targetIds: [], timeMs: 0, order: 0, sourceEventIds: [], facts: {} });
+  if (cast) setup.events.unshift({ id: 'cast', kind: 'action', actorId: castActor, skillId: cast, category: 'burst', targetIds: [], timeMs: 0, order: 0, sourceEventIds: [], facts: {} });
   for (const [index, [actorId, timeMs, change]] of changes.entries()) setup.events.push({ id: 'change-' + index, kind: 'state-change',
     actorId, timeMs, order: index + 2, targetIds: [], sourceEventIds: [], facts: { hpRatioChange: change === null ? f(null) : number('scalar', change) } });
   request.frame.factOverrides = [{ subject: { kind: 'actor', id: 'actor' }, facts: actorFacts }, { subject: { kind: 'actor', id: 'support' }, facts: ownerFacts }];
-  if (!cast && !Object.keys(ownerFacts).length) request.frame.factOverrides.pop();
+  if ((!cast || castActor !== 'support') && !Object.keys(ownerFacts).length) request.frame.factOverrides.pop();
+  setup.events.push(...extraEvents);
+  if (Object.keys(targetFacts).length) request.frame.factOverrides.push({ subject: { kind: 'target', id: 'enemy' }, facts: targetFacts });
   const result = engine.evaluateCombatBindings(team.program, engine.createStructuredCombatContext(team, setup), {
     value: { kind: 'attribute', key: { namespace: 'builtin', id: 'attribute.' + key, revision: '1' }, actor: { role: 'owner' }, at: { kind: 'current', phase: 'same' } }
   }, { ...request.frame, ownerId: name, recipientId: name, contributorId: null, hit: null });
@@ -909,4 +911,48 @@ test('Scarlet Proof starts only after its holder triggers Stellar Swirl, expires
     near(result.outputs.critRate.value.value,.05 + (applies ? .16 : 0));
     near(result.outputs['reaction.stellar-swirl.damageBonus'].value.value,applies ? .4 : 0);
   }
+});
+
+test('Hexerei grants respect recipient, awakening and trigger windows', async () => {
+  const [fischl, klee, mona, kaeya] = await Promise.all([
+    build('fischl', 'huntersbow'), build('klee', 'apprenticesnotes'),
+    build('mona', 'apprenticesnotes'), build('kaeya', 'dullblade'),
+  ]);
+  const team = (support, rank = 0) => prepare([{ id: 'actor', build: kaeya }, { id: 'support', build: { ...support, constellation: rank } }]);
+  const fischlTeam = team(fischl);
+  const owner = { 'fischl.hexereiSecretRite': yes(true), 'fischl.hexereiOverloadActive': yes(false),
+    'fischl.hexereiElectroActive': yes(false), 'fischl.hexereiCoordinationActive': yes(false) };
+  const readFischl = (key, actor, facts) => panel(fischlTeam, kaeya, 'actor', key, { onField: yes(actor) }, facts);
+  const attack = readFischl('attackPercent', true, owner);
+  near(readFischl('attackPercent', true, { ...owner, 'fischl.hexereiOverloadActive': yes(true) }) - attack, .225);
+  near(readFischl('attackPercent', true, { ...owner, 'fischl.hexereiOverloadActive': yes(true), 'fischl.hexereiCoordinationActive': yes(true) }) - attack, .45);
+  near(readFischl('attackPercent', false, { ...owner, 'fischl.hexereiOverloadActive': yes(true) }), attack);
+  const mastery = readFischl('elementalMastery', true, owner);
+  near(readFischl('elementalMastery', true, { ...owner, 'fischl.hexereiElectroActive': yes(true) }) - mastery, 90);
+  near(readFischl('elementalMastery', true, { ...owner, 'fischl.hexereiElectroActive': yes(true), 'fischl.hexereiSecretRite': yes(false) }), mastery);
+
+  const kleeTeam = prepare([{ id: 'actor', build: { ...klee, constellation: 6 } }]);
+  const kleeFacts = awakened => ({ 'klee.hexereiAwakened': yes(awakened), 'klee.chainedSparkAttackActive': yes(false) });
+  const pyro = (awakened, time, cast) => panel(kleeTeam, klee, 'actor', 'pyroBonus', kleeFacts(awakened), {}, time, cast, [], false, [], {}, 'actor');
+  const basePyro = pyro(true, 1);
+  near(pyro(false, 1, 'klee.burst') - basePyro, .1);
+  near(pyro(true, 1, 'klee.burst') - basePyro, .5);
+  near(pyro(true, 25001, 'klee.burst'), basePyro);
+  const attackKlee = active => panel(kleeTeam, klee, 'actor', 'attackPercent', { ...kleeFacts(true), 'klee.chainedSparkAttackActive': yes(active) });
+  near(attackKlee(true) - attackKlee(false), .6);
+  near(panel(kleeTeam, klee, 'actor', 'attackPercent', { ...kleeFacts(false), 'klee.chainedSparkAttackActive': yes(true) }), attackKlee(false));
+
+  const monaTeam = team(mona, 4);
+  const monaFacts = { 'mona.hexereiAwakened': yes(true), 'mona.c1Prophecy': yes(false) };
+  const charged = { id: 'charged', kind: 'hit', actorId: 'support', targetIds: ['enemy'], timeMs: 0, order: 0,
+    skillId: 'mona.normal', category: 'charged', sourceEventIds: [], facts: {} };
+  const monaPanel = (key, time, events, magus, omen) => panel(monaTeam, kaeya, 'actor', key,
+    { 'mona.recipientHexerei': yes(magus) }, monaFacts, time, undefined, [], false, events, { 'mona.omen': yes(omen) });
+  const baseMastery = monaPanel('elementalMastery', 1, [], true, true);
+  near(monaPanel('elementalMastery', 1, [charged], true, true) - baseMastery, 80);
+  near(monaPanel('elementalMastery', 12001, [charged], true, true), baseMastery);
+  near(monaPanel('elementalMastery', 1, [{ ...charged, category: 'normal' }], true, true), baseMastery);
+  const baseCrit = monaPanel('critDamage', 1, [], true, false);
+  near(monaPanel('critDamage', 1, [], true, true) - baseCrit, .15);
+  near(monaPanel('critDamage', 1, [], false, true), baseCrit);
 });

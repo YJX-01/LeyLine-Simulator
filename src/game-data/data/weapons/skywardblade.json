@@ -228,7 +228,7 @@
   "support": {
     "resolution": "complete",
     "evidence": "adopted",
-    "reason": "已采用当次条件、合法精炼及输出适用范围。破空之势追加伤害按独立输出计算。",
+    "reason": "装备者施放爆发后，破空之势的移速与攻速加成持续12秒。追加伤害取当次命中条件。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
@@ -250,7 +250,7 @@
             "revision": "1"
           }
         ],
-        "reason": "已采用当次条件、合法精炼及输出适用范围。破空之势追加伤害按独立输出计算。"
+        "reason": "装备者施放爆发后，破空之势的移速与攻速加成持续12秒。追加伤害取当次命中条件。"
       }
     ]
   },
@@ -275,8 +275,24 @@
     },
     {
       "id": "skywardblade.piercing-might",
-      "condition": {
-        "fact": "skywardblade.piercingMight"
+      "windowFact": "skywardblade.piercingMight",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "action"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "categories": [
+            "burst"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 12000,
+        "phase": "after"
       },
       "modifiers": [
         {

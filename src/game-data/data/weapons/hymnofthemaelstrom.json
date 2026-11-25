@@ -228,7 +228,7 @@
   "support": {
     "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "治疗加成和告真的蜜酿生命上限已采用。场上角色的攻击力增益及叠层间封顶规则仍待核对。",
+    "reason": "治疗加成、生命上限和单层告真的蜜酿提供的场上角色攻击力已采用；多层攻击力加成与封顶规则仍待独立核对。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
@@ -248,6 +248,21 @@
             "namespace": "builtin",
             "id": "hymnofthemaelstrom.mead-hp-reaction",
             "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "hymnofthemaelstrom.mead-attack-single",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "hymnofthemaelstrom.mead-attack-single-reaction",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "hymnofthemaelstrom.mead-attack-multilayer-observed",
+            "revision": "1"
           }
         ],
         "reason": "已采用当次条件、合法精炼及输出适用范围。"
@@ -256,7 +271,7 @@
         "id": "pending-output-scope",
         "resolution": "unavailable",
         "ruleIds": [],
-        "reason": "治疗加成和告真的蜜酿生命上限已采用。场上角色的攻击力增益及叠层间封顶规则仍待核对。"
+        "reason": "治疗加成、生命上限和单层告真的蜜酿提供的场上角色攻击力已采用；多层攻击力加成与封顶规则仍待独立核对。"
       }
     ]
   },
@@ -356,6 +371,154 @@
           }
         }
       ]
+    },
+    {
+      "id": "hymnofthemaelstrom.mead-attack-single",
+      "condition": {
+        "call": "hymnofthemaelstrom.one-layer",
+        "inputs": {
+          "points": {
+            "fact": "hymnofthemaelstrom.meadLayers"
+          }
+        },
+        "output": "active"
+      },
+      "recipient": "team",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "condition": {
+            "fact": "onField",
+            "of": "recipient"
+          },
+          "value": {
+            "call": "hymnofthemaelstrom.single-layer-attack",
+            "inputs": {
+              "basis": {
+                "call": "hymnofthemaelstrom.hp-excess",
+                "inputs": {
+                  "hp": {
+                    "stat": "hp"
+                  }
+                },
+                "output": "excess"
+              },
+              "rate": {
+                "refinement": [
+                  0.004,
+                  0.005,
+                  0.006,
+                  0.007,
+                  0.008
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.08,
+                  0.1,
+                  0.12,
+                  0.14,
+                  0.16
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hymnofthemaelstrom.mead-attack-single-reaction",
+      "condition": {
+        "call": "condition.all",
+        "inputs": {
+          "term0": {
+            "call": "hymnofthemaelstrom.one-layer",
+            "inputs": {
+              "points": {
+                "fact": "hymnofthemaelstrom.meadLayers"
+              }
+            },
+            "output": "active"
+          },
+          "term1": {
+            "fact": "hymnofthemaelstrom.reactionBuff"
+          }
+        },
+        "output": "active"
+      },
+      "recipient": "team",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "condition": {
+            "fact": "onField",
+            "of": "recipient"
+          },
+          "value": {
+            "call": "hymnofthemaelstrom.single-layer-attack",
+            "inputs": {
+              "basis": {
+                "call": "hymnofthemaelstrom.hp-excess",
+                "inputs": {
+                  "hp": {
+                    "stat": "hp"
+                  }
+                },
+                "output": "excess"
+              },
+              "rate": {
+                "refinement": [
+                  0.003,
+                  0.00375,
+                  0.0045,
+                  0.00525,
+                  0.006
+                ],
+                "unit": "scalar"
+              },
+              "cap": {
+                "refinement": [
+                  0.06,
+                  0.075,
+                  0.09,
+                  0.105,
+                  0.12
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "value"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hymnofthemaelstrom.mead-attack-multilayer-observed",
+      "condition": {
+        "call": "hymnofthemaelstrom.multiple-layers",
+        "inputs": {
+          "points": {
+            "fact": "hymnofthemaelstrom.meadLayers"
+          }
+        },
+        "output": "active"
+      },
+      "recipient": "team",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "condition": {
+            "fact": "onField",
+            "of": "recipient"
+          },
+          "value": {
+            "fact": "hymnofthemaelstrom.multilayerAttackBonus"
+          }
+        }
+      ]
     }
   ],
   "facts": {
@@ -373,6 +536,14 @@
         "kind": "boolean"
       },
       "label": "队伍触发冻结或星扩散后的5秒内"
+    },
+    "hymnofthemaelstrom.multilayerAttackBonus": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "多层蜜酿对场上角色的攻击力加成（含反应增益，须有外部确认）"
     }
   },
   "formulas": [
@@ -394,6 +565,55 @@
         "from": "count",
         "to": "scalar",
         "per": 1
+      }
+    },
+    {
+      "id": "hymnofthemaelstrom.one-layer",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1
+      }
+    },
+    {
+      "id": "hymnofthemaelstrom.hp-excess",
+      "template": {
+        "id": "bounded-stat-bonus",
+        "revision": "1",
+        "input": "hp",
+        "stat": "hp",
+        "threshold": 40000,
+        "channels": [
+          {
+            "output": "excess",
+            "rate": 1,
+            "cap": 20000
+          }
+        ]
+      }
+    },
+    {
+      "id": "hymnofthemaelstrom.single-layer-attack",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "scalar",
+        "to": "scalar",
+        "per": 1000
+      }
+    },
+    {
+      "id": "hymnofthemaelstrom.multiple-layers",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 2
       }
     }
   ]

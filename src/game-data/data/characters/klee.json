@@ -807,6 +807,31 @@
               }
             }
           ]
+        },
+        {
+          "id": "klee.c1.chained-reactions-attack",
+          "recipient": "owner",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "klee.hexereiAwakened"
+              },
+              "term1": {
+                "fact": "klee.chainedSparkAttackActive"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              }
+            }
+          ]
         }
       ]
     },
@@ -950,6 +975,40 @@
               }
             }
           ]
+        },
+        {
+          "id": "klee.c6.hexerei-pyro-bonus",
+          "recipient": "owner",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "klee.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 25000,
+            "phase": "after"
+          },
+          "condition": {
+            "fact": "klee.hexereiAwakened"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
         }
       ]
     }
@@ -982,6 +1041,20 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "klee.hexereiAwakened": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "可莉已完成魔女的课业"
+    },
+    "klee.chainedSparkAttackActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "连环轰隆火花触发后的12秒内"
+    },
     "klee.explosiveSparkSpent": {
       "scope": "query",
       "type": {
