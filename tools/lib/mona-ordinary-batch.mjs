@@ -17,13 +17,25 @@ const inactiveWindows = new Set([
   'emilie.targetBurning', 'ningguang.jadeScreenCrossed', 'yunjin.flagFormation', 'diluc.dawnInfusion',
   'tighnari.wreathArrowFired', 'ganyu.celestialShowerArea', 'aether-dendro.lotusField',
   'lumine-dendro.lotusField', 'chiori.geoConstructMade', 'kamisatoayaka.senhoContact', 'sigewinne.restWindow',
+  'fischl.hexereiSecretRite', 'fischl.hexereiOverloadActive', 'fischl.hexereiElectroActive', 'fischl.hexereiCoordinationActive',
+  'klee.hexereiAwakened', 'klee.chainedSparkAttackActive', 'mona.hexereiAwakened', 'mona.recipientHexerei',
 ]);
+export function ordinaryInactiveWindows(character) {
+  return Object.fromEntries(Object.entries(character.metadata.facts ?? {})
+    .filter(([key, fact]) => inactiveWindows.has(key) && fact.type.kind === 'boolean').map(([key]) => [key, false]));
+}
 const baselinePanelLabel = /^(角色基础|武器基础|圣遗物词条|角斗士的终幕礼[24]|角色副属性|初始值)/;
 const tolerance = expected => Math.max(.000001, Math.abs(expected) * .0001);
 const close = (expected, actual) => Number.isFinite(expected) && Number.isFinite(actual)
   && Math.abs(expected - actual) <= tolerance(expected);
 const hasAdditionalEffect = analysis => ['atk', 'hp', 'def', 'em', 'bonus'].some(key =>
   Object.entries(analysis[key] ?? {}).some(([label, value]) => value !== 0 && !baselinePanelLabel.test(label)));
+
+function ordinaryCommonPanel(analysis, terms, parameters, level) {
+  return terms.reduce((total, term) => total + sum(analysis[axes[term.stat][0]])
+    * parameters.find(parameter => parameter.id === term.parameter).values[level - 1], 0)
+    * (1 + sum(analysis.bonus)) * .45;
+}
 
 function defaultBranches(rows, constellation) {
   return new Map(rows.filter(row => row.kind === 'output-branch' && row.branch === 'normal' && row.output === 'damage'
@@ -98,8 +110,7 @@ export async function auditMonaOrdinaryBatch(monaRows, leylineRows, candidates, 
         branch = { scenario: { input: probe.input } };
       }
       record.monaInput = branch.scenario.input;
-      const inactive = Object.fromEntries(Object.entries(character.metadata.facts ?? {})
-        .filter(([key, fact]) => inactiveWindows.has(key) && fact.type.kind === 'boolean').map(([key]) => [key, false]));
+      const inactive = ordinaryInactiveWindows(character);
       record.leylineInactiveWindows = inactive;
       for (const level of [1, 6, 10]) {
         const input = structuredClone(branch.scenario.input);
@@ -124,8 +135,7 @@ export async function auditMonaOrdinaryBatch(monaRows, leylineRows, candidates, 
         const expected = definition.base.reduce((total, term) => total + values[term.stat] * talent.parameters.find(p => p.id === term.parameter).values[level - 1], 0) * (1 + elementalBonus) * .5 * .9;
         // Re-evaluate LeyLine's authored terms on Mona's actual panel and bonus; the
         // independent engine check above retains its own legal build and target.
-        const commonActual = definition.base.reduce((total, term) => total + sum(analysis[axes[term.stat][0]])
-          * talent.parameters.find(p => p.id === term.parameter).values[level - 1], 0) * (1 + sum(analysis.bonus)) * .5 * .9;
+        const commonActual = ordinaryCommonPanel(analysis, definition.base, talent.parameters, level);
         record.cases.push({ level, mona: { expected: monaExpected, actual: monaActual,
           panel: Object.fromEntries(Object.entries(axes).map(([key, [stat, ratio]]) => [key, { stat: sum(analysis[stat]), ratio: sum(analysis[ratio]) }])),
           bonus: sum(analysis.bonus), extraDamage: sum(analysis.extra_damage) }, commonPanel: { expected: monaActual, actual: commonActual },
@@ -135,6 +145,7 @@ export async function auditMonaOrdinaryBatch(monaRows, leylineRows, candidates, 
         if (!near(monaActual, commonActual)) throw new Error('Damage differs on common panel');
         if (!Number.isFinite(actual)) throw new Error('LeyLine damage is unknown');
         if (!near(expected, actual)) throw new Error('LeyLine damage differs from baseline equation');
+
       }
       record.status = 'matched';
       mappings.push({ id: 'ordinary-batch:' + skill.character + ':' + skill.index, disposition: 'matched', mona: [skill.id, ...(defaults.has(skill.id) ? [defaults.get(skill.id).id] : [])],

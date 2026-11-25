@@ -178,9 +178,22 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 核对进度时，保留两次 `--mona-report` 的结果，用 `node tools/scripts/data/report-mona-progress.mjs 上批.json 本批.json` 按稳定 ID 比较新增、已复核、归入参考及移除的条目。`batches` 保存各机制的输入、独立期望和实算，`packets` 按机制列出待处理 ID。同一映射在多个等级下核算时，映射计一次，算例分别计数。
 
+“行为缺口”视图按公式、命中、属性、触发、受益者、叠层、刷新与到期等来源声明拆分。点击某个期末缺口或本批变化的数字可查行为、缺少的证据与原始条目。菜单、配置与证据条款记录父项；纯治疗和护盾输出记录范围外理由。仍可能授予增益或伤害的条款留在待定范围。多个缺口可以属于同一行为，期末按唯一行为核算。运行场景数和映射数各自统计。
+
 玛拉妮的技能可分别选择撕咬和单枚鲨鲨飞弹。目标数填 1、2 或 3，3 表示三名及以上。飞弹还需确认锁定了另一名有标记的敌人。目标数回归用例在三层浪势下核对零命和一命、三档目标数及飞弹的触发条件。[天赋原文](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/mualani.json) · [多目标系数的独立实现](https://github.com/genshinsim/gcsim/blob/main/internal/characters/mualani/attack.go#L138-L160)
 
 在时间轴的“战斗事件记录”选择“创造护盾”，由当前选中队员在光标处记一次造盾。祭星者之望、尘光七谕和碧落之珑从这个时刻计算效果持续时间。碧落之珑也接受其持有者施放爆发的记录。[武器精炼原文](sources/catalog/genshin-db/weapons.json)
+
+首次建账可用 `pnpm audit:mona --previous-report artifacts/上批.json` 指定期初。以后默认对比上次发布的行为快照，重建同一报告保留其期初。需重放两份归档时运行 `pnpm audit:mona --report artifacts/本批.json --previous-report artifacts/上批.json`。两次报告须使用同一 Mona 基线。来源或绑定消失会重开；单侧发生变化后须取得该行为的相应读数。报告将本批有实算证据的正式绑定变化与补齐探针的进展分开。游戏观测按原有证据规范另行登记。
+
+在仓库根目录可先运行受影响的批次，再运行 `pnpm audit:mona` 生成全量报告。以下命令分别核查 Buff 条件、指定角色共同输入和已登记反应差异。局部报告记录实际使用的版本、场景及限制。
+
+```sh
+node tools/scripts/data/audit-mona-mechanism.mjs --group buff --buff-key DurinC2 --out artifacts/buff.partial.json
+node tools/scripts/data/audit-mona-mechanism.mjs --group damage --character Xingqiu --out artifacts/damage.partial.json
+node tools/scripts/data/audit-mona-mechanism.mjs --group differences --out artifacts/differences.partial.json
+pnpm exec playwright test --config tools/mona-audit/playwright.config.ts --workers=1
+```
 
 从仓库根目录运行 `node tools/scripts/data/audit-calculation-coverage.mjs --check --require-current --mona-report artifacts/mona-single-hit-final.json`。Mona 发布内核从 `.references/mona-community` 的 `589ac6919057709924c0c20d5a9d673fe9b0be1a` 读取，LeyLine 起始目录为 `829d19df0b96113c22016e5bde9ad5744817a260`。正式目录、双向差集和复核引用都闭合时，专项命令返回零。常规 `pnpm data:check` 可以离线运行。
 

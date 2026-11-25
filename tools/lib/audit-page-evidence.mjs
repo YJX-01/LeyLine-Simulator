@@ -20,7 +20,7 @@ export function buildEvidence(report) {
   const ids = value => Array.isArray(value) ? value.flatMap(ids) : typeof value === 'string' ? [value] : value && typeof value === 'object' && typeof value.id === 'string' ? [value.id] : [];
   for (const link of report.links ?? []) for (const id of [...ids(link.mona), ...ids(link.leyline)]) add(id, 'links', link);
   for (const [batch, records] of Object.entries(report.batches ?? {})) for (const record of records ?? []) {
-    const refs = [record.id, record.mona, record.leyline, record.buffId, record.effectId, record.targetId, record.target, record.branch];
+    const refs = [record.id, record.mona, record.leyline, record.buffId, record.effectId, record.targetId, record.targetIds, record.extraTargetIds, record.target, record.branch];
     for (const id of new Set(refs.flatMap(ids))) add(id, 'batches', { batch, record });
   }
   for (const source of ['ordinaryScaling', 'buffProbes', 'equipment', 'transformative', 'aino']) for (const record of report[source]?.rows ?? []) {
@@ -52,11 +52,13 @@ export function buildEvidence(report) {
     const branches = related.filter(item => item.kind === 'output-branch');
     const errors = related.filter(item => item.kind === 'open' && item.id?.startsWith('mona:open:probe:'));
     const probes = observations.filter(item => item.source === 'buffProbes').map(item => item.record);
-    const probeCalls = probes.flatMap(probe => Object.values(probe.comparison ?? {}).flatMap(value => value?.status ? [value] : Object.values(value ?? {}).filter(v => v?.status)));
+    const probeCalls = probes.filter(probe => probe.diagnostic?.kind !== 'invalid-input')
+      .flatMap(probe => ['attribute', 'damage', 'lockedAttribute', 'lockedDamage'].map(key => probe.comparison?.[key]).filter(Boolean));
     const positiveProbe = probeCalls.some(call => call.status === 'ok' && (call.changes ?? []).some(change =>
       Number.isFinite(change.before) && Number.isFinite(change.after) && change.before !== change.after));
     const reactionPairs = collect('reactionPairs');
-    const monaSuccess = reactionPairs.some(item => Number.isFinite(item.mona)) || branches.length > 0 || positiveProbe || batches.some(({ record }) =>
+    const monaSuccess = reactionPairs.some(item => Number.isFinite(item.mona)) || branches.length > 0 || positiveProbe
+      || probes.some(p => p.behaviorEvidence?.some(e => Number.isFinite(e.enabled) && e.before === e.disabled && e.enabled !== e.disabled)) || batches.some(({ record }) =>
       (Number.isFinite(record.monaDelta) && record.monaDelta !== 0) ||
       (record.cases ?? []).some(item => Number.isFinite(item.mona?.actual)) ||
       (record.verifiedScenarios ?? []).some(item => Number.isFinite(item.monaDelta) && item.monaDelta !== 0));
@@ -76,10 +78,11 @@ export function buildEvidence(report) {
     const runStates = [...new Set(Object.values(sideRuns))];
     const run = sideRuns[row.side] ?? '未验证';
     const pairs = [];
-    const pair = (scenario, mona, leyline, tolerance, method, source) => {
+    const pair = (scenario, mona, leyline, tolerance, method, source, candidate = false) => {
       if (!Number.isFinite(mona) || !Number.isFinite(leyline)) return;
       const difference = leyline - mona;
-      pairs.push({ scenario, mona, leyline, difference, tolerance, result: Math.abs(difference) <= tolerance ? '一致' : '有差异', method, source });
+      const result = candidate ? '候选对应待确认' : Math.abs(difference) <= tolerance ? '一致' : '有差异';
+      pairs.push({ scenario, mona, leyline, difference, tolerance, result, method, source });
     };
     for (const item of reactionPairs) pair(`${item.key} 等级 ${item.level} 精通 ${item.em} 抗性 ${item.resistance}`, item.mona, item.leyline,
       Math.max(1e-5, Math.abs(item.independent) * 1e-6), '相同输入的两侧运行读数', item);
@@ -87,9 +90,15 @@ export function buildEvidence(report) {
       // Equal expected units are necessary: percent panel deltas and raw stat modifiers differ in unit.
       if (Number.isFinite(record.monaExpected) && record.monaExpected === record.expected)
         pair(`${batch} ${record.stat ?? ''}`, record.monaDelta, record.leylineDelta, 1e-7, '同单位增量', record);
+      if (record.behaviorEvidence?.mona && record.monaExpected === record.amount) {
+        pair([record.key, record.recipient, record.scenarioId].filter(Boolean).join(' / '), record.monaDelta, record.leylineDelta,
+          1e-7, '同一受益者的属性增量', record);
+      }
       for (const item of record.cases ?? []) {
+        if (batch === 'commonInputs') pair(`零命 天赋 ${item.talentLevel} 攻击力 ${item.effectiveAttack?.mona}`, item.mona, item.leyline,
+          item.tolerance, '共同攻击面板的实际非暴击伤害', item);
         if (item.commonPanel) pair(`${batch} 天赋等级 ${item.level}`, item.commonPanel.expected, item.commonPanel.actual,
-          Math.max(0.000001, Math.abs(item.commonPanel.expected) * .0001), 'Mona 实际读数与 LeyLine 定义在同一面板上的复算值', item);
+          Math.max(0.000001, Math.abs(item.commonPanel.expected) * .0001), 'Mona 实际读数与 LeyLine 定义在同一面板上的复算值', item, record.status === 'unresolved');
       }
     }
     const comparisons = links.flatMap(link => (link.comparisons ?? []).map(item => {
@@ -109,7 +118,8 @@ export function buildEvidence(report) {
     });
     const uniqueStates = [...new Set(linkStates)];
     // Mixed conclusions remain inspectable and are not collapsed into a positive verdict.
-    const comparison = uniqueStates.length === 1 ? uniqueStates[0] : uniqueStates.includes('有差异') ? '有差异' : uniqueStates.length > 1 ? '待确认' : candidates.length ? '待确认' : '无复核映射';
+    const comparison = pairs.some(p => p.result === '有差异') || uniqueStates.includes('有差异') ? '有差异'
+      : uniqueStates.length === 1 ? uniqueStates[0] : uniqueStates.length > 1 || candidates.length ? '待确认' : '无复核映射';
     return { run, comparison, links, candidates, details: { runStates, sideRuns, comparisonStates: uniqueStates, pairs, comparisons, branches, errors, probes, leylineEvidence, leylineProofs, batches, observations, issues } };
   };
 }
@@ -137,6 +147,15 @@ export function summarizeMappings(report) {
   }
   // Probe records represent a recipient, selected buff, and explicit input scenario.
   const scenarioIds = new Set();
+  for (const records of Object.values(report.batches ?? {})) for (const record of records) {
+    if (record.behaviorEvidence?.mona && record.behaviorEvidence?.leyline) {
+      for (const state of ['before', 'enabled', 'disabled', ...(record.behaviorEvidence.boundary ? ['off-field'] : [])])
+        scenarioIds.add(JSON.stringify([record.key, record.scenarioId, record.recipient, state]));
+    }
+  }
+  for (const row of report.batches?.commonInputs ?? []) for (const c of row.cases ?? []) {
+    if (c.monaInput && Number.isFinite(c.mona) && Number.isFinite(c.leyline)) scenarioIds.add(JSON.stringify([row.mona, c.talentLevel, c.flatAttack]));
+  }
   for (const probe of report.buffProbes?.rows ?? []) {
     if (probe.id && probe.scenario?.id && probe.input) scenarioIds.add(probe.id);
   }

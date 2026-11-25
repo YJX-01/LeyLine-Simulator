@@ -7,13 +7,34 @@ import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { buildInventory } from '../../lib/audit-page-inventory.mjs';
 import { buildEvidence, summarizeMappings } from '../../lib/audit-page-evidence.mjs';
+import { buildBehaviorLedger, reconcileBehaviors, facetNames, gapNames } from '../../lib/mona-behavior-ledger.mjs';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 const auditPackage = resolve(root, 'tools/mona-audit');
 const output = resolve(root, 'artifacts/mona-audit-site/data');
 mkdirSync(output, { recursive: true });
-const { values } = parseArgs({ options: { report: { type: 'string' } } });
+const { values } = parseArgs({ options: { report: { type: 'string' }, 'previous-report': { type: 'string' } } });
 const reportFile = resolve(root, values.report ?? 'artifacts/mona-audit-current.json');
+const indexPath = resolve(output, 'index.json');
+const published = existsSync(indexPath) ? JSON.parse(readFileSync(indexPath, 'utf8')) : null;
+function publishBaseline(rawPath) {
+  const raw = JSON.parse(readFileSync(rawPath, 'utf8'));
+  return publishChunk('behavior', JSON.stringify(reconcileBehaviors(buildBehaviorLedger(raw))) + '\n');
+}
+function publishChunk(prefix, content) {
+  const filename = prefix + '-' + createHash('sha256').update(content).digest('hex').slice(0, 20) + '.json';
+  const path = resolve(output, filename);
+  if (!existsSync(path)) {
+    const temporary = path + '.' + randomUUID();
+    writeFileSync(temporary, content);
+    renameSync(temporary, path);
+  }
+  return filename;
+}
+// On migration, capture the last real report before replacing it with a fresh run.
+let baselineFile = published?.coverage?.file;
+if (values['previous-report']) baselineFile = publishBaseline(resolve(root, values['previous-report']));
+else if (!baselineFile && !values.report && existsSync(reportFile)) baselineFile = publishBaseline(reportFile);
 if (!values.report) {
   const pendingReport = reportFile + '.' + randomUUID();
   const audit = spawnSync(process.execPath, ['tools/scripts/data/audit-calculation-coverage.mjs', '--mona-report', pendingReport], {
@@ -28,7 +49,9 @@ if (!values.report) {
   }
   renameSync(pendingReport, reportFile);
 }
-const report = JSON.parse(readFileSync(reportFile, 'utf8'));
+const reportBytes = readFileSync(reportFile);
+const digest = createHash('sha256').update(reportBytes).digest('hex');
+const report = JSON.parse(reportBytes.toString('utf8'));
 if (!Array.isArray(report.mona) || !Array.isArray(report.leyline) || !Array.isArray(report.links)) {
   throw new Error('输入文件缺少双向审计目录或映射。');
 }
@@ -50,26 +73,29 @@ for (const side of sideNames) {
     if (sourceIndex.get(item.id)?.side !== side) throw new Error('未收录原始条目 ' + item.id);
   }
 }
-const indexPath = resolve(output, 'index.json');
-const previous = existsSync(indexPath) ? JSON.parse(readFileSync(indexPath, 'utf8')).summary : null;
+const previous = published?.summary;
+if (!values['previous-report'] && published?.coverage?.reportDigest === digest) baselineFile = published.coverage.baselineFile;
+const baseline = baselineFile ? JSON.parse(readFileSync(resolve(output, baselineFile), 'utf8')) : null;
+const ledger = buildBehaviorLedger(report, inventory, evidenceFor);
+const round = reconcileBehaviors(ledger, baseline);
+const coverage = { file: publishChunk('behavior', JSON.stringify(round) + '\n'), baselineFile, reportDigest: digest, totals: round.totals,
+  complete: round.complete, baseline: round.baseline, batches: round.batches, owners: round.ownerCounts, productChanges: round.productChanges,
+  facets: facetNames, gaps: gapNames };
+const differenceById = ledger.attribution;
 const sides = Object.fromEntries(sideNames.map(side => [side, {
   raw: report[side].length, rows: 0, damage: 0, buff: 0, unknown: 0,
   passed: 0, failed: 0, unverified: 0, comparable: 0, matched: 0, different: 0,
 }]));
 const limits = report.limitations ?? [];
-const summary = { sides, ...summarizeMappings(report), issues: report.gaps?.issues ?? [], limitations: limits, delta: null };
+const summary = { sides, ...summarizeMappings(report), issues: report.gaps?.issues ?? [], limitations: limits, delta: null,
+  attributedMappings: [...differenceById.values()].filter(item => item.status === 'attributed').length,
+  attributedScenarios: (report.transformative?.rows ?? []).filter(item => differenceById.get('transformative-' + item.key)?.status === 'attributed').length };
 const rows = [];
 let pending = [], bytes = 0;
 function flush() {
   if (!pending.length) return;
   const content = '{' + pending.map(entry => JSON.stringify(entry.row.id) + ':' + entry.detail).join(',') + '}\n';
-  const chunk = 'detail-' + createHash('sha256').update(content).digest('hex').slice(0, 20) + '.json';
-  const path = resolve(output, chunk);
-  if (!existsSync(path)) {
-    const temporary = path + '.' + randomUUID();
-    writeFileSync(temporary, content);
-    renameSync(temporary, path);
-  }
+  const chunk = publishChunk('detail', content);
   for (const entry of pending) entry.row.chunk = chunk;
   pending = [];
   bytes = 0;
@@ -88,9 +114,11 @@ for (const row of inventory) {
     counterparts.find(target => target.implementation)?.implementation ?? '';
   const entry = { id: row.id, side: row.side, category: row.category, name: row.name, entity: row.entity,
     entityName: row.entityName, mechanism: row.mechanism, featureText: row.featureText,
-    implementation, run, comparison, chunk: '' };
+    roles: [...new Set(row.sourceIds.map(id => ledger.assignments.get(id).role))], implementation, run, comparison, chunk: '' };
   const detail = JSON.stringify({ features: row.features, source: row.sourcePath, sourceIds: row.sourceIds,
-    raw: row.source, links, candidates, counterparts: counterparts.map(reference), candidateRows: candidateRows.map(reference), details });
+    raw: row.source, links, candidates, counterparts: counterparts.map(reference), candidateRows: candidateRows.map(reference), details,
+    attribution: links.map(link => differenceById.get(link.id)).filter(Boolean),
+    assignments: row.sourceIds.map(id => ({ id, ...ledger.assignments.get(id) })) });
   const size = Buffer.byteLength(detail);
   if (bytes + size > 512 * 1024) flush();
   pending.push({ row: entry, detail });
@@ -121,7 +149,7 @@ const provenance = report.provenance;
 const index = {
   versions: { mona: provenance ? provenance.mona : report.baselines.mona, leyline: provenance?.leyline ?? null },
   generatedAt: provenance?.generatedAt ?? statSync(reportFile).mtime.toISOString(),
-  dirty: provenance?.dirty ?? null, summary, rows,
+  dirty: provenance?.dirty ?? null, worktree: provenance?.worktree, summary, rows, coverage,
 };
 // Publish the index last so readers can finish loading their previous snapshot.
 const vite = resolve(dirname(createRequire(resolve(auditPackage, 'package.json')).resolve('vite/package.json')), 'bin/vite.js');
@@ -129,4 +157,4 @@ execFileSync(process.execPath, [vite, 'build'], { cwd: auditPackage, stdio: 'inh
 const temporary = indexPath + '.' + randomUUID();
 writeFileSync(temporary, JSON.stringify(index) + '\n');
 renameSync(temporary, indexPath);
-console.log(JSON.stringify({ sides, mappings: summary.mappings, comparisons: summary.comparisons, scenarios: summary.scenarios }));
+console.log(JSON.stringify({ sides, mappings: summary.mappings, comparisons: summary.comparisons, scenarios: summary.scenarios, behaviors: round.totals, complete: round.complete }));

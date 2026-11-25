@@ -68,8 +68,20 @@ function safeCall(fn) {
   catch (error) { return { status: 'error', error: String(error?.message ?? error) }; }
 }
 
+export function classifyMonaBuffDiagnostic(key, recipient, params, comparison) {
+  const errors = ['attribute', 'damage', 'lockedAttribute', 'lockedDamage'].map(field => comparison[field]?.error).filter(Boolean);
+  const error = errors[0];
+  if (errors.length && errors.every(item => item === '杜林BUFF须明确本次反应的另一元素') && ['DurinC2', 'DurinTalent2'].includes(key) && params.reaction_element === 0) {
+    return { kind: 'invalid-input', reason: 'reaction element is unselected', field: 'reaction_element' };
+  }
+  if (errors.length && errors.every(item => item === '百万吨重锤定额只属于莉奈娅自身直伤') && key === 'LinneaC1' && params.hit_mode === 1 && recipient !== 'Linnea') {
+    return { kind: 'invalid-input', reason: 'direct hit mode requires Linnea as recipient', field: 'hit_mode' };
+  }
+  return error ? { kind: 'execution-failure', reason: errors.join('; ') } : null;
+}
+
 /** Actual release comparisons. Zero delta describes this scenario only, never absence of an effect. */
-export async function probeMonaBuffs({ keys, recipients = ['Bennett', 'Lisa'], vary = true, skillProbes } = {}) {
+export async function probeMonaBuffs({ keys, recipients = ['Bennett', 'Lisa'], vary = true, skillProbes, params = {}, scenarioPrefix = '', contextual = true } = {}) {
   const { api, read } = await import('../../.references/mona-community/beta-tools/runtime-7106.mjs');
   const catalog = read('src/assets/_gen_buff.js');
   const selected = (keys ?? Object.keys(catalog)).slice().sort();
@@ -89,13 +101,13 @@ export async function probeMonaBuffs({ keys, recipients = ['Bennett', 'Lisa'], v
     };
     for (const key of selected) {
       const fields = catalog[key].config ?? [];
-      const defaults = Object.fromEntries(fields.map(field => [field.name, structuredClone(field.default)]));
+      const defaults = { ...Object.fromEntries(fields.map(field => [field.name, structuredClone(field.default)])), ...params };
       const cases = [{ id: 'default', params: defaults }];
       if (vary) for (const field of fields) {
         const value = alternate(field);
-        if (value !== null && !Object.is(value, field.default)) cases.push({ id: `vary:${field.name}`, params: { ...defaults, [field.name]: value }, varied: { field: field.name, from: field.default, to: value } });
+        if (value !== null && !Object.is(value, defaults[field.name])) cases.push({ id: `vary:${field.name}`, params: { ...defaults, [field.name]: value }, varied: { field: field.name, from: defaults[field.name], to: value } });
       }
-      let defaultCalls;
+      let defaultCalls, defaultDiagnostic;
       for (const scenario of cases) {
         const buff = namedBuff(key, scenario.params);
         const input = { ...baseInput, buffs: [buff] };
@@ -113,18 +125,52 @@ export async function probeMonaBuffs({ keys, recipients = ['Bennett', 'Lisa'], v
             ? { status: 'ok', changes: differences(original.value, result.value) }
             : { status: 'error', error: result.error ?? original.error, baselineError: original.error ?? null };
         }
-        if (scenario.id === 'default') defaultCalls = calls;
+        const diagnostic = classifyMonaBuffDiagnostic(key, recipient, scenario.params, comparison);
+        if (scenario.id === 'default') {
+          defaultCalls = calls;
+          defaultDiagnostic = diagnostic;
+        }
         else {
           comparison.variationFromDefault = {};
           for (const field of ['attribute', 'damage']) {
             const reference = defaultCalls[field], current = calls[field];
             comparison.variationFromDefault[field] = reference.status === 'ok' && current.status === 'ok'
               ? { status: 'ok', changes: differences(reference.value, current.value) }
+              : current.status === 'ok' && defaultDiagnostic?.kind === 'invalid-input'
+                ? { status: 'blocked', baselineError: reference.error, diagnostic: defaultDiagnostic }
               : { status: 'error', error: current.error ?? reference.error };
           }
         }
-        rows.push({ id: `mona:buff-probe:${key}:${recipient}:${scenario.id}`, buffId: `mona:buff:${key}`, recipient, skill: baseInput.skill, scenario, input, comparison });
+        rows.push({ id: `mona:buff-probe:${key}:${recipient}:${scenarioPrefix}${scenario.id}`, buffId: `mona:buff:${key}`, recipient, skill: baseInput.skill, scenario: { ...scenario, context: scenarioPrefix || null }, input, comparison, diagnostic });
       }
+    }
+  }
+  // The catalog defaults deliberately contain an unselected reaction for Durin;
+  // Linnea's direct-hit mode is valid only on Linnea herself. Keep the original
+  // failed observations and add separately identified valid contexts.
+  if (contextual) {
+    for (const spec of [
+      { keys: ['DurinC2', 'DurinTalent2'], recipients, params: { reaction_element: 1 }, scenarioPrefix: 'reaction-dendro:', skillProbes },
+      { keys: ['LinneaC1'], recipients: ['Linnea'], params: { hit_mode: 1 }, scenarioPrefix: 'linnea-direct:' },
+    ]) {
+      const available = spec.keys.filter(key => selected.includes(key));
+      if (!available.length) continue;
+      const extra = await probeMonaBuffs({ ...spec, keys: available, vary, contextual: false });
+      rows.push(...extra.rows);
+    }
+    for (const recipient of recipients) {
+      const prefix = `mona:buff-probe:DurinC2:${recipient}:reaction-dendro:`;
+      const enabled = rows.find(row => row.id === prefix + 'default');
+      const disabled = rows.find(row => row.id === prefix + 'vary:effect_active');
+      if (!enabled || !disabled || enabled.comparison.attribute.status !== 'ok' || disabled.comparison.attribute.status !== 'ok') continue;
+      const changes = enabled.comparison.attribute.changes.filter(change => (change.before === null || typeof change.before === 'number') && typeof change.after === 'number');
+      enabled.behaviorEvidence = changes.map(change => {
+        const inactive = disabled.comparison.attribute.changes.find(item => item.path === change.path);
+        return { id: `${enabled.id}:attribute:${change.path}`, side: 'mona', source: 'DurinC2', recipient,
+          scope: 'Dendro reaction selected; this recipient and default skill fixture only', attributePath: change.path,
+          before: change.before, enabled: change.after, disabled: inactive ? inactive.after : change.before,
+          disabledProbeId: disabled.id, status: 'observed' };
+      });
     }
   }
   return {

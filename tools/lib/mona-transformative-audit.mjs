@@ -6,6 +6,8 @@ import { loadContentSchema } from './load-content-schema.mjs';
 
 const monaSource = '.references/mona-community/beta-tools/runtime-7106.mjs';
 const rulesSource = 'src/game-data/data/calculation/reactions.json';
+const versionEvidence = 'tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json';
+const legacyCoefficients = { superconduct: .5, electro_charged: 1.2, shatter: 1.5, overload: 2 };
 const reactions = [
   ['burning', 'burning', 'pyro', .25], ['superconduct', 'superconduct', 'cryo', 1.5],
   ['swirl_pyro', 'swirl', 'pyro', .6], ['swirl_hydro', 'swirl', 'hydro', .6],
@@ -17,6 +19,8 @@ const reactions = [
 const q = (unit, value) => ({ kind: 'quantity', unit, value });
 const resistanceFactor = r => r < 0 ? 1 - r / 2 : r < .75 ? 1 - r : 1 / (4 * r + 1);
 const near = (a, b) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= Math.max(1e-5, Math.abs(b) * 1e-6);
+const reactionValue = (multiplier, coefficient, em, resistance) =>
+  multiplier * coefficient * (1 + 16 * em / (2000 + em)) * resistanceFactor(resistance);
 
 /** Actual Mona public reaction API versus the maintained LeyLine reaction formula. */
 export async function auditMonaTransformative(entities, engine) {
@@ -57,13 +61,20 @@ export async function auditMonaTransformative(entities, engine) {
     const evaluated = engine.evaluateTimeline(project);
     for (const [index, [key, family, element, coefficient]] of reactions.entries()) {
       const resistance = resistances[element];
-      const multiplier = rules.levelMultipliers[level], factor = resistanceFactor(resistance);
+      const multiplier = rules.levelMultipliers[level];
       const coefficientIndex = reactionData.calculation.attributes.findIndex(entry => entry.identity.id === 'attribute.reaction.' + family + '.coefficient');
       const point = evaluated.points.find(entry => entry.id === records[index]);
       const leyline = point?.real?.structured?.totals?.all?.state === 'known' ? point.value : null;
-      const independent = multiplier * coefficient * (1 + 16 * em / (2000 + em)) * factor;
+      const independent = reactionValue(multiplier, coefficient, em, resistance);
       const mona = result[key];
+      const monaCoefficient = legacyCoefficients[key] ?? coefficient;
+      const explained = monaCoefficient !== coefficient && near(leyline, independent)
+        && near(mona, independent * monaCoefficient / coefficient);
       rows.push({ key, family, element, level, em, resistance, coefficient, mona, leyline, independent,
+        difference: Number.isFinite(mona) && Number.isFinite(leyline) ? leyline - mona : null,
+        tolerance: Math.max(1e-5, Math.abs(independent) * 1e-6),
+        attribution: explained ? { cause: '5.2-reaction-coefficient', monaRuntimeCoefficient: monaCoefficient,
+          leylineCoefficient: coefficient, evidence: versionEvidence } : null,
         diagnostics: leyline === null ? evaluated.diagnostics : undefined, status: leyline === null ? 'leyline-unavailable' : near(mona, independent) && near(leyline, independent) ? 'match' : 'mismatch',
         provenance: { mona: monaSource, leyline: rulesSource + '#/rules/levelMultipliers/' + level,
           formula: 'src/engine/src/calculation/templates-reactions.ts', coefficient: rulesSource + '#/calculation/attributes/' + coefficientIndex },
@@ -78,7 +89,7 @@ export async function auditMonaTransformative(entities, engine) {
   const zero = zeroResult.outputs.value;
   const legalZero = { input: 'zero reaction coefficient', value: zero?.state === 'known' ? zero.value.value : null,
     status: zero?.state === 'known' && zero.value.value === 0 ? 'match' : 'mismatch', scope: 'LeyLine formula only; Mona has no coefficient input.' };
-  const summary = { cases: rows.length };
+  const summary = { cases: rows.length, attributedDifferences: rows.filter(row => row.attribution).length };
   for (const row of rows) summary[row.status] = (summary[row.status] ?? 0) + 1;
   return { rows, legalZero, summary, limitations: ['Crystallize is a shield, not a transformative damage output; not compared here.',
     'Direct lunar and stellar damage use separate APIs and are not covered by this standalone reaction comparison.',
@@ -90,12 +101,12 @@ export async function auditMonaTransformative(entities, engine) {
 export function validateMonaTransformativeReviews(reviews, audit, leylineRows) {
   const issues = [], accepted = [];
   const fields = new Map(leylineRows.map(row => [row.id, row]));
-  const legacyCoefficients = { superconduct: .5, electro_charged: 1.2, shatter: 1.5, overload: 2 };
   const scenarios = [1, 50, 90].flatMap(level => [0, 20].flatMap(em =>
     [-.2, .1, .8].map(resistance => ({ level, em, resistance }))));
   const asymmetric = { pyro: -.2, hydro: 0, electro: .1, cryo: .3, dendro: .5, physical: .8 };
   const caseCount = scenarios.length + 1;
   const rows = audit.rows ?? [];
+  const multipliers = readContentSource(new URL('../../' + rulesSource, import.meta.url)).rules.levelMultipliers;
   if (rows.length !== caseCount * reactions.length) {
     issues.push({ side: 'reaction', issue: 'Expected ' + caseCount * reactions.length + ' reaction cases', actual: rows.length });
   }
@@ -117,6 +128,11 @@ export function validateMonaTransformativeReviews(reviews, audit, leylineRows) {
     if (!target || target.revision !== reference.revision || target.binding?.identity?.id !== 'attribute.reaction.' + family + '.coefficient') {
       errors.push('LeyLine coefficient identity changed');
     }
+    if (different && (review?.attribution?.cause !== '5.2-reaction-coefficient'
+      || review.attribution.monaRuntimeCoefficient !== monaCoefficient || review.attribution.leylineCoefficient !== coefficient
+      || review.attribution.scenarioCount !== caseCount || review.attribution.evidence !== versionEvidence)) {
+      errors.push('version attribution changed');
+    }
     if (cases.length !== caseCount) errors.push('scenario count changed');
     for (const [index, row] of cases.entries()) {
       const expected = scenarios[index] ?? { level: 90, em: 0, resistance: asymmetric[element] };
@@ -124,8 +140,10 @@ export function validateMonaTransformativeReviews(reviews, audit, leylineRows) {
         errors.push('scenario input changed at index ' + index);
         break;
       }
-      if (row.coefficient !== coefficient || !near(row.leyline, row.independent)
-        || !near(row.mona, row.independent * monaCoefficient / coefficient) || row.status !== (different ? 'mismatch' : 'match')) {
+      if (row.coefficient !== coefficient || !near(row.independent, reactionValue(multipliers[row.level], coefficient, row.em, row.resistance))
+        || !near(row.leyline, row.independent)
+        || !near(row.mona, row.independent * monaCoefficient / coefficient) || row.status !== (different ? 'mismatch' : 'match')
+        || (different && row.attribution?.cause !== '5.2-reaction-coefficient')) {
         errors.push('unrecognized result at ' + JSON.stringify([row.level, row.em, row.resistance, row.mona, row.leyline]));
         break;
       }

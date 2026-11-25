@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { buildBehaviorLedger, reconcileBehaviors } from '../../lib/mona-behavior-ledger.mjs';
 
 const paths = process.argv.slice(2);
 if (paths.length !== 2) throw new Error('用法: node tools/scripts/data/report-mona-progress.mjs 上次报告.json 本次报告.json');
@@ -30,5 +31,7 @@ for (const side of ['mona', 'leyline']) {
 const links = change(previous.links.map(row => row.id), current.links.map(row => row.id));
 report.mappings = { before: links.before, added: links.added.length, removed: links.removed.length, after: links.after };
 report.issues = current.gaps.issues;
-report.complete = current.summary.complete;
+const round = reconcileBehaviors(buildBehaviorLedger(current), reconcileBehaviors(buildBehaviorLedger(previous)));
+report.behaviors = { versions: round.versions, baseline: round.baseline, totals: round.totals, batches: round.batches, productChanges: round.productChanges };
+report.complete = round.complete;
 process.stdout.write(JSON.stringify(report, null, 2) + '\n');

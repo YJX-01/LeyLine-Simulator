@@ -41,10 +41,11 @@ export function batchMonaBuffs(monaRows, leylineRows, candidates = new Map(), { 
     if (audit.status !== 'matched') continue;
     const row = rows.find(item => item.id === audit.effectId);
     const target = after.get(audit.targetId);
+    const extraTargets = (audit.extraTargetIds ?? []).map(id => after.get(id));
     const expectedAttribute = { attackPercent: 'ATKPercentage', defensePercent: 'DEFPercentage', critRate: 'CriticalBase', elementalMastery: 'ElementalMastery' }[audit.stat] ?? (/^(pyro|cryo|electro|hydro|geo|anemo|dendro)Bonus$/.test(audit.stat) ? 'Bonus' + audit.stat[0].toUpperCase() + audit.stat.slice(1, -5) : undefined);
-    if (!row || !expectedAttribute || row.effect?.attribute !== expectedAttribute || row.effect?.value !== audit.amount
-      || target?.binding?.modifier?.target !== 'attribute.' + audit.stat) continue;
-    row.verifiedScenarios.push({ ...audit, target: { id: target.id, revision: target.revision, source: target.source } });
+    if (!row || !expectedAttribute || row.effect?.attribute !== expectedAttribute || JSON.stringify(row.effect?.value) !== JSON.stringify(audit.monaExpression ?? audit.amount)
+      || target?.binding?.modifier?.target !== 'attribute.' + audit.stat || extraTargets.some(item => item?.binding?.modifier?.target !== 'attribute.' + audit.stat)) continue;
+    row.verifiedScenarios.push({ ...audit, target: { id: target.id, revision: target.revision, source: target.source }, extraTargets: extraTargets.map(item => ({id:item.id,revision:item.revision,source:item.source})) });
   }
   // Runtime-reviewed components remain separate from the opaque catalog key: a
   // multi-effect key is never closed because one of its components matches.
@@ -60,8 +61,8 @@ export function batchMonaBuffs(monaRows, leylineRows, candidates = new Map(), { 
   }
   const mappings = rows.filter(row => row.kind === 'declared-effect').flatMap(row =>
     row.verifiedScenarios.filter(scenario => scenario.status === 'matched' && scenario.target?.id).map(scenario => ({
-      id: 'buff-scenario:' + scenario.effectId + ':' + scenario.target.id,
-      disposition: 'matched', coverage: 'scenario', mona: [scenario.effectId], leyline: [{ id: scenario.target.id, revision: scenario.target.revision }],
+      id: 'buff-scenario:' + scenario.effectId + ':' + scenario.target.id + (scenario.scenarioId && scenario.scenarioId !== 'default' ? ':' + scenario.scenarioId : ''),
+      disposition: 'matched', coverage: 'scenario', mona: [scenario.effectId], leyline: [scenario.target, ...(scenario.extraTargets ?? [])].map(target => ({ id: target.id, revision: target.revision })),
       explanation: `${scenario.scope} Source ${scenario.source}; recipient ${scenario.recipient}; tested gate: ${JSON.stringify(scenario.gate)}. This mapping is limited to the tested scenario.`,
       sources: scenario.evidence,
       comparisons: [

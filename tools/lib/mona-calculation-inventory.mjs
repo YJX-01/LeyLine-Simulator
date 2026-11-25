@@ -59,7 +59,7 @@ export async function monaCalculationInventory({ probes } = {}) {
   ]) for (const [key, rule] of entries(rules)) for (const [position, effect] of (rule.effects ?? []).entries()) rows.push({
     id: `mona:effect:${book}:${key}:${position}`, kind: 'effect', book, key, position, effect,
     when: rule.when ?? null, variables: rule.variables ?? null,
-    source: { path: source(path), pointer: `${book}.${key}.effects[${position}]` },
+    source: { path: source(path), pointer: `${{ character: 'CHARACTER_EFFECT_RULES', stellar: 'STELLAR_SUPPORT_RULES', vodyanitsa: 'VODYANITSA_SUPPORT_RULES' }[book]}.${key}.effects[${position}]` },
   });
   for (const [ownerType, data, path] of [['weapon', weapons, 'src/assets/_gen_weapon.js'], ['artifact', artifacts, 'src/assets/_gen_artifact.js']]) {
     for (const [owner, item] of entries(data)) for (const [field, value] of entries(item)) {

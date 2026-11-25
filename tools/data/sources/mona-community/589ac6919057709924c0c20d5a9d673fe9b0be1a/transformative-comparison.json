@@ -56,12 +56,13 @@
           "revision": "1"
         }
       ],
-      "explanation": "Mona 发布内核的输出折算系数为 0.5，固定检出源码及 LeyLine 正式定义采用 1.5。独立算式核对 LeyLine 的数值。",
+      "explanation": "Mona 固定运行时输出折算系数 0.5；LeyLine 系数 1.5 与 KQM 公式一致。官方 5.2 更新说明确认该反应基础伤害提高；运行时与检出源码使用的系数不同，不能将运行时差异当作该源码版本的实现。仅归因单次伤害，不证明触发或归属。",
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
         "src/game-data/data/calculation/reactions.json#/calculation/attributes/19",
-        "tools/lib/mona-transformative-audit.mjs"
+        "tools/lib/mona-transformative-audit.mjs",
+        "tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json"
       ],
       "comparisons": [
         {
@@ -82,7 +83,14 @@
           "actual": 1519.1961749999998,
           "tolerance": 0.0015191961749999997
         }
-      ]
+      ],
+      "attribution": {
+        "cause": "5.2-reaction-coefficient",
+        "monaRuntimeCoefficient": 0.5,
+        "leylineCoefficient": 1.5,
+        "scenarioCount": 19,
+        "evidence": "tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json"
+      }
     },
     {
       "id": "transformative-swirl_pyro",
@@ -256,12 +264,13 @@
           "revision": "1"
         }
       ],
-      "explanation": "Mona 发布内核的输出折算系数为 1.2，固定检出源码及 LeyLine 正式定义采用 2。独立算式核对 LeyLine 的数值。",
+      "explanation": "Mona 固定运行时输出折算系数 1.2；LeyLine 系数 2 与 KQM 公式一致。官方 5.2 更新说明确认该反应基础伤害提高；运行时与检出源码使用的系数不同，不能将运行时差异当作该源码版本的实现。仅归因单次伤害，不证明触发或归属。",
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
         "src/game-data/data/calculation/reactions.json#/calculation/attributes/21",
-        "tools/lib/mona-transformative-audit.mjs"
+        "tools/lib/mona-transformative-audit.mjs",
+        "tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json"
       ],
       "comparisons": [
         {
@@ -282,7 +291,14 @@
           "actual": 2604.3363,
           "tolerance": 0.0026043362999999997
         }
-      ]
+      ],
+      "attribution": {
+        "cause": "5.2-reaction-coefficient",
+        "monaRuntimeCoefficient": 1.2,
+        "leylineCoefficient": 2,
+        "scenarioCount": 19,
+        "evidence": "tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json"
+      }
     },
     {
       "id": "transformative-shatter",
@@ -296,12 +312,13 @@
           "revision": "1"
         }
       ],
-      "explanation": "Mona 发布内核的输出折算系数为 1.5，固定检出源码及 LeyLine 正式定义采用 3。独立算式核对 LeyLine 的数值。",
+      "explanation": "Mona 固定运行时输出折算系数 1.5；LeyLine 系数 3 与 KQM 公式一致。官方 5.2 更新说明确认该反应基础伤害提高；运行时与检出源码使用的系数不同，不能将运行时差异当作该源码版本的实现。仅归因单次伤害，不证明触发或归属。",
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
         "src/game-data/data/calculation/reactions.json#/calculation/attributes/22",
-        "tools/lib/mona-transformative-audit.mjs"
+        "tools/lib/mona-transformative-audit.mjs",
+        "tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json"
       ],
       "comparisons": [
         {
@@ -322,7 +339,14 @@
           "actual": 1033.4667857142856,
           "tolerance": 0.0010334667857142855
         }
-      ]
+      ],
+      "attribution": {
+        "cause": "5.2-reaction-coefficient",
+        "monaRuntimeCoefficient": 1.5,
+        "leylineCoefficient": 3,
+        "scenarioCount": 19,
+        "evidence": "tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json"
+      }
     },
     {
       "id": "transformative-overload",
@@ -336,12 +360,13 @@
           "revision": "1"
         }
       ],
-      "explanation": "Mona 发布内核的输出折算系数为 2，固定检出源码及 LeyLine 正式定义采用 2.75。独立算式核对 LeyLine 的数值。",
+      "explanation": "Mona 固定运行时输出折算系数 2；LeyLine 系数 2.75 与 KQM 公式一致。官方 5.2 更新说明确认该反应基础伤害提高；运行时与检出源码使用的系数不同，不能将运行时差异当作该源码版本的实现。仅归因单次伤害，不证明触发或归属。",
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
         "src/game-data/data/calculation/reactions.json#/calculation/attributes/23",
-        "tools/lib/mona-transformative-audit.mjs"
+        "tools/lib/mona-transformative-audit.mjs",
+        "tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json"
       ],
       "comparisons": [
         {
@@ -362,7 +387,14 @@
           "actual": 4376.7318375,
           "tolerance": 0.0043767318375
         }
-      ]
+      ],
+      "attribution": {
+        "cause": "5.2-reaction-coefficient",
+        "monaRuntimeCoefficient": 2,
+        "leylineCoefficient": 2.75,
+        "scenarioCount": 19,
+        "evidence": "tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json"
+      }
     },
     {
       "id": "transformative-bloom",

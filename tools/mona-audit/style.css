@@ -89,3 +89,17 @@ pre { max-height: 360px; overflow: auto; white-space: pre-wrap; overflow-wrap: a
 .filters select { max-width: 245px; }
 .comparison-table td { font-variant-numeric: tabular-nums; }
 @media (max-width: 900px) { .workspace.with-detail { grid-template-columns: 1fr; } }
+.behavior-ledger { margin-top: 16px; background: white; border: 1px solid #d4dfe7; border-radius: 7px; }
+.ledger-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 20px; padding: 16px; }
+.ledger-controls label { display: grid; gap: 6px; min-width: 128px; font-weight: 700; }
+.ledger-controls span { align-self: center; color: #536a7d; }
+.ledger-counts { min-width: 570px; font-variant-numeric: tabular-nums; }
+.ledger-counts td, .ledger-counts th { text-align: right; vertical-align: middle; }
+.ledger-counts th:first-child { text-align: left; }
+.count-link { min-height: 32px; padding: 0 8px; color: #17658f; font-variant-numeric: tabular-nums; }
+.count-link:disabled { border-color: transparent; color: #536a7d; opacity: 1; }
+.behavior-list { min-width: 480px; }
+.behavior-list td:first-child { width: 44%; }
+.evidence li, .evidence p { overflow-wrap: anywhere; }
+.evidence li small { display: block; font-size: inherit; color: #536a7d; }
+@media (max-width: 600px) { .ledger-controls label { flex: 1 1 140px; } }

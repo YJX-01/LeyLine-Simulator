@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { isAbsolute, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readContentSource } from './content-source.mjs';
@@ -11,6 +12,7 @@ import { auditMonaEquipmentHits } from './mona-equipment-hit-audit.mjs';
 import { compareMonaOrdinaryScaling } from './mona-ordinary-scaling.mjs';
 import { auditMonaTransformative, validateMonaTransformativeReviews } from './mona-transformative-audit.mjs';
 import { auditMonaOrdinaryBatch, auditMonaOrdinaryC6 } from './mona-ordinary-batch.mjs';
+import { auditMonaCommonInputBranches } from './mona-common-input-batch.mjs';
 import { auditMonaFixedOpenSkills, auditMonaWrongOrdinaryArms } from './mona-ordinary-wrong-arms.mjs';
 import { auditMonaAmplificationBatch } from './mona-amplification-batch.mjs';
 import { auditMonaBuffScenarios } from './mona-character-buff-batch.mjs';
@@ -201,7 +203,7 @@ function closedComparisons(cases) {
     [expected, actual, tolerance].every(Number.isFinite) && tolerance >= 0 && Math.abs(expected - actual) <= tolerance);
 }
 
-function reviewLinks(reviews, before, after, issues) {
+export function reviewLinks(reviews, before, after, issues) {
   const links = [];
   const ids = new Set();
   const evidence = new Map();
@@ -340,7 +342,22 @@ function monaRevision(checkout) {
   }
 }
 
-function readReviews() {
+/** Identify the exact worktree used by both focused and full reports. */
+export function auditWorktree(directory) {
+  const git = (...args) => execFileSync('git', args, { cwd: directory, encoding: 'utf8' });
+  const revision = git('rev-parse', 'HEAD').trim();
+  const changed = new Set([git('diff', '--name-only', '-z', 'HEAD'), git('ls-files', '--others', '--exclude-standard', '-z')]
+    .flatMap(paths => paths.split('\0').filter(Boolean)));
+  const hash = createHash('sha256').update(revision);
+  for (const relativePath of [...changed].sort()) {
+    const file = resolve(directory, relativePath);
+    const digest = existsSync(file) ? createHash('sha256').update(readFileSync(file)).digest('hex') : 'removed';
+    hash.update('\0' + relativePath + '\0' + digest);
+  }
+  return { revision, dirty: changed.size > 0, worktree: hash.digest('hex') };
+}
+
+export function readReviews() {
   return readdirSync(resolve(root, reviewDirectory), { withFileTypes: true })
     .filter(entry => entry.isFile() && entry.name.endsWith('.json'))
     .map(entry => entry.name).sort().flatMap(name => {
@@ -409,13 +426,18 @@ export async function auditMonaSingleHit(entities, clauseInventory, engine) {
   const reviews = readReviews();
   const reactions = validateMonaTransformativeReviews(reviews.filter(row => row.id.startsWith('transformative-')), transformative, leyline.rows);
   issues.push(...reactions.issues);
-  const result = buildSingleHitComparison(inventory, leyline, [
+  const initialReviews = [
     ...reviews.filter(row => !row.id.startsWith('transformative-')), ...reactions.reviews,
     ...reviewed.flatMap(batch => batch.mappings), ...forms,
-  ], issues, matches);
-  const batches = { ordinary, ordinaryC6, fixedSkills, ordinarySourceDifferences, amplification, buffs: buffBatch,
+  ];
+  const before = new Map(inventory.rows.map(row => [row.id, row]));
+  const after = new Map(leyline.rows.map(row => [row.id, row]));
+  const accepted = reviewLinks(initialReviews, before, after, issues);
+  const commonInputs = await auditMonaCommonInputBranches(mona.rows, leyline.rows, accepted, entities, engine);
+  const result = buildSingleHitComparison(inventory, leyline, [...accepted, ...commonInputs.mappings], issues, matches);
+  const batches = { commonInputs, ordinary, ordinaryC6, fixedSkills, ordinarySourceDifferences, amplification, buffs: buffBatch,
     resonance, characterBuffs, equipmentDamage: gear.damage, artifactEvents, sets, fourPiece };
-  result.summary.batches = { ordinary: ordinary.summary, ordinaryC6: ordinaryC6.summary, fixedSkills: fixedSkills.summary,
+  result.summary.batches = { commonInputs: commonInputs.summary, ordinary: ordinary.summary, ordinaryC6: ordinaryC6.summary, fixedSkills: fixedSkills.summary,
     ordinarySourceDifferences: ordinarySourceDifferences.summary, amplification: amplification.summary, buffs: buffBatch.summary,
     resonance: resonance.summary, sets: sets.summary, fourPiece: fourPiece.summary, exclusiveFormHits: forms.length,
     characterBuffs: characterBuffs.summary, artifactEvents: artifactEvents.rows.length,

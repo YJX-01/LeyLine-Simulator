@@ -81,7 +81,6 @@ import { createRuntimeCatalog } from '../../lib/runtime-catalog.mjs';
 import { auditSingleHitModifiers } from '../../lib/single-hit-modifier-matrix.mjs';
 
 import { writeFileSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
 import { readContentSource } from '../../lib/content-source.mjs';
 import { rosterEvaluation, rosterEquipmentEvaluation, auditPublicScenes, auditResonances, auditReactionBlessings, auditCharacterClauses } from '../../lib/roster-evaluation.mjs';
 
@@ -386,17 +385,17 @@ results.currentSceneGaps = scenes.gaps.filter(row => {
 summary.currentSceneClausesPending = results.currentSceneGaps.length;
 const requireCurrent = flags.has('--require-complete') || flags.has('--require-current');
 if (monaFile || requireCurrent) {
-  const { auditMonaSingleHit } = await import('../../lib/mona-single-hit-comparison.mjs');
+  const { auditMonaSingleHit, auditWorktree } = await import('../../lib/mona-single-hit-comparison.mjs');
+  const { buildBehaviorLedger, reconcileBehaviors } = await import('../../lib/mona-behavior-ledger.mjs');
   const comparison = await auditMonaSingleHit(entities, results.currentClauseInventory, engine);
+  const { revision, dirty, worktree } = auditWorktree('.');
+  comparison.provenance = { generatedAt: new Date().toISOString(), leyline: revision, dirty, worktree,
+    mona: comparison.mona.length ? comparison.baselines.mona : null };
+  const coverage = reconcileBehaviors(buildBehaviorLedger(comparison));
+  comparison.summary.behaviors = { totals: coverage.totals, owners: coverage.ownerCounts, complete: coverage.complete };
+  comparison.summary.complete = coverage.complete;
   summary.monaSingleHit = comparison.summary;
   if (monaFile) {
-    const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
-    comparison.provenance = {
-      generatedAt: new Date().toISOString(),
-      leyline: git('rev-parse', 'HEAD'),
-      dirty: Boolean(git('status', '--porcelain')),
-      mona: comparison.mona.length ? comparison.baselines.mona : null,
-    };
     writeFileSync(monaFile, JSON.stringify(comparison) + '\n');
   }
   results.monaSingleHit = { summary: comparison.summary, gaps: comparison.gaps };

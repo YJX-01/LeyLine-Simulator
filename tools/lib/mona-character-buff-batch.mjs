@@ -4,7 +4,31 @@ import { auditBuild, auditHit, bool, novice, number, setGateFacts } from './rost
 
 // Each row independently identifies an original clause, one Mona effect and one
 // LeyLine modifier. Gates deliberately describe one testable recipient scenario.
+const fischlValue = (amount, rate) => ({
+  op: 'mul', args: [amount, { op: 'coalesce', args: [{ ref: 'parameters.' + rate }, 0] },
+    { op: 'add', args: [1, { op: 'coalesce', args: [{ ref: 'parameters.coordinated_attack_rate' }, 0] }] }],
+});
+const fischlScenarios = [
+  { scenarioId: 'overload', attribute: 'ATKPercentage', stat: 'attackPercent', amount: .225,
+    index: 0, rate: 'overload_rate', phrase: /Overloaded grants 22.5% attack/ },
+  { scenarioId: 'electro-charged', attribute: 'ElementalMastery', stat: 'elementalMastery', amount: 90,
+    index: 1, rate: 'electro_charged_rate', phrase: /Electro-Charged or Lunar-Charged grants 90 elemental mastery/ },
+].flatMap(spec => [false, true].map(coordinated => ({
+  key: 'FischlWitchEve', scenarioId: spec.scenarioId + (coordinated ? '-coordinated' : ''), owner: 'fischl',
+  sourcePath: 'tools/data/sources/character-text/fischl-hexerei-nocturne.json', phrase: spec.phrase,
+  group: 'passives', index: 3,
+  gates: { 'fischl.hexereiSecretRite': true, 'fischl.hexereiOverloadActive': spec.index === 0,
+    'fischl.hexereiElectroActive': spec.index === 1, 'fischl.hexereiCoordinationActive': coordinated },
+  monaParams: { is_magical_secret_rite_active: true, overload_rate: spec.index === 0 ? 1 : 0,
+    electro_charged_rate: spec.index === 1 ? 1 : 0, coordinated_attack_rate: coordinated ? 1 : 0 },
+  monaValue: fischlValue(spec.amount, spec.rate),
+  extraTargetPaths: coordinated ? [`/passives/3/buffs/${spec.index}/modifiers/3`] : [],
+  effects: [[spec.attribute, spec.stat, spec.index, spec.amount * (coordinated ? 2 : 1), spec.index, 1]],
+})));
 const characterSpecs = [
+  ...fischlScenarios,
+  { key:'MonaC2', scenarioId:'awakened-charged', owner:'mona', sourcePath:'tools/data/sources/character-text/mona-hexerei-constellations.json', phrase:/grants nearby party members 80 elemental mastery for 12 seconds/, group:'constellations', index:1, rank:2, gates:{'mona.hexereiAwakened':true,'mona.c1Prophecy':false}, event:{kind:'hit',skillId:'mona.normal',hitId:'mona.normal.param5',category:'charged',targetIds:['enemy']}, effects:[['ElementalMastery','elementalMastery',0,80]] },
+  { key:'KleeC1', scenarioId:'awakened-spark', selfRecipient:true, owner:'klee', sourcePath:'tools/data/sources/character-text/klee-hexerei-constellations.json', phrase:/constellation 1 grants Klee 60% attack for 12 seconds/, group:'constellations', index:0, rank:1, fixedGates:{'klee.hexereiAwakened':true}, gates:{'klee.chainedSparkAttackActive':true}, monaParams:{hexerei_secret_rite:true,effect_active:true}, effects:[['ATKPercentage','attackPercent',0,.6,1]] },
   { key:'AratakiIttoC4', owner:'aratakiitto', group:'constellations', index:3, phrase:/防御力提升20%.*攻击力提升20%.*持续10秒/, rank:4, gates:{'aratakiitto.oniKingEnded':true}, effects:[['ATKPercentage','attackPercent',0,.2,0,1],['DEFPercentage','defensePercent',1,.2]] },
   { key:'AloyTalent1', owner:'aloy', group:'passives', index:0, phrase:/其他角色的攻击力提升8%.*持续10秒/, ascension:1, gates:{'aloy.coilAttackWindow':true}, effects:[['ATKPercentage','attackPercent',0,.08,1]] },
   { key:'HuTaoTalent1', owner:'hutao', group:'passives', index:0, phrase:/不包括胡桃自己.*暴击率提高12%.*持续8秒/, ascension:1, gates:{'hutao.butterflyRetirement':true}, effects:[['CriticalBase','critRate',0,.12]] },
@@ -15,7 +39,9 @@ const characterSpecs = [
   { key:'GanyuTalent2', owner:'ganyu', group:'passives', index:1, phrase:/当前场上角色获得20%冰元素伤害加成/, ascension:4, recipientGates:{'ganyu.celestialShowerArea':true}, effects:[['BonusCryo','cryoBonus',0,.2]] },
   { key:'NingguangTalent2', owner:'ningguang', group:'passives', index:1, phrase:/获得12%岩元素伤害加成，持续10秒/, ascension:4, recipientGates:{'ningguang.jadeScreenCrossed':true}, effects:[['BonusGeo','geoBonus',0,.12]] },
   { key:'XianglingC6', owner:'xiangling', group:'constellations', index:5, phrase:/所有角色获得15%火元素伤害加成/, rank:6, gates:{'xiangling.pyronadoActive':true}, effects:[['BonusPyro','pyroBonus',0,.15]] },
-  { key:'KleeC6', owner:'klee', group:'constellations', index:5, phrase:/所有角色获得10%火元素伤害加成/, rank:6, event:{kind:'action',skillId:'klee.burst',targetIds:[]}, effects:[['BonusPyro','pyroBonus',0,.1]] },
+  { key:'KleeC6', owner:'klee', group:'constellations', index:5, phrase:/所有角色获得10%火元素伤害加成/, rank:6, fixedGates:{'klee.hexereiAwakened':false,'klee.chainedSparkAttackActive':false}, event:{kind:'action',skillId:'klee.burst',targetIds:[]}, monaParams:{is_self:false}, monaValue:{op:'if',args:[{op:'eq',args:[{ref:'parameters.is_self'},true]},.5,.1]}, effects:[['BonusPyro','pyroBonus',0,.1]] },
+  { key:'KleeC6', scenarioId:'self-off-field', selfRecipient:true, recipientOnField:false, owner:'klee', group:'constellations', index:5, phrase:/所有角色获得10%火元素伤害加成/, rank:6, event:{kind:'action',skillId:'klee.burst',targetIds:[]}, fixedGates:{'klee.hexereiAwakened':true,'klee.chainedSparkAttackActive':false}, extraEvidence:['tools/data/sources/character-text/klee-hexerei-constellations.json#/sources/1'], extraTargetPaths:['/constellations/5/buffs/2/modifiers/0'], monaParams:{is_self:true}, monaValue:{op:'if',args:[{op:'eq',args:[{ref:'parameters.is_self'},true]},.5,.1]}, effects:[['BonusPyro','pyroBonus',0,.5]] },
+  ...[false, true].map(stellar => ({ key:'AetherCryoC2', scenarioId:stellar ? 'stellar-120' : 'ordinary-60', owner:'aether-cryo', sourceOwner:'travelercryo', group:'constellations', index:1, phrase:/当前场上角色的元素精通提升60点，持续5秒[\s\S]*提升120点元素精通/, rank:2, recipientGates:{'aether-cryo.frostMotesBuff':true,'aether-cryo.frostMotesStellar':stellar}, monaParams:{stellar_triggered:stellar}, monaValue:{op:'if',args:[{op:'coalesce',args:[{ref:'parameters.stellar_triggered'},true]},120,60]}, recipientBoundary:true, extraModifierIndices:stellar ? [1] : [], effects:[['ElementalMastery','elementalMastery',0,stellar ? 120 : 60]] })),
   { key:'YaeMikoC4', owner:'yaemiko', group:'constellations', index:3, phrase:/所有角色获得20%雷元素伤害加成/, rank:4, event:{kind:'hit',skillId:'yaemiko.skill',hitId:'yaemiko.skill.param1',category:'skill',targetIds:['enemy']}, effects:[['BonusElectro','electroBonus',0,.2]] },
   { key:'NilouTalent1', owner:'nilou', recipient:'barbara', group:'passives', index:0, phrase:/草元素攻击会使附近的所有角色元素精通提升100点，持续10秒/, ascension:1, gates:{'nilou.goldenChaliceDendroHit':true}, teamElements:['dendro','hydro'], effects:[['ElementalMastery','elementalMastery',0,100]] },
   { key:'SucroseTalent1', owner:'sucrose', group:'passives', index:0, phrase:/对应元素类型.*元素精通提升50，持续8秒/, ascension:1, event:{kind:'reaction',reactionId:'swirl',reactionElement:'cryo',targetIds:['enemy']}, effects:[['ElementalMastery','elementalMastery',0,50,2,0]] },
@@ -29,46 +55,64 @@ const close = (a, b, tolerance = 1e-7) => Number.isFinite(a) && Number.isFinite(
 const sourceRoot = 'tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/';
 
 /** Live off/on tests; a row certifies only its named source, recipient, stat and gate. */
-async function auditCharacters({ characters, weapons, engine, api, rules, inputFor }) {
+async function auditCharacters({ characters, weapons, engine, api, rules, ruleSources, inputFor, keys }) {
 
   const rows=[];
-  for (const spec of characterSpecs) {
-    const originalPath = sourceRoot + (spec.group === 'passives' ? 'talents/' : 'constellations/') + spec.owner + '.json';
+  for (const spec of characterSpecs.filter(spec => !keys || keys.has(spec.key))) {
+    const originalPath = spec.sourcePath ?? sourceRoot + (spec.group === 'passives' ? 'talents/' : 'constellations/') + (spec.sourceOwner ?? spec.owner) + '.json';
     const sourceKey = spec.group === 'passives' ? 'passive' + (spec.index+1) : 'c' + (spec.index+1);
     try {
-      const description = readContentSource(new URL('../../'+originalPath,import.meta.url))[sourceKey].description;
+      const original = readContentSource(new URL('../../'+originalPath,import.meta.url));
+      const description = spec.sourcePath ? original.sources[0].description : original[sourceKey].description;
       if (!spec.phrase.test(description)) throw new Error('independent source phrase does not match');
       const owner = characters.get(spec.owner);
-      const recipientId = spec.recipient ?? 'kaeya';
+      const recipientId = spec.selfRecipient ? spec.owner : spec.recipient ?? 'kaeya';
       const kaeya = characters.get(recipientId);
       const recipientWeapon = weapons.get(recipientId === 'barbara' ? 'apprenticesnotes' : 'dullblade');
       const input = await inputFor(recipientId);
       const weapon = weapons.get(novice[owner.identity.weaponType]);
       const build = {...auditBuild(owner,weapon), constellation:spec.rank ?? 0, ascension:spec.ascension ?? 0, level:spec.ascension === 4 ? 60 : spec.ascension ? 20 : 1};
-      const prepared = engine.prepareStructuredBuilds([{id:'actor',build},{id:'peer',build:auditBuild(kaeya,recipientWeapon)},...(spec.teamElements ?? []).map((element,index)=>({id:'extra'+index,element}))]);
+      const prepared = engine.prepareStructuredBuilds([{id:'actor',build},...(!spec.selfRecipient ? [{id:'peer',build:auditBuild(kaeya,recipientWeapon)}] : []),...(spec.teamElements ?? []).map((element,index)=>({id:'extra'+index,element}))]);
       if (!prepared.ok) throw new Error(JSON.stringify(prepared.diagnostics));
-      const { before, after } = samplePanels(api, input, { name: spec.key, config: 'NoConfig' });
+      const { before, after, disabled } = samplePanels(api, input, { name: spec.key, config: spec.monaParams ? { [spec.key]: spec.monaParams } : 'NoConfig' });
       for (const [attribute,stat,position,amount,buffIndex=0,modifierIndex=0] of spec.effects) {
         const effect = rules[spec.key]?.effects?.[position];
-        if (effect?.attribute !== attribute || effect.value !== amount) throw new Error('upstream effect changed: '+spec.key);
-        const {setup,request}=recipientHit(kaeya, 'peer');
+        if (effect?.attribute !== attribute || JSON.stringify(effect.value) !== JSON.stringify(spec.monaValue ?? amount)) throw new Error('upstream effect changed: '+spec.key);
+        const recipientActor = spec.selfRecipient ? 'actor' : 'peer';
+        const {setup,request}=recipientHit(kaeya, recipientActor);
         const values=[];
-        for(const active of [false,true]) {
-          if (spec.gates) setGateFacts(owner,request.frame,Object.fromEntries(Object.keys(spec.gates).map(k=>[k,active])));
-          request.frame.factOverrides = request.frame.factOverrides.filter(entry=>entry.subject.id!=='peer');
-          request.frame.factOverrides.push({subject:{kind:'actor',id:'peer'},facts:{onField:bool(true),hpRatio:number('scalar',1),...Object.fromEntries(Object.keys(spec.recipientGates??{}).map(k=>[k,bool(active)]))}});
+        for(const active of [false,true,false]) {
+          request.frame.factOverrides = request.frame.factOverrides.filter(entry=>entry.subject.id!==recipientActor);
+          request.frame.factOverrides.push({subject:{kind:'actor',id:recipientActor},facts:{onField:bool(spec.recipientOnField ?? true),hpRatio:number('scalar',1),...Object.fromEntries(Object.entries(spec.recipientGates??{}).map(([k,v])=>[k,bool(active && v)]))}});
+          setGateFacts(owner, request.frame, { ...spec.fixedGates,
+            ...Object.fromEntries(Object.entries(spec.gates ?? {}).map(([key, value]) => [key, active && value])) });
           setup.events=setup.events.filter(event=>event.id!=='trigger');
           if(active && spec.event) setup.events.unshift({id:'trigger',actorId:'actor',timeMs:0,order:0,sourceEventIds:[],facts:{},...spec.event});
           values.push(readAttribute(engine, prepared.team, setup, request.frame, stat));
         }
+        let boundary = null;
+        if (spec.recipientBoundary) {
+          const offPanels = samplePanels(api, input, { name: spec.key, config: { [spec.key]: { ...spec.monaParams, recipient_on_field:false } } });
+          request.frame.factOverrides = request.frame.factOverrides.filter(entry=>entry.subject.id!=='peer');
+          request.frame.factOverrides.push({subject:{kind:'actor',id:'peer'},facts:{onField:bool(false),hpRatio:number('scalar',1),...Object.fromEntries(Object.entries(spec.recipientGates ?? {}).map(([k,v])=>[k,bool(v)]))}});
+          const offValue = readAttribute(engine, prepared.team, setup, request.frame, stat);
+          const monaStat=stats[stat]?.[0] ?? (stat.endsWith('Bonus') ? 'bonus_' + stat.slice(0, -5) : undefined);
+          boundary={recipient:'off-field',monaBefore:sum(offPanels.before[monaStat]),monaEnabled:sum(offPanels.after[monaStat]),leyline:offValue};
+        }
         const monaStat=stats[stat]?.[0] ?? (stat.endsWith('Bonus') ? 'bonus_' + stat.slice(0, -5) : undefined), delta=sum(after[monaStat])-sum(before[monaStat]);
         const base=stat==='attackPercent'?before.atk['角色基础攻击']+before.atk['武器基础攻击']:stat==='defensePercent'?before.def['角色基础防御']:1;
         const expected=amount*base, targetId=`character:${spec.owner}:modifier:/${spec.group}/${spec.index}/buffs/${buffIndex}/modifiers/${modifierIndex}`;
-        rows.push({key:spec.key,effectId:`mona:effect:character:${spec.key}:${position}`,stat,amount,source:spec.owner,recipient:recipientId,targetId,
-          gate:{owner:spec.gates??{},recipient:{onField:true,hpRatio:1,...spec.recipientGates??{}},event:spec.event??null,teamElements:[owner.identity.element,kaeya.identity.element,...spec.teamElements??[]]},monaDelta:delta,monaExpected:expected,leylineBefore:values[0],leylineAfter:values[1],leylineDelta:values[1]-values[0],
-          status:values.every(Number.isFinite)&&close(delta,expected)&&close(values[1]-values[0],amount)?'matched':'open',
-          evidence:[originalPath+'#/'+sourceKey,'.references/mona-community/beta-data/classic-static-effect-rules.mjs',`src/game-data/data/characters/${spec.owner}.json#/${spec.group}/${spec.index}/buffs/${buffIndex}`],
-          scope:recipientId + ' recipient and the listed explicit facts or event; Mona uses a manually selected buff. Other recipients and duration boundaries are not verified.'});
+        rows.push({key:spec.key,scenarioId:spec.scenarioId ?? 'default',effectId:`mona:effect:character:${spec.key}:${position}`,stat,amount,source:spec.owner,recipient:recipientId,targetId, extraTargetIds:[...(spec.extraModifierIndices ?? []).map(index=>`character:${spec.owner}:modifier:/${spec.group}/${spec.index}/buffs/${buffIndex}/modifiers/${index}`), ...(spec.extraTargetPaths ?? []).map(path=>`character:${spec.owner}:modifier:${path}`)], monaExpression:spec.monaValue ?? amount, monaParams:spec.monaParams ?? {},
+          gate:{owner:{...spec.fixedGates,...spec.gates},recipient:{onField:spec.recipientOnField ?? true,hpRatio:1,...spec.recipientGates??{}},event:spec.event??null,teamElements:spec.selfRecipient ? [owner.identity.element] : [owner.identity.element,kaeya.identity.element,...spec.teamElements??[]]},monaDelta:delta,monaExpected:expected,leylineBefore:values[0],leylineAfter:values[1],leylineDelta:values[1]-values[0],
+          behaviorEvidence: {
+            source:spec.owner, recipient:recipientId, attribute:stat, targetId,
+            mona:{before:sum(before[monaStat]),enabled:sum(after[monaStat]),disabled:sum(disabled[monaStat]),disabledCondition:'selected buff locked'},
+            leyline:{before:values[0],enabled:values[1],disabled:values[2],disabledCondition:spec.event ? 'trigger event absent; declared gates false' : 'declared gates false'},
+            boundary, scope:'Explicit source, recipient, listed gates and stat only; no duration inferred.',
+          },
+          status:values.every(Number.isFinite)&&close(delta,expected)&&close(values[1]-values[0],amount)&&close(values[2],values[0])&&close(sum(disabled[monaStat]),sum(before[monaStat]))&&(!boundary || close(boundary.monaEnabled,boundary.monaBefore)&&close(boundary.leyline,values[0]))?'matched':'open',
+          evidence:[originalPath+(spec.sourcePath ? '#/sources/0' : '#/'+sourceKey),ruleSources[spec.key],`src/game-data/data/characters/${spec.owner}.json#/${spec.group}/${spec.index}/buffs/${buffIndex}`,...spec.extraEvidence ?? []],
+          scope:recipientId + ' recipient and the listed explicit facts or event; Mona uses a manually selected buff with parameters ' + JSON.stringify(spec.monaParams ?? {}) + '. Other recipients and duration boundaries are not verified.'});
       }
     } catch(error) { rows.push({key:spec.key,status:'error',error:String(error?.message??error)}); }
   }
@@ -82,12 +126,14 @@ const resonanceSpecs = [
 ];
 
 /** Tests one actual Kaeya recipient, with and without the two-element team grant. */
-async function auditResonances({ characters, weapons, engine, api, inputFor }) {
+async function auditResonances({ characters, weapons, engine, api, inputFor, keys }) {
+  const selected = resonanceSpecs.filter(spec => !keys || keys.has(spec.key));
+  if (!selected.length) return { rows: [], summary: { cases: 0, matched: 0 } };
   const character = characters.get('kaeya');
   const weapon = weapons.get('dullblade');
   const input = await inputFor('kaeya');
   const rows = [];
-  for (const spec of resonanceSpecs) {
+  for (const spec of selected) {
     const config = spec.key === 'ResonanceGeo2' ? { [spec.key]: { rate1: 0, rate2: 0 } } : 'NoConfig';
     const { before, after } = samplePanels(api, input, { name: spec.key, config });
     const monaDelta = sum(after[spec.monaStat]) - sum(before[spec.monaStat]);
@@ -113,7 +159,8 @@ async function auditResonances({ characters, weapons, engine, api, inputFor }) {
 
 function samplePanels(api, input, buff) {
   return { before: api.CommonInterface.get_attribute({ ...input, buffs: [] }),
-    after: api.CommonInterface.get_attribute({ ...input, buffs: [buff] }) };
+    after: api.CommonInterface.get_attribute({ ...input, buffs: [buff] }),
+    disabled: api.CommonInterface.get_attribute({ ...input, buffs: [{ ...buff, lock: true }] }) };
 }
 
 function recipientHit(character, actorId) {
@@ -134,15 +181,25 @@ function readAttribute(engine, team, setup, frame, stat) {
 }
 
 /** Run both scenario families with one runtime and shared recipient fixtures. */
-export async function auditMonaBuffScenarios(entities, engine) {
+export async function auditMonaBuffScenarios(entities, engine, keys) {
   const { api } = await import('../../.references/mona-community/beta-tools/runtime-7106.mjs');
   const { CHARACTER_EFFECT_RULES } = await import('../../.references/mona-community/beta-data/character-effect-rules.mjs');
+  const [classic, classicBook, characterBook, lunarBook] = await Promise.all([
+    import('../../.references/mona-community/beta-data/classic-static-effect-rules.mjs'),
+    import('../../.references/mona-community/beta-data/classic-effect-rule-book.mjs'),
+    import('../../.references/mona-community/beta-data/character-rule-book.mjs'),
+    import('../../.references/mona-community/beta-data/lunar-effect-rule-book.mjs'),
+  ]);
+  const libraries = [['classic-static-effect-rules.mjs', classic.CLASSIC_STATIC_RULES], ['classic-effect-rule-book.mjs', classicBook.CLASSIC_EFFECT_RULE_BOOK],
+    ['character-rule-book.mjs', characterBook.CHARACTER_RULE_BOOK], ['lunar-effect-rule-book.mjs', lunarBook.LUNAR_EFFECT_RULE_BOOK]];
+  const ruleSources = Object.fromEntries(libraries.flatMap(([file, rules]) => Object.keys(rules).map(key => [key, '.references/mona-community/beta-data/' + file])));
   const inputs = new Map();
   const inputFor = async id => {
-    if (!inputs.has(id)) inputs.set(id, (await probeMonaSkills({ characters: [id === 'barbara' ? 'Barbara' : 'Kaeya'], indices: [0], constellations: [0] })).rows[0].input);
+    if (!inputs.has(id)) inputs.set(id, (await probeMonaSkills({ characters: [{barbara:'Barbara',klee:'Klee'}[id] ?? 'Kaeya'], indices: [0], constellations: [0] })).rows[0].input);
     return structuredClone(inputs.get(id));
   };
   const shared = { characters: new Map(entities.characters.map(item => [item.id, item])),
-    weapons: new Map(entities.weapons.map(item => [item.id, item])), engine, api, rules: CHARACTER_EFFECT_RULES, inputFor };
-  return { resonance: await auditResonances(shared), characters: await auditCharacters(shared) };
+    weapons: new Map(entities.weapons.map(item => [item.id, item])), engine, api, rules: CHARACTER_EFFECT_RULES, ruleSources, inputFor, keys: keys == null ? null : new Set(keys) };
+  const characters = await auditCharacters(shared);
+  return { resonance: await auditResonances(shared), characters };
 }
