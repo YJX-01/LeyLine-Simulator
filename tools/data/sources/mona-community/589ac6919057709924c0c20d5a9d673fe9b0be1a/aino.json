@@ -1,0 +1,1259 @@
+{
+  "source": {
+    "id": "mona.aino-single-hit-and-c6",
+    "kind": "repo",
+    "repository": "TwiceDrop/genshin_artifact",
+    "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+    "path": "beta-tools/runtime-7106.mjs"
+  },
+  "officialSource": "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/constellations/aino.json",
+  "probe": "tools/lib/mona-aino-audit.mjs#auditMonaAino",
+  "ordinaryIndices": {
+    "0": "aino.normal.param1",
+    "1": "aino.normal.param2",
+    "2": "aino.normal.param3 times 2",
+    "3": "aino.normal.param4",
+    "4": "aino.normal.param5",
+    "5": "aino.normal.param8",
+    "6": "aino.normal.param9",
+    "7": "aino.normal.param10",
+    "8": "aino.skill.param1",
+    "9": "aino.skill.param2",
+    "10": "aino.burst.param1"
+  },
+  "runtime": {
+    "talentLevels": "Mona input 0 through 14 selects levels 1 through 15; 165 index and level pairs match the local parameter tables within 0.00011, allowing for the release kernel's displayed ratio precision.",
+    "c6": "The structured rule produces 0.15 for electro-charged, bloom, lunar-charged, lunar-bloom and lunar-crystallize; full moonsign adds 0.20. The supplied recipient-on-field false yields no effects. Actual transformative calls check electro-charged and bloom and exclude hyperbloom, burgeon and overload.",
+    "c6Source": "beta-data/lunar-effect-rule-book.mjs#L10"
+  },
+  "boundaries": [
+    "The Mona skill catalogue contains no Aino C2 water-shot index; its absence is not proof that no other runtime path exists.",
+    "The existing LeyLine C2 hit uses one explicit aggregate fact. Its input means that the on-field ally attack, nearby target, Aino being off field, active domain and five-second interval have already been satisfied; it does not itself establish an event scheduler or evaluate those predicates.",
+    "The Mona C6 probe supplies a buff directly. It does not independently verify cast history, 15-second expiry, proximity or the game reaction formula.",
+    "The Mona output for a 90-level Aino burst with 100 elemental mastery did not expose the official A4 flat damage addition; this is a limitation of the observed Mona path, not evidence against the official text or the LeyLine binding.",
+    "Full moonsign changes burst shot interval and area according to A1; no per-shot multiplier change follows from that description. Concrete timing and range require separate evidence."
+  ],
+  "mappings": [
+    {
+      "id": "aino-skill-0",
+      "disposition": "matched",
+      "mona": [
+        "mona:skill:Aino:0"
+      ],
+      "leyline": [
+        {
+          "id": "character:aino:hit:/talents/0/hits/0",
+          "revision": "3"
+        }
+      ],
+      "explanation": "目录、技能阶段和逐级倍率指向相同输出。命中条件仍按正式定义登记。",
+      "sources": [
+        ".references/mona-community/src/assets/_gen_character.js",
+        "tools/lib/mona-aino-audit.mjs",
+        "src/game-data/data/characters/aino.json#/talents/0/hits/0"
+      ],
+      "comparisons": [
+        {
+          "name": "天赋1级倍率",
+          "expected": 0.664986,
+          "actual": 0.665,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋2级倍率",
+          "expected": 0.719113,
+          "actual": 0.7191,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋3级倍率",
+          "expected": 0.77324,
+          "actual": 0.7732,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋4级倍率",
+          "expected": 0.850564,
+          "actual": 0.8506,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋5级倍率",
+          "expected": 0.904691,
+          "actual": 0.9047,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋6级倍率",
+          "expected": 0.96655,
+          "actual": 0.9666,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋7级倍率",
+          "expected": 1.051606,
+          "actual": 1.0516,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋8级倍率",
+          "expected": 1.136663,
+          "actual": 1.1367,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋9级倍率",
+          "expected": 1.221719,
+          "actual": 1.2217,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋10级倍率",
+          "expected": 1.314508,
+          "actual": 1.3145,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋11级倍率",
+          "expected": 1.407297,
+          "actual": 1.4073,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋12级倍率",
+          "expected": 1.500086,
+          "actual": 1.5001,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋13级倍率",
+          "expected": 1.592874,
+          "actual": 1.5929,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋14级倍率",
+          "expected": 1.685663,
+          "actual": 1.6857,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋15级倍率",
+          "expected": 1.778452,
+          "actual": 1.7785,
+          "tolerance": 0.00011
+        }
+      ]
+    },
+    {
+      "id": "aino-skill-1",
+      "disposition": "matched",
+      "mona": [
+        "mona:skill:Aino:1"
+      ],
+      "leyline": [
+        {
+          "id": "character:aino:hit:/talents/0/hits/1",
+          "revision": "3"
+        }
+      ],
+      "explanation": "目录、技能阶段和逐级倍率指向相同输出。命中条件仍按正式定义登记。",
+      "sources": [
+        ".references/mona-community/src/assets/_gen_character.js",
+        "tools/lib/mona-aino-audit.mjs",
+        "src/game-data/data/characters/aino.json#/talents/0/hits/1"
+      ],
+      "comparisons": [
+        {
+          "name": "天赋1级倍率",
+          "expected": 0.661916,
+          "actual": 0.6619,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋2级倍率",
+          "expected": 0.715793,
+          "actual": 0.7158,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋3级倍率",
+          "expected": 0.76967,
+          "actual": 0.7697,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋4级倍率",
+          "expected": 0.846637,
+          "actual": 0.8466,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋5级倍率",
+          "expected": 0.900514,
+          "actual": 0.9005,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋6级倍率",
+          "expected": 0.962087,
+          "actual": 0.9621,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋7级倍率",
+          "expected": 1.046751,
+          "actual": 1.0468,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋8级倍率",
+          "expected": 1.131415,
+          "actual": 1.1314,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋9级倍率",
+          "expected": 1.216079,
+          "actual": 1.2161,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋10级倍率",
+          "expected": 1.308439,
+          "actual": 1.3084,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋11级倍率",
+          "expected": 1.400799,
+          "actual": 1.4008,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋12级倍率",
+          "expected": 1.49316,
+          "actual": 1.4932,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋13级倍率",
+          "expected": 1.58552,
+          "actual": 1.5855,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋14级倍率",
+          "expected": 1.677881,
+          "actual": 1.6779,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋15级倍率",
+          "expected": 1.770241,
+          "actual": 1.7703,
+          "tolerance": 0.00011
+        }
+      ]
+    },
+    {
+      "id": "aino-skill-2",
+      "disposition": "matched",
+      "mona": [
+        "mona:skill:Aino:2"
+      ],
+      "leyline": [
+        {
+          "id": "character:aino:hit:/talents/0/hits/2",
+          "revision": "3"
+        }
+      ],
+      "explanation": "Mona 汇总两次等倍率普攻，LeyLine 命中保留两击序号。",
+      "sources": [
+        ".references/mona-community/src/assets/_gen_character.js",
+        "tools/lib/mona-aino-audit.mjs",
+        "src/game-data/data/characters/aino.json#/talents/0/hits/2"
+      ],
+      "comparisons": [
+        {
+          "name": "天赋1级倍率",
+          "expected": 0.98433,
+          "actual": 0.9844,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋2级倍率",
+          "expected": 1.06445,
+          "actual": 1.0644,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋3级倍率",
+          "expected": 1.14457,
+          "actual": 1.1446,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋4级倍率",
+          "expected": 1.259028,
+          "actual": 1.259,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋5级倍率",
+          "expected": 1.339146,
+          "actual": 1.3392,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋6级倍率",
+          "expected": 1.430712,
+          "actual": 1.4308,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋7级倍率",
+          "expected": 1.556616,
+          "actual": 1.5566,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋8级倍率",
+          "expected": 1.682518,
+          "actual": 1.6826,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋9级倍率",
+          "expected": 1.80842,
+          "actual": 1.8084,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋10级倍率",
+          "expected": 1.94577,
+          "actual": 1.9458,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋11级倍率",
+          "expected": 2.083118,
+          "actual": 2.0832,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋12级倍率",
+          "expected": 2.220466,
+          "actual": 2.2204,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋13级倍率",
+          "expected": 2.357814,
+          "actual": 2.3578,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋14级倍率",
+          "expected": 2.495162,
+          "actual": 2.4952,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋15级倍率",
+          "expected": 2.632512,
+          "actual": 2.6326,
+          "tolerance": 0.00011
+        }
+      ]
+    },
+    {
+      "id": "aino-skill-3",
+      "disposition": "matched",
+      "mona": [
+        "mona:skill:Aino:3"
+      ],
+      "leyline": [
+        {
+          "id": "character:aino:hit:/talents/0/hits/3",
+          "revision": "3"
+        }
+      ],
+      "explanation": "目录、技能阶段和逐级倍率指向相同输出。命中条件仍按正式定义登记。",
+      "sources": [
+        ".references/mona-community/src/assets/_gen_character.js",
+        "tools/lib/mona-aino-audit.mjs",
+        "src/game-data/data/characters/aino.json#/talents/0/hits/3"
+      ],
+      "comparisons": [
+        {
+          "name": "天赋1级倍率",
+          "expected": 0.62522,
+          "actual": 0.6252,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋2级倍率",
+          "expected": 0.67611,
+          "actual": 0.6761,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋3级倍率",
+          "expected": 0.727,
+          "actual": 0.727,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋4级倍率",
+          "expected": 0.7997,
+          "actual": 0.7997,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋5级倍率",
+          "expected": 0.85059,
+          "actual": 0.8506,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋6级倍率",
+          "expected": 0.90875,
+          "actual": 0.9088,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋7级倍率",
+          "expected": 0.98872,
+          "actual": 0.9887,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋8级倍率",
+          "expected": 1.06869,
+          "actual": 1.0687,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋9级倍率",
+          "expected": 1.14866,
+          "actual": 1.1487,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋10级倍率",
+          "expected": 1.2359,
+          "actual": 1.2359,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋11级倍率",
+          "expected": 1.32314,
+          "actual": 1.3231,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋12级倍率",
+          "expected": 1.41038,
+          "actual": 1.4104,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋13级倍率",
+          "expected": 1.49762,
+          "actual": 1.4976,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋14级倍率",
+          "expected": 1.58486,
+          "actual": 1.5849,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋15级倍率",
+          "expected": 1.6721,
+          "actual": 1.6721,
+          "tolerance": 0.00011
+        }
+      ]
+    },
+    {
+      "id": "aino-skill-4",
+      "disposition": "matched",
+      "mona": [
+        "mona:skill:Aino:4"
+      ],
+      "leyline": [
+        {
+          "id": "character:aino:hit:/talents/0/hits/4",
+          "revision": "3"
+        }
+      ],
+      "explanation": "目录、技能阶段和逐级倍率指向相同输出。命中条件仍按正式定义登记。",
+      "sources": [
+        ".references/mona-community/src/assets/_gen_character.js",
+        "tools/lib/mona-aino-audit.mjs",
+        "src/game-data/data/characters/aino.json#/talents/0/hits/4"
+      ],
+      "comparisons": [
+        {
+          "name": "天赋1级倍率",
+          "expected": 1.1309,
+          "actual": 1.1309,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋2级倍率",
+          "expected": 1.22295,
+          "actual": 1.223,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋3级倍率",
+          "expected": 1.315,
+          "actual": 1.315,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋4级倍率",
+          "expected": 1.4465,
+          "actual": 1.4465,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋5级倍率",
+          "expected": 1.53855,
+          "actual": 1.5386,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋6级倍率",
+          "expected": 1.64375,
+          "actual": 1.6438,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋7级倍率",
+          "expected": 1.7884,
+          "actual": 1.7884,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋8级倍率",
+          "expected": 1.93305,
+          "actual": 1.9331,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋9级倍率",
+          "expected": 2.0777,
+          "actual": 2.0777,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋10级倍率",
+          "expected": 2.2355,
+          "actual": 2.2355,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋11级倍率",
+          "expected": 2.3933,
+          "actual": 2.3933,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋12级倍率",
+          "expected": 2.5511,
+          "actual": 2.5511,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋13级倍率",
+          "expected": 2.7089,
+          "actual": 2.7089,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋14级倍率",
+          "expected": 2.8667,
+          "actual": 2.8667,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋15级倍率",
+          "expected": 3.0245,
+          "actual": 3.0245,
+          "tolerance": 0.00011
+        }
+      ]
+    },
+    {
+      "id": "aino-skill-5",
+      "disposition": "matched",
+      "mona": [
+        "mona:skill:Aino:5"
+      ],
+      "leyline": [
+        {
+          "id": "character:aino:hit:/talents/0/hits/5",
+          "revision": "3"
+        }
+      ],
+      "explanation": "目录、技能阶段和逐级倍率指向相同输出。命中条件仍按正式定义登记。",
+      "sources": [
+        ".references/mona-community/src/assets/_gen_character.js",
+        "tools/lib/mona-aino-audit.mjs",
+        "src/game-data/data/characters/aino.json#/talents/0/hits/5"
+      ],
+      "comparisons": [
+        {
+          "name": "天赋1级倍率",
+          "expected": 0.745878,
+          "actual": 0.7459,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋2级倍率",
+          "expected": 0.806589,
+          "actual": 0.8066,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋3级倍率",
+          "expected": 0.8673,
+          "actual": 0.8673,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋4级倍率",
+          "expected": 0.95403,
+          "actual": 0.954,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋5级倍率",
+          "expected": 1.014741,
+          "actual": 1.0147,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋6级倍率",
+          "expected": 1.084125,
+          "actual": 1.0841,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋7级倍率",
+          "expected": 1.179528,
+          "actual": 1.1795,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋8级倍率",
+          "expected": 1.274931,
+          "actual": 1.2749,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋9级倍率",
+          "expected": 1.370334,
+          "actual": 1.3703,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋10级倍率",
+          "expected": 1.47441,
+          "actual": 1.4744,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋11级倍率",
+          "expected": 1.578486,
+          "actual": 1.5785,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋12级倍率",
+          "expected": 1.682562,
+          "actual": 1.6826,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋13级倍率",
+          "expected": 1.786638,
+          "actual": 1.7866,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋14级倍率",
+          "expected": 1.890714,
+          "actual": 1.8907,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋15级倍率",
+          "expected": 1.99479,
+          "actual": 1.9948,
+          "tolerance": 0.00011
+        }
+      ]
+    },
+    {
+      "id": "aino-skill-6",
+      "disposition": "matched",
+      "mona": [
+        "mona:skill:Aino:6"
+      ],
+      "leyline": [
+        {
+          "id": "character:aino:hit:/talents/0/hits/6",
+          "revision": "3"
+        }
+      ],
+      "explanation": "目录、技能阶段和逐级倍率指向相同输出。命中条件仍按正式定义登记。",
+      "sources": [
+        ".references/mona-community/src/assets/_gen_character.js",
+        "tools/lib/mona-aino-audit.mjs",
+        "src/game-data/data/characters/aino.json#/talents/0/hits/6"
+      ],
+      "comparisons": [
+        {
+          "name": "天赋1级倍率",
+          "expected": 1.49144,
+          "actual": 1.4914,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋2级倍率",
+          "expected": 1.612836,
+          "actual": 1.6128,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋3级倍率",
+          "expected": 1.734233,
+          "actual": 1.7342,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋4级倍率",
+          "expected": 1.907656,
+          "actual": 1.9077,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋5级倍率",
+          "expected": 2.029052,
+          "actual": 2.0291,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋6级倍率",
+          "expected": 2.167791,
+          "actual": 2.1678,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋7级倍率",
+          "expected": 2.358556,
+          "actual": 2.3586,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋8级倍率",
+          "expected": 2.549322,
+          "actual": 2.5493,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋9级倍率",
+          "expected": 2.740087,
+          "actual": 2.7401,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋10级倍率",
+          "expected": 2.948195,
+          "actual": 2.9482,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋11级倍率",
+          "expected": 3.156303,
+          "actual": 3.1563,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋12级倍率",
+          "expected": 3.364411,
+          "actual": 3.3644,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋13级倍率",
+          "expected": 3.572519,
+          "actual": 3.5725,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋14级倍率",
+          "expected": 3.780627,
+          "actual": 3.7806,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋15级倍率",
+          "expected": 3.988735,
+          "actual": 3.9887,
+          "tolerance": 0.00011
+        }
+      ]
+    },
+    {
+      "id": "aino-skill-7",
+      "disposition": "matched",
+      "mona": [
+        "mona:skill:Aino:7"
+      ],
+      "leyline": [
+        {
+          "id": "character:aino:hit:/talents/0/hits/7",
+          "revision": "3"
+        }
+      ],
+      "explanation": "目录、技能阶段和逐级倍率指向相同输出。命中条件仍按正式定义登记。",
+      "sources": [
+        ".references/mona-community/src/assets/_gen_character.js",
+        "tools/lib/mona-aino-audit.mjs",
+        "src/game-data/data/characters/aino.json#/talents/0/hits/7"
+      ],
+      "comparisons": [
+        {
+          "name": "天赋1级倍率",
+          "expected": 1.862889,
+          "actual": 1.8629,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋2级倍率",
+          "expected": 2.01452,
+          "actual": 2.0145,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋3级倍率",
+          "expected": 2.16615,
+          "actual": 2.1662,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋4级倍率",
+          "expected": 2.382765,
+          "actual": 2.3828,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋5级倍率",
+          "expected": 2.534396,
+          "actual": 2.5344,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋6级倍率",
+          "expected": 2.707688,
+          "actual": 2.7077,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋7级倍率",
+          "expected": 2.945964,
+          "actual": 2.946,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋8级倍率",
+          "expected": 3.184241,
+          "actual": 3.1842,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋9级倍率",
+          "expected": 3.422517,
+          "actual": 3.4225,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋10级倍率",
+          "expected": 3.682455,
+          "actual": 3.6824,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋11级倍率",
+          "expected": 3.942393,
+          "actual": 3.9423,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋12级倍率",
+          "expected": 4.202331,
+          "actual": 4.2023,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋13级倍率",
+          "expected": 4.462269,
+          "actual": 4.4622,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋14级倍率",
+          "expected": 4.722207,
+          "actual": 4.7222,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋15级倍率",
+          "expected": 4.982145,
+          "actual": 4.9821,
+          "tolerance": 0.00011
+        }
+      ]
+    },
+    {
+      "id": "aino-skill-8",
+      "disposition": "matched",
+      "mona": [
+        "mona:skill:Aino:8"
+      ],
+      "leyline": [
+        {
+          "id": "character:aino:hit:/talents/1/hits/0",
+          "revision": "3"
+        }
+      ],
+      "explanation": "目录、技能阶段和逐级倍率指向相同输出。命中条件仍按正式定义登记。",
+      "sources": [
+        ".references/mona-community/src/assets/_gen_character.js",
+        "tools/lib/mona-aino-audit.mjs",
+        "src/game-data/data/characters/aino.json#/talents/1/hits/0"
+      ],
+      "comparisons": [
+        {
+          "name": "天赋1级倍率",
+          "expected": 0.656,
+          "actual": 0.656,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋2级倍率",
+          "expected": 0.7052,
+          "actual": 0.7052,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋3级倍率",
+          "expected": 0.7544,
+          "actual": 0.7544,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋4级倍率",
+          "expected": 0.82,
+          "actual": 0.82,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋5级倍率",
+          "expected": 0.8692,
+          "actual": 0.8692,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋6级倍率",
+          "expected": 0.9184,
+          "actual": 0.9184,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋7级倍率",
+          "expected": 0.984,
+          "actual": 0.984,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋8级倍率",
+          "expected": 1.0496,
+          "actual": 1.0496,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋9级倍率",
+          "expected": 1.1152,
+          "actual": 1.1152,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋10级倍率",
+          "expected": 1.1808,
+          "actual": 1.1808,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋11级倍率",
+          "expected": 1.2464,
+          "actual": 1.2464,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋12级倍率",
+          "expected": 1.312,
+          "actual": 1.312,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋13级倍率",
+          "expected": 1.394,
+          "actual": 1.394,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋14级倍率",
+          "expected": 1.476,
+          "actual": 1.476,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋15级倍率",
+          "expected": 1.558,
+          "actual": 1.558,
+          "tolerance": 0.00011
+        }
+      ]
+    },
+    {
+      "id": "aino-skill-9",
+      "disposition": "matched",
+      "mona": [
+        "mona:skill:Aino:9"
+      ],
+      "leyline": [
+        {
+          "id": "character:aino:hit:/talents/1/hits/1",
+          "revision": "3"
+        }
+      ],
+      "explanation": "目录、技能阶段和逐级倍率指向相同输出。命中条件仍按正式定义登记。",
+      "sources": [
+        ".references/mona-community/src/assets/_gen_character.js",
+        "tools/lib/mona-aino-audit.mjs",
+        "src/game-data/data/characters/aino.json#/talents/1/hits/1"
+      ],
+      "comparisons": [
+        {
+          "name": "天赋1级倍率",
+          "expected": 1.888,
+          "actual": 1.888,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋2级倍率",
+          "expected": 2.0296,
+          "actual": 2.0296,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋3级倍率",
+          "expected": 2.1712,
+          "actual": 2.1712,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋4级倍率",
+          "expected": 2.36,
+          "actual": 2.36,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋5级倍率",
+          "expected": 2.5016,
+          "actual": 2.5016,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋6级倍率",
+          "expected": 2.6432,
+          "actual": 2.6432,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋7级倍率",
+          "expected": 2.832,
+          "actual": 2.832,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋8级倍率",
+          "expected": 3.0208,
+          "actual": 3.0208,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋9级倍率",
+          "expected": 3.2096,
+          "actual": 3.2096,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋10级倍率",
+          "expected": 3.3984,
+          "actual": 3.3984,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋11级倍率",
+          "expected": 3.5872,
+          "actual": 3.5872,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋12级倍率",
+          "expected": 3.776,
+          "actual": 3.776,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋13级倍率",
+          "expected": 4.012,
+          "actual": 4.012,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋14级倍率",
+          "expected": 4.248,
+          "actual": 4.248,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋15级倍率",
+          "expected": 4.484,
+          "actual": 4.484,
+          "tolerance": 0.00011
+        }
+      ]
+    },
+    {
+      "id": "aino-skill-10",
+      "disposition": "matched",
+      "mona": [
+        "mona:skill:Aino:10"
+      ],
+      "leyline": [
+        {
+          "id": "character:aino:hit:/talents/2/hits/0",
+          "revision": "3"
+        }
+      ],
+      "explanation": "目录、技能阶段和逐级倍率指向相同输出。命中条件仍按正式定义登记。",
+      "sources": [
+        ".references/mona-community/src/assets/_gen_character.js",
+        "tools/lib/mona-aino-audit.mjs",
+        "src/game-data/data/characters/aino.json#/talents/2/hits/0"
+      ],
+      "comparisons": [
+        {
+          "name": "天赋1级倍率",
+          "expected": 0.20112,
+          "actual": 0.2011,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋2级倍率",
+          "expected": 0.216204,
+          "actual": 0.2162,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋3级倍率",
+          "expected": 0.231288,
+          "actual": 0.2313,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋4级倍率",
+          "expected": 0.2514,
+          "actual": 0.2514,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋5级倍率",
+          "expected": 0.266484,
+          "actual": 0.2665,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋6级倍率",
+          "expected": 0.281568,
+          "actual": 0.2816,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋7级倍率",
+          "expected": 0.30168,
+          "actual": 0.3017,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋8级倍率",
+          "expected": 0.321792,
+          "actual": 0.3218,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋9级倍率",
+          "expected": 0.341904,
+          "actual": 0.3419,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋10级倍率",
+          "expected": 0.362016,
+          "actual": 0.362,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋11级倍率",
+          "expected": 0.382128,
+          "actual": 0.3821,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋12级倍率",
+          "expected": 0.40224,
+          "actual": 0.4022,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋13级倍率",
+          "expected": 0.42738,
+          "actual": 0.4274,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋14级倍率",
+          "expected": 0.45252,
+          "actual": 0.4525,
+          "tolerance": 0.00011
+        },
+        {
+          "name": "天赋15级倍率",
+          "expected": 0.47766,
+          "actual": 0.4777,
+          "tolerance": 0.00011
+        }
+      ]
+    }
+  ]
+}

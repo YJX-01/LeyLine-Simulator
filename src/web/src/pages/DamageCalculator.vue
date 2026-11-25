@@ -12,12 +12,12 @@ import { absorbedElements, ordinaryReactions } from '@leyline/schema/hit-binding
 import { putHitFact, subjectFacts, findBuildHit, isTransformative, partyInfusionFact, talentInputMaximum, transformativeElements } from '@leyline/schema';
 import { APP_VERSION } from '@leyline/schema/version';
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, ref, shallowRef, toRaw, watch } from 'vue';
-import { getReactionCalculationBundle } from '@leyline/game-data';
+import { getReactionCalculationBundle, stellarSwirlCoefficients } from '@leyline/game-data';
 import type { TransformativeFamily, ProjectReaction } from '@leyline/schema';
 import { damageCalculatorSchema, projectSchema, type ValueType, createTalentRankReader, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest, type StatKey } from '@leyline/schema';
 import type { AccountArtifact, AccountCharacter, LocalAccount } from '../domain/account';
 import { addCalculatorCapture, addCalculatorSceneHit, calculatorRequest, calculatorCritProject, calculatorSceneHits, calculatorSnapshotDraft, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
-import { addActorFromBuild, addTransformativeReaction, defaultEnemy } from '../domain/real-project';
+import { addActorFromBuild, addSingleContributorReaction, defaultEnemy, singleContributorLunarElements, type SingleContributorReaction } from '../domain/real-project';
 import { createEmptyProject, nextRecordId } from '../domain/workbench-project';
 import { teamArtifactEntries, type TeamConfigurationRef } from '../domain/team-members';
 import { buildRollBasis } from '../domain/effective-roll-basis';
@@ -133,7 +133,7 @@ const sceneDefinition = computed(() => sceneHit.value && matchingSceneHits(docum
 const sceneHitDefinition = computed(() => sceneDefinition.value?.hits?.[0]);
 const hasDamageCard = computed(() => !!(selectedChoice.value || standalone.value || sceneDefinition.value));
 const sceneBaseOnly = computed(() => sceneHitDefinition.value && 'settlement' in sceneHitDefinition.value);
-const transformative = computed(() => !!standalone.value && isTransformative(standalone.value.family));
+const editableStandaloneCrit = computed(() => standalone.value?.contributors.length === 1 && !standalone.value.jointCrit);
 const selectedLabel = computed(() => {
   if (sceneHit.value) return sceneHitLabel(sceneDefinition.value);
   if (standalone.value) return damageFamilyLabel(standalone.value.family);
@@ -428,7 +428,9 @@ function install(next: DamageCalculatorDocument, saved = false) {
   damage.value = record?.damage ? JSON.parse(JSON.stringify(record.damage)) : emptyDamage();
   if (record?.reactionEvent) {
     const reaction = structuredClone(toRaw(record.reactionEvent));
-    damage.value = { ...damage.value, crit: isTransformative(reaction.family) ? reaction.contributors[0].crit ?? 'noncritical' : null,
+    const contributor = reaction.contributors.length === 1 && !reaction.jointCrit ? reaction.contributors[0] : undefined;
+    const crit = isTransformative(reaction.family) ? contributor?.crit ?? 'noncritical' : contributor?.crit ?? null;
+    damage.value = { ...damage.value, crit,
       facts: reaction.facts, effectApplications: reaction.effectApplications };
   }
   hitTime.value = (record?.timeMs ?? 0) / 1000; captureTime.value = '';
@@ -582,16 +584,34 @@ function defaultReactionElement(family: TransformativeFamily) {
   const matching = allowed.filter(element => partyElements.has(element));
   return matching.length === 1 ? matching[0] : allowed[0];
 }
-async function selectReaction(family: TransformativeFamily) {
+const stellarStages = [
+  { id: 'initialAnemo', name: '初始风元素伤害', element: 'anemo' },
+  { id: 'cryoLevel1', name: '一级风涡冰元素伤害', element: 'cryo' },
+  { id: 'cryoLevel2', name: '二级风涡冰元素伤害', element: 'cryo' },
+] as const;
+const stellarStage = computed(() => stellarStages.find(stage => stage.element === standalone.value?.element &&
+  stellarSwirlCoefficients[stage.id] === standalone.value.coefficient));
+function setStellarStage(event: Event) {
+  const stage = stellarStages.find(stage => stage.id === (event.target as HTMLSelectElement).value);
+  const current = document.value;
+  const reaction = standalone.value;
+  if (!stage || !current || current.baseline || reaction?.family !== 'stellar-swirl') return;
+  const timeline = current.project.timeline.map(record => record.id === current.recordId
+    ? { ...record, reactionEvent: { ...reaction, element: stage.element, coefficient: stellarSwirlCoefficients[stage.id] } } : record);
+  document.value = { ...current, project: { ...current.project, timeline } };
+  void calculate();
+}
+async function selectReaction(family: SingleContributorReaction) {
   const current=document.value, owner=hitOwner.value?.id;
   if (!current || !owner || current.baseline) return;
   if (standalone.value?.family === family) { picker.value = undefined; return; }
-  const element = defaultReactionElement(family);
+  const element = isTransformative(family) ? defaultReactionElement(family) : family === 'stellar-swirl' ? 'anemo' : singleContributorLunarElements[family];
   try {
     const before=signature(), rules=current.project.reactionRules ?? await getReactionCalculationBundle();
     if (before!==signature()) return;
     const next=prepareDocument()!;
-    next.recordId=addTransformativeReaction(next.project,owner,family,element,Math.round(hitTime.value*1000),rules,next.recordId);
+    next.recordId=addSingleContributorReaction(next.project,owner,family,element,Math.round(hitTime.value*1000),rules,next.recordId,
+      family === 'stellar-swirl' ? stellarSwirlCoefficients.initialAnemo : undefined);
     install(next); picker.value=undefined;
     await calculate();
   } catch(cause) { showError(cause); }
@@ -729,7 +749,7 @@ function prepareDocument() {
     const i=timeline.findIndex(r=>r.id===next.recordId);
     const reaction = standalone.value;
     if (i>=0) timeline[i]={...timeline[i],timeMs,reactionEvent:{...reaction, facts:damage.value.facts, effectApplications:damage.value.effectApplications,
-      contributors: transformative.value ? reaction.contributors.map(owner => ({ ...owner, crit:damage.value.crit })) : reaction.contributors }};
+      contributors: editableStandaloneCrit.value ? reaction.contributors.map(owner => ({ ...owner, crit: damage.value.crit })) : reaction.contributors }};
   } else if (sceneHit.value) {
     const index = timeline.findIndex(record => record.id === next.recordId);
     if (index >= 0) {
@@ -988,7 +1008,7 @@ defineExpose({ requestLeave: leaveCalculator });
       <button type="button" class="selection-tile damage-slot" data-density="compact" :data-empty="!hasDamageCard" :data-card-action="hasDamageCard ? undefined : 'select'" :class="{ 'equipment-slot-card': !hasDamageCard }" aria-label="选择伤害" aria-haspopup="dialog" :data-hit-id="damage.hit.hitId"
         :disabled="!queryCharacter || !!document?.baseline" @click="picker = 'damage'">
         <CalculatorDamageCard v-if="hasDamageCard" class="equipment-slot-card" data-density="compact" :hit="selectedChoice" :scene="sceneDefinition"
-          :family="standalone?.family" :element="standalone?.element" :coefficient="standalone?.coefficient" :rules="document?.project.reactionRules" />
+          :family="standalone?.family" :element="standalone?.element" :coefficient="standalone?.coefficient" :rules="document?.project.reactionRules" :single-contributor="editableStandaloneCrit" />
         <SlotPlaceholder v-else label="选择伤害" />
       </button>
       <button type="button" class="selection-tile buff-slot equipment-slot-card" data-density="compact" :data-empty="!buffIcons.length" :class="{ 'filled-slot': buffIcons.length }" data-card-action="select" aria-label="选择增益" aria-haspopup="dialog"
@@ -1070,10 +1090,14 @@ defineExpose({ requestLeave: leaveCalculator });
               <label>冲击触发<select v-model="sceneTriggered"><option :value="true">已满足</option><option :value="false">未满足</option></select></label>
               <label>{{ sceneHitDefinition?.recipient === 'character' ? '场上角色受到冲击' : '当前敌人受到冲击' }}<select v-model="sceneTargetHit"><option :value="true">命中</option><option :value="false">未命中</option></select></label>
             </template>
-            <label v-else-if="!standalone || transformative">暴击<select v-model="damage.crit" :disabled="selectedHit?.critical === 'always'"><option value="noncritical">非暴击</option><option value="critical">暴击</option><option value="expected">期望伤害</option></select></label>
+            <label v-else-if="!standalone || editableStandaloneCrit">暴击<select v-model="damage.crit" :disabled="selectedHit?.critical === 'always'"><option value="noncritical">非暴击</option><option value="critical">暴击</option><option value="expected">期望伤害</option></select></label>
             <label v-if="infusionChoices.length">本击队伍附魔<select v-model="partyInfusion"><option value="none">无</option><option v-for="[element, sources] in infusionChoices" :key="element" :value="element">{{ realElementLabel(element) }}元素（{{ sources.join('、') }}）</option></select></label>
             <label v-if="selectedHit?.elementBy === 'absorbedElement'">转化元素<select v-model="absorbedElement"><option value="none">无</option><option v-for="element in absorbedElements" :key="element" :value="element">{{ realElementLabel(element) }}</option></select></label>
             <label v-if="standalone?.family === 'swirl'">扩散元素<select :value="standalone.element" @change="setReactionElement"><option v-for="element in transformativeElements.swirl" :key="element" :value="element">{{ realElementLabel(element) }}</option></select></label>
+            <label v-if="standalone?.family === 'stellar-swirl'">星扩散伤害段<select :value="stellarStage?.id ?? ''" :disabled="!!document?.baseline" @change="setStellarStage">
+              <option v-if="!stellarStage" value="" disabled>文件记录的系数：{{ standalone.coefficient ?? '未指定' }}</option>
+              <option v-for="stage in stellarStages" :key="stage.id" :value="stage.id">{{ stage.name }} × {{ stellarSwirlCoefficients[stage.id] }}</option>
+            </select></label>
             <label v-if="!standalone && !sceneHit">反应<select v-model="reactionType"><option v-for="reaction in reactionChoices" :key="reaction" :value="reaction">{{ reactionNames[reaction] }}</option></select></label>
             <label v-for="input in hitInputs" :key="input.id">{{ inputNames[input.id] ?? queryCharacter?.metadata.facts?.[input.id]?.label ?? buffFactNames[input.id] ?? input.id }}
               <select v-if="input.id === 'counterCharge'" :value="subjectFacts(damage.facts, { kind: 'event' })?.[input.id]?.value?.value ?? ''" @change="setInput(input.id, $event)"><option :value="0">0 / 无反击加成</option><option :value="1">1 / 一档反击</option><option :value="2">2 / 满档／完美反击</option></select>

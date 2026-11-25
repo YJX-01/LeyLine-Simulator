@@ -92,7 +92,7 @@ function option(name) {
   if (!path || path.startsWith('--')) throw new Error(key + ' 需要文件名。');
   return path;
 }
-const file = option('--report'), gapFile = option('--gaps');
+const file = option('--report'), gapFile = option('--gaps'), monaFile = option('--mona-report');
 const flags = new Set(args);
 for (const flag of flags) if (!['--json', '--require-complete', '--require-current', '--check'].includes(flag)) throw new Error('未知验收参数 ' + flag);
 const catalog = await createRuntimeCatalog();
@@ -383,13 +383,21 @@ results.currentSceneGaps = scenes.gaps.filter(row => {
     evidence: { ...row.evidence, ...checked.evidence, established: checked.resolved } } : row;
 });
 summary.currentSceneClausesPending = results.currentSceneGaps.length;
+const requireCurrent = flags.has('--require-complete') || flags.has('--require-current');
+if (monaFile || requireCurrent) {
+  const { auditMonaSingleHit } = await import('../../lib/mona-single-hit-comparison.mjs');
+  const comparison = await auditMonaSingleHit(entities, results.currentClauseInventory, engine);
+  summary.monaSingleHit = comparison.summary;
+  if (monaFile) writeFileSync(monaFile, JSON.stringify(comparison) + '\n');
+  results.monaSingleHit = { summary: comparison.summary, gaps: comparison.gaps };
+}
 summary.currentCalculationComplete = !calculator.failures.length && !auditFailures.length && !results.currentClauseInventory.gaps.length
-  && !summary.currentSceneClausesPending && !summary.unresolvedHitInterpretations;
+  && !summary.currentSceneClausesPending && !summary.unresolvedHitInterpretations && (summary.monaSingleHit?.complete ?? true);
 if (file) writeFileSync(file, JSON.stringify(results, null, 2) + '\n');
 if (gapFile) writeFileSync(gapFile, rosterGapReport(results, entities));
 console.log(JSON.stringify(flags.has('--json') ? { ...report, ...results } : { material: report.material, ...summary }));
 const checkFullMechanisms = flags.has('--check') && (!flags.has('--require-current') || flags.has('--require-complete'));
-if ((flags.has('--require-complete') || flags.has('--require-current')) && !summary.currentCalculationComplete
+if (requireCurrent && !summary.currentCalculationComplete
   || summary.singleHitModifierFailures || summary.sceneEnvironmentAmountCheckFailures || summary.calculatorEntryFailures || summary.singleHitAuditFailures || summary.characterClauseGrantFailures || summary.currentEquipmentMismatches || summary.currentTalentFailures ||
   summary.manekinFailures || summary.weaponTriggerFailures || summary.setConditionFailures || summary.blessingMismatches || summary.publicResonanceMismatches || summary.countFailures || summary.clauseGateFailures || summary.conditionFailures || summary.publicSceneChecksFailed || summary.equipmentMismatches || summary.modifierMismatches || summary.invalidDefinitions || summary.mismatches || summary.duplicate || checkFullMechanisms && (report.lifecycleGaps.some(gap => gap.area !== 'observation') || summary.positiveHits !== summary.evaluated || summary.equipmentMissingValues || summary.missingBindings || summary.missingValues || summary.detailCandidates || summary.unresolvedHitInterpretations || summary.contextualContributionsPending || summary.numericModifierContributions !== summary.modifierScenarios || summary.publicCombatClauseGaps || summary.publicSceneSourceGaps || summary.characterCombatClausesPending)
   || checkFullMechanisms && (summary.weaponClausesPending || summary.setClausesPending || summary.recoveryDetailsPending)

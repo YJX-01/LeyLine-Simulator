@@ -62,9 +62,13 @@ export const effectDefinitionSchema = z.object({
   stacking: z.object({ group: idSchema, scope: z.enum(['owner', 'recipient', 'team']), policy: z.enum(['add', 'replace', 'max']),
     maxStacks: z.number().int().min(1).max(10000), retain: z.enum(['earliest', 'latest', 'highest-priority']),
     crossOwnerUnverified: z.literal(true).optional(),
+    crossOwnerAdditiveGroup: idSchema.optional(),
     refreshUnverified: z.literal(true).optional(),
     endOnNewTrigger: z.literal(true).optional() }).strict(),
 }).strict().superRefine((effect, context) => {
+  if (effect.stacking.crossOwnerAdditiveGroup && effect.target.kind !== 'attribute') context.addIssue({
+    code: 'custom', path: ['stacking', 'crossOwnerAdditiveGroup'], message: '加法叠加组只能用于属性效果。',
+  });
   if (effect.extraAttack && (effect.target.kind !== 'attribute' || effect.target.attribute.id !== 'attribute.attack')) {
     context.addIssue({ code: 'custom', path: ['extraAttack'], message: '额外攻击力贡献须指向攻击力。' });
   }

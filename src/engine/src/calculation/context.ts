@@ -361,15 +361,22 @@ class BoundEvaluator {
     const known = [base, ...values] as Extract<EvaluatedValue, { state: 'known' }>[];
     if (known.some(value => value.value.kind !== 'quantity')) return this.session.invalid(origin, id, origin.pointer, '数值合并要求数量。', 'unit-mismatch');
     const numeric = known.map(value => (value.value as Extract<Value, { kind: 'quantity' }>).value);
-    if ((policy === 'sum' || policy === 'product') && contributions.some(({ instance }) => instance.definition.stacking.crossOwnerUnverified)) {
+    let sharedAdditiveGroup = false;
+    if ((policy === 'sum' || policy === 'product') && contributions.some(({ instance }) =>
+      instance.definition.stacking.crossOwnerUnverified || instance.definition.stacking.crossOwnerAdditiveGroup)) {
       const active = contributions.filter((_, index) => numeric[index + 1] !== (policy === 'sum' ? 0 : 1));
-      if (active.some(({ instance }) => instance.definition.stacking.crossOwnerUnverified)
-        && new Set(active.map(({ instance }) => instance.owner.id)).size > 1) {
+      const additiveGroup = active.find(({ instance }) => instance.definition.stacking.crossOwnerAdditiveGroup)?.instance.definition.stacking.crossOwnerAdditiveGroup;
+      sharedAdditiveGroup = policy === 'product' && additiveGroup !== undefined
+        && active.every(({ instance }) => instance.definition.stacking.crossOwnerAdditiveGroup === additiveGroup);
+      const unresolved = active.some(({ instance }) => instance.definition.stacking.crossOwnerUnverified) || additiveGroup !== undefined;
+      if (unresolved && !sharedAdditiveGroup && new Set(active.map(({ instance }) => instance.owner.id)).size > 1) {
         const reason = this.session.report('unreviewed-mechanism', origin.pointer, '此项有效增益由多位队员提供，其叠加规则尚未核验。', id);
         return this.session.emit(origin, id, known.map(value => value.traceId), null, 'unknown', [reason]);
       }
     }
-    const value = policy === 'sum' ? numeric.reduce((a, b) => a + b, 0) : policy === 'product' ? numeric.reduce((a, b) => a * b, 1) : Math.max(...numeric);
+    const value = policy === 'sum' ? numeric.reduce((a, b) => a + b, 0)
+      : sharedAdditiveGroup ? numeric[0] * (1 + numeric.slice(1).reduce((total, factor) => total + factor - 1, 0))
+      : policy === 'product' ? numeric.reduce((a, b) => a * b, 1) : Math.max(...numeric);
     return this.session.known(origin, id, { ...(known[0].value as Extract<Value, { kind: 'quantity' }>), value }, known.map(value => value.traceId), type);
   }
 }

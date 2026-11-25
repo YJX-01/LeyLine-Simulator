@@ -1006,7 +1006,7 @@
       "type": {
         "kind": "boolean"
       },
-      "label": "对点水冷域内，后台爱诺的额外水弹可触发"
+      "label": "水冷域持续、爱诺在后台，场上队友攻击命中附近敌人且已满足5秒间隔"
     },
     "aino.directEnergy.c4": {
       "scope": "owner",

@@ -4,13 +4,14 @@ import { readContentSource } from './content-source.mjs';
 import { auditBuild, auditHit, bool, elements, fact, novice, number, setAuditDefaults } from './roster-audit-settings.mjs';
 
 export const confirmedReactionElevationIds = ['flins', 'zibai', 'mitya', 'odette'];
-export const confirmedReactionElevationPeerIds = ['ineffa', 'sandrone', 'columbina'];
+export const confirmedReactionElevationPeerIds = ['ineffa', 'sandrone', 'columbina', 'nefer'];
 export const confirmedReactionElevationWeaponIds = ['dullblade', 'beginnersprotector', 'wastergreatsword', 'magicguide', 'apprenticesnotes'];
 
 const field = '/constellations/5';
 const genshin = 'tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/';
 const guides = 'tools/data/sources/kqm-web/2026-11-22/constellation-elevation-facts.json';
 const formulas = 'tools/data/sources/kqm-web/2026-11-15/reaction-formulas.json';
+const crossElevation = 'tools/data/sources/kqm-web/2026-11-25/columbina-cross-owner-elevation.json';
 const growthRoot = 'tools/data/sources/catalog/genshin-db/';
 const talents = genshin + 'stats/talents.json';
 const levelSource = 'tools/data/sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/player.json';
@@ -51,10 +52,10 @@ export function auditConfirmedReactionElevation(entities, engine) {
   const characters = new Map(entities.characters.map(character => [character.id, character]));
   const weapons = new Map(entities.weapons.map(weapon => [weapon.id, weapon]));
   const teams = new Map();
-  const available = id => weapons.has(id === 'mitya' ? 'magicguide' : novice[characters.get(id)?.identity.weaponType]);
+  const available = id => weapons.has(['mitya', 'nefer'].includes(id) ? 'magicguide' : novice[characters.get(id)?.identity.weaponType]);
   function build(id, constellation, ascension) {
     const character = characters.get(id);
-    const weapon = weapons.get(id === 'mitya' ? 'magicguide' : novice[character.identity.weaponType]);
+    const weapon = weapons.get(['mitya', 'nefer'].includes(id) ? 'magicguide' : novice[character.identity.weaponType]);
     return { ...auditBuild(character, weapon), level: levelOf(ascension), ascension, constellation };
   }
 
@@ -124,7 +125,7 @@ export function auditConfirmedReactionElevation(entities, engine) {
       const stage = output?.stages.find(entry => ['elevation', 'ordinary-elevation'].includes(entry.id));
       const observedFactor = numeric(stage?.value);
       const baseline = factor === null ? null : numeric(readHit(entity, 5, options).totals.all);
-      const expected = factor === null || baseline === null ? null : (independent?.damage ?? baseline) * factor;
+      const expected = factor === null || baseline === null ? null : (independent?.damage ?? baseline / (options.baselineElevation ?? 1)) * factor;
       const matches = factor === null ? status === 'unknown' && (!options.stacking || result.diagnostics.some(issue =>
         issue.code === 'unreviewed-mechanism' && issue.nodeId === options.stacking))
         : baseline > 0 && close(value, expected) && close(observedFactor, factor) && (!independent || close(baseline, independent.damage));
@@ -163,7 +164,7 @@ export function auditConfirmedReactionElevation(entities, engine) {
   }
 
   verify('flins', ['ineffa'], '月感电的本人35%、满辉本人45%及满辉队友10%进入最终擢升区。',
-    '与哥伦比娅等其他角色对同一月感电贡献同时提供擢升时，叠加规则待独立证据。', (text, source, probe, reaction) => {
+    '除哥伦比娅外，其他角色对同一月感电贡献的跨来源擢升仍待核验。', (text, source, probe, reaction) => {
       const [self, party] = [...text.matchAll(/擢升(?:\*\*)?(\d+)%/g)].map(match => +match[1] / 100);
       if (!close(self + party, source.fullMoonsignPersonal)) throw new Error('菲林斯满辉两条擢升的固定依据不一致。');
       const attack = atk('flins', 'beginnersprotector') * (1 + amount(description(clause('flins', 'constellations', 'c4')), /攻击力提升(\d+)%/) / 100);
@@ -181,9 +182,9 @@ export function auditConfirmedReactionElevation(entities, engine) {
       if (available('columbina')) {
         const overlapping = { dealer: 'columbina', hitId: 'columbina.skill.param3', peerConstellation: 1,
           teamFacts: { fullMoonsign: true }, dealerFacts: { 'columbina.lunar-chargedInterference': true },
-          stacking: 'attribute.reaction.lunar.elevationFactor' };
-        probe(overlapping, null);
-        probe({ ...overlapping, disabledPeerEffect: 'columbina.c1-elevation' }, 1 + party);
+          stacking: 'attribute.reaction.lunar.elevationFactor', baselineElevation: 1.015 };
+        probe(overlapping, 1 + party + .015);
+        probe({ ...overlapping, disabledPeerEffect: 'columbina.c1-elevation', baselineElevation: 1 }, 1 + party);
       }
       const one = levelMultiplier[1] * 3 * blessing(attack) * (1 - resistances.electro) * math.rankedAggregation.weights[0];
       for (const fullMoonsign of [false, true, null]) reaction({ family: 'lunar-charged', element: 'electro',
@@ -267,6 +268,38 @@ export function auditConfirmedReactionElevation(entities, engine) {
         { subject: { kind: 'target', id: 'target' }, values: { 'odette.mirrorNearTarget': bool(false) } },
       ] }, one * (1 + source.personalWithSplendor));
     });
+
+  if (['columbina', 'flins', 'nefer'].every(available)) {
+    const source = read(crossElevation);
+    for (const [dealer, hitId, dealerFacts, personal] of [
+      ['flins', 'flins.burst.param2', {}, source.facts.flins.fullMoonsignPersonal],
+      ['nefer', 'nefer.skill.phantasm-shadow-1', { 'nefer.phantasm': true }, source.facts.nefer.fullMoonsignPersonal],
+    ]) {
+      let added = 0;
+      for (let rank = 0; rank <= 6; rank++) {
+        if (rank) added += source.facts.columbina[rank - 1];
+        const options = { dealer, hitId, peerConstellation: 6, teamFacts: { fullMoonsign: true }, dealerFacts };
+        const result = readHit('columbina', rank, options);
+        const value = numeric(result.totals.all), factor = numeric(result.outputs[0]?.stages.find(stage => stage.id === 'elevation')?.value);
+        const expectedFactor = 1 + personal + added;
+        rows.push({ entity: dealer, field: '/constellations/5', output: 'cross-owner-elevation', probe: { columbinaRank: rank, ...options },
+          sources: [crossElevation, clause(dealer, 'constellations', 'c6'), ...Array.from({ length: rank }, (_, index) => clause('columbina', 'constellations', 'c' + (index + 1)))],
+          expectedFactor, factor, value, status: result.totals.all.state,
+          ...close(factor, expectedFactor) && value !== null ? {} : { issue: '跨角色月曜擢升未按已验证条款相加。', diagnostics: result.diagnostics } });
+      }
+    }
+  }
+
+  if (available('columbina') && available('zibai')) {
+    const options = { dealer: 'zibai', hitId: 'zibai.skill.param2', peerConstellation: 6,
+      teamFacts: { fullMoonsign: true }, dealerFacts: { 'zibai.spiritsteedStride': true, 'zibai.lunarPhase': true,
+        'zibai.strideRadianceConsumed': 100 } };
+    const result = readHit('columbina', 1, options);
+    const status = result.totals.all.state;
+    rows.push({ entity: 'zibai', field, output: 'unverified-cross-owner-elevation', probe: options, sources: [crossElevation], status,
+      ...(status === 'unknown' && result.diagnostics.some(diagnostic => diagnostic.code === 'unreviewed-mechanism'
+        && diagnostic.nodeId === 'attribute.reaction.lunar.elevationFactor') ? {} : { issue: '未核验角色的跨来源擢升不应被推定为已知。', diagnostics: result.diagnostics }) });
+  }
 
   return { rows, verified, resolved, gaps, summary: { confirmedReactionElevationCases: rows.length,
     confirmedReactionElevationMismatches: rows.filter(row => row.issue).length, verifiedConfirmedReactionElevation: verified.size } };

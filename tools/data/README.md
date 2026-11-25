@@ -166,6 +166,14 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 `currentClauseInventory` 按原文字段和修饰项记录证据，`currentSceneGaps` 列出仍影响当次数值的场景字段。`--require-current` 在计算器专项仍有缺项时返回非零退出码。惊蛰的范围增加 100%，匠理等场地满五层增加 0.3 抗打断参数。传播到哪些目标及最终是否中断仍需位置和受击记录。哥伦比娅的复苏以受益者生命上限为基数，每级好感取 10%。[场地条款](sources/catalog/battle-scenes.json) · [月的守望复苏配置](sources/catalog/columbina-revival.json)
 
+### Mona 单击双向核对
+
+核对进度时，保留两次 `--mona-report` 的结果，用 `node tools/scripts/data/report-mona-progress.mjs 上批.json 本批.json` 按稳定 ID 比较新增、已复核、归入参考及移除的条目。`batches` 保存各机制的输入、独立期望和实算，`packets` 按机制列出待处理 ID。同一映射在多个等级下核算时，映射计一次，算例分别计数。
+
+从仓库根目录运行 `node tools/scripts/data/audit-calculation-coverage.mjs --check --require-current --mona-report artifacts/mona-single-hit-final.json`。Mona 发布内核从 `.references/mona-community` 的 `589ac6919057709924c0c20d5a9d673fe9b0be1a` 读取，LeyLine 起始目录为 `829d19df0b96113c22016e5bde9ad5744817a260`。正式目录、双向差集和复核引用都闭合时，专项命令返回零。常规 `pnpm data:check` 可以离线运行。
+
+报告的 `mona`、`leyline` 和 `links` 按条目标识互相引用。候选根据目录身份、天赋组、名称、伤害族或修饰属性提出。复核记录绑定正式字段与实体修订，附上适用条件和独立数值。`ordinaryScaling` 保留逐级倍率对照，`buffProbes` 保留启用、锁定和参数变化，`equipment` 保留精炼和触发场景，`transformative` 使用实际独立反应入口复算。默认配置下的结果、未触发的零值、版本差异和待核条件均可从条目追溯。[代表机制与复核记录](sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/single-hit-pilot.json)
+
 19 条秘境冲击可按输入的 `ElementLevelCo` 复核减伤前数值。固定系数表分别保留环境与角色两列。山脊守望 IV 的旧录像可辨 8419 白字，仍需改变目标抗性与防御的独立对照，以及关卡实际读取等级的证据。[秘境冲击系数与结算证据](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/scene-hit-settlement-evidence.json)
 
 芬德尼尔之顶的严寒和平台、太山府的阴燃之火、菫色之庭的稚雷珠共 32 条说明指向空的关卡能力入口。已固定各阶的秘境与场景 ID。通用严寒、暖源与持续火伤配置仅作排查参考，当前场景仍需对应的区域或机关绑定。太山府 1.5 版测得开战后 3 秒首次附着、此后每 30 秒再次附着，当前版本的每跳伤害和间隔仍待证。菫色之庭 IV 的两份公开画面分别显示 50 级凯亚和 80 级班尼特触发后出现 74208 雷伤。凯亚画面发表于 2.0 期间，班尼特画面发表于 2022 年 7 月且游戏版本不明。两图可辨难度 IV 与 88 级敌人，日程和各伤害数字对应的敌方身份未能核定。[固定配置与实战来源](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/scene-environment-amount-facts.json)
@@ -234,7 +242,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 战斗记录可指定敌方生命比例、元素附着、站场、护盾、生命变化、受伤、施予治疗和接受治疗。治疗事件可包含溢出量。受伤记录使用实际扣除的伤害值，生命消耗使用单独的生命变化记录。
 
-逐技能验收列出治疗量和护盾吸收量的每个详情字段。治疗的数值对照从本地天赋原始精度、角色和武器白值独立计算，并在施救者和受益人之间交换少女与游医二件套。施放治疗另核对受益人数、已有记录去重和海染泡沫伤害。擢升验收分别计算本人和队友的增幅，保留不同角色同时擢升同一伤害时的叠加缺口。逐项报告记录原文字段、相关输入、验过的分支及待补证据。[战斗条款](sources/catalog/combat-lifecycle.json) · [六命擢升依据](sources/kqm-web/2026-11-22/constellation-elevation-facts.json)
+逐技能验收列出治疗量和护盾吸收量的每个详情字段。治疗的数值对照从本地天赋原始精度、角色和武器白值独立计算，并在施救者和受益人之间交换少女与游医二件套。施放治疗另核对受益人数、已有记录去重和海染泡沫伤害。擢升验收分别计算本人和队友的增幅，逐命座核对哥伦比娅与六命菲林斯、奈芙尔的月曜擢升相加；其他来源组合仍按各自证据核验。逐项报告记录原文字段、相关输入、验过的分支及待补证据。[战斗条款](sources/catalog/combat-lifecycle.json) · [六命擢升依据](sources/kqm-web/2026-11-22/constellation-elevation-facts.json) · [跨角色月曜擢升依据](sources/kqm-web/2026-11-25/columbina-cross-owner-elevation.json)
 
 菲林斯爆发中间段和最终段、哥伦比娅月露涤荡单段及兹白月转时隙第四段额外伤害已绑定相应月伤模板。单段倍率与伤害类别来自固定天赋表。时间轴接入明确贡献者的月感电、月结晶与星扩散聚合，以及薇斯纳明确动作和初始状态求值。配装比较保留覆盖诊断。记录完整性、自动次数与冷却、完整修订类型和全目录机制仍待接入。
 

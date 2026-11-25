@@ -276,8 +276,19 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
   if (frame?.element) hitTargets.add('target.resistance.' + frame.element);
   if (reaction) {
     hitTargets.add('attribute.elementalMastery');
-    hitTargets.add('attribute.reaction.' + family + '.damageBonus');
-    hitTargets.add('attribute.reaction.' + reaction.family + '.coefficient');
+    const group = reaction.family.startsWith('lunar-') ? 'lunar' : family;
+    hitTargets.add('attribute.reaction.' + group + '.damageBonus');
+    hitTargets.add('attribute.reaction.' + group + '.flatBaseBonus');
+    if (isTransformative(reaction.family)) {
+      hitTargets.add('attribute.reaction.' + reaction.family + '.coefficient');
+      hitTargets.add('attribute.reaction.transformative.critRate');
+      hitTargets.add('attribute.reaction.transformative.critDamage');
+    } else {
+      hitTargets.add('attribute.critRate');
+      hitTargets.add('attribute.critDamage');
+      hitTargets.add('attribute.reaction.' + group + '.baseBonus');
+      hitTargets.add('attribute.reaction.' + group + (group === 'lunar' ? '.elevationFactor' : '.elevation'));
+    }
   }
   const disabled = new Set(project.effectRevisions?.filter(entry => entry.disabled).map(entry => entry.instanceId));
   const applications = new Map(damage.effectApplications?.map(entry => [entry.instanceId, entry.active]));

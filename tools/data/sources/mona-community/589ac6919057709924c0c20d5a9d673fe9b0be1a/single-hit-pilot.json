@@ -1,0 +1,124 @@
+{
+  "monaCommit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+  "scope": "Fixed calculation settings, not observed game damage. Mona inputs use zero-based character skill levels; ShenheE skill2 is a one-based buff parameter.",
+  "sources": [
+    ".references/mona-community/beta-tools/runtime-7106.mjs",
+    ".references/mona-community/beta-data/classic-effect-rule-book.mjs:14",
+    ".references/mona-community/beta-data/equipment-damage-events.mjs:56",
+    "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json",
+    "tools/data/sources/catalog/genshin-db/weapons.json",
+    "tools/data/sources/kqm-web/2026-11-15/reaction-formulas.json",
+    "tools/data/sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/base-damage-bonus-facts.json",
+    "tests/unit/mona-single-hit-pilot.test.ts"
+  ],
+  "probes": [
+    {
+      "id": "flins-direct-lunar",
+      "monaInput": { "character": "Flins", "level": 90, "ascend": false, "constellation": 0, "skill1": 9, "skill2": 9, "skill3": 9, "params": { "talent1_active": true, "full_moon": true }, "weapon": "BeginnersProtector", "weaponLevel": 1, "refine": 1, "artifacts": [], "enemy": null, "buffs": [], "crit": "non_critical" },
+      "leylineInput": { "character": "flins", "level": 90, "ascension": 6, "constellation": 0, "talentLevel": 10, "weapon": "beginnersprotector", "weaponLevel": 1, "refinement": 1, "artifacts": [], "enemyLevel": 90, "electroResistance": 0.1, "symphonyWindow": true, "fullMoonsign": true, "nearThundercloud": true },
+      "equation": "attack * coefficient * 3 * 0.9 * (1 + 6 * mastery / (2000 + mastery) + 0.2) * (1 + attack * 0.00007), mastery = attack * 0.08",
+      "rows": [
+        { "monaIndex": 19, "leylineHit": "flins.burst.symphony", "coefficient": 1.286208, "mona": 1722.258786169951, "leyline": 1721.4521212310406 },
+        { "monaIndex": 20, "leylineHit": "flins.burst.symphony-extra", "coefficient": 1.870848, "mona": 2505.054997019705, "leyline": 2503.930358154241 }
+      ],
+      "interpretation": "Mona uses rounded attack 375 and mastery 30, and rounds talent coefficients; LeyLine uses attack 374.8372196 and exact source coefficients. The extra strike is zero when nearThundercloud is false in LeyLine. Mona's menu index alone does not encode that explicit gate."
+    },
+    {
+      "id": "flins-normal-burst-extra-middle",
+      "leylineHit": "flins.burst.param2-extra",
+      "source": "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/flins.json#combat3",
+      "interpretation": "A separately selectable single extra middle strike uses the ordinary burst middle-strike coefficient and requires both full Moonsign and a nearby thundercloud. Two such strikes are described; each query evaluates one strike. All four combinations of the explicit facts are tested. This is not mapped to a Mona output without a verified distinct index."
+    },
+    {
+      "id": "shenhe-quill-to-kaeya",
+      "monaInput": { "character": "Kaeya", "level": 1, "ascend": false, "constellation": 0, "skill1": 0, "skill2": 0, "skill3": 0, "weapon": "DullBlade", "weaponLevel": 1, "refine": 1, "artifacts": [], "enemy": null, "skillIndex": 10, "buff": "ShenheE", "buffSkill2": 1, "crit": "non_critical" },
+      "leylineInput": { "recipient": "kaeya", "recipientLevel": 1, "recipientWeapon": "dullblade", "owner": "shenhe", "ownerLevel": 1, "ownerWeapon": "beginnersprotector", "talentLevel": 1, "enemyLevel": 90, "cryoResistance": 0.1, "hit": "kaeya.skill.param1", "buff": "shenhe.icy-quill", "fact": "shenhe.quillTap" },
+      "equation": "source attack * 0.45656 * 101 / 291 * 0.9, added to the Cryo recipient's noncritical damage",
+      "monaRows": [
+        { "sourceAttack": 0, "damage": 25.084651546391754 },
+        { "sourceAttack": 46.8924, "damage": 31.772851712907215, "addedBase": 21.41106984 },
+        { "sourceAttack": 100, "damage": 39.3475175257732, "addedBase": 45.66 }
+      ],
+      "interpretation": "Mona rounds recipient attack to 42; LeyLine retains source precision. The LeyLine test toggles the source fact and changes the source weapon level from 1 to 20."
+    },
+    {
+      "id": "frostbearer-target-aura",
+      "monaRule": ".references/mona-community/beta-data/equipment-damage-events.mjs:56",
+      "leylineHits": ["frostbearer.icicle", "frostbearer.icicle-cryo"],
+      "monaInput": { "profiles": ["Lisa with R1 Frostbearer", "Kaeya with R1 DullBlade or Amber with R1 DullBlade"], "artifacts": [[], []], "events": [{ "role": 0, "time": 0, "category": "normal", "onField": true, "order": 0, "rootOrder": 0 }], "heals": [], "duration": 2 },
+      "monaOutput": [{ "ally": "Kaeya", "ratio": 2, "probability": 0.6 }, { "ally": "Amber", "ratio": 0.8, "probability": 0.6 }],
+      "leylineInput": { "character": "lisa", "level": 1, "ascension": 0, "weapon": "frostbearer", "weaponLevel": 1, "refinement": 1, "artifacts": [], "allyElement": "cryo", "enemyLevel": 1, "physicalResistance": 0.1, "triggered": true, "targetCryoAura": [false, true] },
+      "equation": "(19.41072 + 42.401) * 1.09 * coefficient * 0.5 * 0.9; coefficient is 0.8 without target Cryo and 2.0 with target Cryo",
+      "interpretation": "The Mona rule selects the higher coefficient when a Cryo character is in the profiles. The weapon description instead specifies the target affected by Cryo. With a Cryo ally present, LeyLine tests both target aura values and both branches at R1, using 0.8 and 2.0 attack coefficients respectively."
+    },
+    {
+      "id": "xingqiu-two-strikes",
+      "leylineHits": ["xingqiu.skill.param1", "xingqiu.skill.param2"],
+      "monaInput": { "character": "Xingqiu", "level": 90, "ascend": false, "constellation": 0, "skill1": 8, "skill2": 8, "skill3": 8, "weapon": "FavoniusSword", "weaponLevel": 90, "refine": 1, "artifacts": [], "enemy": null, "buffs": [], "crit": "non_critical" },
+      "monaRows": [{ "index": 15, "normal": 1254.5197056, "vaporize": 2509.0394112 }, { "index": 16, "normal": 1427.76290304, "vaporize": 2855.52580608 }],
+      "interpretation": "T9 coefficients 2.856 and 3.2504 are tested independently with and without Hydro-triggered vaporize. Mona rounds its character and weapon white attack before applying the ascension bonus; LeyLine retains source precision."
+    }
+  ],
+  "mappings": [
+    {
+      "id": "flins-direct-lunar-middle",
+      "disposition": "matched",
+      "mona": ["mona:skill:Flins:19"],
+      "leyline": [{ "id": "character:flins:hit:/talents/2/hits/3", "revision": "4" }],
+      "explanation": "Both are the direct lunar middle strike. Mona rounds its panel and coefficient; LeyLine keeps source precision.",
+      "sources": [".references/mona-community/beta-tools/runtime-7106.mjs", "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json", "tools/data/sources/kqm-web/2026-11-15/reaction-formulas.json", "tests/unit/mona-single-hit-pilot.test.ts"],
+      "comparisons": [{ "name": "LeyLine independent equation", "expected": 1721.4521212310403, "actual": 1721.4521212310406, "tolerance": 0.000001 }]
+    },
+    {
+      "id": "flins-direct-lunar-extra",
+      "disposition": "different",
+      "mona": ["mona:skill:Flins:20"],
+      "leyline": [{ "id": "character:flins:hit:/talents/2/hits/4", "revision": "4" }],
+      "explanation": "Both identify the extra direct lunar strike; the talent text requires full Moonsign and a nearby thundercloud. Mona's index 20 returns 2116.273525769705 even with full_moon false, and exposes no nearby-thundercloud input in the character configuration; LeyLine gates both conditions.",
+      "sources": [".references/mona-community/beta-tools/runtime-7106.mjs", "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/flins.json", "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json", "tools/data/sources/kqm-web/2026-11-15/reaction-formulas.json", "tests/unit/mona-single-hit-pilot.test.ts"],
+      "comparisons": [{ "name": "LeyLine independent equation with cloud", "expected": 2503.930358154241, "actual": 2503.930358154241, "tolerance": 0.000001 }, { "name": "LeyLine no cloud", "expected": 0, "actual": 0, "tolerance": 0 }]
+    },
+    {
+      "id": "shenhe-quill-source",
+      "disposition": "matched",
+      "mona": ["mona:buff:ShenheE", "mona:effect:character:ShenheE:0"],
+      "leyline": [{ "id": "character:shenhe:modifier:/talents/1/buffs/0/modifiers/0", "revision": "3" }],
+      "explanation": "Both add Shenhe's attack multiplied by the Quill talent coefficient to a qualifying Cryo hit. The tested recipient is Kaeya skill index 10 / kaeya.skill.param1; Mona accepts the source attack as a numeric buff input and LeyLine reads the allied build.",
+      "sources": [".references/mona-community/beta-data/classic-effect-rule-book.mjs:14", "tools/data/sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/base-damage-bonus-facts.json", "tests/unit/mona-single-hit-pilot.test.ts"],
+      "comparisons": [{ "name": "Mona Quill base at 46.8924 attack", "expected": 21.41106984, "actual": 21.41106984, "tolerance": 0.00000001 }, { "name": "LeyLine recipient delta at level-one source", "expected": 6.687614253228862, "actual": 6.687614253228862, "tolerance": 0.00000001 }]
+    },
+    {
+      "id": "xingqiu-first-strike",
+      "disposition": "matched",
+      "mona": ["mona:skill:Xingqiu:15"],
+      "leyline": [{ "id": "character:xingqiu:hit:/talents/1/hits/0", "revision": "3" }],
+      "explanation": "First skill strike; both expose coefficient 2.856 at T9 and Hydro vaporize doubles its noncritical value with zero mastery.",
+      "sources": [".references/mona-community/beta-tools/runtime-7106.mjs", "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json", "tests/unit/mona-single-hit-pilot.test.ts"],
+      "comparisons": [{ "name": "Mona vaporize", "expected": 2509.0394112, "actual": 2509.0394112, "tolerance": 0.000001 }]
+    },
+    {
+      "id": "xingqiu-second-strike",
+      "disposition": "matched",
+      "mona": ["mona:skill:Xingqiu:16"],
+      "leyline": [{ "id": "character:xingqiu:hit:/talents/1/hits/1", "revision": "3" }],
+      "explanation": "Second skill strike; both expose coefficient 3.2504 at T9 and Hydro vaporize doubles its noncritical value with zero mastery.",
+      "sources": [".references/mona-community/beta-tools/runtime-7106.mjs", "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json", "tests/unit/mona-single-hit-pilot.test.ts"],
+      "comparisons": [{ "name": "Mona vaporize", "expected": 2855.52580608, "actual": 2855.52580608, "tolerance": 0.000001 }]
+    },
+    {
+      "id": "frostbearer-icicle-condition",
+      "disposition": "different",
+      "mona": ["mona:equipment-event:Frostbearer"],
+      "leyline": [{ "id": "weapon:frostbearer:equipment-hit:/hits/0", "revision": "1" }, { "id": "weapon:frostbearer:equipment-hit:/hits/1", "revision": "1" }],
+      "explanation": "Mona's event rule selects the high coefficient from Cryo party presence; the weapon description and LeyLine select it from Cryo on the target. LeyLine explicitly tests each target aura state with a Cryo ally.",
+      "sources": [".references/mona-community/beta-data/equipment-damage-events.mjs:56", "tools/data/sources/catalog/genshin-db/weapons.json", "tests/unit/mona-single-hit-pilot.test.ts"],
+      "comparisons": [
+        { "name": "Mona R1 ratio with Cryo Kaeya ally", "expected": 2, "actual": 2, "tolerance": 0 },
+        { "name": "Mona R1 ratio with Pyro Amber ally", "expected": 0.8, "actual": 0.8, "tolerance": 0.000000001 },
+        { "name": "LeyLine R1 no target aura, standard branch", "expected": 24.254918928, "actual": 24.254918928, "tolerance": 0.00000001 },
+        { "name": "LeyLine R1 target Cryo aura, Cryo branch", "expected": 60.63729732, "actual": 60.63729732, "tolerance": 0.00000001 },
+        { "name": "LeyLine mismatched aura branches", "expected": 0, "actual": 0, "tolerance": 0 }
+      ]
+    }
+  ]
+}

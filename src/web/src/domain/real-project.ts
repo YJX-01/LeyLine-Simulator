@@ -106,13 +106,20 @@ export function addConfirmedBuff(project: Project, actorId: string, buff: Defini
 }
 
 export function addTransformativeReaction(project: Project, actorId: string, family: TransformativeFamily, element: ProjectReaction['element'], timeMs: number, rules: CalculationBundle, replaceId?:string) {
+  return addSingleContributorReaction(project, actorId, family, element, timeMs, rules, replaceId);
+}
+
+export const singleContributorLunarElements = { 'lunar-charged': 'electro', 'lunar-crystallize': 'geo' } as const;
+export type SingleContributorReaction = ProjectReaction['family'];
+
+export function addSingleContributorReaction(project: Project, actorId: string, family: SingleContributorReaction, element: ProjectReaction['element'], timeMs: number, rules: CalculationBundle, replaceId?: string, coefficient?: number) {
   const actor = project.candidate.actors.find(a => a.id === actorId);
   if (!actor?.build) throw new Error('请选择触发反应的队员。');
   const previous = project.timeline.find(r=>r.id===replaceId);
   if (replaceId && (!previous || previous.kind !== 'damage' || previous.actor !== actorId)) throw new Error('反应引用的伤害记录已失效。');
   const id = previous?.id ?? nextRecordId(project);
   const record: Project['timeline'][number] = { id, actor: actorId, timeMs, order: previous?.order ?? Math.max(-1,...project.timeline.map(entry => entry.order)) + 1,
-    kind: 'damage', definition: actorId + '-real-damage', reactionEvent: { family, element, triggerActorId: actorId,
+    kind: 'damage', definition: actorId + '-real-damage', reactionEvent: { family, element, triggerActorId: actorId, coefficient,
       contributors: [{ actorId, qualified: true, crit: 'noncritical' }] } };
   const timeline = previous ? project.timeline.map(r=>r.id===id ? record : r) : [...project.timeline,record];
   const checked = projectSchema.parse({ ...project, reactionRules: rules, timeline });

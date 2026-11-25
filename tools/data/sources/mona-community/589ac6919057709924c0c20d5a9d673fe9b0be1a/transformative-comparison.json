@@ -1,0 +1,488 @@
+{
+  "scope": "剧变反应单次非暴击伤害及目标抗性口径",
+  "monaRevision": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+  "leylineBaseline": "829d19df0b96113c22016e5bde9ad5744817a260",
+  "scenarios": "等级 1、50、90，合法配装精通 0 或 20，同元素抗性 -0.2、0.1、0.8 与分元素抗性；完整 228 次对照由专项审计复算。",
+  "mappings": [
+    {
+      "id": "transformative-burning",
+      "disposition": "matched",
+      "mona": [
+        "mona:reaction:burning"
+      ],
+      "leyline": [
+        {
+          "id": "public:reactions:attributes:18",
+          "revision": "1"
+        }
+      ],
+      "explanation": "两侧对应同一剧变反应的单次非暴击伤害，按相同角色等级、精通及目标元素抗性复算。",
+      "sources": [
+        ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
+        ".references/mona-community/beta-tools/runtime-7106.mjs",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/18",
+        "tools/lib/mona-transformative-audit.mjs"
+      ],
+      "comparisons": [
+        {
+          "name": "LeyLine 1级 0精通 -0.2抗性",
+          "expected": 4.72054165,
+          "actual": 4.72054165,
+          "tolerance": 0.00001
+        },
+        {
+          "name": "LeyLine 90级 20精通 0.8抗性",
+          "expected": 99.76535802687411,
+          "actual": 99.76535802687411,
+          "tolerance": 0.0000997653580268741
+        },
+        {
+          "name": "LeyLine 90级 0精通 -0.2抗性",
+          "expected": 397.88471250000003,
+          "actual": 397.88471250000003,
+          "tolerance": 0.0003978847125
+        }
+      ]
+    },
+    {
+      "id": "transformative-superconduct",
+      "disposition": "different",
+      "mona": [
+        "mona:reaction:superconduct"
+      ],
+      "leyline": [
+        {
+          "id": "public:reactions:attributes:19",
+          "revision": "1"
+        }
+      ],
+      "explanation": "Mona 发布内核的输出折算系数为 0.5，固定检出源码及 LeyLine 正式定义采用 1.5。独立算式核对 LeyLine 的数值。",
+      "sources": [
+        ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
+        ".references/mona-community/beta-tools/runtime-7106.mjs",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/19",
+        "tools/lib/mona-transformative-audit.mjs"
+      ],
+      "comparisons": [
+        {
+          "name": "LeyLine 1级 0精通 -0.2抗性",
+          "expected": 28.323249900000004,
+          "actual": 28.323249900000004,
+          "tolerance": 0.000028323249900000002
+        },
+        {
+          "name": "LeyLine 90级 20精通 0.8抗性",
+          "expected": 598.5921481612446,
+          "actual": 598.5921481612446,
+          "tolerance": 0.0005985921481612446
+        },
+        {
+          "name": "LeyLine 90级 0精通 0.3抗性",
+          "expected": 1519.1961749999998,
+          "actual": 1519.1961749999998,
+          "tolerance": 0.0015191961749999997
+        }
+      ]
+    },
+    {
+      "id": "transformative-swirl_pyro",
+      "disposition": "matched",
+      "mona": [
+        "mona:reaction:swirl_pyro"
+      ],
+      "leyline": [
+        {
+          "id": "public:reactions:attributes:20",
+          "revision": "1"
+        }
+      ],
+      "explanation": "两侧对应同一剧变反应的单次非暴击伤害，按相同角色等级、精通及目标元素抗性复算。",
+      "sources": [
+        ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
+        ".references/mona-community/beta-tools/runtime-7106.mjs",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/20",
+        "tools/lib/mona-transformative-audit.mjs"
+      ],
+      "comparisons": [
+        {
+          "name": "LeyLine 1级 0精通 -0.2抗性",
+          "expected": 11.32929996,
+          "actual": 11.32929996,
+          "tolerance": 0.000011329299959999999
+        },
+        {
+          "name": "LeyLine 90级 20精通 0.8抗性",
+          "expected": 239.43685926449783,
+          "actual": 239.43685926449785,
+          "tolerance": 0.00023943685926449781
+        },
+        {
+          "name": "LeyLine 90级 0精通 -0.2抗性",
+          "expected": 954.92331,
+          "actual": 954.92331,
+          "tolerance": 0.0009549233099999999
+        }
+      ]
+    },
+    {
+      "id": "transformative-swirl_hydro",
+      "disposition": "matched",
+      "mona": [
+        "mona:reaction:swirl_hydro"
+      ],
+      "leyline": [
+        {
+          "id": "public:reactions:attributes:20",
+          "revision": "1"
+        }
+      ],
+      "explanation": "两侧对应同一剧变反应的单次非暴击伤害，按相同角色等级、精通及目标元素抗性复算。",
+      "sources": [
+        ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
+        ".references/mona-community/beta-tools/runtime-7106.mjs",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/20",
+        "tools/lib/mona-transformative-audit.mjs"
+      ],
+      "comparisons": [
+        {
+          "name": "LeyLine 1级 0精通 -0.2抗性",
+          "expected": 11.32929996,
+          "actual": 11.32929996,
+          "tolerance": 0.000011329299959999999
+        },
+        {
+          "name": "LeyLine 90级 20精通 0.8抗性",
+          "expected": 239.43685926449783,
+          "actual": 239.43685926449785,
+          "tolerance": 0.00023943685926449781
+        },
+        {
+          "name": "LeyLine 90级 0精通 0抗性",
+          "expected": 868.1120999999999,
+          "actual": 868.1120999999999,
+          "tolerance": 0.0008681120999999999
+        }
+      ]
+    },
+    {
+      "id": "transformative-swirl_electro",
+      "disposition": "matched",
+      "mona": [
+        "mona:reaction:swirl_electro"
+      ],
+      "leyline": [
+        {
+          "id": "public:reactions:attributes:20",
+          "revision": "1"
+        }
+      ],
+      "explanation": "两侧对应同一剧变反应的单次非暴击伤害，按相同角色等级、精通及目标元素抗性复算。",
+      "sources": [
+        ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
+        ".references/mona-community/beta-tools/runtime-7106.mjs",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/20",
+        "tools/lib/mona-transformative-audit.mjs"
+      ],
+      "comparisons": [
+        {
+          "name": "LeyLine 1级 0精通 -0.2抗性",
+          "expected": 11.32929996,
+          "actual": 11.32929996,
+          "tolerance": 0.000011329299959999999
+        },
+        {
+          "name": "LeyLine 90级 20精通 0.8抗性",
+          "expected": 239.43685926449783,
+          "actual": 239.43685926449785,
+          "tolerance": 0.00023943685926449781
+        },
+        {
+          "name": "LeyLine 90级 0精通 0.1抗性",
+          "expected": 781.30089,
+          "actual": 781.30089,
+          "tolerance": 0.00078130089
+        }
+      ]
+    },
+    {
+      "id": "transformative-swirl_cryo",
+      "disposition": "matched",
+      "mona": [
+        "mona:reaction:swirl_cryo"
+      ],
+      "leyline": [
+        {
+          "id": "public:reactions:attributes:20",
+          "revision": "1"
+        }
+      ],
+      "explanation": "两侧对应同一剧变反应的单次非暴击伤害，按相同角色等级、精通及目标元素抗性复算。",
+      "sources": [
+        ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
+        ".references/mona-community/beta-tools/runtime-7106.mjs",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/20",
+        "tools/lib/mona-transformative-audit.mjs"
+      ],
+      "comparisons": [
+        {
+          "name": "LeyLine 1级 0精通 -0.2抗性",
+          "expected": 11.32929996,
+          "actual": 11.32929996,
+          "tolerance": 0.000011329299959999999
+        },
+        {
+          "name": "LeyLine 90级 20精通 0.8抗性",
+          "expected": 239.43685926449783,
+          "actual": 239.43685926449785,
+          "tolerance": 0.00023943685926449781
+        },
+        {
+          "name": "LeyLine 90级 0精通 0.3抗性",
+          "expected": 607.67847,
+          "actual": 607.67847,
+          "tolerance": 0.0006076784699999999
+        }
+      ]
+    },
+    {
+      "id": "transformative-electro_charged",
+      "disposition": "different",
+      "mona": [
+        "mona:reaction:electro_charged"
+      ],
+      "leyline": [
+        {
+          "id": "public:reactions:attributes:21",
+          "revision": "1"
+        }
+      ],
+      "explanation": "Mona 发布内核的输出折算系数为 1.2，固定检出源码及 LeyLine 正式定义采用 2。独立算式核对 LeyLine 的数值。",
+      "sources": [
+        ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
+        ".references/mona-community/beta-tools/runtime-7106.mjs",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/21",
+        "tools/lib/mona-transformative-audit.mjs"
+      ],
+      "comparisons": [
+        {
+          "name": "LeyLine 1级 0精通 -0.2抗性",
+          "expected": 37.7643332,
+          "actual": 37.7643332,
+          "tolerance": 0.0000377643332
+        },
+        {
+          "name": "LeyLine 90级 20精通 0.8抗性",
+          "expected": 798.1228642149929,
+          "actual": 798.1228642149929,
+          "tolerance": 0.0007981228642149928
+        },
+        {
+          "name": "LeyLine 90级 0精通 0.1抗性",
+          "expected": 2604.3363,
+          "actual": 2604.3363,
+          "tolerance": 0.0026043362999999997
+        }
+      ]
+    },
+    {
+      "id": "transformative-shatter",
+      "disposition": "different",
+      "mona": [
+        "mona:reaction:shatter"
+      ],
+      "leyline": [
+        {
+          "id": "public:reactions:attributes:22",
+          "revision": "1"
+        }
+      ],
+      "explanation": "Mona 发布内核的输出折算系数为 1.5，固定检出源码及 LeyLine 正式定义采用 3。独立算式核对 LeyLine 的数值。",
+      "sources": [
+        ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
+        ".references/mona-community/beta-tools/runtime-7106.mjs",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/22",
+        "tools/lib/mona-transformative-audit.mjs"
+      ],
+      "comparisons": [
+        {
+          "name": "LeyLine 1级 0精通 -0.2抗性",
+          "expected": 56.64649980000001,
+          "actual": 56.64649980000001,
+          "tolerance": 0.000056646499800000004
+        },
+        {
+          "name": "LeyLine 90级 20精通 0.8抗性",
+          "expected": 1197.1842963224892,
+          "actual": 1197.1842963224892,
+          "tolerance": 0.0011971842963224891
+        },
+        {
+          "name": "LeyLine 90级 0精通 0.8抗性",
+          "expected": 1033.4667857142856,
+          "actual": 1033.4667857142856,
+          "tolerance": 0.0010334667857142855
+        }
+      ]
+    },
+    {
+      "id": "transformative-overload",
+      "disposition": "different",
+      "mona": [
+        "mona:reaction:overload"
+      ],
+      "leyline": [
+        {
+          "id": "public:reactions:attributes:23",
+          "revision": "1"
+        }
+      ],
+      "explanation": "Mona 发布内核的输出折算系数为 2，固定检出源码及 LeyLine 正式定义采用 2.75。独立算式核对 LeyLine 的数值。",
+      "sources": [
+        ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
+        ".references/mona-community/beta-tools/runtime-7106.mjs",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/23",
+        "tools/lib/mona-transformative-audit.mjs"
+      ],
+      "comparisons": [
+        {
+          "name": "LeyLine 1级 0精通 -0.2抗性",
+          "expected": 51.92595815,
+          "actual": 51.92595815,
+          "tolerance": 0.000051925958149999996
+        },
+        {
+          "name": "LeyLine 90级 20精通 0.8抗性",
+          "expected": 1097.418938295615,
+          "actual": 1097.4189382956151,
+          "tolerance": 0.0010974189382956148
+        },
+        {
+          "name": "LeyLine 90级 0精通 -0.2抗性",
+          "expected": 4376.7318375,
+          "actual": 4376.7318375,
+          "tolerance": 0.0043767318375
+        }
+      ]
+    },
+    {
+      "id": "transformative-bloom",
+      "disposition": "matched",
+      "mona": [
+        "mona:reaction:bloom"
+      ],
+      "leyline": [
+        {
+          "id": "public:reactions:attributes:24",
+          "revision": "1"
+        }
+      ],
+      "explanation": "两侧对应同一剧变反应的单次非暴击伤害，按相同角色等级、精通及目标元素抗性复算。",
+      "sources": [
+        ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
+        ".references/mona-community/beta-tools/runtime-7106.mjs",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/24",
+        "tools/lib/mona-transformative-audit.mjs"
+      ],
+      "comparisons": [
+        {
+          "name": "LeyLine 1级 0精通 -0.2抗性",
+          "expected": 37.7643332,
+          "actual": 37.7643332,
+          "tolerance": 0.0000377643332
+        },
+        {
+          "name": "LeyLine 90级 20精通 0.8抗性",
+          "expected": 798.1228642149929,
+          "actual": 798.1228642149929,
+          "tolerance": 0.0007981228642149928
+        },
+        {
+          "name": "LeyLine 90级 0精通 0.5抗性",
+          "expected": 1446.8535,
+          "actual": 1446.8535,
+          "tolerance": 0.0014468534999999999
+        }
+      ]
+    },
+    {
+      "id": "transformative-burgeon",
+      "disposition": "matched",
+      "mona": [
+        "mona:reaction:burgeon"
+      ],
+      "leyline": [
+        {
+          "id": "public:reactions:attributes:25",
+          "revision": "1"
+        }
+      ],
+      "explanation": "两侧对应同一剧变反应的单次非暴击伤害，按相同角色等级、精通及目标元素抗性复算。",
+      "sources": [
+        ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
+        ".references/mona-community/beta-tools/runtime-7106.mjs",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/25",
+        "tools/lib/mona-transformative-audit.mjs"
+      ],
+      "comparisons": [
+        {
+          "name": "LeyLine 1级 0精通 -0.2抗性",
+          "expected": 56.64649980000001,
+          "actual": 56.64649980000001,
+          "tolerance": 0.000056646499800000004
+        },
+        {
+          "name": "LeyLine 90级 20精通 0.8抗性",
+          "expected": 1197.1842963224892,
+          "actual": 1197.1842963224892,
+          "tolerance": 0.0011971842963224891
+        },
+        {
+          "name": "LeyLine 90级 0精通 0.5抗性",
+          "expected": 2170.28025,
+          "actual": 2170.28025,
+          "tolerance": 0.0021702802499999996
+        }
+      ]
+    },
+    {
+      "id": "transformative-hyperbloom",
+      "disposition": "matched",
+      "mona": [
+        "mona:reaction:hyperbloom"
+      ],
+      "leyline": [
+        {
+          "id": "public:reactions:attributes:26",
+          "revision": "1"
+        }
+      ],
+      "explanation": "两侧对应同一剧变反应的单次非暴击伤害，按相同角色等级、精通及目标元素抗性复算。",
+      "sources": [
+        ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
+        ".references/mona-community/beta-tools/runtime-7106.mjs",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/26",
+        "tools/lib/mona-transformative-audit.mjs"
+      ],
+      "comparisons": [
+        {
+          "name": "LeyLine 1级 0精通 -0.2抗性",
+          "expected": 56.64649980000001,
+          "actual": 56.64649980000001,
+          "tolerance": 0.000056646499800000004
+        },
+        {
+          "name": "LeyLine 90级 20精通 0.8抗性",
+          "expected": 1197.1842963224892,
+          "actual": 1197.1842963224892,
+          "tolerance": 0.0011971842963224891
+        },
+        {
+          "name": "LeyLine 90级 0精通 0.5抗性",
+          "expected": 2170.28025,
+          "actual": 2170.28025,
+          "tolerance": 0.0021702802499999996
+        }
+      ]
+    }
+  ]
+}
