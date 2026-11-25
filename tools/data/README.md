@@ -168,6 +168,14 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 ### Mona 单击双向核对
 
+**分支约束：Mona 审计功能仅在 `dev` 开发和提交，禁止进入 `main`。** 审计页面、探针、对照数据、报告脚本及其在共享配置中的改动都受此约束。生成报告留在已忽略的 `artifacts/`。向 `main` 交付计算器修复时，从基于 `main` 的分支单独提交产品改动，核对完整差异；禁止整批合并或拣选含审计内容的提交。
+
+在仓库根目录运行 `pnpm audit:mona`，读取固定版本的 Mona 和当前 LeyLine，生成双向清单与独立网页。随后运行 `pnpm audit:mona:serve`，打开 [Mona 双向审计页](http://127.0.0.1:5186/audit/mona/)。页面可按来源、伤害或 Buff、运行状态和差异筛选，每行都能展开输入、证据与双向关联。分享浏览器地址可定位同一条目。
+
+审计前端位于 `tools/mona-audit/`，使用独立的 Vite 配置和预览服务。运行 `pnpm --filter @leyline/mona-audit typecheck` 可单独检查页面类型。主站和桌面应用沿用各自的构建入口。
+
+生成物位于 `artifacts/mona-audit-site/`。已有完整报告时可运行 `pnpm audit:mona --report artifacts/mona-single-hit-final.json` 重建网页。新报告记录求值时的 Git 版本与工作区状态，旧报告缺失的信息在页面标为未知。首页分别统计原始记录、归并后的展示行、映射、独立探针输入和数值检查项；相邻两次生成的变化按相同口径计算。映射的机制差异和指定输入下的数值差异分别展示。
+
 核对进度时，保留两次 `--mona-report` 的结果，用 `node tools/scripts/data/report-mona-progress.mjs 上批.json 本批.json` 按稳定 ID 比较新增、已复核、归入参考及移除的条目。`batches` 保存各机制的输入、独立期望和实算，`packets` 按机制列出待处理 ID。同一映射在多个等级下核算时，映射计一次，算例分别计数。
 
 从仓库根目录运行 `node tools/scripts/data/audit-calculation-coverage.mjs --check --require-current --mona-report artifacts/mona-single-hit-final.json`。Mona 发布内核从 `.references/mona-community` 的 `589ac6919057709924c0c20d5a9d673fe9b0be1a` 读取，LeyLine 起始目录为 `829d19df0b96113c22016e5bde9ad5744817a260`。正式目录、双向差集和复核引用都闭合时，专项命令返回零。常规 `pnpm data:check` 可以离线运行。

@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
   "inputs": {
-    "lockfile": "be658e20f5998e8381d17805e329936d6206fb8467080e9adf1a4bf3660b9520",
+    "lockfile": "b17759afbf2d759721bac3683c75ae9ceffd5b13672c718797940141b0065f5f",
     "manifests": [
       {
         "path": "package.json",
@@ -24,7 +24,7 @@
         "sha256": "38716c09d854084bb9d214bc68444729895a557589ea057babaef5efa2c53644"
       }
     ],
-    "workspace": "df9b59709acc1e0522a6a33d468e6a162d87373498f39b7a485777bc36432631"
+    "workspace": "667c759324c807320a283f6ac47b02e6d20a425610a867d2110ee9a2077c9843"
   },
   "scope": "pnpm installed dependency graph including development/optional platform packages; SPDX declarations from package.json; complete upstream notices are archived in npm-LICENSES.txt",
   "archives": {

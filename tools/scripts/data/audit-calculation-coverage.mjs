@@ -81,6 +81,7 @@ import { createRuntimeCatalog } from '../../lib/runtime-catalog.mjs';
 import { auditSingleHitModifiers } from '../../lib/single-hit-modifier-matrix.mjs';
 
 import { writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { readContentSource } from '../../lib/content-source.mjs';
 import { rosterEvaluation, rosterEquipmentEvaluation, auditPublicScenes, auditResonances, auditReactionBlessings, auditCharacterClauses } from '../../lib/roster-evaluation.mjs';
 
@@ -388,7 +389,16 @@ if (monaFile || requireCurrent) {
   const { auditMonaSingleHit } = await import('../../lib/mona-single-hit-comparison.mjs');
   const comparison = await auditMonaSingleHit(entities, results.currentClauseInventory, engine);
   summary.monaSingleHit = comparison.summary;
-  if (monaFile) writeFileSync(monaFile, JSON.stringify(comparison) + '\n');
+  if (monaFile) {
+    const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
+    comparison.provenance = {
+      generatedAt: new Date().toISOString(),
+      leyline: git('rev-parse', 'HEAD'),
+      dirty: Boolean(git('status', '--porcelain')),
+      mona: comparison.mona.length ? comparison.baselines.mona : null,
+    };
+    writeFileSync(monaFile, JSON.stringify(comparison) + '\n');
+  }
   results.monaSingleHit = { summary: comparison.summary, gaps: comparison.gaps };
 }
 summary.currentCalculationComplete = !calculator.failures.length && !auditFailures.length && !results.currentClauseInventory.gaps.length

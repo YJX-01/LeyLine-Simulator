@@ -38,4 +38,6 @@ Review UI changes before implementation. Keep `WorkspaceShell`, candidate editin
 
 ## Commits and pull requests
 
+Mona audit work is restricted to `dev`. Never commit, merge, cherry-pick, or push audit changes to `main`. This includes the audit UI, probes, comparison and report scripts, audit data, generated reports, and audit-specific changes in shared files such as package manifests, lockfiles, and build configuration. When promoting a product fix, isolate its changes on a branch based on `main` and review the entire diff against `main`. A commit containing both product and audit changes must be split before promotion.
+
 Obtain explicit approval before committing or pushing. Use a descriptive scoped prefix such as `feat(engine):` or `test(calculator):`. Keep dependency changes with their lockfile and patches. Describe behavior and validation in the PR, link relevant issues, and attach screenshots for UI changes. Follow the [delivery workflow](tools/README.md#构建托管与本地交付操作) for packaging and pruning.
