@@ -1,5 +1,7 @@
 # Repository Guidelines
 
+For work on LeyLine mechanics, imports, inventory, timelines, or delivery, main agents and subagents can use the repository's [`$leyline-mechanics-port` skill](.agents/skills/leyline-mechanics-port/SKILL.md). Open the guide that fits the task.
+
 ## Project structure
 
 Keep account, timeline project, and content library data separate. Follow the [product direction](docs/product-direction.md) and check [supported cases](tools/data/README.md#计算支持与验证资料) before extending mechanics.
@@ -28,9 +30,11 @@ Use `CharacterMetadata` for built-in and custom characters. Preserve IDs, units,
 
 ## Testing
 
-Run `pnpm test` for Vitest (`tests/unit/**/*.test.ts` and TypeScript integration tests). Run `pnpm test:content` for Node integration checks. Derive mechanics expectations independently from traceable sources. Use authorized recordings and skip dependent checks when originals are missing. [Evidence standard](docs/evidence-and-validation.md)
+During development, select a relevant case with a known short runtime, including its setup. Start full suites, long tests, or full audits only when explicitly requested and within the user's time limit. Apply the same limit to subagents and background jobs. Record any outstanding acceptance checks.
 
-For browser or Worker changes, build resources and run relevant Playwright `*.spec.ts` cases. Use `pnpm exec playwright test tests/browser/development/inventory.spec.ts --project=chromium --workers=1` for inventory and `node tests/desktop/workspace.mjs` for packaged desktop changes. Run browser and desktop acceptance serially with one worker. [Test commands](tests/README.md)
+Full acceptance uses `pnpm test` for Vitest and `pnpm test:content` for Node integration checks. Derive mechanics expectations independently from traceable sources. Use authorized recordings and skip dependent checks when originals are missing. [Evidence standard](docs/evidence-and-validation.md)
+
+Browser and Worker acceptance uses built resources and the relevant Playwright `*.spec.ts` cases. The inventory suite is `pnpm exec playwright test tests/browser/development/inventory.spec.ts --project=chromium --workers=1`. Packaged desktop acceptance uses `node tests/desktop/workspace.mjs`. Run browser and desktop acceptance serially with one worker. [Test commands](tests/README.md)
 
 ## UI and storage
 
