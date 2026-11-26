@@ -831,6 +831,110 @@
       "name": "天才的发现",
       "description": "合成武器突破素材时，有10%概率获得2倍产出。",
       "unlockAscension": null
+    },
+    {
+      "id": "albedo.passive.hexerei-secret-rite",
+      "name": "魔女的前夜礼·白芒之书",
+      "description": "魔导·秘仪生效时：\n·炼成阳华后的20秒内，基于阿贝多的防御力，提升队伍中附近的角色的普通攻击、重击、下落攻击、元素战技和元素爆发造成的伤害：每1000点防御力都将提升4%伤害，至多通过这种方式提升12%伤害。\n·炼成瑰银后的20秒内，基于阿贝多的防御力，提升队伍中附近的魔导角色的普通攻击、重击、下落攻击、元素战技和元素爆发造成的伤害：每1000点防御力都将提升10%伤害，至多通过这种方式提升30%伤害。",
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "albedo.hexerei.isotoma-damage",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "albedo.skill"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 20000,
+            "phase": "after"
+          },
+          "windowFact": "albedo.hexereiIsotomaWindow",
+          "condition": {
+            "fact": "albedo.hexereiSecretRite"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge",
+              "skill",
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "albedo.hexerei-isotoma-damage",
+                "inputs": {
+                  "input": {
+                    "stat": "defense"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "albedo.hexerei.fumo-damage",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "albedo.hexereiSecretRite"
+                  },
+                  "term1": {
+                    "fact": "albedo.hexereiFumoWindow"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "albedo.recipientHexerei",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge",
+              "skill",
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "albedo.hexerei-fumo-damage",
+                "inputs": {
+                  "input": {
+                    "stat": "defense"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -929,6 +1033,47 @@
               },
               "term1": {
                 "fact": "albedo.isotomaArea"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "categories": [
+              "plunge"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "albedo.c4.fumo-plunge-impact",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "albedo.hexereiSecretRite"
+                  },
+                  "term1": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "albedo.fumoPlungeImpactWindow",
+                "of": "recipient"
               }
             },
             "output": "active"
@@ -1070,6 +1215,36 @@
         "maxInput": 4,
         "revision": "1"
       }
+    },
+    {
+      "id": "albedo.hexerei-isotoma-damage",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "scalar",
+        "rate": 0.00004,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.12,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "albedo.hexerei-fumo-damage",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "scalar",
+        "rate": 0.0001,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.3,
+        "revision": "1"
+      }
     }
   ],
   "facts": {
@@ -1108,6 +1283,41 @@
         "kind": "boolean"
       },
       "label": "阿贝多的拟造阳华生成的刹那之花本次绽放"
+    },
+    "albedo.hexereiSecretRite": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "阿贝多的魔导·秘仪生效"
+    },
+    "albedo.hexereiIsotomaWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "炼成阳华后的20秒内"
+    },
+    "albedo.hexereiFumoWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "炼成瑰银后的20秒内"
+    },
+    "albedo.recipientHexerei": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受益者是魔导角色"
+    },
+    "albedo.fumoPlungeImpactWindow": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "在瑰银附近跳跃摧毁瑰银后的3秒内且为下落攻击坠地冲击"
     }
   }
 }

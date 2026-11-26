@@ -34,8 +34,16 @@ describe('build-bound stellar contributions and per-state ranking', () => {
     expect(prepared.ok, JSON.stringify(prepared.diagnostics)).toBe(true); if (!prepared.ok) throw new Error('build assembly failed');
     const setup: schemas.StructuredCombatSetup = {
       targets: [{ id: 'enemy', inputs: { 'resistance.anemo': fact(quantity('scalar', 0.1)) }, facts: {} }],
-      team: { inputs: {}, facts: {}, actorFacts: {} }, sources: [], factIntervals: [{ id: 'vesna-no-radiance', subject: { kind: 'actor', id: 'vesna' }, startMs: 0, endMs: 3000,
-        facts: { radiance: fact({ kind: 'enum', value: 'none' }) } }],
+      team: { inputs: {}, facts: {}, actorFacts: {} }, sources: [], factIntervals: [
+        { id: 'vesna-no-radiance', subject: { kind: 'actor', id: 'vesna' }, startMs: 0, endMs: 3000,
+          facts: { radiance: fact({ kind: 'enum', value: 'none' }) } },
+        { id: 'traveler-no-enhanced', subject: { kind: 'actor', id: 'aether-cryo' }, startMs: 0, endMs: 3000,
+          facts: Object.fromEntries([
+            'traveler.enhancedResonance.anemo', 'traveler.enhancedResonance.geo', 'traveler.enhancedResonance.electro',
+            'traveler.enhancedResonance.dendro', 'traveler.enhancedResonance.hydro', 'traveler.enhancedResonance.pyro',
+            'traveler.enhancedResonance.cryo', 'traveler.enhancedAttribute.first', 'traveler.enhancedAttribute.second',
+          ].map(key => [key, fact({ kind: 'boolean', value: false })])) },
+      ],
       events: [{ id: 'reaction', kind: 'reaction', actorId: null, targetIds: ['enemy'], timeMs: 1000, order: 1, reactionId: 'stellar-swirl', sourceEventIds: [], facts: {} }],
     };
     const request: schemas.BoundAggregateRequest = { definition: ref('stellar-swirl'), probability: { kind: 'fixed' }, contributors: builds.map(({ id }) => ({

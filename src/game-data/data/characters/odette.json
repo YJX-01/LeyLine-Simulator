@@ -1258,7 +1258,67 @@
       "id": "odette.passive1",
       "name": "获选者的春祭",
       "description": "奥黛塔召唤**独舞倒影**时，还会获得4层**华彩**。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "odette.a1.splendor-reaction-damage",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": {
+                "call": "odette.splendor-reaction-damage",
+                "inputs": {
+                  "input": {
+                    "fact": "odette.splendorStacks",
+                    "of": "recipient"
+                  },
+                  "c1": {
+                    "call": "rank.at-least-1",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  }
+                }
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-conduct"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": {
+                "call": "odette.splendor-reaction-damage",
+                "inputs": {
+                  "input": {
+                    "fact": "odette.splendorStacks",
+                    "of": "recipient"
+                  },
+                  "c1": {
+                    "call": "rank.at-least-1",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  }
+                }
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-swirl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "odette.passive2",
@@ -1507,14 +1567,9 @@
         },
         {
           "id": "odette.c2.splendor-attack",
-          "condition": {
-            "call": "rank.at-least-1",
-            "inputs": {
-              "rank": {
-                "state": "ascension"
-              }
-            },
-            "output": "active"
+          "recipient": "team",
+          "activation": {
+            "ascension": 1
           },
           "modifiers": [
             {
@@ -1523,7 +1578,8 @@
                 "call": "odette.splendor-attack",
                 "inputs": {
                   "input": {
-                    "fact": "odette.splendorStacks"
+                    "fact": "odette.splendorStacks",
+                    "of": "recipient"
                   }
                 }
               }
@@ -1861,6 +1917,28 @@
       }
     },
     {
+      "id": "odette.splendor-reaction-damage",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.15,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 6,
+        "cap": 0.6,
+        "capIncreases": [
+          {
+            "input": "c1",
+            "amount": 0.3
+          }
+        ]
+      }
+    },
+    {
       "id": "odette.splendor-attack",
       "template": {
         "id": "linear-bonus",
@@ -1871,7 +1949,8 @@
         "rate": 0.07,
         "offset": 0,
         "threshold": 0,
-        "output": "value"
+        "output": "value",
+        "maxInput": 6
       }
     },
     {
@@ -1882,7 +1961,8 @@
         "unit": "count",
         "input": "stacks",
         "relation": "gt",
-        "threshold": 0
+        "threshold": 0,
+        "maxInput": 6
       }
     }
   ],
@@ -1916,7 +1996,7 @@
       "label": "雪鹄之梦持续中"
     },
     "odette.splendorStacks": {
-      "scope": "owner",
+      "scope": "recipient",
       "type": {
         "kind": "quantity",
         "unit": "count"

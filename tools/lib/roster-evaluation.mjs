@@ -518,6 +518,10 @@ export function auditReactionBlessings(entities, engine) {
     const prepared = engine.prepareStructuredBuilds([{ id: 'actor', build: recipient }, { id: 'source', build: owner }]);
     if (!prepared.ok) throw new Error(id + ': ' + JSON.stringify(prepared.diagnostics));
     const t = receiving.talents[0], h = t.hits[0], { setup, request } = auditHit(receiving, t, h);
+    const sourceFacts = Object.fromEntries(Object.entries(c.metadata.facts ?? {})
+      .filter(([, field]) => field.scope === 'owner' && field.type.kind === 'boolean')
+      .map(([key]) => [key, bool(false)]));
+    if (Object.keys(sourceFacts).length) request.frame.factOverrides.push({ subject: { kind: 'actor', id: 'source' }, facts: sourceFacts });
     const context = engine.createStructuredCombatContext(prepared.team, setup);
     const basis = source.stat === 'attack' ? c.attributes.base.attack + weapon.baseAttack
       : source.stat === 'elementalMastery' ? weapon.baseStat * weapon.statCurve[1] : c.attributes.base[source.stat];

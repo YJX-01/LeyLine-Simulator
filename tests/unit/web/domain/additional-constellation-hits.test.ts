@@ -34,6 +34,18 @@ it.each([
   const damage = record.damage!;
   record.timeMs = 1000;
   putHitFact(damage.facts!, { kind: 'event' }, trigger, { kind: 'boolean', value: true });
+  if (id.startsWith('aether-') || id.startsWith('lumine-')) {
+    const captureRecord = selected.project.timeline.find(entry => entry.kind === 'capture');
+    if (captureRecord) captureRecord.captureFacts = [];
+    for (const key of [
+      'traveler.enhancedResonance.anemo', 'traveler.enhancedResonance.geo', 'traveler.enhancedResonance.electro',
+      'traveler.enhancedResonance.dendro', 'traveler.enhancedResonance.hydro', 'traveler.enhancedResonance.pyro',
+      'traveler.enhancedResonance.cryo', 'traveler.enhancedAttribute.first', 'traveler.enhancedAttribute.second',
+    ]) {
+      putHitFact(damage.facts!, { kind: 'actor', id: selected.actorId }, key, { kind: 'boolean', value: false });
+      if (captureRecord) putHitFact(captureRecord.captureFacts!, { kind: 'actor', id: selected.actorId }, key, { kind: 'boolean', value: false });
+    }
+  }
   if (element === 'pyro') putHitFact(damage.facts!, { kind: 'event' }, 'absorbedElement', { kind: 'enum', value: element });
   if (captures) damage.capture = { recordId: selected.project.timeline.find(record => record.kind === 'capture')!.id, phase: 'after' };
 

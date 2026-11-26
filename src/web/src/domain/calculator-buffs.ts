@@ -41,7 +41,7 @@ export interface CalculatorBuff {
 
 const effectLabels: Record<string, string> = {
   damageBonus: '伤害加成', baseMultiplier: '基础伤害倍率', baseDamageBonus: '附加基础伤害', 'base-flat': '附加基础伤害',
-  normalAttackSpeed: '普通攻击速度', flatAttack: '固定攻击力', flatDefense: '固定防御力', whiteAttack: '基础攻击力',
+  normalAttackSpeed: '普通攻击速度', flatAttack: '固定攻击力', flatDefense: '固定防御力', whiteAttack: '基础攻击力', whiteHp: '基础生命值',
   shieldStrength: '护盾强效', additiveReactionBonus: '激化反应伤害加成', amplifyingReactionBonus: '增幅反应伤害加成',
   'target.defenseReduction': '目标防御力降低', 'target.ordinaryDamageReduction': '目标所受直伤减免',
   elevationFactor: '伤害擢升倍率', 'reaction.lunar.elevationFactor': '月反应伤害擢升倍率',

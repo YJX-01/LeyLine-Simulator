@@ -39,6 +39,14 @@ export function auditHit(character, talent, hit, level = 1) {
     if (character.id === 'kujousara') capture.subjectFacts = [{ subject, values: {
       onField: bool(true), 'kujousara.tenguJuuraiRecipient': bool(false),
     } }];
+    if (character.id === 'aether-geo' || character.id === 'lumine-geo') capture.subjectFacts = [{ subject, values: {
+      onField: bool(true),
+      'traveler.enhancedResonance.anemo': bool(false), 'traveler.enhancedResonance.geo': bool(false),
+      'traveler.enhancedResonance.electro': bool(false), 'traveler.enhancedResonance.dendro': bool(false),
+      'traveler.enhancedResonance.hydro': bool(false), 'traveler.enhancedResonance.pyro': bool(false),
+      'traveler.enhancedResonance.cryo': bool(false), 'traveler.enhancedAttribute.first': bool(false),
+      'traveler.enhancedAttribute.second': bool(false),
+    } }];
     if (hit.id === 'wanderer.a1.descent-arrow') capture.subjectFacts = [{ subject, values: {
       'wanderer.windfavored': bool(true), 'wanderer.jadeClaimed-pyro': bool(false), 'wanderer.jadeClaimed-cryo': bool(false),
     } }];
