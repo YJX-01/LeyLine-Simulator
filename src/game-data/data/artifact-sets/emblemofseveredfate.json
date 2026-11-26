@@ -82,7 +82,8 @@
                 "call": "emblemofseveredfate.conversion",
                 "inputs": {
                   "basis": {
-                    "stat": "energyRecharge"
+                    "stat": "energyRecharge",
+                    "excludeNonConvertible": true
                   }
                 }
               }

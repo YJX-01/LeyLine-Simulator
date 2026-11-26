@@ -517,7 +517,14 @@
               "parameter": "param9"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "ganyu.normal",
+            "sourceKind": "action-or-capture",
+            "attributes": [
+              "attack"
+            ]
+          }
         },
         {
           "id": "ganyu.normal.param10",
@@ -530,7 +537,14 @@
               "parameter": "param10"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "ganyu.normal",
+            "sourceKind": "action-or-capture",
+            "attributes": [
+              "attack"
+            ]
+          }
         },
         {
           "id": "ganyu.normal.param11",
@@ -843,7 +857,14 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "ganyu.burst",
+            "sourceKind": "action-or-capture",
+            "attributes": [
+              "attack"
+            ]
+          }
         }
       ],
       "energyCapacity": {

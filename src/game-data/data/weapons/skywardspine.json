@@ -325,6 +325,21 @@
           }
         },
         "output": "base"
+      },
+      "confirmedProc": {
+        "group": "skywardspine.vacuum-blade",
+        "sourceCategories": [
+          "normal",
+          "charged"
+        ],
+        "cooldownMs": [
+          2000,
+          2000,
+          2000,
+          2000,
+          2000
+        ],
+        "confirmedFact": "skywardspine.vacuum-bladeTriggered"
       }
     }
   ]

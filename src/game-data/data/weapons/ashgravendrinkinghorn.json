@@ -276,6 +276,25 @@
           }
         },
         "output": "base"
+      },
+      "confirmedProc": {
+        "group": "ashgravendrinkinghorn.impact",
+        "sourceCategories": [
+          "normal",
+          "charged",
+          "plunge",
+          "skill",
+          "burst",
+          "other"
+        ],
+        "cooldownMs": [
+          15000,
+          15000,
+          15000,
+          15000,
+          15000
+        ],
+        "confirmedFact": "ashgravendrinkinghorn.impactTriggered"
       }
     }
   ]

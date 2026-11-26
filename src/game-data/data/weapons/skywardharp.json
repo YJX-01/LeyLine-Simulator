@@ -284,6 +284,24 @@
       "when": [
         "skywardharp.balladTriggered"
       ],
+      "confirmedProc": {
+        "group": "skywardharp.ballad",
+        "sourceCategories": [
+          "normal",
+          "charged",
+          "plunge",
+          "skill",
+          "burst"
+        ],
+        "confirmedFact": "skywardharp.balladTriggered",
+        "cooldownMs": [
+          4000,
+          3500,
+          3000,
+          2500,
+          2000
+        ]
+      },
       "base": {
         "template": "attack-damage-base",
         "inputs": {

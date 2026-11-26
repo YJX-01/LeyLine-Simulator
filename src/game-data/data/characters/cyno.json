@@ -1248,7 +1248,7 @@
     {
       "rank": 1,
       "name": "立仪·俯览昼冥",
-      "description": "施放圣仪·煟煌随狼行后，赛诺普通攻击的攻击速度提升20%，持续10秒。若施放秘仪·律渊渡魂时触发了突破天赋「落羽的裁择」的「裁定」效果，将刷新该效果的持续时间。\n需要解锁突破天赋「落羽的裁择」。",
+      "description": "施放圣仪·煟煌随狼行后，赛诺普通攻击的攻击速度提升20%，持续10秒。若施放秘仪·律渊渡魂时触发了突破天赋「落羽的裁择」的「裁定」效果，将刷新该效果的持续时间。\n需要解锁突破天赋「落羽的裁择」。\n辉映·星超导：进入启途誓使状态时获得偕日共升，元素精通提升200点；期间从赛诺切换角色时，登场角色继承该效果的剩余持续时间。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -1304,6 +1304,23 @@
           "activation": {
             "ascension": 1
           }
+        },
+        {
+          "id": "cyno.c1.together-we-rise-mastery",
+          "recipient": "team",
+          "condition": {
+            "fact": "cyno.togetherWeRise",
+            "of": "recipient"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 200,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
         }
       ]
     },
@@ -1452,6 +1469,13 @@
         "kind": "boolean"
       },
       "label": "启途誓使期间赛诺触发合格的雷元素反应，本次未达每次爆发5次上限"
+    },
+    "cyno.togetherWeRise": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该角色正受赛诺偕日共升影响（含已转移的剩余时间）"
     }
   },
   "formulas": [

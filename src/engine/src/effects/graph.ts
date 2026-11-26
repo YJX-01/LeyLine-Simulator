@@ -1,9 +1,9 @@
 import { resolveSummons } from '../calculation/summons';
-import { resolveCoordinatedHits } from '../calculation/coordinated-hits';
+import { resolveTriggeredHits } from '../calculation/coordinated-hits';
 import { expandCastExits, resolveCombatChanges } from '../calculation/combat-changes';
 import { accumulateHealingHits } from '../calculation/accumulated-hits';
 import { resolveTalentHealing } from '../calculation/talent-healing';
-import { findCharacterHit } from '@leyline/schema';
+import { findCharacterHit, preservedTimelineFields, subjectFacts } from '@leyline/schema';
 import { statKeys, reactionBonusKeys, createTalentRankReader, talentParameterAt, type Project, type Diagnostic, type QuantityUnit, type StatKey, type ReactionBonusKey, type HitDamageKey } from '@leyline/schema';
 import { resolveStaticBuild } from '../attributes/build';
 import { percentStat, relevantPanelIssues, statUnit } from '../attributes/stat-dependencies';
@@ -29,12 +29,12 @@ export interface GraphResult extends EvaluationResult { attributes?: Partial<Rec
 export function evaluateDependencyGraph(input: Project, options: GraphOptions = {}): GraphResult {
   const summons = resolveSummons(expandCastExits(input));
   const healing = resolveTalentHealing(summons.project);
-  const coordinated = resolveCoordinatedHits(accumulateHealingHits(healing.project));
-  const project = coordinated.project;
+  const triggered = resolveTriggeredHits(accumulateHealingHits(healing.project));
+  const project = triggered.project;
   const preparedRuntime = project.candidate.actors.some(actor => actor.build) || project.timeline.some(record => record.reactionEvent || record.sceneHit) ? prepareProjectRuntime(project) : undefined;
   const runtime = preparedRuntime?.ok ? preparedRuntime.runtime : undefined;
   const talentRank = runtime?.team.talentRank ?? createTalentRankReader(project.candidate.actors);
-  const diagnostics: Diagnostic[] = [...summons.diagnostics, ...coordinated.diagnostics];
+  const diagnostics: Diagnostic[] = [...summons.diagnostics, ...triggered.diagnostics];
   const report = (code: Diagnostic['code'], path: string, message: string) => {
     if (!diagnostics.some(d => d.code === code && d.path === path && d.message === message)) diagnostics.push({ code, path, message });
   };
@@ -55,6 +55,12 @@ export function evaluateDependencyGraph(input: Project, options: GraphOptions = 
     for (const e of d.effects) if (e.action && !definitions.has(e.action)) missing(e.action, `definitions.${d.id}.effects.${e.id}`);
   }
   for (const r of timeline) {
+    const preserved: string[] = preservedTimelineFields.filter(key => Object.hasOwn(r, key));
+    if (r.confirmedBuff?.recipientId) preserved.push('confirmedBuff.recipientId');
+    if (preserved.length) {
+      diagnostics.push({ code: 'unsupported', path: `timeline.${r.id}`, message:
+        '当前计算未使用此记录中的旧版字段：' + preserved.join('、') + '。原始记录仍保存在工程中。' });
+    }
     if (!actors.has(r.actor)) missing(r.actor, `timeline.${r.id}.actor`);
     if (!definitions.has(r.definition)) missing(r.definition, `timeline.${r.id}.definition`);
   }
@@ -516,6 +522,24 @@ export function evaluateDependencyGraph(input: Project, options: GraphOptions = 
         }
         else report('arithmetic', path, '伤害不是有限值。');
       }
+      // Counts describe recorded outcomes, while a missing count keeps the
+      // historical single-target theoretical hit convention for older projects.
+      if (record.damage) {
+        const facts = { ...record.facts, ...subjectFacts(record.damage.facts, { kind: 'event' }) };
+        const hit = facts.targetsHit?.value, damaged = facts.targetsDamaged?.value;
+        const zero = (hit?.kind === 'quantity' && hit.value === 0)
+          || (damaged?.kind === 'quantity' && damaged.value === 0);
+        const unknown = !zero && ((facts.targetsHit && hit === null && !(damaged?.kind === 'quantity' && damaged.value > 0))
+          || (facts.targetsDamaged && damaged === null));
+        if (zero) {
+          point.value = 0;
+          if (point.real) point.real = { ...point.real, value: 0,
+            diagnostics: [...point.real.diagnostics, '已记录未命中或没有目标受到伤害；上方公式保留理论单次命中值。'] };
+        } else if (unknown) {
+          point.value = null;
+          report('unknown', path, '本次命中或受伤目标数尚未确认，无法统计实际伤害。');
+        }
+      }
       if (point.value === null && point.real?.status === 'complete') {
         point.real = { ...point.real, status: 'partial', value: null,
           diagnostics: [...point.real.diagnostics, '属性依赖未能完整求值。'] };
@@ -542,7 +566,7 @@ export function evaluateDependencyGraph(input: Project, options: GraphOptions = 
   };
   const objective = sum(orderedPoints.filter(p => !project.objective.damageIds || project.objective.damageIds.includes(p.id)),!project.objective.damageIds && unrecorded.length>0);
   const total = sum(orderedPoints,unrecorded.length>0);
-  return { status: invalid || diagnostics.some(d => d.code === 'arithmetic') ? 'invalid' : exhausted || summons.diagnostics.length > 0 || coordinated.diagnostics.length > 0 || diagnostics.some(d => d.code === 'stale-revision') || orderedPoints.some(p => p.value === null || p.real?.status === 'partial')
+  return { status: invalid || diagnostics.some(d => d.code === 'arithmetic') ? 'invalid' : exhausted || summons.diagnostics.length > 0 || triggered.diagnostics.length > 0 || diagnostics.some(d => d.code === 'stale-revision' || d.code === 'unsupported') || orderedPoints.some(p => p.value === null || p.real?.status === 'partial')
       || unrecorded.length>0 || combatChanges.some(change => change.status === 'unknown' || change.missing?.length)
       || (options.attributeQuery && Object.values(attributes).some(value => value === null)) ? 'partial' : 'complete', points: orderedPoints,
     objectiveValue: objective.value, totalValue: total.value,

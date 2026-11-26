@@ -1,15 +1,15 @@
-import { definitionKey, type CalculationEvent, type CalculationFact, type CalculationEventSelector, type CalculationHitSelector,
+import { buildSetCounts, type Build, type Project, subjectFacts, definitionKey, type CalculationEvent, type CalculationFact, type CalculationEventSelector, type CalculationHitSelector,
   type CombatActor, type CombatContext, type CombatFrame, type DefinitionRef, type EffectDefinition } from '@leyline/schema';
 import type { CompiledData } from './compile';
 
-export interface EffectInstance { id: string; owner: CombatActor; definition: EffectDefinition; source: CalculationEvent | null; triggerKnown: boolean; until?: number; replacedBy?: CalculationEvent; possibleEndMs?: number }
+export interface EffectInstance { id: string; owner: CombatActor; definition: EffectDefinition; source: CalculationEvent | null; triggerKnown: boolean; until?: number; replacedBy?: CalculationEvent; possibleEndMs?: number; certainEndMs?: number }
 export function calculationEffectInstanceId(ownerId: string, definition: DefinitionRef, sourceEventId: string | null): string {
   return JSON.stringify([ownerId, definition.namespace, definition.id, definition.revision, sourceEventId]);
 }
 type EventPosition = Pick<CalculationEvent, 'id' | 'order' | 'timeMs'>;
 export function eventOrder(a: EventPosition, b: EventPosition): number | null {
   if (a.id === b.id) return 0;
-  return a.timeMs !== b.timeMs ? Math.sign(a.timeMs - b.timeMs) : a.order !== b.order ? Math.sign(a.order - b.order) : null;
+  return Math.sign(comparePosition(a, b)) || null;
 }
 export function eventMatches(selector: CalculationEventSelector, event: CalculationEvent, ownerId: string, targetId: string): boolean | null {
   if (event.occurred === false || !selector.kinds.includes(event.kind) && !(event.kind === 'hit' && event.reactionId && selector.kinds.includes('reaction'))) return false;
@@ -17,7 +17,12 @@ export function eventMatches(selector: CalculationEventSelector, event: Calculat
   if (event.occurred === null) checks.push(null);
   if (selector.actor === 'owner') checks.push(event.actorId === null ? null : event.actorId === ownerId);
   if (selector.target === 'enemy') checks.push(event.targetIds === null ? null : event.targetIds.length > 0);
-  if (event.kind === 'hit' && selector.target !== 'any' && !selector.allowZeroDamage && event.facts.targetsDamaged) {
+  const contact = event.facts.targetsHit;
+  if (event.kind === 'hit' && selector.target !== 'any' && contact?.value?.kind === 'quantity' && contact.value.value === 0) checks.push(false);
+  if (event.kind === 'hit' && selector.zeroDamage === 'unknown') {
+    const damaged = event.facts.targetsDamaged;
+    checks.push(damaged?.provenance !== 'preset' && damaged?.value?.kind === 'quantity' && damaged.value.value > 0 ? true : null);
+  } else if (event.kind === 'hit' && selector.target !== 'any' && !selector.allowZeroDamage && event.facts.targetsDamaged) {
     const count = event.facts.targetsDamaged.value;
     checks.push(count?.kind === 'quantity' ? count.value > 0 : null);
   }
@@ -62,6 +67,7 @@ export function effectRecipientMatches(recipient: EffectDefinition['recipient'],
 export function buffTriggerMatches(definition: EffectDefinition, event: CalculationEvent, ownerId: string, targetId: string): boolean | null {
   if (definition.trigger.kind !== 'event') return false;
   if (event.confirmedBuff) {
+    if (event.confirmedBuff.recipientId) return false;
     if (event.kind !== 'state-change' || event.occurred === false || event.actorId !== ownerId || definitionKey(event.confirmedBuff) !== definitionKey(definition.buff ?? definition.identity)) return false;
     return event.occurred === null ? null : true;
   }
@@ -91,7 +97,7 @@ export function buffSources(definition: EffectDefinition, context: Pick<CombatCo
   const key = trigger.duringTeamInterval;
   const windows = key && context.factIntervals.filter(row => row.subject.kind === 'team' && row.facts[key]?.value?.value === true);
   const cooldown = trigger.cooldownMs ?? 0;
-  const events = cooldown ? [...context.events].sort((a,b) => a.timeMs-b.timeMs || a.order-b.order || a.id.localeCompare(b.id)) : context.events;
+  const events = cooldown ? [...context.events].sort((a,b) => comparePosition(a, b) || a.id.localeCompare(b.id)) : context.events;
   let ready = 0, possible = 0, lastWindow: string | undefined;
   for (const source of events) {
     if (visit && !visit()) break;
@@ -120,18 +126,26 @@ export function collectEffectInstances(data: CompiledData, context: CombatContex
     if (definition.trigger.kind === 'permanent' || definition.windowFact) result.push({ id: calculationEffectInstanceId(owner.id, definition.buff ?? reference, null), owner, definition, source: null, triggerKnown: true });
     const sources = buffSources(definition,context,owner.id,targetId,visit);
     let previous: EffectInstance[] = [];
-    if (definition.stacking.refreshUnverified) sources.sort((a,b) => a.source.timeMs-b.source.timeMs || a.source.order-b.source.order || a.source.id.localeCompare(b.source.id));
+    if (definition.stacking.refreshUnverified || definition.stacking.refreshAll) sources.sort((a,b) => comparePosition(a.source, b.source) || a.source.id.localeCompare(b.source.id));
     for (const match of sources) {
       const instance: EffectInstance = {id: calculationEffectInstanceId(owner.id,definition.buff ?? reference,match.source.id),owner,definition,...match};
-      if (definition.stacking.refreshUnverified) {
+      if (definition.stacking.refreshUnverified || definition.stacking.refreshAll) {
         const end = buffEndMs(definition, instance.source, match.until);
         previous = previous.filter(p => (p.possibleEndMs ?? buffEndMs(definition,p.source,p.until)) > match.source.timeMs);
         if (!match.source.confirmedBuff) for (const prior of previous) {
+          if (!visit()) return result;
           const latest = Math.min(end, prior.until ?? Infinity);
-          if (latest > (prior.possibleEndMs ?? buffEndMs(definition,prior.source,prior.until))) prior.possibleEndMs = latest;
+          const certainEnd = prior.certainEndMs ?? buffEndMs(definition,prior.source,prior.until);
+          const strictlyLater = prior.source!.timeMs < match.source.timeMs || prior.source!.order < match.source.order;
+          const knownRefresh = definition.stacking.refreshAll && match.triggerKnown && prior.triggerKnown
+            && strictlyLater && match.source.timeMs < certainEnd;
+          if (knownRefresh) prior.certainEndMs = Math.max(certainEnd,latest);
+          if (latest > (prior.possibleEndMs ?? certainEnd)) prior.possibleEndMs = latest;
         }
         previous.push(instance);
-        if (previous.length > definition.stacking.maxStacks) previous.shift();
+        if (previous.length > definition.stacking.maxStacks && (definition.stacking.refreshUnverified
+          || previous.every(item => item.triggerKnown) && previous.every((item, index) => index === 0
+            || item.source!.timeMs !== previous[index - 1].source!.timeMs || item.source!.order !== previous[index - 1].source!.order))) previous.shift();
       }
       result.push(instance);
       if (definition.stacking.endOnNewTrigger) {
@@ -161,13 +175,13 @@ export function buffEndMs(definition: EffectDefinition, source: CalculationEvent
 }
 
 export function stackExpiryUncertain(instance: EffectInstance, timeMs: number): boolean {
-  return instance.possibleEndMs !== undefined && timeMs >= buffEndMs(instance.definition, instance.source, instance.until) && timeMs < instance.possibleEndMs;
+  return instance.possibleEndMs !== undefined && timeMs >= (instance.certainEndMs ?? buffEndMs(instance.definition, instance.source, instance.until)) && timeMs < instance.possibleEndMs;
 }
 
 export function instanceActive(instance: EffectInstance, event: EventPosition, phase: CombatFrame['phase']): boolean | null {
   const lifetime = instance.definition.lifetime;
   if (lifetime.kind === 'permanent' || !instance.source) return instance.triggerKnown ? true : null;
-  const end = buffEndMs(instance.definition, instance.source, instance.until);
+  const end = instance.certainEndMs ?? buffEndMs(instance.definition, instance.source, instance.until);
   if (event.timeMs >= (instance.possibleEndMs ?? end) || event.timeMs < instance.source.timeMs) return false;
   const order = eventOrder(instance.source, event);
   if (order === null) return null;
@@ -244,4 +258,224 @@ export function teamHealthCounter(instance: EffectInstance, events: Iterable<Cal
     change.sourceRefs.forEach(source => sources.add(source));
   }
   return result(overflow ? Math.max(0, total - cap) : Math.min(total, cap));
+}
+
+type SourceOwnerFactReader = (owner: string, source: CalculationEvent, key: string) => boolean | null;
+/** Index source-time facts once for event projections that do not have query overrides. */
+export function sourceOwnerFactReader(context: CombatContext): SourceOwnerFactReader {
+  const frames = new Map<string, CalculationFact>();
+  for (const entry of context.stateFrames ?? []) if (entry.subject.kind === 'actor' && entry.phase === 'before') {
+    for (const [key, fact] of Object.entries(entry.facts)) frames.set(JSON.stringify([entry.subject.id, entry.eventId, key]), fact);
+  }
+  const intervals = new Map<string, CombatContext['factIntervals']>();
+  for (const interval of context.factIntervals) if (interval.subject.kind === 'actor') for (const key of Object.keys(interval.facts)) {
+    const id = JSON.stringify([interval.subject.id, key]), list = intervals.get(id) ?? [];
+    list.push(interval); intervals.set(id, list);
+  }
+  for (const list of intervals.values()) list.sort((a, b) => a.startMs - b.startMs);
+  const actors = new Map(context.actors.map(actor => [actor.id, actor]));
+  return (owner, source, key) => {
+    const observed = subjectFacts(source.subjectFacts, { kind: 'actor', id: owner })?.[key];
+    let fact = observed?.provenance !== 'preset' ? observed : undefined;
+    fact ??= frames.get(JSON.stringify([owner, source.id, key])) ?? source.derivedStates?.before[owner]?.[key];
+    if (!fact) {
+      const list = intervals.get(JSON.stringify([owner, key])) ?? [];
+      fact = intervalFactAt(list, source.timeMs, key);
+    }
+    fact ??= actors.get(owner)?.facts[key];
+    return fact?.provenance === 'preset' || fact?.value?.kind !== 'boolean' ? null : fact.value.value;
+  };
+}
+
+function intervalFactAt(intervals: CombatContext['factIntervals'], timeMs: number, key: string) {
+  let start = 0;
+  let end = intervals.length;
+  while (start < end) {
+    const middle = (start + end) >>> 1;
+    if (intervals[middle].startMs <= timeMs) start = middle + 1;
+    else end = middle;
+  }
+  const latest = intervals[start - 1];
+  return latest && timeMs < latest.endMs ? latest.facts[key] : undefined;
+}
+
+type Position = {timeMs: number; order: number};
+const comparePosition = (a: Position, b: Position) => a.timeMs - b.timeMs || a.order - b.order;
+
+/** Records with the same time and order share an observation boundary. */
+function groupTimelineRecords<T extends { timeMs: number; order: number }>(records: readonly T[]): T[][] {
+  const groups: T[][] = [];
+  for (const record of [...records].sort(comparePosition)) {
+    const group = groups.at(-1);
+    if (group && group[0].timeMs === record.timeMs && group[0].order === record.order) group.push(record);
+    else groups.push([record]);
+  }
+  return groups;
+}
+
+type CategoryStackRule = NonNullable<Build['weapon']>['metadata']['categoryStacks'] extends (infer T)[] | undefined ? T : never;
+type CategoryStackWindow = { certainUntil: number; possibleUntil: number; certainSource?: string; possibleSource?: string };
+
+const recorded = (fact?: CalculationFact) => fact && (fact.provenance === 'explicit' || fact.provenance === 'recorded');
+
+/** Both equipment stack rules project observations onto the same ordered events. */
+export function applyEquipmentStacks(timeline: Project['timeline'], context: CombatContext, builds: Map<string, Build>, events: Map<string, CalculationEvent>): void {
+  const holders = [...builds].filter(([, build]) => build.weapon?.metadata.categoryStacks?.length
+    || build.weapon?.metadata.sharedEventStacks?.length || build.sets.some(set => set.metadata.categoryStacks?.length));
+  if (!holders.length) return;
+  const groups = groupTimelineRecords(timeline);
+  const sources = new Map<string, string>();
+  const index = { groups, events, sources };
+  applyCategoryStacks(context, holders, index);
+  applySharedEventStacks(context, holders, index);
+  const existing = new Set(context.sources.map(source => source.id));
+  for (const [id, reference] of sources) if (!existing.has(id)) context.sources.push({ id, kind: 'recording', reference });
+}
+
+interface StackTimeline {
+  groups: Project['timeline'][];
+  events: Map<string, CalculationEvent>;
+  sources: Map<string, string>;
+}
+
+function applyCategoryStacks(context: CombatContext, builds: [string, Build][], {groups, events, sources}: StackTimeline): void {
+  for (const [owner, build] of builds) {
+    const rules: CategoryStackRule[] = [...build.weapon?.metadata.categoryStacks ?? [], ...build.sets.flatMap(set =>
+      (set.metadata.categoryStacks ?? []).filter(rule => rule.pieces !== undefined && (buildSetCounts(build)[set.id] ?? 0) >= rule.pieces))];
+    for (const rule of rules) {
+      const windows = new Map(rule.categories.map(category => [category, { certainUntil: 0, possibleUntil: rule.durationMs } as CategoryStackWindow]));
+      const marker = 'category-stack-' + owner + '-' + rule.fact + '-';
+      let anchorSources: string[] = [];
+      for (const event of context.events) for (const phase of ['before', 'after'] as const) {
+        const facts = event.derivedStates?.[phase]?.[owner];
+        if (facts?.[rule.fact]?.provenance === 'derived') delete facts[rule.fact];
+      }
+      function write(id: string, phase: 'before' | 'after', time: number) {
+        const event = events.get(id);
+        if (!event) return;
+        const current = [...windows.values()];
+        const lower = Math.min(rule.maxStacks, current.filter(window => time < window.certainUntil).length);
+        const upper = Math.min(rule.maxStacks, current.filter(window => time < window.possibleUntil).length);
+        const refs = [...new Set([...anchorSources, ...current.flatMap(window => [window.certainSource, window.possibleSource].filter((value): value is string => !!value))])].map(source => marker + source);
+        event.derivedStates ??= { before: {}, after: {} };
+        (event.derivedStates[phase][owner] ??= {})[rule.fact] = {
+          value: lower === upper ? { kind: 'quantity', unit: 'count', value: lower } : null,
+          provenance: 'derived', sourceRefs: refs,
+        };
+      }
+      for (const group of groups) {
+        const manual = group.flatMap(record => {
+          const fact = record.damage && subjectFacts(record.damage.facts, { kind: 'actor', id: owner })?.[rule.fact];
+          return fact && ['explicit', 'recorded'].includes(fact.provenance) ? [{ fact, id: record.id }] : [];
+        });
+        if (manual.length) {
+          const clear = manual.every(({ fact }) => fact.value?.kind === 'quantity' && fact.value.unit === 'count' && fact.value.value === 0);
+          anchorSources = manual.map(item => item.id);
+          for (const item of manual) sources.set(marker + item.id, item.id);
+          for (const window of windows.values()) {
+            window.certainUntil = 0;
+            window.possibleUntil = clear ? 0 : group[0].timeMs + rule.durationMs;
+            window.certainSource = undefined;
+            window.possibleSource = undefined;
+          }
+        }
+        for (const record of group) write(record.id, 'before', record.timeMs);
+        for (const record of group) {
+          if (record.damage?.hit.definition.group !== 'characters') continue;
+          const event = events.get(record.id), category = event?.category;
+          const window = category && category !== 'other' ? windows.get(category) : undefined;
+          if (!event || !window || event.occurred === false || event.actorId !== owner && event.actorId !== null) continue;
+          const hit = event.facts.targetsHit, damage = event.facts.targetsDamaged;
+          const observed = (value: typeof hit) => value && ['explicit', 'recorded'].includes(value.provenance) && value.value?.kind === 'quantity' ? value.value.value : undefined;
+          const hits = observed(hit), damaged = observed(damage);
+          const contact = hits !== undefined ? hits > 0 : damaged !== undefined && damaged > 0 ? true : null;
+          if (contact === false) continue;
+          const end = record.timeMs + rule.durationMs;
+          if (contact === true && event.actorId === owner && event.occurred !== null) {
+            window.certainUntil = end;
+            window.certainSource = record.id;
+          }
+          window.possibleUntil = end;
+          window.possibleSource = record.id;
+          sources.set(marker + record.id, record.id);
+        }
+        for (const record of group) write(record.id, 'after', record.timeMs);
+      }
+    }
+  }
+}
+
+function applySharedEventStacks(context: CombatContext, builds: [string, Build][], {groups, events, sources}: StackTimeline): void {
+  const readSource = sourceOwnerFactReader(context);
+  for (const [owner, build] of builds) for (const rule of build.weapon?.metadata.sharedEventStacks ?? []) {
+    let lower = 0, upper = rule.initialStacks ?? rule.maxStacks, certainUntil = 0, possibleUntil = rule.durationMs;
+    let certainEnds: number[] = [];
+    let ready = 0, possibleReady = rule.cooldownMs, refs: string[] = [];
+    const actor = context.actors.find(item => item.id === owner);
+    const marker = 'shared-event-stack-' + owner + '-' + rule.countFact + '-';
+    if (rule.fullTriggerFact) for (const event of context.events) {
+      if (event.actorId === owner && event.facts[rule.fullTriggerFact]?.provenance === 'derived') delete event.facts[rule.fullTriggerFact];
+    }
+    const manualIntervals = new Map([rule.countFact, ...(rule.fullFact ? [rule.fullFact] : [])].map(key => [key, context.factIntervals
+      .filter(row => row.subject.kind === 'actor' && row.subject.id === owner && recorded(row.facts[key]))
+      .sort((a, b) => a.startMs - b.startMs)]));
+    const manual = (eventId: string, time: number, key: string) => {
+      const direct = subjectFacts(events.get(eventId)?.subjectFacts, { kind: 'actor', id: owner })?.[key];
+      if (recorded(direct)) return true;
+      const intervals = manualIntervals.get(key) ?? [];
+      if (intervalFactAt(intervals, time, key)) return true;
+      return !!recorded(actor?.facts[key]);
+    };
+    function write(eventId: string, phase: 'before' | 'after', time: number) {
+      const event = events.get(eventId); if (!event) return;
+      const count = lower === upper ? lower : null;
+      const full = lower === rule.maxStacks ? true : upper < rule.maxStacks ? false : null;
+      const countManual = manual(eventId, time, rule.countFact), fullManual = rule.fullFact && manual(eventId, time, rule.fullFact);
+      const states = event.derivedStates ??= { before: {}, after: {} };
+      const facts = states[phase][owner] ??= {};
+      if (!countManual) facts[rule.countFact] = { value: count === null ? null : { kind: 'quantity', unit: 'count', value: count }, provenance: 'derived', sourceRefs: refs };
+      else if (facts[rule.countFact]?.provenance === 'derived') delete facts[rule.countFact];
+      if (rule.fullFact && !fullManual && !countManual) facts[rule.fullFact] = { value: full === null ? null : { kind: 'boolean', value: full }, provenance: 'derived', sourceRefs: refs };
+      else if (rule.fullFact && facts[rule.fullFact]?.provenance === 'derived') delete facts[rule.fullFact];
+    }
+    for (const group of groups) {
+      const time = group[0].timeMs;
+      if (rule.refresh === 'unverified') { certainEnds = certainEnds.filter(end => time < end); lower = certainEnds.length; }
+      else if (time >= certainUntil) lower = 0;
+      if (time >= possibleUntil) upper = 0;
+      const beforeLower = lower, beforeUpper = upper, beforeRefs = refs;
+      for (const record of group) write(record.id, 'before', time);
+      for (const record of group) {
+        const event = events.get(record.id); if (!event) continue;
+        const matches = eventMatches(rule.selector, event, owner, 'target');
+        if (matches === false || time < ready) continue;
+        const field = rule.sourceOwnerFact ? readSource(owner, event, rule.sourceOwnerFact) : true;
+        if (field === false) continue;
+        const certain = matches === true && field === true && time >= possibleReady && group.length === 1;
+        if (certain) {
+          if (rule.refresh === 'unverified') {
+            certainEnds.sort((a, b) => a - b);
+            if (certainEnds.length >= rule.maxStacks) certainEnds.pop();
+            certainEnds.push(time + rule.durationMs); lower = certainEnds.length;
+          } else { lower = Math.min(rule.maxStacks, lower + 1); certainUntil = time + rule.durationMs; }
+          ready = time + rule.cooldownMs;
+        }
+        upper = Math.min(rule.maxStacks, upper + 1); possibleUntil = time + rule.durationMs;
+        possibleReady = time + rule.cooldownMs;
+        const source = marker + event.id; refs = [...refs, source].slice(-rule.maxStacks); sources.set(source, event.id);
+        if (rule.fullTriggerFact) {
+          const full = certain && lower === rule.maxStacks ? true : upper < rule.maxStacks ? false : null;
+          event.facts[rule.fullTriggerFact] = { value: full === null ? null : { kind: 'boolean', value: full }, provenance: 'derived', sourceRefs: refs };
+        }
+      }
+      if (group.length > 1 && (lower !== beforeLower || upper !== beforeUpper)) {
+        const afterLower = lower, afterUpper = upper, afterRefs = refs;
+        lower = Math.min(beforeLower, afterLower); upper = Math.max(beforeUpper, afterUpper);
+        refs = [...new Set([...beforeRefs, ...afterRefs])].slice(-rule.maxStacks);
+        for (const record of group) write(record.id, 'before', time);
+        lower = afterLower; upper = afterUpper; refs = afterRefs;
+      }
+      for (const record of group) write(record.id, 'after', time);
+    }
+  }
 }

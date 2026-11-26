@@ -575,7 +575,17 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "amber.skill",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "pyroBonus",
+              "damageBonus"
+            ]
+          }
         }
       ],
       "cooldownParameter": "param4",

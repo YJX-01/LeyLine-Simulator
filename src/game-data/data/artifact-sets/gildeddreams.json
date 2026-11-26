@@ -83,9 +83,6 @@
       "buffs": [
         {
           "id": "gildeddreams.gilded",
-          "condition": {
-            "fact": "gildeddreams.reactionWindow"
-          },
           "modifiers": [
             {
               "target": "attribute.attackPercent",
@@ -93,7 +90,12 @@
                 "call": "gildeddreams.attack-per-member",
                 "inputs": {
                   "layers": {
-                    "fact": "gildeddreams.sameElements"
+                    "teamCount": {
+                      "elements": "owner",
+                      "match": "include",
+                      "excludeOwner": true,
+                      "cap": 3
+                    }
                   }
                 },
                 "output": "value"
@@ -105,13 +107,35 @@
                 "call": "gildeddreams.mastery-per-member",
                 "inputs": {
                   "layers": {
-                    "fact": "gildeddreams.differentElements"
+                    "teamCount": {
+                      "elements": "owner",
+                      "match": "exclude",
+                      "excludeOwner": true,
+                      "cap": 3
+                    }
                   }
                 },
                 "output": "value"
               }
             }
-          ]
+          ],
+          "windowFact": "gildeddreams.reactionWindow",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy"
+            },
+            "cooldownMs": 8000
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          }
         }
       ]
     }
@@ -123,22 +147,6 @@
         "kind": "boolean"
       },
       "label": "触发元素反应后的8秒内"
-    },
-    "gildeddreams.sameElements": {
-      "scope": "owner",
-      "type": {
-        "kind": "quantity",
-        "unit": "count"
-      },
-      "label": "其他队员中与装备者同元素的人数"
-    },
-    "gildeddreams.differentElements": {
-      "scope": "owner",
-      "type": {
-        "kind": "quantity",
-        "unit": "count"
-      },
-      "label": "其他队员中与装备者不同元素的人数"
     }
   },
   "formulas": [

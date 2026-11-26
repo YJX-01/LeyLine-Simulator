@@ -226,9 +226,9 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "complete",
+    "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "已采用当次条件、合法精炼及输出适用范围。",
+    "reason": "已记录普通或下落攻击可推导荣花层数，并在明确满层时快照防御给予队伍15秒增伤；零伤护盾、前置历史及层间刷新未确认时保留未知。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
@@ -270,6 +270,13 @@
         "kind": "boolean"
       },
       "label": "荣花之歌达到或刷新2层后的15秒内"
+    },
+    "peakpatrolsong.fullLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "荣花之歌处于两层"
     }
   },
   "formulas": [
@@ -392,9 +399,6 @@
     },
     {
       "id": "peakpatrolsong.ode-team",
-      "condition": {
-        "fact": "peakpatrolsong.ode-teamActive"
-      },
       "recipient": "team",
       "appliesTo": {
         "elements": [
@@ -414,7 +418,11 @@
             "call": "peakpatrolsong.defense-to-elements",
             "inputs": {
               "basis": {
-                "stat": "defense"
+                "stat": "defense",
+                "at": {
+                  "kind": "source-event-or-manual",
+                  "phase": "after"
+                }
               },
               "rate": {
                 "refinement": [
@@ -440,7 +448,62 @@
             "output": "value"
           }
         }
-      ]
+      ],
+      "windowFact": "peakpatrolsong.ode-teamActive",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "categories": [
+            "normal",
+            "plunge"
+          ],
+          "allowZeroDamage": true,
+          "observation": {
+            "key": "peakpatrolsong.fullTriggered",
+            "test": "true"
+          }
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 15000,
+        "phase": "after"
+      },
+      "stacking": {
+        "scope": "owner",
+        "policy": "replace",
+        "maxStacks": 1,
+        "retain": "latest",
+        "endOnNewTrigger": true
+      }
+    }
+  ],
+  "sharedEventStacks": [
+    {
+      "countFact": "peakpatrolsong.odeLayers",
+      "fullFact": "peakpatrolsong.fullLayers",
+      "selector": {
+        "kinds": [
+          "hit"
+        ],
+        "actor": "owner",
+        "target": "enemy",
+        "categories": [
+          "normal",
+          "plunge"
+        ],
+        "zeroDamage": "unknown"
+      },
+      "durationMs": 6000,
+      "cooldownMs": 100,
+      "maxStacks": 2,
+      "refresh": "unverified",
+      "fullTriggerFact": "peakpatrolsong.fullTriggered"
     }
   ]
 }

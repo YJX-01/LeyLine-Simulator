@@ -594,6 +594,16 @@
         {
           "id": "fischl.skill.param1",
           "name": "奥兹攻击伤害",
+          "snapshot": {
+            "sourceSkillId": "fischl.skill",
+            "sourceKind": "action-or-capture",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "electroBonus"
+            ]
+          },
           "base": [
             {
               "stat": "attack",

@@ -739,6 +739,17 @@
         {
           "id": "xiangling.burst.param3",
           "name": "三段挥舞伤害",
+          "snapshot": {
+            "sourceSkillId": "xiangling.burst",
+            "sourceKind": "capture-only",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "pyroBonus",
+              "elementalMastery"
+            ]
+          },
           "base": [
             {
               "stat": "attack",
@@ -750,6 +761,17 @@
         {
           "id": "xiangling.burst.param4",
           "name": "旋火轮伤害",
+          "snapshot": {
+            "sourceSkillId": "xiangling.burst",
+            "sourceKind": "capture-only",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "pyroBonus",
+              "elementalMastery"
+            ]
+          },
           "base": [
             {
               "stat": "attack",

@@ -47,6 +47,19 @@ describe('authored ordinary formula library', () => {
     expect(numeric(ordinary)).toBeCloseTo(attack * 0.9875 * (190 / (190 + 190 * 0.75)) * 0.9, 8);
   });
 
+  it('caps stacked defense reduction at 90% independently of defense ignore', () => {
+    // KQM's four-source in-game measurements: https://library.keqingmains.com/evidence/combat-mechanics/damage/damage-formula
+    const program = prepared(readCalculationLibrary());
+    for (const enemyLevel of [1, 90, 100]) for (const reduction of [.89, .9, .98, 1.1]) for (const ignore of [0, .6, 1]) {
+      const result = evaluateFormula(program, {namespace:'builtin',id:'defense',revision:'1'}, {
+        characterLevel:quantity('count', 1), enemyLevel:quantity('count', enemyLevel),
+        reduction:quantity('scalar', reduction), ignore:quantity('scalar', ignore),
+      });
+      const expected = 101 / (101 + (enemyLevel + 100) * (1 - Math.min(.9, reduction)) * (1 - ignore));
+      expect(numeric(result)).toBeCloseTo(expected, 12);
+    }
+  });
+
   it('implements resistance branches and crit clamping from source-bounded derivatives', async () => {
     const program = prepared(readCalculationLibrary());
     // Transparent resistance-boundary derivatives of the existing 10% Hilichurl calculation setting.

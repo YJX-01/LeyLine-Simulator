@@ -257,13 +257,38 @@
         "kind": "boolean"
       },
       "label": "重击命中要害后的10秒内"
+    },
+    "prototypecrescent.triggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本击已确认触发试作澹月被动"
     }
   },
   "buffs": [
     {
       "id": "prototypecrescent.weak-point",
-      "condition": {
-        "fact": "prototypecrescent.weakPointWindow"
+      "windowFact": "prototypecrescent.weakPointWindow",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "allowZeroDamage": true,
+          "observation": {
+            "key": "prototypecrescent.triggered",
+            "test": "true"
+          }
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 10000,
+        "phase": "after"
       },
       "modifiers": [
         {

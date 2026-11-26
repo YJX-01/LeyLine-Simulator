@@ -62,9 +62,10 @@ class BoundEvaluator {
   }
   scopedFact(subject: CombatContext['factIntervals'][number]['subject'], key: string, frame: ReadFrame): CalculationFact | undefined {
     const identity = JSON.stringify([subject, key]);
-    if (frame.eventId === this.initialFrame.eventId && this.overrides.has(identity)) return this.overrides.get(identity);
+    const override = frame.eventId === this.initialFrame.eventId ? this.overrides.get(identity) : undefined;
+    if (override && override.provenance !== 'preset') return override;
     const recordFact = subjectFacts(this.events.get(frame.eventId)?.subjectFacts, subject)?.[key];
-    if (recordFact) return recordFact;
+    if (recordFact && recordFact.provenance !== 'preset') return recordFact;
     const eventFrame = this.stateFrames.get(JSON.stringify([subject, key, frame.eventId, frame.phase]));
     if (eventFrame) return eventFrame;
     const resource = subject.kind === 'actor' ? this.events.get(frame.eventId)?.derivedStates?.[frame.phase][subject.id]?.[key] : undefined;
@@ -75,7 +76,8 @@ class BoundEvaluator {
     while (left < right) { const middle = (left + right) >>> 1; if (entries[middle].startMs <= timeMs) left = middle + 1; else right = middle; }
     const interval = entries[left - 1];
     if (interval && timeMs < interval.endMs) return interval.facts[key];
-    return subject.kind === 'team' ? own(this.context.team.facts, key) : subject.kind === 'actor' ? own(this.actors.get(subject.id)!.facts, key) : own(this.targets.get(subject.id)!.facts, key);
+    const base = subject.kind === 'team' ? own(this.context.team.facts, key) : subject.kind === 'actor' ? own(this.actors.get(subject.id)!.facts, key) : own(this.targets.get(subject.id)!.facts, key);
+    return base ?? override ?? recordFact;
   }
   sourceTime(frame: ReadFrame, origin: TraceOrigin, phase: ReadFrame['phase']): ReadFrame | EvaluatedValue {
     if (!frame.sourceEventId) return this.missing(origin, 'sourceEventId', { kind: 'enum', values: [...this.events.keys()] }, 'source-event');
@@ -92,6 +94,17 @@ class BoundEvaluator {
       return { ...frame, phase: at.phase === 'same' ? frame.phase : at.phase };
     }
     if (at.kind === 'source-event') return this.sourceTime(frame, origin, at.phase);
+    if (at.kind === 'source-event-or-manual') {
+      if (frame.sourceEventId) return this.sourceTime(frame, origin, at.phase);
+      const instance = frame.instance;
+      if (instance && !instance.source && instance.definition.windowFact) {
+        const id = instance.owner.id;
+        const manual = this.scopedFact({kind:'actor',id}, instance.definition.windowFact, frame);
+        if (manual && manual.provenance !== 'preset' && manual.provenance !== 'derived'
+          && manual.value?.kind === 'boolean' && manual.value.value) return frame;
+      }
+      return this.missing(origin, 'sourceEventId', { kind: 'enum', values: [...this.events.keys()] }, 'source-event');
+    }
     const slot = this.invocation.captures.find(candidate => candidate.id === at.slot), capture = own(frame.captures, at.slot);
     if (!slot || !slot.attributes.some(reference => definitionKey(reference) === definitionKey(attribute))) return this.session.invalid(origin, at.slot, '/invocation/captures', '属性未在捕获槽中声明。', 'missing-dependency');
     if (!capture) return this.missing(origin, at.slot, { kind: 'enum', values: [...this.events.keys()] }, 'capture');
@@ -117,11 +130,13 @@ class BoundEvaluator {
     if (binding.kind === 'team-attribute') {
       const type = this.data.attributes.get(definitionKey(binding.key))!.type;
       if (type.kind !== 'quantity') return this.session.invalid(origin, binding.key.id, '/bindings', '队伍聚合只读取数值属性。', 'unit-mismatch');
+      const at = binding.at ? this.time(binding.at, frame, origin, binding.key, frame.ownerId) : frame;
+      if ('state' in at) return at;
       const excluded = frame.instance ? new Set([...frame.excluded, frame.instance.id]) : frame.excluded;
       const dependencies: string[] = [];
       let total = binding.aggregate === 'max' ? -Infinity : 0;
       for (const actor of this.context.actors) {
-        const value = this.attribute(binding.key, actor.id, { ...frame, ownerId: actor.id, recipientId: actor.id, excluded }, depth + 1);
+        const value = this.attribute(binding.key, actor.id, { ...at, ownerId: actor.id, recipientId: actor.id, excluded }, depth + 1, binding.excludeNonConvertible);
         if (value.state !== 'known') return value;
         if (value.value.kind !== 'quantity') return this.session.invalid(origin, binding.key.id, '/bindings', '队伍属性单位无效。', 'unit-mismatch');
         dependencies.push(value.traceId);
@@ -130,9 +145,11 @@ class BoundEvaluator {
       return this.session.known(origin, binding.key.id, { kind: 'quantity', unit: type.unit, value: total }, dependencies, type);
     }
     if (binding.kind === 'team-count' || binding.kind === 'team-region') {
+      const relative = binding.kind === 'team-count' && binding.elements === 'owner';
+      const owner = this.actors.get(frame.ownerId)?.identity;
       let count = 0;
       let unknownElement: string | undefined;
-      const sources = new Set<string>();
+      const sources = new Set<string>(relative ? owner?.sourceRefs : []);
       const distinct = new Set<string>();
       for (const actor of this.context.actors) {
         if (binding.excludeOwner && actor.id === frame.ownerId) continue;
@@ -142,10 +159,17 @@ class BoundEvaluator {
           if ((actor.identity.region === binding.region) !== (binding.match === 'exclude')) count++;
           continue;
         }
-        if (!actor.identity) { unknownElement ??= actor.id; continue; }
-        actor.identity.sourceRefs.forEach(source => sources.add(source));
-        if (binding.elements.includes(actor.identity.element) === (binding.match === 'include')) {
-          distinct.add(actor.identity.element);
+        const self = relative && actor.id === frame.ownerId;
+        if (!self && (!actor.identity || relative && !owner)) {
+          unknownElement ??= actor.identity ? frame.ownerId : actor.id;
+          continue;
+        }
+        actor.identity?.sourceRefs.forEach(source => sources.add(source));
+        const matches = binding.elements === 'owner'
+          ? self || actor.identity?.element === owner?.element
+          : actor.identity !== undefined && binding.elements.includes(actor.identity.element);
+        if (matches === (binding.match === 'include')) {
+          distinct.add(actor.identity?.element ?? actor.id);
           count = binding.distinctElements ? distinct.size : count + 1;
         }
         if (count === binding.cap) { unknownElement = undefined; break; }
@@ -226,7 +250,7 @@ class BoundEvaluator {
       }
       excluded = selected;
     }
-    const value = this.attribute(binding.key, actorId, { ...at, excluded }, depth + 1);
+    const value = this.attribute(binding.key, actorId, { ...at, excluded }, depth + 1, binding.kind === 'attribute' && binding.excludeNonConvertible);
     return binding.at.kind === 'capture' ? this.session.emit(origin, binding.at.slot, [value.traceId], value.state === 'known' ? value.value : null,
       value.state, value.state === 'known' ? [] : value.reasons, 'capture', { eventId: at.eventId, phase: at.phase, actorId, captureSlot: binding.at.slot }) : value;
   }
@@ -246,14 +270,14 @@ class BoundEvaluator {
       return binding ? this.binding(binding, frame, origin, inputDepth + 1) : undefined;
     } });
   }
-  attribute(reference: DefinitionRef, actorId: string, frame: ReadFrame, depth: number): EvaluatedValue {
+  attribute(reference: DefinitionRef, actorId: string, frame: ReadFrame, depth: number, excludeNonConvertible = false): EvaluatedValue {
     const definition = this.data.attributes.get(definitionKey(reference))!, origin = originOf(definition);
     const key = JSON.stringify([definitionKey(reference), actorId, frame.ownerId, frame.recipientId, frame.contributorId, frame.targetId, frame.eventId,
-      frame.phase, frame.sourceEventId, frame.instance?.id, [...frame.excluded].sort()]);
+      frame.phase, frame.sourceEventId, frame.instance?.id, excludeNonConvertible, [...frame.excluded].sort()]);
     if (this.memo.has(key)) return this.memo.get(key)!;
     const exhausted = this.session.enter(origin, definition.identity.id, depth);
     if (exhausted) return exhausted;
-    const external = frame.excluded.size ? undefined : this.attributeReader?.(actorId, reference, frame.eventId, frame.phase);
+    const external = frame.excluded.size || excludeNonConvertible ? undefined : this.attributeReader?.(actorId, reference, frame.eventId, frame.phase);
     if (external !== undefined) {
       const read = external === null ? this.missing(origin, reference.id, definition.type, 'project-attribute') : this.session.known(origin, reference.id, external, [], definition.type);
       const value = this.session.emit(origin, reference.id, [read.traceId], read.state === 'known' ? read.value : null, read.state,
@@ -268,7 +292,7 @@ class BoundEvaluator {
       definition.scope === 'hit' ? own(frame.facts, definition.base.key) : own(subject.inputs, definition.base.key))
       : this.binding(definition.base, baseFrame, origin, depth + 1);
     const contributions = this.contributions({ ...frame, recipientId: definition.scope === 'target' ? frame.recipientId : actorId }, origin, depth + 1,
-      instance => instance.definition.target.kind === 'attribute' && definitionKey(instance.definition.target.attribute) === definitionKey(reference));
+      instance => !(excludeNonConvertible && instance.definition.nonConvertible) && instance.definition.target.kind === 'attribute' && definitionKey(instance.definition.target.attribute) === definitionKey(reference));
     let value = this.combine(origin, definition.identity.id, base, contributions, definition.combine, definition.type);
     if (value.state === 'known' && value.value.kind === 'quantity' && definition.bounds) value = this.session.known(origin, definition.identity.id + '.bounds',
       { ...value.value, value: Math.min(definition.bounds.max ?? Infinity, Math.max(definition.bounds.min ?? -Infinity, value.value.value)) }, [value.traceId], definition.type);
@@ -326,6 +350,13 @@ class BoundEvaluator {
   }
   stack(group: Contribution[], origin: TraceOrigin): Contribution[] {
     const { stacking } = group[0].instance.definition;
+    if (group.length > stacking.maxStacks && stacking.retain === 'unverified') {
+      const [first, ...rest] = group;
+      const value = first.value.state === 'known' ? first.value.value : undefined;
+      if (stacking.maxStacks === 1 && value?.kind === 'quantity' && rest.every(({value: read}) =>
+        read.state === 'known' && read.value.kind === 'quantity' && read.value.unit === value.unit && read.value.value === value.value)) return [first];
+      return [{ instance: first.instance, value: this.missing(origin, stacking.group, boolean, 'stacking-order') }];
+    }
     if (group.length > stacking.maxStacks) {
       const compare = (a: Contribution, b: Contribution): number | null => {
         if (stacking.retain === 'highest-priority') return a.instance.definition.priority === b.instance.definition.priority ? null : b.instance.definition.priority - a.instance.definition.priority;

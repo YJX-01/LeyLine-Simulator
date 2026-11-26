@@ -1105,12 +1105,18 @@
           "modifiers": [
             {
               "target": "attribute.elementalMastery",
+              "nonConvertible": true,
               "value": {
                 "call": "nahida.compassion.em",
                 "inputs": {
                   "highest": {
                     "teamStat": "elementalMastery",
-                    "aggregate": "max"
+                    "aggregate": "max",
+                    "excludeNonConvertible": true,
+                    "at": {
+                      "kind": "source-event-or-manual",
+                      "phase": "before"
+                    }
                   }
                 }
               }

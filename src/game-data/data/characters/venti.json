@@ -1077,6 +1077,16 @@
         {
           "id": "venti.burst.param1",
           "name": "持续伤害",
+          "snapshot": {
+            "sourceSkillId": "venti.burst",
+            "sourceKind": "action-or-capture",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "anemoBonus"
+            ]
+          },
           "base": [
             {
               "stat": "attack",
@@ -1088,6 +1098,20 @@
         {
           "id": "venti.burst.param2",
           "name": "附加元素伤害",
+          "snapshot": {
+            "sourceSkillId": "venti.burst",
+            "sourceKind": "action-or-capture",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "pyroBonus",
+              "hydroBonus",
+              "electroBonus",
+              "cryoBonus",
+              "elementalMastery"
+            ]
+          },
           "base": [
             {
               "stat": "attack",

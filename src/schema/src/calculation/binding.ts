@@ -11,19 +11,24 @@ export const calculationReadTimeSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('current'), phase: z.enum(['same', 'before', 'after']) }).strict(),
   z.object({ kind: z.literal('capture'), slot: idSchema }).strict(),
   z.object({ kind: z.literal('source-event'), phase: z.enum(['before', 'after']) }).strict(),
+  z.object({ kind: z.literal('source-event-or-manual'), phase: z.enum(['before', 'after']) }).strict(),
 ]);
 export type CalculationActorSelector = z.infer<typeof actorSelectorSchema>;
 export type CalculationReadTime = z.infer<typeof calculationReadTimeSchema>;
+export const sourceAttributeTimeSchema = z.object({
+  kind: z.enum(['source-event','source-event-or-manual']), phase: z.enum(['before','after']),
+}).strict();
 export const teamCountSchema = z.object({
-  elements: z.array(z.enum(elements)).min(1).max(8).refine(values => new Set(values).size === values.length, '元素条件重复。'),
+  elements: z.union([z.literal('owner'), z.array(z.enum(elements)).min(1).max(8)
+    .refine(values => new Set(values).size === values.length, '元素条件重复。')]),
   match: z.enum(['include','exclude']), excludeOwner: z.boolean(), cap: z.number().int().min(1).max(4).optional(), distinctElements: z.literal(true).optional(),
 }).strict();
 export type CalculationBinding =
   | { kind: 'attribute'; actor: CalculationActorSelector; key: DefinitionRef; at: CalculationReadTime;
-    excludeCurrentEffect?: true; excludeExtraAttack?: true; excludeOwnerBuffs?: DefinitionRef[] }
+    excludeCurrentEffect?: true; excludeExtraAttack?: true; excludeOwnerBuffs?: DefinitionRef[]; excludeNonConvertible?: true }
   | { kind: 'talent-parameter'; actor: CalculationActorSelector; skillId: string; parameterId: string; type: ValueType }
   | { kind: 'actor-state'; actor: CalculationActorSelector; property: 'ascension' | 'constellation' | 'refinement' }
-  | { kind: 'team-attribute'; key: DefinitionRef; aggregate: 'max' | 'sum' }
+  | { kind: 'team-attribute'; key: DefinitionRef; aggregate: 'max' | 'sum'; at?: z.infer<typeof sourceAttributeTimeSchema>; excludeNonConvertible?: true }
   | ({ kind: 'team-count' } & z.infer<typeof teamCountSchema>)
   | { kind: 'team-region'; region:string; excludeOwner?: true; match?: 'exclude' }
   | { kind: 'refinement-parameter'; values: number[]; type: Extract<ValueType, { kind: 'quantity' }> }
@@ -35,13 +40,17 @@ export type CalculationBinding =
 export const calculationBindingSchema: z.ZodType<CalculationBinding> = z.lazy(() => z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('attribute'), actor: actorSelectorSchema, key: definitionRefSchema, at: calculationReadTimeSchema,
     excludeCurrentEffect: z.literal(true).optional(), excludeExtraAttack: z.literal(true).optional(),
-    excludeOwnerBuffs: z.array(definitionRefSchema).min(1).max(32).optional() }).strict()
+    excludeOwnerBuffs: z.array(definitionRefSchema).min(1).max(32).optional(), excludeNonConvertible: z.literal(true).optional() }).strict()
+    .refine(read => !read.excludeNonConvertible || ['attribute.elementalMastery','attribute.energyRecharge'].includes(read.key.id), '排除不可转化来源只适用于精通和充能效率。')
     .refine(read => !read.excludeExtraAttack || read.key.id === 'attribute.attack', '非额外攻击力须读取攻击力属性。'),
   z.object({ kind: z.literal('talent-parameter'), actor: actorSelectorSchema, skillId: idSchema, parameterId: idSchema, type: calculationValueTypeSchema }).strict(),
   z.object({ kind: z.literal('actor-state'), actor: actorSelectorSchema, property: z.enum(['ascension', 'constellation', 'refinement']) }).strict(),
-  z.object({ kind: z.literal('team-attribute'), key: definitionRefSchema, aggregate: z.enum(['max', 'sum']) }).strict(),
+  z.object({ kind: z.literal('team-attribute'), key: definitionRefSchema, aggregate: z.enum(['max', 'sum']),
+    at: sourceAttributeTimeSchema.optional(), excludeNonConvertible: z.literal(true).optional() }).strict()
+    .refine(read => !read.excludeNonConvertible || ['attribute.elementalMastery','attribute.energyRecharge'].includes(read.key.id),
+      '排除不可转化来源只适用于精通和充能效率。'),
   z.object({ kind: z.literal('team-region'), region:idSchema, excludeOwner:z.literal(true).optional(), match:z.literal('exclude').optional() }).strict(),
-  teamCountSchema.extend({kind:z.literal('team-count')}),
+  teamCountSchema.safeExtend({kind:z.literal('team-count')}),
   z.object({ kind: z.literal('refinement-parameter'), values: z.array(finiteSchema).length(5), type: calculationQuantityTypeSchema }).strict(),
   z.object({ kind: z.literal('fact'), key: idSchema, type: calculationValueTypeSchema, at: z.enum(['source-event','last-observation']).optional(),
     scope: z.enum(['query', 'owner', 'recipient', 'event-actor', 'contributor', 'target', 'team', 'source-event']) }).strict(),
@@ -53,7 +62,7 @@ export const calculationBindingSchema: z.ZodType<CalculationBinding> = z.lazy(()
   z.object({ kind: z.literal('constant'), value: calculationValueSchema }).strict(),
 ]));
 
-export const calculationFactSchema = z.object({ value: calculationValueSchema.nullable(), provenance: z.enum(['explicit', 'recorded', 'derived']), sourceRefs: z.array(idSchema).max(1000) }).strict();
+export const calculationFactSchema = z.object({ value: calculationValueSchema.nullable(), provenance: z.enum(['explicit', 'recorded', 'derived', 'preset']), sourceRefs: z.array(idSchema).max(1000) }).strict();
 export type CalculationFact = z.infer<typeof calculationFactSchema>;
 export const calculationCaptureSlotSchema = z.object({
   id: idSchema, sourceSkillId: idSchema, attributes: z.array(definitionRefSchema).min(1).max(1000),

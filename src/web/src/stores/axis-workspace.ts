@@ -1,5 +1,5 @@
 import { storageKeyFor } from '@leyline/schema/version';
-import { packDocument, unpackDocument } from '../domain/content-document';
+import { DocumentReadError, packDocument, readWorkbenchDocument } from '../domain/content-document';
 import { formatJson } from '@leyline/schema';
 import { defineStore } from 'pinia';
 import { computed, ref, shallowRef, watch, onScopeDispose } from 'vue';
@@ -21,6 +21,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   const selectedId = ref(project.value.timeline.find(record => record.kind === 'damage')?.id ?? '');
   const notice = ref('当前为空轴，请先准备队伍并记录动作。');
   const error = ref('');
+  const unreadDocument = ref('');
   const busy = ref(false);
   const workerResult = shallowRef(pendingAxisResult());
   const workerEnabled = typeof Worker !== 'undefined';
@@ -162,14 +163,16 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
       const content = localStorage.getItem(recoveryKey);
       if (!content) return false;
       if (new TextEncoder().encode(content).byteLength > maxProjectBytes) throw new Error('恢复副本超过大小限制。');
-      const input = unpackDocument('axis-recovery', JSON.parse(content)) as { project: unknown; savedProject: unknown };
-      const next = validateProject(input.project);
-      const previousSaved=input.savedProject ? fileSignature(projectSchema.parse(input.savedProject)) : null;
+      const {next, previousSaved} = readWorkbenchDocument('axis-recovery', JSON.parse(content), data => {
+        const input = data as { project: unknown; savedProject: unknown };
+        return { next: validateProject(input.project), previousSaved: input.savedProject ? fileSignature(projectSchema.parse(input.savedProject)) : null };
+      }, content);
       installProject(next);savedSnapshot.value=previousSaved;
       notice.value='已恢复本地编辑副本，并重新计算；请保存项目文件。';
       return true;
-    } catch {
-      error.value = '恢复副本无法读取，当前项目保持不变。';
+    } catch (cause) {
+      unreadDocument.value = cause instanceof DocumentReadError ? cause.original : '';
+      error.value = cause instanceof Error ? cause.message : '恢复副本无法读取，当前项目保持不变。';
       return false;
     }
   }
@@ -177,6 +180,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   const actor = computed(() => project.value.candidate.actors.find(entry => entry.id === actorId.value));
 
   function installProject(next: Project) {
+    unreadDocument.value = '';
     session++;
     suppressHistory = true;
     try { project.value = next; } finally { suppressHistory = false; }
@@ -200,7 +204,12 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   }
 
   function importContent(content:string):void {
-    installProject(importProject(content));notice.value='项目已打开，并已按保存的定义和规则版本重新计算。';
+    try { installProject(importProject(content)); }
+    catch (cause) {
+      unreadDocument.value = cause instanceof DocumentReadError ? cause.original : '';
+      throw cause;
+    }
+    notice.value='项目已打开，并已按保存的定义和规则版本重新计算。';
   }
 
   function createProject(id: string = crypto.randomUUID(), preserveRecovery = false): void {
@@ -257,6 +266,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
     if (!bridge) return false;
     if (busy.value) return true;
     error.value = '';
+    unreadDocument.value = '';
     busy.value = true;
     try {
       const content = await bridge.openProject();
@@ -275,6 +285,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   async function inputFile(file: File): Promise<void> {
     if (busy.value) return;
     error.value = '';
+    unreadDocument.value = '';
     busy.value = true;
     try {
       if (file.size > maxProjectBytes) throw new Error('项目文件超过 8 MiB，当前项目保持不变。');
@@ -286,7 +297,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
     }
   }
 
-  return { project, result, dirty, actorId, actor, selectedId, notice, error, busy,
+  return { project, result, dirty, actorId, actor, selectedId, notice, error, unreadDocument, busy,
     replaceProject, importContent, createProject, saveProject, openNativeProject, inputFile,
     undo, redo, canUndo, canRedo, recover, recoveryAvailable, cancelRun, runState, run, command };
 });

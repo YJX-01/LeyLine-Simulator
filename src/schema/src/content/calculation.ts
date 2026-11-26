@@ -20,7 +20,12 @@ export const structuredHitSchema = z.object({
   infusion: z.object({ fact:idSchema, element:z.enum(elements), minConstellation:z.number().int().min(1).max(6).optional() }).strict().optional(),
   coordinated: z.object({ dealer: z.literal('on-field'), readyFact: idSchema, cooldownMs: z.number().int().positive(),
     window: z.object({ duration: idSchema, charges: idSchema }).strict().optional() }).strict().optional(),
-  snapshot: z.object({ sourceSkillId: idSchema, attributes: z.array(z.union([statSchema, z.literal('damageBonus')])).min(1).max(30), source: contentSourceSchema.optional() }).strict().optional(),
+  confirmedProc: z.object({
+    group: idSchema, sourceCategories: z.array(attackTypeSchema).min(1), confirmedFact: idSchema,
+    cooldownMs: z.tuple([z.number().int().positive(), z.number().int().positive(), z.number().int().positive(), z.number().int().positive(), z.number().int().positive()]),
+  }).strict().optional(),
+  snapshot: z.object({ sourceSkillId: idSchema, attributes: z.array(z.union([statSchema, z.literal('damageBonus')])).min(1).max(30),
+    sourceKind: z.enum(['capture-only', 'action-or-capture']).optional(), source: contentSourceSchema.optional() }).strict().optional(),
   base: boundFormulaSchema, sources: z.array(idSchema).min(1).max(1000),
   origin: z.enum(['talent', 'triggered']), damage: z.record(idSchema, boundFormulaSchema),
   coverageRefs: z.array(definitionRefSchema).min(1).max(1000),

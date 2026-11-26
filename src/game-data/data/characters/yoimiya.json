@@ -786,7 +786,12 @@
           ]
         }
       ],
-      "cooldownParameter": "param3"
+      "cooldownParameter": "param3",
+      "castWindow": {
+        "fact": "yoimiya.niwabi",
+        "durationParameter": "param2",
+        "cancelOnLeave": true
+      }
     },
     {
       "id": "yoimiya.burst",

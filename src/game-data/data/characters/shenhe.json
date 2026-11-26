@@ -972,7 +972,15 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "shenhe.burst",
+            "sourceKind": "capture-only",
+            "attributes": [
+              "attack",
+              "damageBonus"
+            ]
+          }
         }
       ],
       "energyCapacity": {

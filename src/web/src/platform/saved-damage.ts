@@ -1,6 +1,6 @@
 import { storageKeyFor } from '@leyline/schema/version';
 import { damageCalculatorSchema, type DamageCalculatorDocument } from '@leyline/schema';
-import { packDocument, unpackDocument } from '../domain/content-document';
+import { packDocument, readWorkbenchDocument } from '../domain/content-document';
 
 export interface SavedDamageSummary {
   id: string;
@@ -60,7 +60,7 @@ export async function saveDamageSnapshot(info: Omit<SavedDamageSummary, 'id' | '
 export async function loadSavedDamage(id: string) {
   const packed = await withDatabase(db => read(db.transaction('documents').objectStore('documents').get(id)));
   if (packed === undefined) throw new Error('这条伤害已被删除，请重新打开列表。');
-  return damageCalculatorSchema.parse(unpackDocument('damage-calculator', packed));
+  return readWorkbenchDocument('damage-calculator', packed, data => damageCalculatorSchema.parse(data));
 }
 
 export async function deleteSavedDamage(id: string) {

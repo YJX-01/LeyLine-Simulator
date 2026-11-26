@@ -271,6 +271,22 @@
       "when": [
         "kagotsurubeisshin.windTriggered"
       ],
+      "confirmedProc": {
+        "group": "kagotsurubeisshin.wind",
+        "sourceCategories": [
+          "normal",
+          "charged",
+          "plunge"
+        ],
+        "cooldownMs": [
+          8000,
+          8000,
+          8000,
+          8000,
+          8000
+        ],
+        "confirmedFact": "kagotsurubeisshin.windTriggered"
+      },
       "base": {
         "template": "attack-damage-base",
         "inputs": {

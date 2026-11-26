@@ -295,24 +295,6 @@
     ]
   },
   "maxRefinement": 5,
-  "facts": {
-    "athousandfloatingdreams.sameElements": {
-      "scope": "owner",
-      "type": {
-        "kind": "quantity",
-        "unit": "count"
-      },
-      "label": "除装备者外的同元素队员人数"
-    },
-    "athousandfloatingdreams.differentElements": {
-      "scope": "owner",
-      "type": {
-        "kind": "quantity",
-        "unit": "count"
-      },
-      "label": "除装备者外的异元素队员人数"
-    }
-  },
   "formulas": [
     {
       "id": "athousandfloatingdreams.same-1",
@@ -368,7 +350,12 @@
         "call": "athousandfloatingdreams.same-1",
         "inputs": {
           "points": {
-            "fact": "athousandfloatingdreams.sameElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "include",
+              "excludeOwner": true,
+              "cap": 3
+            }
           }
         },
         "output": "active"
@@ -395,7 +382,12 @@
         "call": "athousandfloatingdreams.same-2",
         "inputs": {
           "points": {
-            "fact": "athousandfloatingdreams.sameElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "include",
+              "excludeOwner": true,
+              "cap": 3
+            }
           }
         },
         "output": "active"
@@ -422,7 +414,12 @@
         "call": "athousandfloatingdreams.same-3",
         "inputs": {
           "points": {
-            "fact": "athousandfloatingdreams.sameElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "include",
+              "excludeOwner": true,
+              "cap": 3
+            }
           }
         },
         "output": "active"
@@ -452,7 +449,12 @@
             "call": "athousandfloatingdreams.different-per-member",
             "inputs": {
               "basis": {
-                "fact": "athousandfloatingdreams.differentElements"
+                "teamCount": {
+                  "elements": "owner",
+                  "match": "exclude",
+                  "excludeOwner": true,
+                  "cap": 3
+                }
               },
               "rate": {
                 "refinement": [
@@ -487,7 +489,12 @@
             "call": "athousandfloatingdreams.different-per-member",
             "inputs": {
               "basis": {
-                "fact": "athousandfloatingdreams.differentElements"
+                "teamCount": {
+                  "elements": "owner",
+                  "match": "exclude",
+                  "excludeOwner": true,
+                  "cap": 3
+                }
               },
               "rate": {
                 "refinement": [
@@ -522,7 +529,12 @@
             "call": "athousandfloatingdreams.different-per-member",
             "inputs": {
               "basis": {
-                "fact": "athousandfloatingdreams.differentElements"
+                "teamCount": {
+                  "elements": "owner",
+                  "match": "exclude",
+                  "excludeOwner": true,
+                  "cap": 3
+                }
               },
               "rate": {
                 "refinement": [
@@ -557,7 +569,12 @@
             "call": "athousandfloatingdreams.different-per-member",
             "inputs": {
               "basis": {
-                "fact": "athousandfloatingdreams.differentElements"
+                "teamCount": {
+                  "elements": "owner",
+                  "match": "exclude",
+                  "excludeOwner": true,
+                  "cap": 3
+                }
               },
               "rate": {
                 "refinement": [
@@ -592,7 +609,12 @@
             "call": "athousandfloatingdreams.different-per-member",
             "inputs": {
               "basis": {
-                "fact": "athousandfloatingdreams.differentElements"
+                "teamCount": {
+                  "elements": "owner",
+                  "match": "exclude",
+                  "excludeOwner": true,
+                  "cap": 3
+                }
               },
               "rate": {
                 "refinement": [
@@ -627,7 +649,12 @@
             "call": "athousandfloatingdreams.different-per-member",
             "inputs": {
               "basis": {
-                "fact": "athousandfloatingdreams.differentElements"
+                "teamCount": {
+                  "elements": "owner",
+                  "match": "exclude",
+                  "excludeOwner": true,
+                  "cap": 3
+                }
               },
               "rate": {
                 "refinement": [
@@ -662,7 +689,12 @@
             "call": "athousandfloatingdreams.different-per-member",
             "inputs": {
               "basis": {
-                "fact": "athousandfloatingdreams.differentElements"
+                "teamCount": {
+                  "elements": "owner",
+                  "match": "exclude",
+                  "excludeOwner": true,
+                  "cap": 3
+                }
               },
               "rate": {
                 "refinement": [

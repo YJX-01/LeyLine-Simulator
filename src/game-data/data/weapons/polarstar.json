@@ -225,6 +225,19 @@
   "kind": "weapon-definition",
   "namespace": "builtin",
   "revision": "1",
+  "categoryStacks": [
+    {
+      "fact": "polarstar.starLayers",
+      "durationMs": 12000,
+      "categories": [
+        "normal",
+        "charged",
+        "skill",
+        "burst"
+      ],
+      "maxStacks": 4
+    }
+  ],
   "support": {
     "resolution": "complete",
     "evidence": "adopted",

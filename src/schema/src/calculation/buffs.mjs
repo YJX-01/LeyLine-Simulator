@@ -50,7 +50,7 @@ export function expression(value, facts) {
   if (value?.amount !== undefined) return { kind: 'constant', value: { kind: 'quantity', unit: value.unit, value: value.amount } };
   if (typeof value === 'number') return { kind: 'constant', value: { kind: 'quantity', unit: 'scalar', value } };
   if (value.call) return { kind: 'formula', formula: ref(value.call), inputs: mapValues(value.inputs, input => expression(input, facts)), output: value.output ?? 'value' };
-  if (value.teamStat) return { kind: 'team-attribute', key: ref('attribute.' + value.teamStat), aggregate: value.aggregate };
+  if (value.teamStat) return { kind: 'team-attribute', key: ref('attribute.' + value.teamStat), aggregate: value.aggregate, ...(value.at && { at: value.at }), ...(value.excludeNonConvertible && { excludeNonConvertible: true }) };
   if (value.fact) {
     const field = combatFactDeclaration(facts, value.fact);
     if (!field) throw new Error('Unknown combat fact: ' + value.fact);
@@ -59,6 +59,7 @@ export function expression(value, facts) {
   if (value.stat) return { kind: 'attribute', key: ref('attribute.' + value.stat), actor: { role: value.actor ?? 'owner' },
     at: value.at ?? { kind: 'current', phase: 'same' },
     ...(value.excludeCurrentEffect ? { excludeCurrentEffect: true } : {}),
+    ...(value.excludeNonConvertible && { excludeNonConvertible: true }),
     ...(value.excludeExtraAttack ? { excludeExtraAttack: true } : {}),
     ...(value.excludeOwnerBuffs ? { excludeOwnerBuffs: value.excludeOwnerBuffs.map(id => ref(id)) } : {}) };
   if (value.state) return { kind: 'actor-state', actor: { role: value.actor ?? 'owner' }, property: value.state };
@@ -114,7 +115,7 @@ export function grantBuffs(owner, effects, sources, facts, unlock = {}, parentTa
     ruleIds.push(ref(key));
     effects.push({
       identity: ref(key), ...(buff.modifiers.length > 1 ? { buff: ref(buff.id) } : {}), sources, activation, trigger, lifetime,
-      ...(charges ? { charges } : {}), ...(counter ? { counter } : {}), ...(modifier.extraAttack ? { extraAttack: true } : {}),
+      ...(charges ? { charges } : {}), ...(counter ? { counter } : {}), ...(modifier.nonConvertible && { nonConvertible: true }), ...(modifier.extraAttack ? { extraAttack: true } : {}),
       ...(buff.windowFact ? { windowFact: buff.windowFact } : {}),
       recipient: recipient === 'team' ? { role: 'team', excludeOwner: buff.excludeOwner ?? false,
         ...(modifier.recipientElements && { elements: modifier.recipientElements }),

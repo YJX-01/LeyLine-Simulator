@@ -314,7 +314,12 @@
         "call": "astralvulturescrimsonplumage.charged.is1",
         "inputs": {
           "points": {
-            "fact": "astralvulturescrimsonplumage.differentElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "exclude",
+              "excludeOwner": true,
+              "cap": 2
+            }
           }
         },
         "output": "active"
@@ -346,7 +351,12 @@
         "call": "astralvulturescrimsonplumage.charged.is2",
         "inputs": {
           "points": {
-            "fact": "astralvulturescrimsonplumage.differentElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "exclude",
+              "excludeOwner": true,
+              "cap": 2
+            }
           }
         },
         "output": "active"
@@ -378,7 +388,12 @@
         "call": "astralvulturescrimsonplumage.burst.is1",
         "inputs": {
           "points": {
-            "fact": "astralvulturescrimsonplumage.differentElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "exclude",
+              "excludeOwner": true,
+              "cap": 2
+            }
           }
         },
         "output": "active"
@@ -410,7 +425,12 @@
         "call": "astralvulturescrimsonplumage.burst.is2",
         "inputs": {
           "points": {
-            "fact": "astralvulturescrimsonplumage.differentElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "exclude",
+              "excludeOwner": true,
+              "cap": 2
+            }
           }
         },
         "output": "active"
@@ -432,16 +452,6 @@
       ]
     }
   ],
-  "facts": {
-    "astralvulturescrimsonplumage.differentElements": {
-      "scope": "owner",
-      "type": {
-        "kind": "quantity",
-        "unit": "count"
-      },
-      "label": "队伍内与装备者元素类型不同的角色人数（两名及以上填2）"
-    }
-  },
   "formulas": [
     {
       "id": "astralvulturescrimsonplumage.charged.is1",

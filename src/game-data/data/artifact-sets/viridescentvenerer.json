@@ -56,7 +56,7 @@
       "support": {
         "resolution": "complete",
         "evidence": "adopted",
-        "reason": "已采用当次条件、装备件数及输出适用范围。",
+        "reason": "扩散减抗按持有者触发时的在场状态、反应元素和目标求值。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
@@ -93,7 +93,7 @@
                 "revision": "1"
               }
             ],
-            "reason": "已采用当次条件、装备件数及输出适用范围。"
+            "reason": "普通扩散与星扩散减抗需持有者在场，持续10秒；同元素减抗不叠加。"
           }
         ]
       },
@@ -164,7 +164,11 @@
               "target": "target.resistance.pyro",
               "value": -0.4
             }
-          ]
+          ],
+          "condition": {
+            "fact": "onField",
+            "at": "source-event"
+          }
         },
         {
           "id": "viridescentvenerer.shred-electro",
@@ -201,7 +205,11 @@
               "target": "target.resistance.electro",
               "value": -0.4
             }
-          ]
+          ],
+          "condition": {
+            "fact": "onField",
+            "at": "source-event"
+          }
         },
         {
           "id": "viridescentvenerer.shred-hydro",
@@ -238,7 +246,11 @@
               "target": "target.resistance.hydro",
               "value": -0.4
             }
-          ]
+          ],
+          "condition": {
+            "fact": "onField",
+            "at": "source-event"
+          }
         },
         {
           "id": "viridescentvenerer.shred-cryo",
@@ -276,7 +288,11 @@
               "target": "target.resistance.cryo",
               "value": -0.4
             }
-          ]
+          ],
+          "condition": {
+            "fact": "onField",
+            "at": "source-event"
+          }
         }
       ]
     }

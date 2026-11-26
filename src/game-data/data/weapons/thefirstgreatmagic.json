@@ -304,7 +304,12 @@
         "call": "thefirstgreatmagic.gimmick-.is1",
         "inputs": {
           "points": {
-            "fact": "thefirstgreatmagic.sameElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "include",
+              "excludeOwner": false,
+              "cap": 3
+            }
           }
         },
         "output": "active"
@@ -331,7 +336,12 @@
         "call": "thefirstgreatmagic.gimmick-.is2",
         "inputs": {
           "points": {
-            "fact": "thefirstgreatmagic.sameElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "include",
+              "excludeOwner": false,
+              "cap": 3
+            }
           }
         },
         "output": "active"
@@ -358,7 +368,12 @@
         "call": "thefirstgreatmagic.gimmick-.is3",
         "inputs": {
           "points": {
-            "fact": "thefirstgreatmagic.sameElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "include",
+              "excludeOwner": false,
+              "cap": 3
+            }
           }
         },
         "output": "active"
@@ -385,7 +400,12 @@
         "call": "thefirstgreatmagic.theatrics-.is1",
         "inputs": {
           "points": {
-            "fact": "thefirstgreatmagic.differentElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "exclude",
+              "excludeOwner": true,
+              "cap": 3
+            }
           }
         },
         "output": "active"
@@ -412,7 +432,12 @@
         "call": "thefirstgreatmagic.theatrics-.is2",
         "inputs": {
           "points": {
-            "fact": "thefirstgreatmagic.differentElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "exclude",
+              "excludeOwner": true,
+              "cap": 3
+            }
           }
         },
         "output": "active"
@@ -439,7 +464,12 @@
         "call": "thefirstgreatmagic.theatrics-.is3",
         "inputs": {
           "points": {
-            "fact": "thefirstgreatmagic.differentElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "exclude",
+              "excludeOwner": true,
+              "cap": 3
+            }
           }
         },
         "output": "active"
@@ -462,24 +492,6 @@
     }
   ],
   "maxRefinement": 5,
-  "facts": {
-    "thefirstgreatmagic.sameElements": {
-      "scope": "owner",
-      "type": {
-        "kind": "quantity",
-        "unit": "count"
-      },
-      "label": "与装备者元素类型相同的角色人数（计装备者，三名及以上填3）"
-    },
-    "thefirstgreatmagic.differentElements": {
-      "scope": "owner",
-      "type": {
-        "kind": "quantity",
-        "unit": "count"
-      },
-      "label": "与装备者元素类型不同的角色人数"
-    }
-  },
   "formulas": [
     {
       "id": "thefirstgreatmagic.gimmick-.is1",

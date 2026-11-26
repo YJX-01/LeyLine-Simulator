@@ -1,4 +1,4 @@
-import { packDocument } from '../../../../src/web/src/domain/content-document';
+import { DocumentReadError, packDocument } from '../../../../src/web/src/domain/content-document';
 import { existsSync } from 'node:fs';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createPinia, disposePinia, setActivePinia } from 'pinia';
@@ -7,7 +7,7 @@ import type { Project } from '@leyline/schema';
 import { recordedProject } from '../../../helpers/recorded-project';
 import type { DesktopBridge } from '../../../../src/web/src/platform/desktop';
 import { useAxisWorkspaceStore } from '../../../../src/web/src/stores/axis-workspace';
-import { createEmptyProject } from '../../../../src/web/src/domain/workbench-project';
+import { createEmptyProject, importProject } from '../../../../src/web/src/domain/workbench-project';
 import type { AxisRequest, AxisResponse } from '../../../../src/web/src/domain/axis-task';
 
 const adapters = vi.hoisted(() => ({ bridge: undefined as DesktopBridge | undefined, download: vi.fn() }));
@@ -24,6 +24,26 @@ function workspace() {
   store.replaceProject(snapshot());
   return store;
 }
+
+it('preserves the serialized source of unreadable axis and calculator documents', async () => {
+  const { parseDamageCalculator } = await import('../../../../src/web/src/domain/damage-calculator');
+  const project = createEmptyProject('custom-project');
+  expect(importProject(JSON.stringify(packDocument('axis', project)))).toEqual(project);
+  const snapshot = { ...project, definitions: [{ namespace: 'custom', id: 'custom-rule', nodes: [{ op: 'unsupported' }] }],
+    timeline: [{ id: 'event-1', actionVariant: 'custom.variant' }] };
+  const calculator = { kind: 'damage-calculator', schemaVersion: project.schemaVersion, project: snapshot, actorId: 'owner' };
+  for (const [packed, parse] of [
+    [packDocument('axis', snapshot), importProject],
+    [packDocument('damage-calculator', calculator), parseDamageCalculator],
+  ] as const) {
+    const original = JSON.stringify(packed, null, 2) + '\n';
+    let diagnostic: unknown;
+    try { parse(original); } catch (error) { diagnostic = error; }
+    expect(diagnostic).toBeInstanceOf(DocumentReadError);
+    expect((diagnostic as DocumentReadError).original).toBe(original);
+    expect((diagnostic as DocumentReadError).message).toBeTruthy();
+  }
+});
 
 describe.skipIf(!existsSync('.references/enka/official-example.json'))('current workspace files and editing', () => {
   beforeAll(async () => { recorded = await recordedProject(); });

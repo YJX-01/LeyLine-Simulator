@@ -27,7 +27,7 @@ import { fileSignature } from '../domain/file-signature';
 import { useCharacterLoadoutsStore } from '../stores/character-loadouts';
 import { applyCharacterDefinition, copyCharacterDefinition, parseCharacterDefinition } from '../domain/character-definition';
 import { exportCharacterSnapshot } from '../domain/structured-character-import';
-import { packDocument } from '../domain/content-document';
+import { DocumentReadError, packDocument } from '../domain/content-document';
 import { downloadJson, downloadJsonText } from '../domain/download';
 import { realElementLabel, realStatLabel, recordLabel, actorLabel, damageFamilyLabel, sceneHitLabel } from '../domain/workbench-labels';
 import { useAccountStore } from '../stores/account';
@@ -67,6 +67,7 @@ const ManualCharacterImport = defineAsyncComponent(() => import('./ManualCharact
 const account = useAccountStore(), axis = useAxisWorkspaceStore();
 const document = shallowRef<DamageCalculatorDocument>();
 const working = ref(false), error = ref('');
+const unreadDocument = ref('');
 const file = ref<HTMLInputElement>(), source = ref('');
 const savedSignature = ref('');
 const listed = shallowRef<{ id: string; signature: string }>();
@@ -418,6 +419,7 @@ watch(document, invalidate, { flush: 'sync' });
 watch([damage, enemy, hitTime], invalidate, { deep: true, flush: 'sync' });
 onBeforeUnmount(stop);
 function install(next: DamageCalculatorDocument, saved = false) {
+  unreadDocument.value = '';
   const keepsActor = !saved && next.project.id === document.value?.project.id && next.actorId === document.value.actorId
     && fileSignature(next.project.candidate.actors.find(member => member.id === next.actorId)?.build) === fileSignature(actor.value?.build);
   if (!keepsActor) { linkedConfiguration.value = undefined; source.value = ''; }
@@ -447,7 +449,9 @@ function clearCalculation() {
 }
 function newCalculation() { requestLeave(clearCalculation); }
 function copyAxis() { requestLeave(() => { try { const copy = copyProjectForCalculator(axis.project); install(copy); if (copy.recordId) void calculate(); } catch (cause) { showError(cause); } }); }
-function showError(cause: unknown) { error.value = cause instanceof Error ? cause.message : '计算未完成。'; }
+function showError(cause: unknown) {
+  unreadDocument.value = cause instanceof DocumentReadError ? cause.original : '';
+  error.value = cause instanceof Error ? cause.message : '计算未完成。'; }
 function openCharacters() {
   characterSource.value = !account.account.characters.length ? 'catalog' : source.value.startsWith('showcase:') ? 'showcase' : 'local';
   picker.value = 'character';
@@ -542,7 +546,7 @@ function selectDamage(choice: CalculatorHitChoice) {
       for (const field of factFields.value) {
         if (field.subject?.kind !== 'actor' || !['onField', 'hpRatio', 'shielded'].includes(field.key)) continue;
         if (subjectFacts(draft.facts, field.subject)?.[field.key]?.value == null)
-          setCalculatorFact(draft, { ...field, value: calculatorFactPreset(field, hitOwner.value.id) }, hitOwner.value.id);
+          putHitFact(draft.facts ??= [], field.subject, field.key, calculatorFactPreset(field, hitOwner.value.id), 'preset');
       }
     }
     const changes = resolveBuffSelection(buffs.value, draft, intervals.value, hitOwner.value.id, new Map());
@@ -809,7 +813,7 @@ async function calculate() {
           const presets = missingCalculatorPresets(record.captureFacts, fields, missing, record.actor);
           if (!presets.length) continue;
           const facts = structuredClone(toRaw(record.captureFacts ?? []));
-          for (const preset of presets) putHitFact(facts, preset.subject, preset.key, preset.value);
+          for (const preset of presets) putHitFact(facts, preset.subject, preset.key, preset.value, 'preset');
           updated.set(record.id, { ...record, captureFacts: facts });
         }
         if (updated.size) {
@@ -820,7 +824,7 @@ async function calculate() {
         const presets = missingCalculatorPresets(damage.value.facts, factFields.value, missing, owner);
         if (presets.length) {
           const draft: DamageRequest = JSON.parse(JSON.stringify(damage.value));
-          for (const preset of presets) setCalculatorFact(draft, preset, owner);
+          for (const preset of presets) putHitFact(draft.facts ??= [], preset.subject, preset.key, preset.value, 'preset');
           damage.value = draft;
           retry = calculate();
           return;
@@ -1028,6 +1032,10 @@ defineExpose({ requestLeave: leaveCalculator });
       </button>
     </div>
     <p v-if="error" role="alert">{{ error }}</p>
+    <details v-if="error && unreadDocument"><summary>查看未能计算的文件原文</summary>
+      <button class="ui-action" @click="downloadJsonText(unreadDocument, '计算文件原文.json')">另存原文</button>
+      <pre>{{ unreadDocument }}</pre>
+    </details>
     <section class="library-section calculator-result" aria-label="计算结果">
       <header class="result-heading"><DisclosureHeading title="伤害结果" controls="calculator-result-details" :expanded="resultExpanded" @toggle="resultExpanded = !resultExpanded" /><div class="library-page-actions">
         <button class="ui-action soft" v-if="!document?.baseline && point?.value != null" data-accent="anemo" :disabled="working" @click="pinBaseline">设为比较基准</button>

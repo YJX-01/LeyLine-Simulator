@@ -226,9 +226,9 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "complete",
+    "resolution": "unavailable",
     "evidence": "adopted",
-    "reason": "已采用当次条件、合法精炼及输出适用范围。",
+    "reason": "前台持有者的已记录战技命中可共刷新宏大诗篇；轴前历史、零伤护盾接触和多持有者同名队伍效果的覆盖仍待确认，旧手动事实优先。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
@@ -297,6 +297,7 @@
       "modifiers": [
         {
           "target": "attribute.elementalMastery",
+          "nonConvertible": true,
           "value": {
             "call": "keyofkhajnisut.hp-mastery",
             "inputs": {
@@ -337,6 +338,7 @@
       "modifiers": [
         {
           "target": "attribute.elementalMastery",
+          "nonConvertible": true,
           "value": {
             "call": "keyofkhajnisut.hp-mastery",
             "inputs": {
@@ -377,6 +379,7 @@
       "modifiers": [
         {
           "target": "attribute.elementalMastery",
+          "nonConvertible": true,
           "value": {
             "call": "keyofkhajnisut.hp-mastery",
             "inputs": {
@@ -412,6 +415,7 @@
       "modifiers": [
         {
           "target": "attribute.elementalMastery",
+          "nonConvertible": true,
           "value": {
             "call": "keyofkhajnisut.hp-mastery",
             "inputs": {
@@ -503,6 +507,27 @@
         "threshold": 3,
         "maxInput": 3
       }
+    }
+  ],
+  "sharedEventStacks": [
+    {
+      "countFact": "keyofkhajnisut.grandHymnLayers",
+      "fullFact": "keyofkhajnisut.grand-hymn-teamActive",
+      "selector": {
+        "kinds": [
+          "hit"
+        ],
+        "actor": "owner",
+        "target": "enemy",
+        "categories": [
+          "skill"
+        ],
+        "zeroDamage": "unknown"
+      },
+      "sourceOwnerFact": "onField",
+      "durationMs": 20000,
+      "cooldownMs": 300,
+      "maxStacks": 3
     }
   ]
 }

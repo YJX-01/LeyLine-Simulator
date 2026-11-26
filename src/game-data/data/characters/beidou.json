@@ -1177,7 +1177,7 @@
     {
       "rank": 6,
       "name": "北斗祓幽孽",
-      "description": "斫雷持续期间，周围敌人的雷元素抗性降低15%。",
+      "description": "斫雷持续期间，周围敌人的雷元素抗性降低15%。\n辉映·星超导：斫雷持续期间，附近敌人的冰元素抗性还会降低15%，且当前场上角色元素精通提升200点。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -1209,6 +1209,98 @@
             {
               "target": "target.resistance.electro",
               "value": -0.15
+            }
+          ]
+        },
+        {
+          "id": "beidou.stormbreaker-stellar-cryo-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "beidou.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "windowFact": "beidou.stormbreaker",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "beidou.radiance-stellar-conduct",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "beidou.stormbreakerNear"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.cryo",
+              "value": -0.15
+            }
+          ]
+        },
+        {
+          "id": "beidou.stormbreaker-stellar-mastery",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "beidou.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "windowFact": "beidou.stormbreaker",
+          "condition": {
+            "call": "beidou.radiance-stellar-conduct",
+            "inputs": {
+              "mode": {
+                "fact": "radiance"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 200,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "fact": "onField",
+                "of": "recipient"
+              }
             }
           ]
         }
@@ -1360,6 +1452,20 @@
         ],
         "equals": "electro",
         "revision": "1"
+      }
+    },
+    {
+      "id": "beidou.radiance-stellar-conduct",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "mode",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-conduct"
       }
     }
   ]

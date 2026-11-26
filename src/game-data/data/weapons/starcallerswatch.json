@@ -274,17 +274,30 @@
       "windowFact": "starcallerswatch.night-mirrorActive",
       "trigger": {
         "kind": "event",
-        "selector": {
-          "kinds": [
-            "state-change"
-          ],
-          "actor": "owner",
-          "target": "any",
-          "observation": {
-            "key": "shieldCreated",
-            "test": "true"
+        "selector": [
+          {
+            "kinds": [
+              "state-change"
+            ],
+            "actor": "owner",
+            "target": "any",
+            "observation": {
+              "key": "shieldCreated",
+              "test": "true"
+            }
+          },
+          {
+            "kinds": [
+              "state-change"
+            ],
+            "actor": "owner",
+            "target": "any",
+            "observation": {
+              "key": "pickedOwnCrystal",
+              "test": "true"
+            }
           }
-        },
+        ],
         "cooldownMs": 14000
       },
       "lifetime": {

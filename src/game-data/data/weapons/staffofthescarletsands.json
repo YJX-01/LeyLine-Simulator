@@ -286,7 +286,8 @@
             "call": "staffofthescarletsands.mastery-to-attack",
             "inputs": {
               "basis": {
-                "stat": "elementalMastery"
+                "stat": "elementalMastery",
+                "excludeNonConvertible": true
               },
               "rate": {
                 "refinement": [

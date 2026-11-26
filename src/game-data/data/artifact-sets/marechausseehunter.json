@@ -81,6 +81,10 @@
       "buffs": [
         {
           "id": "marechausseehunter.hp-change",
+          "condition": {
+            "fact": "onField",
+            "at": "source-event"
+          },
           "trigger": {
             "kind": "event",
             "selector": {
@@ -101,7 +105,8 @@
             "phase": "after"
           },
           "stacking": {
-            "maxStacks": 3
+            "maxStacks": 3,
+            "refreshAll": true
           },
           "modifiers": [
             {

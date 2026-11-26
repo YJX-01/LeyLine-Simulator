@@ -260,24 +260,6 @@
     ]
   },
   "maxRefinement": 5,
-  "facts": {
-    "jadevista.sameElements": {
-      "scope": "owner",
-      "type": {
-        "kind": "quantity",
-        "unit": "count"
-      },
-      "label": "除装备者外的同元素队员人数"
-    },
-    "jadevista.differentElements": {
-      "scope": "owner",
-      "type": {
-        "kind": "quantity",
-        "unit": "count"
-      },
-      "label": "除装备者外的异元素队员人数"
-    }
-  },
   "formulas": [
     {
       "id": "jadevista.mastery.is1",
@@ -333,7 +315,12 @@
         "call": "jadevista.mastery.is1",
         "inputs": {
           "points": {
-            "fact": "jadevista.sameElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "include",
+              "excludeOwner": true,
+              "cap": 3
+            }
           }
         },
         "output": "active"
@@ -360,7 +347,12 @@
         "call": "jadevista.mastery.is2",
         "inputs": {
           "points": {
-            "fact": "jadevista.sameElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "include",
+              "excludeOwner": true,
+              "cap": 3
+            }
           }
         },
         "output": "active"
@@ -387,7 +379,12 @@
         "call": "jadevista.mastery.is3",
         "inputs": {
           "points": {
-            "fact": "jadevista.sameElements"
+            "teamCount": {
+              "elements": "owner",
+              "match": "include",
+              "excludeOwner": true,
+              "cap": 3
+            }
           }
         },
         "output": "active"
@@ -417,7 +414,12 @@
             "call": "jadevista.attack-per-member",
             "inputs": {
               "basis": {
-                "fact": "jadevista.differentElements"
+                "teamCount": {
+                  "elements": "owner",
+                  "match": "exclude",
+                  "excludeOwner": true,
+                  "cap": 3
+                }
               },
               "rate": {
                 "refinement": [
