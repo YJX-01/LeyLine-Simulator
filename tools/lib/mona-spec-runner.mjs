@@ -257,7 +257,7 @@ export async function runSpecBuffScenarios({ scenarios, entities, engine, leylin
       const effectiveMonaParams = spec.monaParams ? { ...spec.monaParams } : {};
       let injectedOwnerStatValue = null;
       if (spec.injectOwnerStat) {
-        const { stat: ownerStatName, monaParam } = spec.injectOwnerStat;
+        const { stat: ownerStatName, monaParam, scale } = spec.injectOwnerStat;
         const ownerSetup = structuredClone(setup);
         const ownerFrame = structuredClone(request.frame);
         setAuditDefaults(ownerChar, ownerFrame);
@@ -268,7 +268,7 @@ export async function runSpecBuffScenarios({ scenarios, entities, engine, leylin
         const ownerRead = readLeylineTarget(engine, prepared.team, ownerSetup, ownerFrame, 'attribute.' + ownerStatName);
         if (ownerRead.value == null) throw new Error(`Failed to read owner stat ${ownerStatName} for injection`);
         injectedOwnerStatValue = ownerRead.value;
-        if (monaParam) effectiveMonaParams[monaParam] = injectedOwnerStatValue;
+        if (monaParam) effectiveMonaParams[monaParam] = injectedOwnerStatValue * (scale ?? 1);
       }
 
       const monaInput = await monaFixture(recipientId, spec.monaSkillIndex ?? 0);
@@ -328,13 +328,32 @@ export async function runSpecBuffScenarios({ scenarios, entities, engine, leylin
           if (!selfRecipient) {
             phaseFrame.factOverrides = phaseFrame.factOverrides.filter(r => r.subject.id !== recipientActor);
           }
+          const recipientDefaults = {};
+          if (!selfRecipient) {
+            for (const srcEntity of [ownerChar, ...(spec.kind === 'weapon' ? [ownerWeapon] : []), ...(spec.kind === 'set' ? [ownerSets[0]] : [])]) {
+              for (const [key, field] of Object.entries(srcEntity?.metadata?.facts ?? {})) {
+                if (field.scope !== 'recipient' || eventWindowFacts.has(key)) continue;
+                recipientDefaults[key] = field.type.kind === 'quantity' ? 0
+                  : field.type.kind === 'boolean' ? false
+                    : (field.type.values?.includes('none') ? 'none' : field.type.values?.[0]);
+              }
+            }
+          }
           const resetVal = v => (typeof v === 'boolean' ? false : typeof v === 'string' ? 'none' : 0);
           setSubjectFacts(phaseFrame, { kind: 'actor', id: recipientActor }, {
+            ...recipientDefaults,
             onField: spec.recipientOnField ?? true,
             hpRatio: spec.recipientHpRatio ?? 1,
             ...(spec.fixedRecipientGates ?? {}),
             ...Object.fromEntries(Object.entries(spec.recipientGates ?? {}).map(([k, v]) => [k, active ? v : resetVal(v)])),
-          }, recipientChar.metadata);
+          }, {
+            facts: {
+              ...(ownerChar?.metadata?.facts ?? {}),
+              ...(spec.kind === 'weapon' ? (ownerWeapon?.metadata?.facts ?? {}) : {}),
+              ...(spec.kind === 'set' ? (ownerSets[0]?.metadata?.facts ?? {}) : {}),
+              ...(recipientChar?.metadata?.facts ?? {}),
+            },
+          });
 
           const ownerFacts = {
             onField: spec.ownerOnField ?? true,
@@ -738,16 +757,37 @@ export async function runSpecFourPieceScenarios({ scenarios, entities, engine, l
         ascension: 6,
         theoreticalSetSlots: setDoc.slots.slice(0, pieces).map(slot => ({ slot, setId: setDoc.id })),
       });
-      const team3 = engine.prepareStructuredBuilds([{ id: 'actor', build: buildFor(3) }]);
-      const team4 = engine.prepareStructuredBuilds([{ id: 'actor', build: buildFor(4) }]);
+      const extraMembers = (spec.teamElements ?? []).map((element, i) => ({ id: 'extra' + i, element }));
+      const team3 = engine.prepareStructuredBuilds([{ id: 'actor', build: buildFor(3) }, ...extraMembers]);
+      const team4 = engine.prepareStructuredBuilds([{ id: 'actor', build: buildFor(4) }, ...extraMembers]);
       if (!team3.ok || !team4.ok) throw new Error('Failed to prepare 3pc/4pc builds');
 
       const { setup, request } = resolveRecipientHit(character, spec, 'actor');
+      const fourPcEvents = spec.events ?? (spec.event ? [spec.event] : []);
+      const eventWindowFacts = new Set();
+      if (fourPcEvents.length) {
+        const meta = setDoc.metadata ?? setDoc;
+        for (const g of [meta, ...(meta.effects ?? [])]) {
+          for (const b of g.buffs ?? []) if (b.windowFact && b.trigger) eventWindowFacts.add(b.windowFact);
+        }
+      }
       setAuditDefaults(character, request.frame);
       setAuditDefaults(setDoc, request.frame);
+      if (eventWindowFacts.size) {
+        for (const row of request.frame.factOverrides) {
+          for (const key of eventWindowFacts) {
+            if (!Object.hasOwn(spec.gates ?? {}, key)) {
+              delete row.facts[key];
+            }
+          }
+        }
+      }
       if (spec.gates) setGateFacts(setDoc, request.frame, spec.gates);
       if (spec.targetGates) setSubjectFacts(request.frame, { kind: 'target', id: 'enemy' }, spec.targetGates, setDoc.metadata);
-      const fourPcEvents = spec.events ?? (spec.event ? [spec.event] : []);
+      if (fourPcEvents.length) {
+        const hitEvent = setup.events.find(e => e.id === 'hit');
+        if (hitEvent) hitEvent.timeMs = fourPcEvents.length * 10 + 1;
+      }
       for (const [idx, ev] of fourPcEvents.entries()) {
         const { actorOnField, ...eventBody } = ev;
         const subjectFacts = actorOnField !== undefined
@@ -760,7 +800,11 @@ export async function runSpecFourPieceScenarios({ scenarios, entities, engine, l
       const probe = (await probeMonaSkills({ characters: [monaName], indices: [spec.monaSkillIndex ?? 0], constellations: [0] })).rows[0];
       if (!probe || probe.status !== 'ok') throw new Error(`Mona fixture failed for ${monaName}`);
       const otherSet = spec.key === 'GladiatorsFinale' ? 'NoblesseOblige' : 'GladiatorsFinale';
-      const arts3 = probe.input.artifacts.slice(0, 4).map((a, i) => ({ ...a, set_name: i === 3 ? otherSet : spec.key }));
+      const arts3 = probe.input.artifacts.slice(0, 4).map((a, i) => ({
+        ...a,
+        set_name: i === 3 ? otherSet : spec.key,
+        ...(spec.stripArtifactSubstats ? { sub_stats: [] } : {}),
+      }));
       const arts4 = arts3.map(a => ({ ...a, set_name: spec.key }));
       const monaConfig = spec.monaArtifactConfig ?? null;
 

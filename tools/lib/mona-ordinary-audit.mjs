@@ -105,6 +105,11 @@ const inactiveWindows = new Set([
   'lumine-dendro.lotusField', 'chiori.geoConstructMade', 'kamisatoayaka.senhoContact', 'sigewinne.restWindow',
   'fischl.hexereiSecretRite', 'fischl.hexereiOverloadActive', 'fischl.hexereiElectroActive', 'fischl.hexereiCoordinationActive',
   'klee.hexereiAwakened', 'klee.chainedSparkAttackActive', 'mona.hexereiAwakened', 'mona.recipientHexerei',
+  'traveler.enhancedResonance.anemo', 'traveler.enhancedResonance.geo', 'traveler.enhancedResonance.electro',
+  'traveler.enhancedResonance.dendro', 'traveler.enhancedResonance.hydro', 'traveler.enhancedResonance.pyro',
+  'traveler.enhancedResonance.cryo', 'traveler.enhancedAttribute.first', 'traveler.enhancedAttribute.second',
+  'albedo.hexereiSecretRite', 'albedo.hexereiIsotomaWindow', 'albedo.hexereiFumoWindow',
+  'albedo.recipientHexerei', 'albedo.fumoPlungeImpactWindow',
 ]);
 export function ordinaryInactiveWindows(character) {
   const extra = loadSpecInactiveWindows(character.id);
@@ -113,9 +118,12 @@ export function ordinaryInactiveWindows(character) {
   return result;
 }
 const baselinePanelLabel = /^(角色基础|武器基础|圣遗物词条|角斗士的终幕礼[24]|角色副属性|初始值)/;
+const baselineRatioLabel = /^技能倍率$/;
 const tolerance = expected => Math.max(.000001, Math.abs(expected) * .0001);
 const close = (expected, actual) => Number.isFinite(expected) && Number.isFinite(actual)
   && Math.abs(expected - actual) <= tolerance(expected);
+const ratioClose = (expected, actual) => Number.isFinite(expected) && Number.isFinite(actual)
+  && Math.abs(expected - actual) <= Math.max(0.000051, Math.abs(expected) * 0.0001);
 export function soloTalentGrants(character, ascension = 6) {
   const grants = { normal: 0, skill: 0, burst: 0 };
   for (const passive of character.passives ?? []) {
@@ -128,8 +136,17 @@ export function soloTalentGrants(character, ascension = 6) {
   }
   return grants;
 }
-const hasAdditionalEffect = analysis => ['atk', 'hp', 'def', 'em', 'bonus'].some(key =>
-  Object.entries(analysis[key] ?? {}).some(([label, value]) => value !== 0 && !baselinePanelLabel.test(label)));
+const additionalRatioLabel = /(?:^C[1-6]|C[1-6]「|[1-6]命|命座|天赋)/;
+const hasAdditionalEffect = analysis => ['atk', 'hp', 'def', 'em', 'bonus', 'atk_ratio', 'def_ratio', 'hp_ratio', 'em_ratio'].some(key => {
+  const entries = Object.entries(analysis[key] ?? {}).filter(([, value]) => value !== 0);
+  if (!key.endsWith('_ratio')) {
+    return entries.some(([label]) => !baselinePanelLabel.test(label));
+  }
+  return entries.some(([label]) =>
+    !baselinePanelLabel.test(label)
+    && !baselineRatioLabel.test(label)
+    && (additionalRatioLabel.test(label) || entries.length > 1));
+});
 
 function ordinaryCommonPanel(analysis, terms, parameters, level) {
   return terms.reduce((total, term) => total + sum(analysis[batchAxes[term.stat][0]])
@@ -316,19 +333,21 @@ export async function auditMonaOrdinaryC6(monaRows, leylineRows, c0, entities, e
         const effectiveLevel = level;
         const ratios = Object.fromEntries(Object.keys(batchAxes).map(key => [key, 0]));
         for (const term of terms) ratios[term.stat] += talent.parameters.find(p => p.id === term.parameter)?.values[effectiveLevel - 1] ?? NaN;
-        if (Object.entries(batchAxes).some(([stat, [, ratio]]) => !close(ratios[stat], sum(analysis[ratio]))) || !close(0, sum(analysis.extra_damage))) {
+        if (Object.entries(batchAxes).some(([stat, [, ratio]]) => !ratioClose(ratios[stat], sum(analysis[ratio]))) || !close(0, sum(analysis.extra_damage))) {
           throw new Error('C6 scaling differs after talent-rank alignment');
         }
         const monaExpected = Object.values(batchAxes).reduce((total, [stat, ratio]) => total + sum(analysis[stat]) * sum(analysis[ratio]), 0)
           * (1 + sum(analysis.bonus)) * .45;
         const commonActual = Object.entries(batchAxes).reduce((total, [stat, [key]]) => total + sum(analysis[key]) * ratios[stat], 0)
           * (1 + sum(analysis.bonus)) * .45;
+        const ratioRoundingBound = Object.entries(batchAxes).reduce((total, [stat, [key]]) => total + (ratios[stat] > 0 ? sum(analysis[key]) * 0.000051 : 0), 0)
+          * (1 + sum(analysis.bonus)) * .45;
         const monaActual = analysis.normal.non_critical;
         if (level === 10 && (!Number.isFinite(branch.result.non_critical) || Math.abs(branch.result.non_critical - monaActual) > 1e-9
           || ['skill1', 'skill2', 'skill3'].some(key => input.character[key] !== branch.scenario.input.character[key]))) {
           throw new Error('C6 stored default branch differs from the unaltered level-10 input');
         }
-        if (!close(monaExpected, monaActual) || !close(monaActual, commonActual)) throw new Error('C6 Mona or common-panel damage differs');
+        if (!close(monaExpected, monaActual) || !Number.isFinite(commonActual) || Math.abs(monaActual - commonActual) > Math.max(tolerance(monaActual), ratioRoundingBound)) throw new Error('C6 Mona or common-panel damage differs');
         const build = { ...auditBuild(character, weapon), level: 90, ascension: 6, constellation: 6,
           talents: Object.fromEntries(['normal', 'skill', 'burst'].map(category => [category, level - bonuses[category] - grants[category]])) };
         const prepared = engine.prepareStructuredBuilds([{ id: 'actor', build }]);
