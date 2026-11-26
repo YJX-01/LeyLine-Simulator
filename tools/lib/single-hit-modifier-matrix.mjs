@@ -1,5 +1,7 @@
-import { auditOrdinaryHitProfiles } from './ordinary-hit-profiles.mjs';
+import { auditOrdinaryHitProfiles, precomputeAliasHitIds } from './ordinary-hit-profiles.mjs';
 import { auditBuild, auditHit, bool, novice, number, setAuditDefaults, setGateFacts } from './roster-audit-settings.mjs';
+
+export { precomputeAliasHitIds };
 
 const categories = ['normal', 'charged', 'plunge', 'skill', 'burst'];
 const melee = new Set(['WEAPON_SWORD_ONE_HAND', 'WEAPON_CLAYMORE', 'WEAPON_POLE']);
@@ -36,12 +38,14 @@ function baseDamage(character, weapon, { declaration, source }, attackBonus = 0)
   return Number.isFinite(total) && total > 0 ? total : null;
 }
 
-export function auditSingleHitModifiers(entities, engine) {
+export function auditSingleHitModifiers(entities, engine, options = {}) {
+  const { characterIds, aliasHitIds, includeCrossChecks = true } = options;
   const characters = new Map(entities.characters.map(c => [c.id, c]));
   const weapons = new Map(entities.weapons.map(w => [w.id, w]));
   const sets = new Map(entities.sets.map(s => [s.id, s]));
   const rows = [], unsampled = [];
   const seenAliases = new Set();
+  const teamCache = new Map();
   const starter = c => weapons.get(novice[c.identity.weaponType]);
 
   function build(c, gear = [], weapon = starter(c), constellation = 0) {
@@ -57,11 +61,20 @@ export function auditSingleHitModifiers(entities, engine) {
     return result;
   }
 
+  function buildKey(b) {
+    const slots = (b.theoreticalSetSlots ?? []).map(s => s.setId + ':' + s.slot).join(',');
+    return `${b.character.id}|${b.weapon?.id ?? ''}|${b.constellation}|${slots}`;
+  }
+
   function team(dealer, peer) {
+    const key = buildKey(dealer) + '||' + (peer ? buildKey(peer) : '');
+    const cached = teamCache.get(key);
+    if (cached) return cached;
     const actors = [{ id: 'actor', build: dealer }];
     if (peer) actors.push({ id: 'peer', build: peer });
     const prepared = engine.prepareStructuredBuilds(actors);
     if (!prepared.ok) throw new Error(JSON.stringify(prepared.diagnostics));
+    teamCache.set(key, prepared.team);
     return prepared.team;
   }
 
@@ -85,8 +98,9 @@ export function auditSingleHitModifiers(entities, engine) {
       ...(before && { before: before.value }), status, ...(missing && { required: missing.required, diagnostics: missing.diagnostics }) });
   }
 
-  const context = { weapons, characters, build, team, evaluate, record, whiteStat, seenAliases, unsampled };
-  for (const character of characters.values()) {
+  const context = { weapons, characters, build, team, evaluate, record, whiteStat, seenAliases, aliasHitIds, unsampled };
+  const targetCharacters = characterIds ? characterIds.map(id => characters.get(id)).filter(Boolean) : [...characters.values()];
+  for (const character of targetCharacters) {
     const hits = entries(character);
     auditOrdinaryHitProfiles(character, hits, starter(character), context);
     const normal = hits.find(e => e.talent.category === 'normal' && e.hit.category === 'normal');
@@ -111,6 +125,12 @@ export function auditSingleHitModifiers(entities, engine) {
       const before = evaluate(parties[1], character, entry);
       record('gladiator-exclusion', character, entry, { set: gladiator, fromPieces: 2, toPieces: 4 }, evaluate(parties[2], character, entry), before.value, before);
     }
+  }
+
+  if (!includeCrossChecks) {
+    const samples = [...new Map(unsampled.map(row => [JSON.stringify(row), row])).values()];
+    const failures = rows.filter(row => row.status !== 'passed').concat(samples.filter(row => row.required));
+    return { rows, unsampled: samples, failures };
   }
 
   // Both 2-piece sources occupy different slots. Cross element, hit category and stacking bucket.

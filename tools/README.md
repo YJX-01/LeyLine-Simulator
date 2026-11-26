@@ -3,7 +3,7 @@
 `scripts/data` 负责来源采集、候选与审计，`scripts/assets` 准备资源，`scripts/checks` 校验仓库输入及构建产物。构建、交付、本地服务与许可工具分别位于 `scripts/build`、`scripts/release`、`scripts/dev` 和 `scripts/licenses`。共用实现放在 `lib`，依赖补丁放在 `patches`。具体来源和采用记录见[资料入口](data/README.md)。
 
 
-上一版存档用 `node tools/scripts/data/convert-previous-file.mjs <旧文件.json> <新文件.json>` 离线另存。目标文件必须尚未存在。命中选择无法唯一还原时，命令会列出原记录和字段供重选。全目录数值、授予和排除的逐项验收可用 `node tools/scripts/data/audit-calculation-coverage.mjs --report <报告.json> --gaps <缺口.md>` 重跑。
+全目录数值、授予和排除的逐项验收可用 `node tools/scripts/data/audit-calculation-coverage.mjs --report <报告.json> --gaps <缺口.md>` 重跑。
 
 ## 工具命令
 
@@ -12,14 +12,11 @@
 | 命令 | 输入与输出 |
 | --- | --- |
 | `pnpm data:build` | 从正式资源生成 `.cache/public/assets`，复用相同字节并清理废弃副本 |
-| `pnpm data:check` | 只读比较来源数值、目录依赖、展示与导入映射和资源缓存 |
-| `node tools/scripts/data/capture-catalog.mjs` | 将固定 `.references/genshin-db` 的原始字节复制到新审阅目录 |
-| `python tools/scripts/data/prepare-character-update.py --out artifacts/content-candidates/<新目录>` | 按当前来源和规则生成角色候选及差异 |
+| `pnpm data:check` | 只读比较来源数值、目录依赖、展示与导入映射、资源缓存及正式目录覆盖核对（`--check` 拦截所有回归与数值不符，未闭合未来条款由 `--require-complete` 单独把关） |
 | `node tools/scripts/data/audit-numeric-sources.mjs` | 核对数值并更新 `tools/data/audits/numeric-precision.json` |
-| `node tools/scripts/data/audit-calculation-coverage.mjs --json` | 报告当前正式目录的编译覆盖、命中绑定和效果。使用 `--require-complete` 检查目录是否全部闭合 |
+| `node tools/scripts/data/audit-calculation-coverage.mjs --json` | 并行执行全目录编译覆盖、命中绑定、装备、治疗、场景和直伤矩阵核对（可用 `LEYLINE_AUDIT_WORKERS` 控制并行线程数；`--require-complete` 检查目录是否全部闭合） |
 | `node tools/scripts/checks/check-ui-assets.mjs` | 核对资源格式、来源、别名、预算和角色引用 |
 | `pnpm architecture:check`、`node tools/scripts/checks/check-docs.mjs` | 核对模块边界、文档结构、链接及命令入口 |
-| `node tools/scripts/data/evaluate-project.mjs <项目.json>` | 读取已解包的当前 `Project` JSON，将求值结果写到 stdout |
 | `pnpm preview --port=5175` | 本地托管网页与 Enka 服务，支持 `--base` 和 `--dir` |
 | `node tools/scripts/licenses/third-party-notices.mjs --capture` | 读取安装依赖并更新许可原件与清单，元数据核验可联网 |
 | `node tools/scripts/licenses/third-party-notices.mjs`、`node tools/scripts/licenses/third-party-notices.mjs --check` | 离线复制分发许可或只读核对 |

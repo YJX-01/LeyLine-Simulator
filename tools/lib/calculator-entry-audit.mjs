@@ -12,7 +12,13 @@ export async function auditCalculatorEntries(entities, results) {
   const { findBuildHit, isCalculatorCombatModifier } = await loadContentSchema();
   const hits = [], equipmentHits = [], buffs = [], clauses = [], failures = [];
   const readings = new Map(results.evaluatedHits.map(row => [row.entity + '/' + row.hit, row]));
-  const equipmentChecks = [...results.currentEquipment.rows, ...results.additionalEquipment.rows, ...results.remainingEquipment.rows, ...results.triggeredStrikes.rows];
+  const equipmentChecks = [
+    ...(results.equipment?.rows ?? []),
+    ...(results.currentEquipment?.rows ?? []),
+    ...(results.additionalEquipment?.rows ?? []),
+    ...(results.remainingEquipment?.rows ?? []),
+    ...(results.triggeredStrikes?.rows ?? []),
+  ];
   const noviceIds = ['dullblade', 'wastergreatsword', 'huntersbow', 'apprenticesnotes', 'beginnersprotector'];
   const weapons = new Map(entities.weapons.filter(weapon => noviceIds.includes(weapon.id)).map(weapon => [weapon.weaponType, weapon]));
   for (const character of entities.characters) {
@@ -52,7 +58,7 @@ export async function auditCalculatorEntries(entities, results) {
       const pointer = field + '/' + index;
       const checks = equipmentChecks.filter(check => check.entity === entity.id && (check.field === '/hits/' + hit.id || check.settings?.hit === hit.id));
       const sample = checks.find(check => check.value > 0 && !check.issue && Number.isFinite(check.expected) && Math.abs(check.value - check.expected) <= Math.max(1e-8, Math.abs(check.expected) * 1e-9));
-      const accumulated = !sample && results.setHealing.rows.find(check => check.entity === entity.id && check.field.startsWith(pointer + '/')
+      const accumulated = !sample && results.setHealing?.rows?.find(check => check.entity === entity.id && check.field.startsWith(pointer + '/')
         && !check.issue && check.actual?.[0]?.value > 0);
       const comparison = sample ? { value: sample.value, expected: sample.expected, rank: sample.rank ?? sample.settings?.refinement, field: sample.field }
         : accumulated ? { value: accumulated.actual[0].value, expected: accumulated.expected[0].value, field: accumulated.field } : undefined;

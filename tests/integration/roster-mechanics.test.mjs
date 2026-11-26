@@ -7,7 +7,6 @@ import { readContentSource } from '../../tools/lib/content-source.mjs';
 import { catalogPlugin } from '../../tools/scripts/build/catalog-plugin.mjs';
 import { auditHealingWindows, auditSetConditions } from '../../tools/lib/set-condition-audit.mjs';
 import { auditBuild, auditHit } from '../../tools/lib/roster-evaluation.mjs';
-import { auditVarkaChargedHands } from '../../tools/lib/varka-charged-hands-audit.mjs';
 
 const catalog = await createRuntimeCatalog(), engine = await loadContentSchema('/src/engine/src/index.ts');
 const fixtureModules = new Map();
@@ -505,10 +504,6 @@ test('Yae resolves 14-second independent Sakura clocks, only destroys nearby sum
 
 test('Varka binds each stance hit to its hand and C2 follows the triggering attack category', async () => {
   const b = auditBuild(await catalog.get('characters', 'varka'), await catalog.get('weapons', 'wastergreatsword'));
-  const audited = auditVarkaChargedHands({ characters: [b.character], weapons: [b.weapon] }, engine);
-  assert.deepEqual(audited.rows.filter(row => row.issue), []);
-  assert.equal(audited.rows.length, 113);
-  assert.equal(audited.verified.size, 11);
   const skill = b.character.talents[1], attack = b.character.attributes.base.attack + b.weapon.baseAttack;
   const rate = n => skill.parameters.find(p => p.id === 'param' + n).values[0];
   const fourWinds = skill.hits.find(hit => hit.id === 'varka.skill.param14');

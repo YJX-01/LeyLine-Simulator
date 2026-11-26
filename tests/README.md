@@ -4,10 +4,10 @@
 
 | 命令 | 用途 |
 | --- | --- |
-| `pnpm test` | Vitest 单元及 TypeScript 集成检查 |
+| `pnpm test` | Vitest 单元及 TypeScript 集成检查（默认按 CPU 核数自适应 3–6 个工作线程，单测超时 15 秒） |
 | `pnpm exec vitest run tests/unit/web/domain/calculator-catalog-defaults.test.ts` | 遍历正式目录的命中与增益，检查默认值、命座限制和计算页文案 |
 | `pnpm test:content` | Node 内容、目录及文件工具检查 |
-| `node --test tests/integration/single-hit-modifier-matrix.test.mjs` | 离线核验五类直伤与套装、武器、队友增益的交叉组合，以及生命阈值和层数边界 |
+| `node --test tests/integration/single-hit-modifier-matrix.test.mjs` | 离线核验五类直伤与套装、武器、队友增益的交叉组合，以及生命阈值和层数边界；默认按角色启用多核 `worker_threads` 并行分片，可通过 `LEYLINE_AUDIT_WORKERS` 指定线程数 |
 | `pnpm exec playwright test tests/browser/development/inventory.spec.ts --project=chromium --workers=1` | Chromium 真实库存流程 |
 | `pnpm exec playwright test tests/browser/development/ui-contracts.spec.ts --project=chromium --workers=1` | Chromium 真实样式、焦点与窄屏 |
 | `pnpm test:e2e` | 完整 Chromium 开发回归 |
@@ -30,4 +30,4 @@ Playwright 辅助代码的运行时映射在 `browser/playwright-runtime.json`�
 
 [全目录测试](unit/web/domain/calculator-catalog-defaults.test.ts)随正式数据扩展，检查增益在初始和启用时的取值、计数的合法范围，以及已有的零值和“否”能否保留。伤害数值另用独立公式核对，具体案例见[计算支持与验证资料](../tools/data/README.md#计算支持与验证资料)。
 
-[伤害计算](browser/development/damage-calculator.spec.ts)、[场景冲击](browser/development/scene-damage.spec.ts)和[展柜配装重放](browser/development/vesna-production-chain.spec.ts)覆盖页面与 Worker 的实际操作。三组用例共用[浏览器检查](helpers/calculator-browser.ts)，在渲染时检查增益卡控件的初始值，并检查页面、弹窗、输入提示和无障碍标签是否出现旧的待确认文案。
+[伤害计算与场景冲击](browser/development/damage-calculator.spec.ts)和[展柜配装重放](browser/development/vesna-production-chain.spec.ts)覆盖页面与 Worker 的实际操作。两组用例共用[浏览器检查](helpers/calculator-browser.ts)，在渲染时检查增益卡控件的初始值，并检查页面、弹窗、输入提示和无障碍标签是否出现旧的待确认文案。开发浏览器回归已按业务域收拢为 11 个主 `*.spec.ts` 文件（库存、圣遗物库、角色库、组合与队伍、导入与弹窗、库导航、资源覆盖、界面契约、伤害计算、全目录与状态重放、展柜生产链）。

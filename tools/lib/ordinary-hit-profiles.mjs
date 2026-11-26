@@ -98,8 +98,31 @@ function configure(hit, input, frame) {
   if (input.spirit !== undefined) frame.facts['mavuika.fightingSpirit'] = number('scalar', input.spirit);
 }
 
+export function precomputeAliasHitIds(characters) {
+  const seen = new Set();
+  const aliasHitIds = new Set();
+  for (const character of characters) {
+    for (const talent of character.talents) {
+      const source = character.metadata.talents.find(row => row.id === talent.id);
+      for (const hit of talent.hits) {
+        const declaration = source?.hits?.find(row => row.id === hit.id);
+        if (excluded({ hit, source, declaration })) continue;
+        const category = declaration.category ?? source.category;
+        const element = declaration.element ?? source.element;
+        const scaling = [...new Set(declaration.base.map(term => term.stat))].sort().join('+');
+        const signature = [category, element, scaling].join('/');
+        if (!seen.has(signature)) {
+          seen.add(signature);
+          aliasHitIds.add(hit.id);
+        }
+      }
+    }
+  }
+  return aliasHitIds;
+}
+
 export function auditOrdinaryHitProfiles(character, entries, starter, context) {
-  const { weapons, characters, build, team, evaluate, record, whiteStat, seenAliases, unsampled } = context;
+  const { weapons, characters, build, team, evaluate, record, whiteStat, seenAliases, aliasHitIds, unsampled } = context;
   const cases = [];
   for (const entry of entries) {
     const reason = excluded(entry);
@@ -112,8 +135,8 @@ export function auditOrdinaryHitProfiles(character, entries, starter, context) {
     const element = declaration.element ?? source.element;
     const scaling = [...new Set(declaration.base.map(term => term.stat))].sort().join('+');
     const signature = [category, element, scaling].join('/');
-    const checkAliases = !seenAliases.has(signature);
-    seenAliases.add(signature);
+    const checkAliases = aliasHitIds ? aliasHitIds.has(entry.hit.id) : !seenAliases.has(signature);
+    if (!aliasHitIds) seenAliases.add(signature);
     for (const input of inputsFor(entry.hit.id)) cases.push({ entry, input, category, element, scaling, checkAliases, baseline: null });
   }
   if (!cases.length) return;
