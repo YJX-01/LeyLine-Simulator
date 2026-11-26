@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import * as schema from '@leyline/schema';
-import { compileCalculation, collectCalculationRoots, createStructuredCombatContext, evaluateDamageQuery, evaluateStructuredHit, prepareStructuredBuilds } from '@leyline/engine';
+import { compileCalculation, collectCalculationRoots, createStructuredCombatContext, evaluateCombatBindings, evaluateDamageQuery, evaluateStructuredHit, prepareStructuredBuilds } from '@leyline/engine';
 import { readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { assembleCalculationLibrary } from '../../../../tools/lib/calculation-library.mjs';
 import { createContentLinker } from '../../../../src/game-data/src/link-content.mjs';
@@ -11,7 +11,7 @@ const weaponKeys = {
   WEAPON_POLE: 'beginnersprotector', WEAPON_SWORD_ONE_HAND: 'dullblade',
 } as const;
 const ids = ['aloy', 'amber', 'beidou', 'candace', 'charlotte', 'columbina', 'faruzan', 'furina', 'gorou', 'illuga',
-  'kukishinobu', 'lauma', 'mavuika', 'mona', 'nahida', 'nefer', 'sangonomiyakokomi', 'sethos', 'shenhe', 'skirk',
+  'kukishinobu', 'lauma', 'mavuika', 'mitya', 'mona', 'nahida', 'nefer', 'sangonomiyakokomi', 'sethos', 'shenhe', 'skirk',
   'valeriy', 'vodyanitsa', 'yumemizukimizuki', 'varka'] as const;
 type CharacterId = typeof ids[number];
 type WeaponId = typeof weaponKeys[keyof typeof weaponKeys] | 'magicguide' | 'kitaincrossspear';
@@ -25,6 +25,7 @@ const main = read('tables/artifact-main');
 const reactions = read('calculation/reactions');
 const growth = readCalculationData('tools/data/sources/catalog/genshin-db/characters.json');
 const growthCurves = readCalculationData('tools/data/sources/catalog/genshin-db/character-curves.json');
+const innateBaseStats = readCalculationData('tools/data/sources/catalog/innate-base-stats.json');
 const multipliers = readCalculationData('tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json');
 
 describe('source-defined hit conditions and grants', () => {
@@ -109,7 +110,8 @@ describe('source-defined hit conditions and grants', () => {
     const upstream = growth[id].stats;
     const base = (stat: 'attack' | 'hp' | 'defense') => upstream.base[stat] * growthCurves[level][upstream.curve[stat]] + upstream.promotion[ascension][stat];
     const attack = base('attack') + weapon.baseAttack * weapon.attackCurve[1] + weapon.promotion[0];
-    const em = (upstream.specialized === 'FIGHT_PROP_ELEMENT_MASTERY' ? upstream.promotion[ascension].specialized : 0)
+    const em = (innateBaseStats.characters[id]?.elementalMastery ?? 0)
+      + (upstream.specialized === 'FIGHT_PROP_ELEMENT_MASTERY' ? upstream.promotion[ascension].specialized : 0)
       + (weapon.stat === 'elementalMastery' ? weapon.baseStat * weapon.statCurve[1] : 0);
     return { result, attack, hp: base('hp'), defense: base('defense'), em, level };
   }
@@ -261,12 +263,39 @@ describe('source-defined hit conditions and grants', () => {
     expect(known(at(2, 5))).toBeCloseTo(base * 1.65, 8);
   });
 
-  it('uses the three Lunar shades and makes the C1 flat gain scale with Nefer Veil stacks', () => {
+  it('includes innate base elemental mastery for Lauma, Nefer, and Mitya', () => {
+    for (const [id, expectedEm] of [['lauma', 200], ['nefer', 100], ['mitya', 100], ['nahida', 0]] as const) {
+      const character = characters.get(id)!;
+      const weapon = weapons.get(weaponTypes[character.identity.weaponType])!;
+      const build: schema.StructuredBuild = { schemaVersion: character.schemaVersion, kind: 'calculation-build', dataVersion: character.dataVersion,
+        character, weapon, sets: [], artifacts: [], artifactMain: main, artifactMainSourceRefs: ['content.artifact-main'],
+        sources: [{ id: 'content.artifact-main', kind: 'definition' }], level: 1, ascension: 0, weaponLevel: 1, weaponAscension: 0,
+        constellation: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 } };
+      const team = prepareStructuredBuilds([{ id: 'actor', build }]);
+      expect(team.ok, JSON.stringify(team.diagnostics)).toBe(true);
+      if (!team.ok) continue;
+      const talent = character.talents[0], hit = talent.hits[0];
+      const setup: schema.StructuredCombatSetup = { targets: [{ id: 'enemy', inputs: {}, facts: {} }], team: { inputs: {}, facts: {}, actorFacts: {} }, sources: [], factIntervals: [],
+        events: [{ id: 'stat', kind: 'hit', actorId: 'actor', targetIds: ['enemy'], timeMs: 1000, order: 1, skillId: talent.id, hitId: hit.id, category: hit.category, sourceEventIds: [], facts: {} }] };
+      const context = createStructuredCombatContext(team.team, setup);
+      const reading = evaluateCombatBindings(team.team.program, context, {
+        em: { kind: 'attribute', key: { namespace: 'builtin', id: 'attribute.elementalMastery', revision: '1' }, actor: { role: 'owner' }, at: { kind: 'current', phase: 'same' } },
+      }, { eventId: 'stat', targetId: 'enemy', sourceEventId: null, phase: 'before', ownerId: 'actor', recipientId: 'actor', contributorId: null,
+        facts: {}, actorFacts: {}, applications: [], captures: {}, factOverrides: [], hit: null });
+      expect(reading.diagnostics).toEqual([]);
+      expect(reading.outputs.em?.state).toBe('known');
+      expect(reading.outputs.em?.state === 'known' && reading.outputs.em.value.kind === 'quantity' ? reading.outputs.em.value.value : NaN).toBe(expectedEm);
+    }
+  });
+
+  it('uses the three Lunar shades and makes the C1 base damage gain scale with Nefer Veil stacks', () => {
     const base = { ascension: 6, changes: { 'nefer.phantasm': true }, weaponId: 'magicguide' } as const;
     const neutral = known(probe('nefer', 'skill.phantasm-shadow-1', base));
     const c1 = probe('nefer', 'skill.phantasm-shadow-1', { ...base, rank: 1 });
     expect(c1.em).toBeGreaterThan(0);
-    expect(known(c1) - neutral).toBeCloseTo(c1.em * 0.6 * 0.9, 8);
+    const blessing = Math.min(0.14, c1.em * 0.000175);
+    const emFactor = 1 + 6 * c1.em / (2000 + c1.em);
+    expect(known(c1) - neutral).toBeCloseTo(c1.em * 0.6 * (1 + blessing) * emFactor * 0.9, 8);
     const stacks = probe('nefer', 'skill.phantasm-shadow-1', { ...base, rank: 1, changes: { ...base.changes, 'nefer.phantasmVeil': 3 } });
     expect(known(stacks)).toBeCloseTo(known(c1) * 1.24, 8);
     expect(known(probe('nefer', 'skill.phantasm-shadow-2', { ascension: 6 }))).toBe(0);

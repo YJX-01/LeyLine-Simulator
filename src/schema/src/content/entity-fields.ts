@@ -10,7 +10,7 @@ export const characterFieldsSchema = z.object({
   identity: z.object({ name: idSchema, title: z.string().max(500), description: z.string().max(40000), element: z.enum(elements), weaponType: idSchema,
     rarity: z.number().int().min(1).max(5).nullable(), gameId: z.number().int().positive().optional(), region: z.string().max(160).optional(),
     notes: z.array(z.string().min(1).max(1000)).max(20).optional() }).strict(),
-  attributes: z.object({ base: z.object({ hp: finiteSchema.positive(), attack: finiteSchema.nonnegative(), defense: finiteSchema.nonnegative(), critRate: finiteSchema.nonnegative(), critDamage: finiteSchema.nonnegative() }).strict(), specialized: statSchema }).strict(),
+  attributes: z.object({ base: z.object({ hp: finiteSchema.positive(), attack: finiteSchema.nonnegative(), defense: finiteSchema.nonnegative(), critRate: finiteSchema.nonnegative(), critDamage: finiteSchema.nonnegative(), elementalMastery: finiteSchema.nonnegative().optional() }).strict(), specialized: statSchema }).strict(),
   progression: z.object({ curves: z.object({ hp: curve, attack: curve, defense: curve }).strict(),
     promotion: z.array(z.object({ maxLevel: finiteSchema, hp: finiteSchema, attack: finiteSchema, defense: finiteSchema, specialized: finiteSchema }).strict()).min(7).max(8) }).strict(),
 }).strict();

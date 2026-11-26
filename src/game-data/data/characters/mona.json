@@ -835,6 +835,40 @@
       "name": "运行原理",
       "description": "合成武器突破素材时，有25%概率返还部分合成材料。",
       "unlockAscension": null
+    },
+    {
+      "id": "mona.passive.hexerei-secret-rite",
+      "name": "魔女的前夜礼·水星天的辉光",
+      "description": "莫娜魔导·秘仪：莫娜的普通攻击或重击命中敌人时获得「水星天的辉光」，至多3层。队伍中自己的其他角色触发蒸发反应时，消耗所有辉光，每层使本次蒸发伤害提升5%（至多15%）。",
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "mona.hexerei.magus-glow",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "fact": "mona.hexereiSecretRite"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.amplifyingReactionBonus",
+              "appliesTo": {
+                "reactionIds": [
+                  "vaporize"
+                ]
+              },
+              "value": {
+                "call": "mona.magus-glow-vaporize",
+                "inputs": {
+                  "basis": {
+                    "fact": "mona.magusGlowStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -1236,6 +1270,21 @@
         "kind": "boolean"
       },
       "label": "受益者是魔导角色"
+    },
+    "mona.hexereiSecretRite": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "魔导·秘仪生效"
+    },
+    "mona.magusGlowStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "水星天的辉光层数"
     }
   },
   "formulas": [
@@ -1252,6 +1301,22 @@
         "threshold": 0,
         "output": "value",
         "maxInput": 3
+      }
+    },
+    {
+      "id": "mona.magus-glow-vaporize",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "threshold": 0,
+        "rate": 0.05,
+        "offset": 0,
+        "maxInput": 3,
+        "cap": 0.15,
+        "output": "value"
       }
     }
   ]

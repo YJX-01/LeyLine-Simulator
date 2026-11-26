@@ -31,6 +31,7 @@ export async function numericAudit(read = readAuditJson) {
   const talents = read(`tools/data/sources/genshin-db/${commit}/stats/talents.json`);
   const textExcerpts = read(`tools/data/sources/genshin-db/${commit}/text-excerpts.json`);
   const supplement = read('tools/data/sources/character-text/base-and-manekin.json');
+  const innateBaseStats = read('tools/data/sources/catalog/innate-base-stats.json').characters;
   const rawCharacters = new Map(read(`tools/data/sources/lunagc/${luna}/AvatarExcelConfigData.json`).map(row=>[row.id,row]));
   const proudSkills = new Map();
   for (const row of read(supplement.proudSkillsFile)) proudSkills.set(`${row.proudSkillGroupId}/${row.level}`,row);
@@ -44,7 +45,11 @@ export async function numericAudit(read = readAuditJson) {
     const character = read(`src/game-data/data/characters/${file}`), binding = supplement.bindings[character.id];
     const base = binding?.baseId ?? (/^(aether|lumine)-/.test(character.id) ? character.id.split('-')[0] : character.id);
     const source = characters[base].stats;
-    for (const [key,value] of Object.entries(character.attributes.base)) check('character-base',value,source.base[({critRate:'critrate',critDamage:'critdmg'})[key] ?? key],`${character.id}/base/${key}`);
+    for (const [key,value] of Object.entries(character.attributes.base)) {
+      if (key === 'elementalMastery') continue;
+      check('character-base',value,source.base[({critRate:'critrate',critDamage:'critdmg'})[key] ?? key],`${character.id}/base/${key}`);
+    }
+    check('character-base',character.attributes.base.elementalMastery ?? 0,innateBaseStats[character.id]?.elementalMastery ?? 0,`${character.id}/base/elementalMastery`);
     for (const [key,values] of Object.entries(character.progression.curves)) values.slice(1).forEach((value,index)=>check('character-curves',value,characterCurves[index+1][source.curve[key]],`${character.id}/curves/${key}/${index+1}`));
     character.progression.promotion.forEach((row,index)=>{
       for (const [key,value] of Object.entries(row)) check('character-promotion',value,source.promotion[index][key==='maxLevel'?'maxlevel':key],`${character.id}/promotion/${index}/${key}`);

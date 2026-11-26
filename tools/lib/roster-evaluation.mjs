@@ -25,7 +25,7 @@ const blessings = new Map(lifecycle.reactionBlessings.map(row => {
 function referenceDamage(build, talent, hit, setup, request, party, withBuffs = true) {
   const { character, weapon } = build;
   const { frame } = request;
-  const stats = { elementalMastery: weapon.stat === 'elementalMastery' ? weapon.baseStat * weapon.statCurve[build.weaponLevel] : 0 };
+  const stats = { elementalMastery: (character.attributes.base.elementalMastery ?? 0) + (weapon.stat === 'elementalMastery' ? weapon.baseStat * weapon.statCurve[build.weaponLevel] : 0) };
   for (const stat of ['hp', 'attack', 'defense']) stats[stat] = character.attributes.base[stat] * character.progression.curves[stat][build.level] + character.progression.promotion[build.ascension][stat];
   stats.attack += weapon.baseAttack * weapon.attackCurve[build.weaponLevel] + weapon.promotion[build.weaponAscension];
   const specialized = character.attributes.specialized, bonus = character.progression.promotion[build.ascension].specialized;
@@ -146,7 +146,7 @@ function referenceDamage(build, talent, hit, setup, request, party, withBuffs = 
   const passive = withBuffs && blessing?.families.includes(family) ? Math.min(blessing.cap, stats[blessing.stat] * blessing.rate) : 0;
   const lunarBloom = family === 'lunar-bloom';
   const neferC6 = id.startsWith('nefer.skill.c6-phantasm-');
-  const flat = withBuffs && lunarBloom && character.id === 'nefer' && build.constellation >= 1
+  const baseDamageBonus = withBuffs && lunarBloom && character.id === 'nefer' && build.constellation >= 1
     ? .6 * mastery * (1 + .08 * valueOfFact('nefer.phantasmVeil')) : 0;
   const stellarC6 = build.constellation >= 6 && (character.id === 'sandrone' || character.id === 'vesna' && family === 'stellar-swirl');
   let elevation = withBuffs && stellarC6 ? 1.2
@@ -156,7 +156,7 @@ function referenceDamage(build, talent, hit, setup, request, party, withBuffs = 
   if (c6 && character.id === 'odette' && ['stellar-conduct', 'stellar-swirl'].includes(family)) elevation = valueOfFact('odette.splendorStacks') > 0 ? 1.45 : 1.2;
   const lunarBonus = (withBuffs && character.id === 'zibai' && family === 'lunar-crystallize' && build.constellation >= 2 && valueOfFact('zibai.lunarPhase') ? .3 : 0)
     + (withBuffs && character.id === 'wriothesley' && family === 'stellar-conduct' && valueOfFact('radiance') === 'stellar-conduct' ? .3 : 0);
-  return (base * steadyCore * (1 + passive) * coefficient * (1 + 6 * mastery / (2000 + mastery) + lunarBonus) + flat) * resistanceFactor * elevation * strideFactor;
+  return ((base * steadyCore + baseDamageBonus) * coefficient * (1 + passive) * (1 + 6 * mastery / (2000 + mastery) + lunarBonus)) * resistanceFactor * elevation * strideFactor;
 }
 
 function parameterRefs(value, skill, out = new Set()) {
@@ -524,7 +524,7 @@ export function auditReactionBlessings(entities, engine) {
     if (Object.keys(sourceFacts).length) request.frame.factOverrides.push({ subject: { kind: 'actor', id: 'source' }, facts: sourceFacts });
     const context = engine.createStructuredCombatContext(prepared.team, setup);
     const basis = source.stat === 'attack' ? c.attributes.base.attack + weapon.baseAttack
-      : source.stat === 'elementalMastery' ? weapon.baseStat * weapon.statCurve[1] : c.attributes.base[source.stat];
+      : source.stat === 'elementalMastery' ? (c.attributes.base.elementalMastery ?? 0) + weapon.baseStat * weapon.statCurve[1] : c.attributes.base[source.stat];
     const authored = c.metadata.passives.find(p => p.id === id + '.passive3')?.buffs?.[0];
     for (const family of ['ordinary','lunar-charged','lunar-bloom','lunar-crystallize','stellar-conduct','stellar-swirl']) {
       const channel = 'attribute.reaction.' + (family.startsWith('stellar-') ? family : 'lunar') + '.baseBonus';

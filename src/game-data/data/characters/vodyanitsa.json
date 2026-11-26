@@ -930,7 +930,164 @@
       "id": "vodyanitsa.passive2",
       "name": "十二弦的泪歌",
       "description": "施放元素战技宣叙·晨声纷流时，沃雅妮莎还会获得25层**「领唱」**与10层**「重唱」**。\n上述两种效果分别持续30秒，并会在施放元素战技时刷新层数。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "vodyanitsa.a4.tearsong-ordinary",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "ordinary"
+            ],
+            "elements": [
+              "hydro",
+              "cryo"
+            ],
+            "categories": [
+              "normal",
+              "charged",
+              "plunge",
+              "skill",
+              "burst"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "vodyanitsa.a4VortexMode"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.any",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "vodyanitsa.a4LeadVocal"
+                      },
+                      "term1": {
+                        "fact": "onField",
+                        "of": "recipient"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "vodyanitsa.a4EnsembleVocal"
+                      },
+                      "term1": {
+                        "call": "condition.not",
+                        "inputs": {
+                          "term0": {
+                            "fact": "onField",
+                            "of": "recipient"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "vodyanitsa.a4-ordinary-flat",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "vodyanitsa.a4.tearsong-stellar",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "stellar-swirl"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "vodyanitsa.a4VortexMode"
+              },
+              "term1": {
+                "call": "condition.any",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "vodyanitsa.a4LeadVocal"
+                      },
+                      "term1": {
+                        "fact": "onField",
+                        "of": "recipient"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "vodyanitsa.a4EnsembleVocal"
+                      },
+                      "term1": {
+                        "call": "condition.not",
+                        "inputs": {
+                          "term0": {
+                            "fact": "onField",
+                            "of": "recipient"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-swirl.flatBaseBonus",
+              "value": {
+                "call": "vodyanitsa.a4-stellar-flat",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "vodyanitsa.passive3",
@@ -1284,6 +1441,27 @@
         "unit": "count"
       },
       "label": "本次治疗前的四命生命加成层数"
+    },
+    "vodyanitsa.a4LeadVocal": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "十二弦的泪歌·领唱生效"
+    },
+    "vodyanitsa.a4EnsembleVocal": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "十二弦的泪歌·重唱生效"
+    },
+    "vodyanitsa.a4VortexMode": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "十二弦的泪歌为流荡风旋分支"
     }
   },
   "formulas": [
@@ -1326,6 +1504,36 @@
         "threshold": 0,
         "output": "value",
         "maxInput": 3
+      }
+    },
+    {
+      "id": "vodyanitsa.a4-ordinary-flat",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.14,
+        "offset": 0,
+        "threshold": 40000,
+        "cap": 3500,
+        "output": "value"
+      }
+    },
+    {
+      "id": "vodyanitsa.a4-stellar-flat",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.26,
+        "offset": 0,
+        "threshold": 40000,
+        "cap": 6500,
+        "output": "value"
       }
     }
   ]

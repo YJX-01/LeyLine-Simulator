@@ -84,7 +84,7 @@ export function buffTargetLabel(id: string) {
   const staminaActions: Record<string, string> = { charged: '重击', climb: '攀爬', glide: '滑翔', sprint: '冲刺', swim: '游泳' };
   if (group === 'staminaCostReduction' && staminaActions[family]) return staminaActions[family] + '体力消耗降低';
   const reactionStats: Record<string, string> = { damageBonus: '伤害加成', flatBaseBonus: '固定加值', baseBonus: '基础伤害加成',
-    baseMultiplier: '基础伤害倍率', critRate: '暴击率', critDamage: '暴击伤害', elevation: '伤害提升' };
+    baseDamageBonus: '附加基础伤害', baseMultiplier: '基础伤害倍率', critRate: '暴击率', critDamage: '暴击伤害', elevation: '伤害提升' };
   if (group === 'reaction' && stat && reactionStats[stat]) return (family === 'lunar' ? '月反应' : damageFamilyLabel(family)) + reactionStats[stat];
   return realStatLabels[target] ?? effectLabels[target] ?? target;
 }
