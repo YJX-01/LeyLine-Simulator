@@ -328,8 +328,15 @@ const hitElement = computed(() => {
 });
 const reactionChoices = computed(() => ['none' as const, ...selectedHit.value?.reactions === false ? [] : ordinaryReactions(hitElement.value)]);
 const records = computed(() => document.value?.project.timeline.filter(record => record.kind === 'damage' && (record.damage || record.reactionEvent || record.sceneHit)) ?? []);
-const captures = computed(() => document.value?.project.timeline.filter(record => record.actor === hitOwner.value?.id
-  && (record.kind === 'damage' ? findBuildHit(hitOwner.value?.build, record.damage?.hit)?.talent?.id : record.skillId) === selectedHit.value?.snapshot?.sourceSkillId) ?? []);
+const captures = computed(() => {
+  const snapshot = selectedHit.value?.snapshot;
+  if (!snapshot) return [];
+  return document.value?.project.timeline.filter(record => record.actor === hitOwner.value?.id
+    && (snapshot.sourceKind === 'capture-only' ? record.kind === 'capture'
+      : snapshot.sourceKind === 'action-or-capture' ? record.kind === 'capture' || record.kind === 'action'
+      : true)
+    && (record.kind === 'damage' ? findBuildHit(hitOwner.value?.build, record.damage?.hit)?.talent?.id : record.skillId) === snapshot.sourceSkillId) ?? [];
+});
 const captureRecord = computed(() => captures.value.find(record => record.kind === 'capture' && record.id === damage.value.capture?.recordId));
 type CaptureRecord = DamageCalculatorDocument['project']['timeline'][number];
 type CaptureField = CalculatorFactField & { subject: NonNullable<CalculatorFactField['subject']> };
@@ -739,12 +746,21 @@ function prepareDocument() {
         timeMs, order: Math.max(-1, ...timeline.map(record => record.order)) + 1, damage: damage.value });
     }
     const snapshot = selectedHit.value?.snapshot;
+    const allowedCapture = (record: CaptureRecord) => record.actor === hitOwner.value?.id
+      && (snapshot?.sourceKind === 'capture-only' ? record.kind === 'capture'
+        : snapshot?.sourceKind === 'action-or-capture' ? record.kind === 'capture' || record.kind === 'action'
+        : true)
+      && (record.kind === 'damage' ? findBuildHit(hitOwner.value?.build, record.damage?.hit)?.talent?.id : record.skillId) === snapshot?.sourceSkillId;
+    if (snapshot && damage.value.capture?.recordId) {
+      const current = timeline.find(record => record.id === damage.value.capture?.recordId);
+      if (!current || !allowedCapture(current)) delete damage.value.capture;
+    }
     if (snapshot && !damage.value.capture?.recordId) {
       const hit = timeline.find(record => record.id === next.recordId)!;
-      const source = captures.value.filter(record => record.id !== hit.id && (record.timeMs < timeMs
+      const source = timeline.filter(record => record.id !== hit.id && allowedCapture(record) && (record.timeMs < timeMs
         || record.timeMs === timeMs && record.order < hit.order)).sort((a,b) => b.timeMs - a.timeMs || b.order - a.order)[0];
       let recordId = source?.id;
-      if (!recordId && skill.value?.id === snapshot.sourceSkillId) recordId = hit.id;
+      if (!recordId && !snapshot.sourceKind && skill.value?.id === snapshot.sourceSkillId) recordId = hit.id;
       recordId ??= addCalculatorCapture(next.project, hit.actor, snapshot.sourceSkillId, timeMs, hit.id);
       damage.value.capture = { recordId, phase: 'before' };
       next.project.timeline.find(record => record.id === hit.id)!.damage = damage.value;

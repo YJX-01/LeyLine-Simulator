@@ -1112,11 +1112,7 @@
                   "highest": {
                     "teamStat": "elementalMastery",
                     "aggregate": "max",
-                    "excludeNonConvertible": true,
-                    "at": {
-                      "kind": "source-event-or-manual",
-                      "phase": "before"
-                    }
+                    "excludeNonConvertible": true
                   }
                 }
               }
