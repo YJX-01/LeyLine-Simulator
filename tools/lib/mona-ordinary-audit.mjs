@@ -1,6 +1,7 @@
 import { readContentSource } from './content-source.mjs';
 import { probeMonaSkills } from './mona-inventory-probes.mjs';
 import { auditBuild, auditHit, novice, setGateFacts, number, bool, setAuditDefaults } from './roster-audit-settings.mjs';
+import { loadSpecInactiveWindows } from './mona-entity-specs.mjs';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -106,8 +107,9 @@ const inactiveWindows = new Set([
   'klee.hexereiAwakened', 'klee.chainedSparkAttackActive', 'mona.hexereiAwakened', 'mona.recipientHexerei',
 ]);
 export function ordinaryInactiveWindows(character) {
+  const extra = loadSpecInactiveWindows(character.id);
   const result = Object.fromEntries(Object.entries(character.metadata.facts ?? {})
-    .filter(([key, fact]) => inactiveWindows.has(key) && fact.type.kind === 'boolean').map(([key]) => [key, false]));
+    .filter(([key, fact]) => (inactiveWindows.has(key) || extra.has(key)) && fact.type.kind === 'boolean').map(([key]) => [key, false]));
   return result;
 }
 const baselinePanelLabel = /^(角色基础|武器基础|圣遗物词条|角斗士的终幕礼[24]|角色副属性|初始值)/;

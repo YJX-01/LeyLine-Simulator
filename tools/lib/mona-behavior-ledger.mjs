@@ -244,6 +244,9 @@ export function classifyMonaDifferences(links, wrongArmRows = [], transformative
     } else if ((batchProof = scopedAmplificationBatch(link, cache))) {
       cause = 'amplification-coefficient-and-talent-precision';
       status = 'attributed-scoped';
+    } else if (/^spec-(?:buff|hit|set4pc):/.test(id) && Array.isArray(link.sources) && link.sources.length && Array.isArray(link.comparisons) && link.comparisons.length) {
+      cause = 'spec-verified-semantic-difference';
+      status = 'attributed';
     } else if (id.startsWith('ordinary-wrong-arm:')) {
       const row = wrongArmRows.find(item => item.status === 'different' && link.mona?.includes(item.mona)
         && link.leyline?.some(ref => ref.id === item.leyline));
@@ -408,12 +411,14 @@ function evidenceForFacet(item, facet, side, evidence, report, links, sourceIds,
         // For ATK/DEF percentages Mona returns panel points. Only convert when the
         // same recipient's run recorded the actual base used to scale those points.
         const scale = observation.monaBaseStat;
-        const scaled = ['attackPercent', 'defensePercent'].includes(record.stat) && Number.isFinite(scale) && scale > 0
-          && compare(record.amount * scale, record.monaExpected, 1e-7);
-        if (scaled || Number.isFinite(record.amount) && record.monaExpected === record.amount) {
-          const same = compare(scaled ? record.monaDelta / scale : record.monaDelta, record.leylineDelta, 1e-7);
-          proof.bilateral ||= Boolean(monaValid && leylineValid && record.status === 'matched' && same);
-          proof.difference ||= !same;
+        const scaled = ['attackPercent', 'defensePercent', 'hpPercent'].includes(record.stat) && Number.isFinite(scale) && scale > 0
+          && compare(record.amount * scale, record.monaExpected, 1e-6);
+        const normalizedMona = Number.isFinite(record.monaDeltaNormalized) ? record.monaDeltaNormalized
+          : scaled ? record.monaDelta / scale : record.monaDelta;
+        if (scaled || Number.isFinite(record.monaDeltaNormalized) || Number.isFinite(record.amount) && record.monaExpected === record.amount) {
+          const same = compare(normalizedMona, record.leylineDelta, 1e-6);
+          proof.bilateral ||= Boolean(monaValid && leylineValid && (record.status === 'matched' && same || record.status === 'different'));
+          proof.difference ||= !same && record.status !== 'different';
         }
       }
       if (facet === 'off-field' && observation.boundary) {

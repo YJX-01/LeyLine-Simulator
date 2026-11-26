@@ -19,6 +19,8 @@ import {
   compareMonaOrdinaryScaling,
 } from './mona-ordinary-audit.mjs';
 import { auditMonaTransformative, validateMonaTransformativeReviews } from './mona-transformative-audit.mjs';
+import { loadSpecBuffScenarios, loadSpecFourPieceScenarios, loadSpecHitScenarios } from './mona-entity-specs.mjs';
+import { runSpecBuffScenarios, runSpecFourPieceScenarios, runSpecHitScenarios } from './mona-spec-runner.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const identitySource = 'tools/data/sources/catalog/mona-community/catalog.json';
@@ -422,8 +424,11 @@ export async function auditMonaSingleHit(entities, clauseInventory, engine) {
   const buffBatch = batchMonaBuffs(mona.rows, leyline.rows, options, { resonanceAudit: resonance, characterAudit: characterBuffs });
   const gear = await reviewMonaEquipmentBatch(leyline.rows, entities, engine, equipment);
   const artifactEvents = await auditMonaArtifactEvents(leyline.rows, entities, engine);
+  const specBuffs = await runSpecBuffScenarios({ scenarios: loadSpecBuffScenarios(), entities, engine, leylineRows: leyline.rows });
+  const specHits = await runSpecHitScenarios({ scenarios: loadSpecHitScenarios(), entities, engine, leylineRows: leyline.rows });
+  const specFourPiece = await runSpecFourPieceScenarios({ scenarios: loadSpecFourPieceScenarios(), entities, engine, leylineRows: leyline.rows });
   const forms = reviewExclusiveFormHits(mona.rows, leyline.rows);
-  const reviewed = [ordinary, ordinaryC6, fixedSkills, ordinarySourceDifferences, amplification, buffBatch, gear, artifactEvents, sets, fourPiece];
+  const reviewed = [ordinary, ordinaryC6, fixedSkills, ordinarySourceDifferences, amplification, buffBatch, gear, artifactEvents, sets, fourPiece, specBuffs, specHits, specFourPiece];
   const reviews = readReviews();
   const reactions = validateMonaTransformativeReviews(reviews.filter(row => row.id.startsWith('transformative-')), transformative, leyline.rows);
   issues.push(...reactions.issues);
@@ -440,11 +445,12 @@ export async function auditMonaSingleHit(entities, clauseInventory, engine) {
   const scenarioLinks = reviewLinks([...commonInputs.mappings, ...commonInputsC6.mappings, ...travelerNormal.mappings], before, after, issues);
   const result = buildSingleHitComparison(inventory, leyline, [...accepted, ...scenarioLinks], issues, matches);
   const batches = { commonInputs, commonInputsC6, travelerNormal, ordinary, ordinaryC6, fixedSkills, ordinarySourceDifferences, duplicateMenus, amplification, buffs: buffBatch,
-    resonance, characterBuffs, equipmentDamage: gear.damage, artifactEvents, sets, fourPiece };
+    resonance, characterBuffs, equipmentDamage: gear.damage, artifactEvents, sets, fourPiece, specBuffs, specHits, specFourPiece };
   result.summary.batches = { commonInputs: commonInputs.summary, commonInputsC6: commonInputsC6.summary, travelerNormal: travelerNormal.summary, ordinary: ordinary.summary, ordinaryC6: ordinaryC6.summary, fixedSkills: fixedSkills.summary,
     ordinarySourceDifferences: ordinarySourceDifferences.summary, amplification: amplification.summary, buffs: buffBatch.summary,
     resonance: resonance.summary, sets: sets.summary, fourPiece: fourPiece.summary, exclusiveFormHits: forms.length,
     characterBuffs: characterBuffs.summary, artifactEvents: artifactEvents.rows.length,
+    specBuffs: specBuffs.summary, specHits: specHits.summary, specFourPiece: specFourPiece.summary,
     equipment: { ...equipment.summary, ...gear.summary, damage: gear.damage.summary },
     transformative: transformative.summary, transformativeReviews: reactions.summary };
   result.summary.ordinaryScaling = ordinaryScaling.summary;
