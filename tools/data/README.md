@@ -190,10 +190,16 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 ```sh
 node tools/scripts/data/audit-mona-mechanism.mjs --group buff --buff-key DurinC2 --out artifacts/buff.partial.json
-node tools/scripts/data/audit-mona-mechanism.mjs --group damage --character Xingqiu --out artifacts/damage.partial.json
+node tools/scripts/data/audit-mona-mechanism.mjs --group damage --character Xingqiu --skill-index 0 --out artifacts/damage.partial.json
 node tools/scripts/data/audit-mona-mechanism.mjs --group differences --out artifacts/differences.partial.json
 pnpm exec playwright test --config tools/mona-audit/playwright.config.ts --workers=1
 ```
+
+`--skill-index` 按 Mona 技能菜单序号筛选，省略时核查所选角色的全部菜单。局部目录只编译本批角色、所需装备及公共规则，报告的 `discovery.entities` 列出实际范围。同一角色其余菜单有重名时，局部倍率样本保留，唯一命中映射需连同重名菜单核查。
+
+伤害组可加 `--constellation 6` 比较六命默认分支的共同输入。此时先用零命确认命中身份，再单独复核六命分支。省略该参数时比较零命。
+
+为一个角色的一个菜单核对指定基础天赋等级时，加 `--talent-levels 1,6,10`。每级使用同一九十级突破六配装的两个真实攻击副词条档位，保存两侧命中、实测面板及独立来源的倍率。Mona 精度修正量在每个样本中单独列出。
 
 从仓库根目录运行 `node tools/scripts/data/audit-calculation-coverage.mjs --check --require-current --mona-report artifacts/mona-single-hit-final.json`。Mona 发布内核从 `.references/mona-community` 的 `589ac6919057709924c0c20d5a9d673fe9b0be1a` 读取，LeyLine 起始目录为 `829d19df0b96113c22016e5bde9ad5744817a260`。正式目录、双向差集和复核引用都闭合时，专项命令返回零。常规 `pnpm data:check` 可以离线运行。
 
@@ -251,7 +257,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 #### 锁面板
 
-香菱「旋火轮」按段跟踪。本地 KQM TCL 的 `docs/characters/pyro/xiangling.md` 将起手第一、二段列为动态取值，第三段及后续旋转命中列为锁面板。当前正式定义的四段均未声明属性捕获。第三段和旋转命中分别登记为待核对项，需确认锁定的属性及取值时点。[香菱定义](../../src/game-data/data/characters/xiangling.json) · [锁面板规则](../../docs/calculation.md#锁面板)
+香菱「旋火轮」的起手第一、二段读取本击面板。第三段与后续旋转命中可关联时间轴上玩家记录的爆发捕获点，读取当时的攻击力、暴击率、暴击伤害、火元素伤害加成及增幅反应用的元素精通。敌人的抗性按各次命中时刻结算。本地 KQM TCL 的 `docs/characters/pyro/xiangling.md` 记录了各段和施放后约 46 帧的实测时机。[香菱定义](../../src/game-data/data/characters/xiangling.json) · [命中属性捕获](../../docs/calculation.md#命中属性捕获)
 
 #### 捕获、基础加值与内容规则
 

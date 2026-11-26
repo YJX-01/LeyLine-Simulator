@@ -42,7 +42,11 @@ export function batchMonaBuffs(monaRows, leylineRows, candidates = new Map(), { 
     const row = rows.find(item => item.id === audit.effectId);
     const target = after.get(audit.targetId);
     const extraTargets = (audit.extraTargetIds ?? []).map(id => after.get(id));
-    const expectedAttribute = { attackPercent: 'ATKPercentage', defensePercent: 'DEFPercentage', critRate: 'CriticalBase', elementalMastery: 'ElementalMastery' }[audit.stat] ?? (/^(pyro|cryo|electro|hydro|geo|anemo|dendro)Bonus$/.test(audit.stat) ? 'Bonus' + audit.stat[0].toUpperCase() + audit.stat.slice(1, -5) : undefined);
+    const element = audit.behaviorEvidence?.hitElement;
+    const elements = target?.binding?.buff?.appliesTo?.elements;
+    const elementalCritical = audit.stat === 'critDamage' && element && elements?.length === 1 && elements[0] === element
+      ? 'CriticalDamage' + element[0].toUpperCase() + element.slice(1) : undefined;
+    const expectedAttribute = elementalCritical ?? { attackPercent: 'ATKPercentage', defensePercent: 'DEFPercentage', critRate: 'CriticalBase', elementalMastery: 'ElementalMastery' }[audit.stat] ?? (/^(pyro|cryo|electro|hydro|geo|anemo|dendro)Bonus$/.test(audit.stat) ? 'Bonus' + audit.stat[0].toUpperCase() + audit.stat.slice(1, -5) : undefined);
     if (!row || !expectedAttribute || row.effect?.attribute !== expectedAttribute || JSON.stringify(row.effect?.value) !== JSON.stringify(audit.monaExpression ?? audit.amount)
       || target?.binding?.modifier?.target !== 'attribute.' + audit.stat || extraTargets.some(item => item?.binding?.modifier?.target !== 'attribute.' + audit.stat)) continue;
     row.verifiedScenarios.push({ ...audit, target: { id: target.id, revision: target.revision, source: target.source }, extraTargets: extraTargets.map(item => ({id:item.id,revision:item.revision,source:item.source})) });

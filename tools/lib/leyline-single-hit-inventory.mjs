@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { authoredHitEntries } from '../../src/schema/src/calculation/hit-bindings.mjs';
+import { conditionFactInputs } from '../../src/schema/src/calculation/buffs.mjs';
 import { readContentSource } from './content-source.mjs';
 import { loadContentSchema } from './load-content-schema.mjs';
 
@@ -44,8 +45,15 @@ export async function leylineSingleHitInventory(entities, clauseInventory) {
       for (const [owner, field] of owners) for (const [index, buff] of (owner.buffs ?? []).entries()) {
         for (const [modifierIndex, modifier] of buff.modifiers.entries()) {
           if (!isCalculatorCombatModifier(modifier.target, metadata.calculator?.buffs?.[buff.id])) continue;
+          const categoryStacks = (metadata.categoryStacks ?? []).flatMap((rule, index) => {
+            if (rule.pieces && rule.pieces !== owner.pieces) return [];
+            const reads = [buff.condition,modifier.condition,modifier.value].flatMap(term => conditionFactInputs(term,metadata.facts));
+            return reads.some(read => read.key === rule.fact && read.scope === 'owner')
+              ? [{rule,source:'/categoryStacks/' + index}] : [];
+          });
           add(kind, entity.id, entity.revision, field + '/buffs/' + index + '/modifiers/' + modifierIndex, 'modifier',
             { buffId: buff.id, effectId: modifierIndex ? buff.id + '.' + modifierIndex : buff.id, modifier, buff,
+              ...(categoryStacks.length && { categoryStacks }),
               ...(kind === 'set' && owner.pieces ? { pieces: owner.pieces } : {}) });
         }
       }

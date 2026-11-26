@@ -39,11 +39,14 @@ const describeFeatures = (row, rows) => {
     stat: modifier.target ?? row.effect?.attribute ?? row.attribute ?? clause.target,
     value: modifier.value ?? row.effect?.value,
     base: definition.base,
+    snapshot: definition.snapshot,
     parameters: binding.parameters ?? clause.parameters,
     description: row.description ?? clause.text,
     trigger: buff.trigger ?? definition.trigger,
     condition: modifier.condition ?? buff.condition ?? row.when ?? definition.when,
-    recipient: modifier.recipient ?? buff.recipient ?? clause.recipient,
+    recipient: buff.sourceRecipient && (modifier.recipient ?? buff.recipient) === 'team'
+      ? {role:'team',source:buff.sourceRecipient,excludeOwner:buff.excludeOwner ?? false}
+      : modifier.recipient ?? buff.recipient ?? clause.recipient,
     appliesTo: buff.appliesTo,
     stacking: buff.stacking,
     lifetime: buff.lifetime ?? buff.duration ?? definition.duration,
@@ -57,7 +60,7 @@ const describeFeatures = (row, rows) => {
       scenario: item.scenario?.id, constellation: item.scenario?.constellation,
     })),
   };
-  const labels = { output: '输出', element: '元素', family: '伤害族', category: '动作类别', stat: '属性', value: '数值', base: '基础倍率', parameters: '参数', description: '说明', trigger: '触发', condition: '条件', recipient: '作用对象', appliesTo: '适用范围', stacking: '叠层', lifetime: '持续', variables: '变量', inputs: '输入', pieces: '件数', scope: '范围', needed: '所需条件' };
+  const labels = { output: '输出', element: '元素', family: '伤害族', category: '动作类别', stat: '属性', value: '数值', base: '基础倍率', snapshot: '属性捕获', parameters: '参数', description: '说明', trigger: '触发', condition: '条件', recipient: '作用对象', appliesTo: '适用范围', stacking: '叠层', lifetime: '持续', variables: '变量', inputs: '输入', pieces: '件数', scope: '范围', needed: '所需条件' };
   const featureText = Object.entries(labels).filter(([key]) => features[key] != null)
     .map(([key, label]) => `${label}：${compact(features[key])}`).join('；');
   return { features, featureText: featureText.length > 160 ? `${featureText.slice(0, 159)}…` : featureText };

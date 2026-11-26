@@ -1,3 +1,5 @@
+import { scopedEquipmentEventEvidence } from './mona-equipment-hit-audit.mjs';
+
 /** Index exact inventory references once so rendering does not rescan the report. */
 export function buildEvidence(report) {
   const rows = new Map();
@@ -46,6 +48,10 @@ export function buildEvidence(report) {
     const links = collect('links');
     const candidates = inventory.flatMap(item => (item.candidates ?? []).map(candidate => ({ sourceId: item.id, ...candidate })));
     const batches = collect('batches');
+    const scopedEquipmentEvents = batches.filter(({ batch, record }) => batch === 'scopedEquipmentEvents'
+      && scopedEquipmentEventEvidence(record, report)).map(({ record }) => record);
+    const pendingScopedEquipmentEvents = batches.filter(({ batch, record }) => batch === 'scopedEquipmentEvents'
+      && !scopedEquipmentEventEvidence(record, report)).map(({ record }) => record);
     const observations = collect('observations');
     const issues = collect('issues');
     const related = [...new Set(inventory.flatMap(item => [item, ...(children.get(item.id) ?? [])]))];
@@ -60,7 +66,7 @@ export function buildEvidence(report) {
     const monaSuccess = reactionPairs.some(item => Number.isFinite(item.mona)) || branches.length > 0 || positiveProbe
       || probes.some(p => p.behaviorEvidence?.some(e => Number.isFinite(e.enabled) && e.before === e.disabled && e.enabled !== e.disabled)) || batches.some(({ record }) =>
       (Number.isFinite(record.monaDelta) && record.monaDelta !== 0) ||
-      (record.cases ?? []).some(item => Number.isFinite(item.mona?.actual)) ||
+      (record.cases ?? []).some(item => Number.isFinite(item.mona?.actual) || Number.isFinite(item.mona)) ||
       (record.verifiedScenarios ?? []).some(item => Number.isFinite(item.monaDelta) && item.monaDelta !== 0));
     const leylineEvidence = inventory.filter(item => item.evidence?.status === 'available' &&
       item.evidence.refs?.length && Number.isFinite(item.evidence.comparison?.value) && Number.isFinite(item.evidence.comparison?.expected));
@@ -70,7 +76,7 @@ export function buildEvidence(report) {
       : []);
     const leylineSuccess = reactionPairs.some(item => Number.isFinite(item.leyline)) || leylineEvidence.length > 0 || leylineProofs.length > 0 || batches.some(({ record }) =>
       (Number.isFinite(record.leylineDelta) && record.leylineDelta !== 0) ||
-      (record.cases ?? []).some(item => Number.isFinite(item.leyline?.actual)) ||
+      (record.cases ?? []).some(item => Number.isFinite(item.leyline?.actual) || Number.isFinite(item.leyline)) ||
       (record.verifiedScenarios ?? []).some(item => Number.isFinite(item.leylineDelta) && item.leylineDelta !== 0));
     const monaFailure = errors.length > 0 || probeCalls.some(call => call.status === 'error');
     const sideRuns = { mona: monaFailure ? '执行失败' : monaSuccess ? '已跑通' : '未验证',
@@ -93,9 +99,13 @@ export function buildEvidence(report) {
       if (record.behaviorEvidence?.mona && record.monaExpected === record.amount) {
         pair([record.key, record.recipient, record.scenarioId].filter(Boolean).join(' / '), record.monaDelta, record.leylineDelta,
           1e-7, '同一受益者的属性增量', record);
+      } else if (['attackPercent', 'defensePercent'].includes(record.stat) && record.behaviorEvidence?.monaBaseStat > 0
+        && Math.abs(record.amount * record.behaviorEvidence.monaBaseStat - record.monaExpected) <= 1e-7) {
+        pair([record.key, record.recipient, record.scenarioId].filter(Boolean).join(' / '), record.monaDelta / record.behaviorEvidence.monaBaseStat,
+          record.leylineDelta, 1e-7, 'Mona 面板增量除以实测基础值，与 LeyLine 百分比增量对照', record);
       }
       for (const item of record.cases ?? []) {
-        if (batch === 'commonInputs') pair(`零命 天赋 ${item.talentLevel} 攻击力 ${item.effectiveAttack?.mona}`, item.mona, item.leyline,
+        if (['commonInputs', 'commonInputsC6'].includes(batch)) pair(`命座 ${item.constellation ?? 0} 天赋 ${item.talentLevel} 攻击力 ${item.effectiveAttack?.mona}`, item.mona, item.leyline,
           item.tolerance, '共同攻击面板的实际非暴击伤害', item);
         if (item.commonPanel) pair(`${batch} 天赋等级 ${item.level}`, item.commonPanel.expected, item.commonPanel.actual,
           Math.max(0.000001, Math.abs(item.commonPanel.expected) * .0001), 'Mona 实际读数与 LeyLine 定义在同一面板上的复算值', item, record.status === 'unresolved');
@@ -120,7 +130,7 @@ export function buildEvidence(report) {
     // Mixed conclusions remain inspectable and are not collapsed into a positive verdict.
     const comparison = pairs.some(p => p.result === '有差异') || uniqueStates.includes('有差异') ? '有差异'
       : uniqueStates.length === 1 ? uniqueStates[0] : uniqueStates.length > 1 || candidates.length ? '待确认' : '无复核映射';
-    return { run, comparison, links, candidates, details: { runStates, sideRuns, comparisonStates: uniqueStates, pairs, comparisons, branches, errors, probes, leylineEvidence, leylineProofs, batches, observations, issues } };
+    return { run, comparison, links, candidates, details: { runStates, sideRuns, comparisonStates: uniqueStates, pairs, comparisons, branches, errors, probes, leylineEvidence, leylineProofs, batches, observations, issues, scopedEquipmentEvents, pendingScopedEquipmentEvents } };
   };
 }
 
@@ -153,7 +163,8 @@ export function summarizeMappings(report) {
         scenarioIds.add(JSON.stringify([record.key, record.scenarioId, record.recipient, state]));
     }
   }
-  for (const row of report.batches?.commonInputs ?? []) for (const c of row.cases ?? []) {
+  const common = [...report.batches?.commonInputs ?? [], ...report.batches?.commonInputsC6 ?? []];
+  for (const row of common) for (const c of row.cases ?? []) {
     if (c.monaInput && Number.isFinite(c.mona) && Number.isFinite(c.leyline)) scenarioIds.add(JSON.stringify([row.mona, c.talentLevel, c.flatAttack]));
   }
   for (const probe of report.buffProbes?.rows ?? []) {

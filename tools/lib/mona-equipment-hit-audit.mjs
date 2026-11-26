@@ -1,10 +1,13 @@
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync } from 'node:fs';
+
 import { readContentSource } from './content-source.mjs';
 
 const source = '.references/mona-community/beta-data/equipment-damage-events.mjs';
 const weapons = [
   ['Messenger', 'messenger', 'Amber', 'charged'], ['SkywardSpine', 'skywardspine', 'Xiangling', 'normal'],
   ['Frostbearer', 'frostbearer', 'Lisa', 'normal'], ['DragonspineSpear', 'dragonspinespear', 'Xiangling', 'normal'],
-  ['Halberd', 'halberd', 'Xiangling', 'normal'], ['PrizedIsshinBlade', 'prizedisshinblade', 'Bennett', 'normal'],
+  ['Halberd', 'halberd', 'Xiangling', 'normal'], ['PrizedIsshinBlade', 'prizedisshinblade-01', 'Bennett', 'normal'],
   ['SwordOfNarzissenkreuz', 'swordofnarzissenkreuz', 'Bennett', 'normal'], ['SkywardAtlas', 'skywardatlas', 'Lisa', 'normal'],
   ['EyeOfPerception', 'eyeofperception', 'Lisa', 'normal'], ['FilletBlade', 'filletblade', 'Bennett', 'normal'],
   ['SwordOfDescension', 'swordofdescension', 'Bennett', 'normal'], ['SkywardBlade', 'skywardblade', 'Bennett', 'normal'],
@@ -78,4 +81,83 @@ export async function auditMonaEquipmentHits(leylineRows) {
 
   for (const row of rows) summary[row.status] = (summary[row.status] ?? 0) + 1;
   return { source, rows, observations, summary };
+}
+
+const baseline = '589ac6919057709924c0c20d5a9d673fe9b0be1a';
+const definitions = {
+  'mona:equipment-event:AshGravenDrinkingHorn': { leyline: 'weapon:ashgravendrinkinghorn:equipment-hit:/hits/0',
+    owner: 'Barbara', category: 'normal', stat: 'hp', cooldown: 15, values: [0.4, 0.8], critical: false },
+  'mona:equipment-event:Messenger': { leyline: 'weapon:messenger:equipment-hit:/hits/0',
+    owner: 'Amber', category: 'charged', stat: 'atk', cooldown: 10, values: [1, 2], critical: true },
+};
+const closeEvidenceValue = (a, b, epsilon = 1e-8) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= epsilon;
+const sharedInputs = [
+  'src/schema/src/calculation/event.ts', 'src/schema/src/calculation/context.ts', 'src/schema/src/calculation/binding.ts',
+  'src/schema/src/calculation/buffs.mjs', 'src/schema/src/content/calculation.ts',
+  'src/schema/src/content/character-metadata.ts', 'src/schema/src/content/equipment-metadata.ts', 'src/schema/src/project/project.ts',
+  'src/schema/src/calculation/hit-bindings.mjs', 'src/game-data/src/character-metadata.mjs', 'src/game-data/src/character-hits.mjs',
+  'src/game-data/data/calculation/common.json', 'src/game-data/data/calculation/resonances.json',
+  'src/engine/src/attributes/build.ts', 'src/engine/src/attributes/queries.ts', 'src/engine/src/calculation/templates.ts',
+  'src/engine/src/calculation/templates-common.ts', 'src/engine/src/calculation/template-builder.ts',
+  'src/engine/src/calculation/interpret.ts', 'src/engine/src/calculation/formula-ir.ts', 'src/engine/src/calculation/build-context.ts',
+  'src/engine/src/calculation/project.ts', 'src/engine/src/calculation/coordinated-hits.ts',
+  'src/engine/src/calculation/context.ts', 'src/engine/src/calculation/effects.ts', 'src/engine/src/effects/graph.ts',
+  'src/web/src/domain/real-project.ts', 'tools/lib/roster-audit-settings.mjs', 'tools/lib/runtime-catalog.mjs',
+  '.references/mona-community/beta-data/equipment-damage-events.mjs', '.references/mona-community/beta-data/equipment-combat-facts.mjs',
+  '.references/mona-community/beta-data/equipment-healing-damage-rules.mjs', '.references/mona-community/beta-data/team-dps-config.mjs',
+  '.references/mona-community/beta-data/team-dps-numeric-rules.mjs', '.references/mona-community/src/assets/_gen_character.js',
+  'artifacts/equipment-beta-timing-probe.mjs',
+];
+const subjectInputs = {
+  'mona:equipment-event:AshGravenDrinkingHorn': ['src/game-data/data/weapons/ashgravendrinkinghorn.json',
+    'src/game-data/data/characters/barbara.json', 'tests/integration/equipment-aura-prose.test.mjs'],
+  'mona:equipment-event:Messenger': ['src/game-data/data/weapons/messenger.json',
+    'src/game-data/data/characters/amber.json', 'tests/integration/equipment-aura-prose.test.mjs'],
+};
+/** Hash the precise shared implementation, entity data and executable comparison setup. */
+export function equipmentEventInputSignature(id, reader = path => readFileSync(path)) {
+  if (!subjectInputs[id]) return undefined;
+  const hash = createHash('sha256');
+  try {
+    for (const path of [...sharedInputs, ...subjectInputs[id]]) {
+      const bytes = reader(path);
+      hash.update(path).update('\0').update(String(bytes.length)).update('\0').update(bytes);
+    }
+  } catch { return undefined; }
+  return hash.digest('hex');
+}
+
+/** Optional scoped evidence: missing or stale artifacts never become positive proof. */
+export function loadScopedEquipmentEvents(path = 'artifacts/equipment-scoped-ledger.json') {
+  if (!existsSync(path)) return [];
+  try {
+    const data = JSON.parse(readFileSync(path, 'utf8'));
+    return Array.isArray(data.records) ? data.records : [];
+  } catch { return []; }
+}
+
+/** Recognize only the explicitly reviewed beta-event samples, never the complete weapon behavior. */
+export function scopedEquipmentEventEvidence(record, report, signature = equipmentEventInputSignature) {
+  const rule = definitions[record?.mona];
+  if (!rule || record.leyline !== rule.leyline || report.provenance?.mona !== baseline || record.monaRevision !== baseline
+    || !record.leylineRevision || record.leylineRevision !== report.provenance?.leyline
+    || !record.inputSignature || record.inputSignature !== signature(record.mona)
+    || record.source !== source
+    || record.owner !== rule.owner || record.category !== rule.category || record.onField !== true
+    || record.confirmation !== 'explicit' || rule.critical && record.weakPoint !== true
+    || record.targetResistance !== 0.1 || record.actorLevel !== 90 || record.enemyLevel !== 90
+    || !Array.isArray(record.cases) || record.cases.length !== 2) return false;
+  const samples = [...record.cases].sort((a, b) => a.refinement - b.refinement);
+  return samples.every((sample, index) => {
+    const beta = sample.beta, actual = sample.leyline;
+    if (sample.refinement !== [1, 5][index] || !beta || !actual || beta.stat !== rule.stat
+      || !closeEvidenceValue(beta.ratio, rule.values[index]) || beta.forceCritical !== rule.critical
+      || !Array.isArray(beta.sourceTimes) || !Array.isArray(beta.procSourceTimes)
+      || JSON.stringify(beta.sourceTimes) !== JSON.stringify([0, rule.cooldown - .001, rule.cooldown])
+      || JSON.stringify(beta.procSourceTimes) !== JSON.stringify([0, rule.cooldown])
+      || !Number.isFinite(actual.panel) || actual.panel <= 0 || !Number.isFinite(actual.first)
+      || !closeEvidenceValue(actual.blocked, 0) || !closeEvidenceValue(actual.ready, actual.first)) return false;
+    const critical = rule.critical ? 1 + actual.critDamage : 1;
+    return Number.isFinite(critical) && closeEvidenceValue(actual.first, actual.panel * beta.ratio * .45 * critical, 1e-7);
+  });
 }

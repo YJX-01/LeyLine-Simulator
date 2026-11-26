@@ -4,9 +4,8 @@ import { assembleCalculationLibrary } from '../../src/game-data/src/calculation-
 export { assembleCalculationLibrary };
 
 /** Read the same maintained inputs for independent numeric checks, without generated snapshots. */
-export function readCalculationLibrary(read = readCalculationData) {
+export function readCalculationLibrary(read = readCalculationData, manifest = catalogInventory()) {
   const base = 'src/game-data/data';
-  const manifest = catalogInventory();
   const entities = [['characters', manifest.characters], ['weapons', manifest.weapons], ['artifact-sets', manifest.sets], ['actions', manifest.actions]]
     .flatMap(([folder, ids]) => ids.map(id => read(`${base}/${folder}/${id}.json`)));
   return assembleCalculationLibrary(read(`${base}/calculation/common.json`), read(`${base}/calculation/reactions.json`), entities);

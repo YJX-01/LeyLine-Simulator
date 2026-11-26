@@ -204,7 +204,8 @@ function gateCases(character, talent, declaration, owner, defaultParty) {
     if (node.teamCount) {
       const { elements, match, excludeOwner, cap, distinctElements } = node.teamCount;
       const party = excludeOwner ? testCase.party : [character.identity.element, ...testCase.party];
-      const matches = party.filter(element => elements.includes(element) === (match === 'include'));
+      const eligible = elements === 'owner' ? [character.identity.element] : elements;
+      const matches = party.filter(element => eligible.includes(element) === (match === 'include'));
       return Math.min(cap ?? Infinity, distinctElements ? new Set(matches).size : matches.length);
     }
     const definition = template(node.call);
@@ -222,7 +223,8 @@ function gateCases(character, talent, declaration, owner, defaultParty) {
   const parties = [defaultParty];
   if (teams.length) parties.push([]);
   for (const team of teams) {
-    const matching = (team.match === 'include' ? team.elements : elements.filter(element => !team.elements.includes(element)))
+    const eligible = team.elements === 'owner' ? [character.identity.element] : team.elements;
+    const matching = (team.match === 'include' ? eligible : elements.filter(element => !eligible.includes(element)))
       .filter(element => element !== 'physical');
     for (let count = 1; count <= Math.min(3, team.threshold + 1); count++) {
       if (team.distinctElements && matching.length < count) continue;

@@ -8,12 +8,12 @@ import { leylineSingleHitInventory } from './leyline-single-hit-inventory.mjs';
 import { auditMonaAino } from './mona-aino-audit.mjs';
 import { monaCalculationInventory } from './mona-calculation-inventory.mjs';
 import { probeMonaBuffs, probeMonaSkills } from './mona-calculation-probes.mjs';
-import { auditMonaEquipmentHits } from './mona-equipment-hit-audit.mjs';
+import { auditMonaEquipmentHits, loadScopedEquipmentEvents } from './mona-equipment-hit-audit.mjs';
 import { compareMonaOrdinaryScaling } from './mona-ordinary-scaling.mjs';
 import { auditMonaTransformative, validateMonaTransformativeReviews } from './mona-transformative-audit.mjs';
 import { auditMonaOrdinaryBatch, auditMonaOrdinaryC6 } from './mona-ordinary-batch.mjs';
-import { auditMonaCommonInputBranches } from './mona-common-input-batch.mjs';
-import { auditMonaFixedOpenSkills, auditMonaWrongOrdinaryArms } from './mona-ordinary-wrong-arms.mjs';
+import { auditMonaCommonInputBranches, auditTravelerNormalScenarios } from './mona-common-input-batch.mjs';
+import { auditMonaFixedOpenSkills, auditMonaWrongOrdinaryArms, auditMonaDuplicateMenuArms } from './mona-ordinary-wrong-arms.mjs';
 import { auditMonaAmplificationBatch } from './mona-amplification-batch.mjs';
 import { auditMonaBuffScenarios } from './mona-character-buff-batch.mjs';
 import { batchMonaBuffs } from './mona-buff-batch.mjs';
@@ -416,6 +416,8 @@ export async function auditMonaSingleHit(entities, clauseInventory, engine) {
   const ordinaryC6 = await auditMonaOrdinaryC6(mona.rows, leyline.rows, ordinary, entities, engine);
   const fixedSkills = await auditMonaFixedOpenSkills(mona.rows, leyline.rows, ordinary, ordinaryC6);
   const ordinarySourceDifferences = await auditMonaWrongOrdinaryArms(mona.rows, leyline.rows, options, ordinaryScaling, entities, engine);
+  const duplicateMenus = await auditMonaDuplicateMenuArms(mona.rows, leyline.rows, entities, engine);
+  ordinarySourceDifferences.mappings.push(...duplicateMenus.mappings);
   const amplification = await auditMonaAmplificationBatch(mona.rows, leyline.rows, ordinary, entities, engine);
   const { resonance, characters: characterBuffs } = await auditMonaBuffScenarios(entities, engine);
   const buffBatch = batchMonaBuffs(mona.rows, leyline.rows, options, { resonanceAudit: resonance, characterAudit: characterBuffs });
@@ -434,10 +436,13 @@ export async function auditMonaSingleHit(entities, clauseInventory, engine) {
   const after = new Map(leyline.rows.map(row => [row.id, row]));
   const accepted = reviewLinks(initialReviews, before, after, issues);
   const commonInputs = await auditMonaCommonInputBranches(mona.rows, leyline.rows, accepted, entities, engine);
-  const result = buildSingleHitComparison(inventory, leyline, [...accepted, ...commonInputs.mappings], issues, matches);
-  const batches = { commonInputs, ordinary, ordinaryC6, fixedSkills, ordinarySourceDifferences, amplification, buffs: buffBatch,
+  const commonInputsC6 = await auditMonaCommonInputBranches(mona.rows, leyline.rows, accepted, entities, engine, { constellation: 6 });
+  const travelerNormal = await auditTravelerNormalScenarios(mona.rows, leyline.rows, entities, engine);
+  const scenarioLinks = reviewLinks([...commonInputs.mappings, ...commonInputsC6.mappings, ...travelerNormal.mappings], before, after, issues);
+  const result = buildSingleHitComparison(inventory, leyline, [...accepted, ...scenarioLinks], issues, matches);
+  const batches = { commonInputs, commonInputsC6, travelerNormal, ordinary, ordinaryC6, fixedSkills, ordinarySourceDifferences, duplicateMenus, amplification, buffs: buffBatch,
     resonance, characterBuffs, equipmentDamage: gear.damage, artifactEvents, sets, fourPiece };
-  result.summary.batches = { commonInputs: commonInputs.summary, ordinary: ordinary.summary, ordinaryC6: ordinaryC6.summary, fixedSkills: fixedSkills.summary,
+  result.summary.batches = { commonInputs: commonInputs.summary, commonInputsC6: commonInputsC6.summary, travelerNormal: travelerNormal.summary, ordinary: ordinary.summary, ordinaryC6: ordinaryC6.summary, fixedSkills: fixedSkills.summary,
     ordinarySourceDifferences: ordinarySourceDifferences.summary, amplification: amplification.summary, buffs: buffBatch.summary,
     resonance: resonance.summary, sets: sets.summary, fourPiece: fourPiece.summary, exclusiveFormHits: forms.length,
     characterBuffs: characterBuffs.summary, artifactEvents: artifactEvents.rows.length,
@@ -447,6 +452,7 @@ export async function auditMonaSingleHit(entities, clauseInventory, engine) {
   result.summary.buffScenarios = buffProbes.rows.length;
   result.summary.equipment = equipment.summary;
   result.summary.transformative = transformative.summary;
-  return { ...result, batches: Object.fromEntries(Object.entries(batches).map(([name, batch]) => [name, batch.rows])),
+  const scopedEquipmentEvents = loadScopedEquipmentEvents().filter(record => before.has(record.mona) && after.has(record.leyline));
+  return { ...result, batches: { ...Object.fromEntries(Object.entries(batches).map(([name, batch]) => [name, batch.rows])), scopedEquipmentEvents },
     ordinaryScaling, buffProbes, equipment, transformative, aino };
 }

@@ -1,9 +1,8 @@
 import { probeMonaSkills } from './mona-calculation-probes.mjs';
 import { auditBuild, auditHit, novice, setGateFacts } from './roster-audit-settings.mjs';
 import { readContentSource } from './content-source.mjs';
-
 const sum = value => Object.values(value ?? {}).reduce((a, b) => a + b, 0);
-const nameKey = value => String(value ?? '').normalize('NFKC').toLowerCase()
+export const ordinaryHitName = value => String(value ?? '').normalize('NFKC').toLowerCase()
   .replace(/\(第(\d+)击\)/g, '$1').replace(/[^\p{L}\p{N}]/gu, '');
 const axes = { attack: ['atk', 'atk_ratio'], hp: ['hp', 'hp_ratio'], defense: ['def', 'def_ratio'], elementalMastery: ['em', 'em_ratio'] };
 const near = (a, b) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= 0.0001 * Math.max(1, Math.abs(a));
@@ -21,13 +20,26 @@ const inactiveWindows = new Set([
   'klee.hexereiAwakened', 'klee.chainedSparkAttackActive', 'mona.hexereiAwakened', 'mona.recipientHexerei',
 ]);
 export function ordinaryInactiveWindows(character) {
-  return Object.fromEntries(Object.entries(character.metadata.facts ?? {})
+  const result = Object.fromEntries(Object.entries(character.metadata.facts ?? {})
     .filter(([key, fact]) => inactiveWindows.has(key) && fact.type.kind === 'boolean').map(([key]) => [key, false]));
+  return result;
 }
 const baselinePanelLabel = /^(角色基础|武器基础|圣遗物词条|角斗士的终幕礼[24]|角色副属性|初始值)/;
 const tolerance = expected => Math.max(.000001, Math.abs(expected) * .0001);
 const close = (expected, actual) => Number.isFinite(expected) && Number.isFinite(actual)
   && Math.abs(expected - actual) <= tolerance(expected);
+export function soloTalentGrants(character, ascension = 6) {
+  const grants = { normal: 0, skill: 0, burst: 0 };
+  for (const passive of character.passives ?? []) {
+    if (ascension < (passive.unlockAscension ?? 0)) continue;
+    for (const rule of passive.talentBonuses ?? []) {
+      const elements = rule.exactPartyElements;
+      if (elements && (elements.length !== 1 || elements[0] !== character.identity.element)) continue;
+      grants[rule.category] += rule.levels;
+    }
+  }
+  return grants;
+}
 const hasAdditionalEffect = analysis => ['atk', 'hp', 'def', 'em', 'bonus'].some(key =>
   Object.entries(analysis[key] ?? {}).some(([label, value]) => value !== 0 && !baselinePanelLabel.test(label)));
 
@@ -79,9 +91,9 @@ export async function auditMonaOrdinaryBatch(monaRows, leylineRows, candidates, 
     if (!skill) continue;
     // A slash number can mean an aggregate divided by its hit count, not a hit ordinal.
     const names = new Set(skill.occurrences.filter(row => !/\/\s*\d/.test(row.label ?? ''))
-      .map(row => nameKey(row.label)).filter(Boolean));
+      .map(row => ordinaryHitName(row.label)).filter(Boolean));
     const hits = entries.map(entry => targets.get(typeof entry === 'string' ? entry : entry.id)).filter(Boolean)
-      .filter(hit => matchedScaling.has(`${id}\0${hit.id}`) && names.has(nameKey(hit.binding.name)));
+      .filter(hit => matchedScaling.has(`${id}\0${hit.id}`) && names.has(ordinaryHitName(hit.binding.name)));
     if (hits.length === 1) choices.push({ skill, hit: hits[0] });
   }
   const targetCounts = new Map();
@@ -114,7 +126,11 @@ export async function auditMonaOrdinaryBatch(monaRows, leylineRows, candidates, 
       record.leylineInactiveWindows = inactive;
       for (const level of [1, 6, 10]) {
         const input = structuredClone(branch.scenario.input);
-        input.character.skill1 = level - 1; input.character.skill2 = level - 1; input.character.skill3 = level - 1;
+        // A single-member build still receives its own unconditional party talent grant.
+        // Mona's single-hit API takes effective ranks, whereas LeyLine derives them.
+        const grants = soloTalentGrants(character);
+        input.character.skill1 = level + grants.normal - 1; input.character.skill2 = level + grants.skill - 1; input.character.skill3 = level + grants.burst - 1;
+        const effectiveLevel = level + grants[talent.category];
         const analysis = api.CalculatorInterface.get_damage_analysis(input, null);
         if (!analysis.normal || analysis.is_heal || analysis.is_shield) throw new Error('Mona damage unavailable');
         if (hasAdditionalEffect(analysis)) {
@@ -132,11 +148,11 @@ export async function auditMonaOrdinaryBatch(monaRows, leylineRows, candidates, 
         const actual = evaluated.totals.all.value?.value;
         const { panel: values, specialized, promotion } = ordinaryPanel(character, weapon);
         const elementalBonus = specialized === binding.element + 'Bonus' ? promotion : 0;
-        const expected = definition.base.reduce((total, term) => total + values[term.stat] * talent.parameters.find(p => p.id === term.parameter).values[level - 1], 0) * (1 + elementalBonus) * .5 * .9;
+        const expected = definition.base.reduce((total, term) => total + values[term.stat] * talent.parameters.find(p => p.id === term.parameter).values[effectiveLevel - 1], 0) * (1 + elementalBonus) * .5 * .9;
         // Re-evaluate LeyLine's authored terms on Mona's actual panel and bonus; the
         // independent engine check above retains its own legal build and target.
-        const commonActual = ordinaryCommonPanel(analysis, definition.base, talent.parameters, level);
-        record.cases.push({ level, mona: { expected: monaExpected, actual: monaActual,
+        const commonActual = ordinaryCommonPanel(analysis, definition.base, talent.parameters, effectiveLevel);
+        record.cases.push({ level, effectiveLevel, talentGrants: grants, mona: { expected: monaExpected, actual: monaActual,
           panel: Object.fromEntries(Object.entries(axes).map(([key, [stat, ratio]]) => [key, { stat: sum(analysis[stat]), ratio: sum(analysis[ratio]) }])),
           bonus: sum(analysis.bonus), extraDamage: sum(analysis.extra_damage) }, commonPanel: { expected: monaActual, actual: commonActual },
           leyline: { expected, actual, panel: values, elementalBonus,
@@ -153,6 +169,8 @@ export async function auditMonaOrdinaryBatch(monaRows, leylineRows, candidates, 
         sources: [identity.ref, ...(identity.row.canonicalId == null ? [formRef] : []), skill.source.path + '#' + skill.source.pointer,
           '.references/mona-community/beta-tools/runtime-7106.mjs',
           hit.source, ...binding.parameters.map(parameter => hit.source.split('#')[0] + '#' + parameter.field),
+          ...character.passives.flatMap((passive, index) => (passive.talentBonuses ?? []).some(rule => rule.category === talent.category)
+            ? [hit.source.split('#')[0] + '#/passives/' + index + '/talentBonuses'] : []),
           ...Object.keys(inactive).map(key => hit.source.split('#')[0] + '#/facts/' + key.replaceAll('~', '~0').replaceAll('/', '~1'))],
         comparisons: record.cases.flatMap(row => [{ name: `Mona level ${row.level}`, ...row.mona, tolerance: Math.max(0.000001, Math.abs(row.mona.expected) * .0001) },
           { name: `Common panel level ${row.level}`, ...row.commonPanel, tolerance: Math.max(0.000001, Math.abs(row.commonPanel.expected) * .0001) },
@@ -190,7 +208,8 @@ export async function auditMonaOrdinaryC6(monaRows, leylineRows, c0, entities, e
     const bonuses = Object.fromEntries(['normal', 'skill', 'burst'].map(category => [category,
       character.constellations.filter(item => item.rank <= 6).flatMap(item => item.talentBonuses ?? [])
         .filter(bonus => bonus.category === category).reduce((n, bonus) => n + bonus.levels, 0)]));
-    record.talentBonuses = bonuses; record.monaInput = branch.scenario.input;
+    const grants = soloTalentGrants(character);
+    record.talentBonuses = bonuses; record.talentGrants = grants; record.monaInput = branch.scenario.input;
     record.leylineInactiveWindows = base.leylineInactiveWindows ?? {};
     try {
       // Mona's saved C6 default uses displayed T10 directly; LeyLine's build
@@ -198,7 +217,7 @@ export async function auditMonaOrdinaryC6(monaRows, leylineRows, c0, entities, e
       for (const level of [4, 7, 10]) {
         const input = structuredClone(branch.scenario.input);
         for (const [group, category] of [[1, 'normal'], [2, 'skill'], [3, 'burst']]) {
-          if (level - bonuses[category] < 1) throw new Error('C6 base talent level would be invalid');
+          if (level - bonuses[category] - grants[category] < 1) throw new Error('C6 base talent level would be invalid');
           input.character['skill' + group] = level - 1;
         }
         const analysis = api.CalculatorInterface.get_damage_analysis(input, null);
@@ -223,7 +242,7 @@ export async function auditMonaOrdinaryC6(monaRows, leylineRows, c0, entities, e
         }
         if (!close(monaExpected, monaActual) || !close(monaActual, commonActual)) throw new Error('C6 Mona or common-panel damage differs');
         const build = { ...auditBuild(character, weapon), level: 90, ascension: 6, constellation: 6,
-          talents: Object.fromEntries(['normal', 'skill', 'burst'].map(category => [category, level - bonuses[category]])) };
+          talents: Object.fromEntries(['normal', 'skill', 'burst'].map(category => [category, level - bonuses[category] - grants[category]])) };
         const prepared = engine.prepareStructuredBuilds([{ id: 'actor', build }]);
         if (!prepared.ok) throw new Error('C6 build preparation failed');
         const { setup, request } = auditHit(character, talent, actualHit, 90);

@@ -54,6 +54,13 @@ export function sourceScope(item, category) {
 
 /** Menus own their fields; distinctly declared conditional outputs still need review. */
 export function conditionalBranches(item) {
+  const snapshot = item.binding?.definition?.snapshot;
+  if (snapshot && (item.subject === 'hit' || item.subject === 'equipment-hit')) {
+    const source = snapshot.sourceKind === 'capture-only' ? '明确捕获点'
+      : snapshot.sourceKind === 'action-or-capture' ? '有效施放或明确捕获点' : '关联记录';
+    return [{ key:'source',category:'damage',facet:'snapshot',condition:snapshot.sourceSkillId + ' · ' + source },
+      ...[...new Set(snapshot.attributes)].map(stat => ({key:'attribute.' + stat,category:'damage',facet:'snapshot',condition:'按捕获时刻读取 ' + stat}))];
+  }
   if (item.kind === 'automatic-rule' && item.modeled?.length) {
     return item.modeled.map(grant => ({ key: grant, category: 'buff', facet: 'trigger', condition: grant }));
   }
@@ -68,6 +75,13 @@ export function conditionalBranches(item) {
   });
 }
 
+function readsTeam(expression) {
+  if (!expression || typeof expression !== 'object') return false;
+  if (['teamCount', 'teamRegion', 'teamStat'].some(key => Object.hasOwn(expression, key))
+    || ['team-count', 'team-region', 'team-attribute'].includes(expression.kind)) return true;
+  return Object.values(expression).some(readsTeam);
+}
+
 export function declaredFacets(item, category) {
   if (category === 'unknown') return ['scope'];
   const b = item.binding ?? {}, def = b.definition ?? {}, grant = b.buff ?? {};
@@ -79,16 +93,22 @@ export function declaredFacets(item, category) {
     if (def.base) facets.add('scaling');
     if (b.parameters?.length) facets.add('curve');
     if (item.branch && item.branch !== 'normal') facets.add('reaction');
-    if (def.coordinated || def.accumulate || item.kind === 'equipment-event' || item.value?.parts > 1) facets.add('events');
+    if (def.coordinated || def.accumulate || def.confirmedProc || item.kind === 'equipment-event' || item.value?.parts > 1) facets.add('events');
   }
-  if (grant.trigger || item.kind === 'automatic-rule' || item.kind === 'equipment-event') facets.add('trigger');
-  if (b.unlock || def.when || item.when || item.effect?.when || grant.condition || b.modifier?.condition || item.pieces || b.pieces) facets.add('condition');
+  if (grant.trigger || def.confirmedProc || item.kind === 'automatic-rule' || item.kind === 'equipment-event') facets.add('trigger');
+  if (b.unlock || def.when || item.when || item.effect?.when || grant.condition || grant.windowFact || grant.trigger?.afterOwnerSkill
+    || b.modifier?.condition || item.pieces || b.pieces) facets.add('condition');
+  if (grant.trigger?.cooldownMs || def.confirmedProc?.cooldownMs) facets.add('cooldown');
+  if ([b.modifier?.value, b.modifier?.condition, grant.condition, def.when].some(readsTeam)) facets.add('team');
   if (grant.recipient || grant.excludeOwner || b.modifier?.recipient) facets.add('recipient');
   if (grant.stacking) {
     if (grant.stacking.policy !== 'replace') facets.add('stacks');
-    if (grant.stacking.policy === 'replace' || grant.stacking.refresh) facets.add('refresh');
+    if (grant.stacking.policy === 'replace' || grant.stacking.refresh || grant.stacking.refreshAll) facets.add('refresh');
   }
   if (grant.duration || grant.lifetime?.durationMs) facets.add('expiry');
+  if (b.categoryStacks?.length) {
+    for (const facet of ['trigger','stacks','refresh','expiry']) facets.add(facet);
+  }
   const text = sourceText(item) + ' ' + JSON.stringify([grant.condition, grant.trigger, b.modifier?.condition, item.when, item.effect, item.config?.map(c => c.name)]);
   for (const [facet, pattern] of boundaryRules) if (pattern.test(text)) facets.add(facet);
   return [...facets];

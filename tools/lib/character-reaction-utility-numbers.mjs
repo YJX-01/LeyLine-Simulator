@@ -674,17 +674,19 @@ export function characterReactionUtilityNumbers(entities, results, engine) {
       check('linnea', slot, prefix + '.catalogue-' + mode, 0, 'reaction.lunar.flatBaseBonus', mode === 'ordinary' ? 'team' : 'owner', reference => {
         const text = c6 ? reference.original('c1') : reference.text;
         const upgrade = c6 ? pct(reference.text, /伤害提升效果提高至原本的(\d+)%/) : 1;
-        const ratio = pct(text, mode === 'ordinary' ? /莉奈娅防御力的(\d+)%/ : /每层都会使造成的伤害提升，提升值相当于莉奈娅防御力的(\d+)%/) * upgrade;
+        const consumption = c6 ? amount(reference.text, /消耗原本(\d+)倍的层数/) : 1;
+        const perStack = pct(text, mode === 'ordinary' ? /莉奈娅防御力的(\d+)%/ : /每层都会使造成的伤害提升，提升值相当于莉奈娅防御力的(\d+)%/) * upgrade;
+        const ratio = perStack * (mode === 'ordinary' ? consumption : 1);
         const defense = reference.stat('defense').value;
         const rank = c6 ? 5 : 6;
         if (mode === 'ordinary') {
-          const key = 'linnea.catalogueConsumeReady', settings = { ...peer(), ...lunarHit('lunar-crystallize'), values: { [key]: true } };
+          const key = 'linnea.catalogueConsumeReady', settings = { ...peer('zibai'), ...talentHit('burst.param2', 'lunar-crystallize'), values: { [key]: true } };
           return [...[0, 500].map(added => caseOf((defense + added) * ratio, { ...settings, inputs: { flatDefense: ['defense', added] } })),
-            caseOf(0, { ...settings, values: { [key]: false } }), caseOf(0, { ...settings, ...lunarHit('lunar-bloom') }),
+            caseOf(0, { ...settings, values: { [key]: false } }), caseOf(0, { ...settings, ...talentHit('burst.param1', 'ordinary') }),
             caseOf(0, { ...settings, constellation: rank })];
         }
         const key = 'linnea.megatonCatalogueSpent', settings = talentHit('skill.param3', 'lunar-crystallize');
-        const cap = amount(text, /消耗至多(\d+)层/);
+        const cap = amount(text, /消耗至多(\d+)层/) * consumption;
         return [...[0, 1, cap].map(count => caseOf(defense * count * ratio, { ...settings, values: { [key]: count } })),
           caseOf(0, { ...settings, constellation: rank, values: { [key]: 1 } }), caseOf(0, { values: { [key]: 1 } })];
       });
@@ -692,8 +694,8 @@ export function characterReactionUtilityNumbers(entities, results, engine) {
   }
   check('linnea', 'c6', 'c6.moonsign-elevation', 0, 'reaction.lunar.elevationFactor', 'team', ({ text }) => {
     const gain = 1 + pct(text, /月结晶反应伤害擢升(\d+)%/);
-    return [...toggled({ ...peer(), ...lunarHit('lunar-crystallize') }, { fullMoonsign: true }, 'fullMoonsign', gain),
-      caseOf(0, { ...peer(), ...lunarHit('lunar-bloom'), values: { fullMoonsign: true } })];
+    return [...toggled({ ...peer('zibai'), ...talentHit('burst.param2', 'lunar-crystallize') }, { fullMoonsign: true }, 'fullMoonsign', gain),
+      caseOf(0, { ...peer('zibai'), ...talentHit('burst.param1', 'ordinary'), values: { fullMoonsign: true } })];
   });
 
   check('nefer', 'c1', 'c1-phantasm-lunar', 0, 'reaction.lunar.flatBaseBonus', 'owner', reference => {

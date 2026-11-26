@@ -4,6 +4,11 @@ import { fileURLToPath } from 'node:url';
 import { readContentSource } from './content-source.mjs';
 import { auditBuild, auditHit, novice } from './roster-audit-settings.mjs';
 import { ordinaryPanel } from './mona-ordinary-batch.mjs';
+import { bool } from './roster-audit-settings.mjs';
+import { loadContentSchema } from './load-content-schema.mjs';
+import { probeMonaSkills } from './mona-calculation-probes.mjs';
+import { amplificationFingerprint } from './source-fingerprint.mjs';
+import { createHash } from 'node:crypto';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const official = 'tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592';
@@ -50,6 +55,64 @@ function readArm(source, skill) {
   if (table.length < 10) return null;
   const line = source.text.slice(0, arm.index).split('\n').length;
   return { variant, constant, field, group: Number(group), table, line, expression: arm[0], path: source.path };
+}
+
+/** Two source-confirmed duplicate menu bindings; one actual hit from each adjacent pair. */
+export async function auditMonaDuplicateMenuArms(monaRows, leylineRows, entities, engine, { selectedSkillIds } = {}) {
+  const specs=[
+    {name:'Citlali',id:'citlali',weapon:'apprenticesnotes',index:10,skill:'citlali.burst',hits:['citlali.burst.param1','citlali.burst.param2'],
+      target:'character:citlali:hit:/talents/2/hits/1',source:'.references/mona-community/mona_core/src/character/characters/cryo/citlali.rs',
+      needles:['Q1 locale!(zh_cn: "冰风暴伤害"','Q1 locale!(zh_cn: "宿灵之髑伤害"','Q2 => CITLALI_SKILL.q_dmg2[s3]'],group:'combat3',params:['param1','param2']},
+    {name:'KaedeharaKazuha',id:'kaedeharakazuha',weapon:'dullblade',index:6,skill:'kaedeharakazuha.normal',hits:['kaedeharakazuha.normal.param7','kaedeharakazuha.normal.param8'],
+      target:'character:kaedeharakazuha:hit:/talents/0/hits/7',source:'.references/mona-community/mona_core/src/character/characters/anemo/kaedehara_kazuha.rs',
+      needles:['KaedeharaKazuhaDamageEnum::Charged11 as usize, text: locale!(zh_cn: "重击伤害-1"','KaedeharaKazuhaDamageEnum::Charged11 as usize, text: locale!(zh_cn: "重击伤害-2"','Charged12 => KAEDEHARA_KAZUHA_SKILL.charged_dmg12[s1]'],group:'combat1',params:['param7','param8']},
+  ];
+  const selected=specs.filter(spec=>!selectedSkillIds || selectedSkillIds.has(`mona:skill:${spec.name}:${spec.index}`));
+  if(!selected.length)return {rows:[],mappings:[],scope:'No duplicate-menu sample selected.'};
+  const {api}=await import('../../.references/mona-community/beta-tools/runtime-7106.mjs');
+  const {createEmptyProject}=await loadContentSchema('/src/web/src/domain/workbench-project.ts');
+  const {addActorFromBuild,addSkillHit,defaultEnemy}=await loadContentSchema('/src/web/src/domain/real-project.ts');
+  const stats=readContentSource(resolve(root,official+'/stats/talents.json')),rows=[],mappings=[];
+  for(const spec of selected) {
+    const character=entities.characters.find(x=>x.id===spec.id),weapon=entities.weapons.find(x=>x.id===spec.weapon);
+    const skill=monaRows.find(x=>x.id===`mona:skill:${spec.name}:${spec.index}`),branch=monaRows.find(x=>x.id===`mona:branch:${spec.name}:${spec.index}:c0:default:normal`);
+    const target=leylineRows.find(x=>x.id===spec.target);
+    if(!character || !weapon || !skill || !branch || target?.revision!=='3' || target.binding?.hitId!==spec.hits[1])continue;
+    const sourceText=readFileSync(resolve(root,spec.source),'utf8');
+    if(!spec.needles.every(needle=>sourceText.includes(needle)))throw new Error(spec.name+' duplicate source mapping changed');
+    const project=createEmptyProject();project.enemy=defaultEnemy();const actor=addActorFromBuild(project,auditBuild(character,weapon));
+    const talent=character.talents.find(x=>x.id===spec.skill);if(!talent)throw new Error('Duplicate-menu talent missing');
+    const events=spec.hits.map((id,i)=>{
+      const ordinal=talent.hits.findIndex(hit=>hit.id===id);if(ordinal<0)throw new Error('Duplicate-menu hit missing');
+      const facts=spec.id==='kaedeharakazuha'?[{subject:{kind:'actor',id:actor},values:{'kaedeharakazuha.crimsonMomijiInfusion':bool(false)}}]:[];
+      return addSkillHit(project,actor,spec.skill,ordinal,1000+i,{crit:'noncritical',reaction:'none',facts});
+    });
+    const result=engine.evaluateTimeline(project),actual=events.map(id=>result.points.find(point=>point.id===id)?.value);
+    const probe=(await probeMonaSkills({characters:[spec.name],indices:[spec.index],constellations:[0],configure(input){
+      Object.assign(input.character,{level:1,ascend:false,constellation:0,skill1:0,skill2:0,skill3:0});Object.assign(input.weapon,{level:1,ascend:false,refine:1});input.artifacts=[];input.buffs=[];input.enemy=null;
+    }})).rows[0];
+    if(probe?.status!=='ok')throw new Error('Duplicate-menu Mona probe unavailable');
+    const attack=character.attributes.base.attack*character.progression.curves.attack[1]+character.progression.promotion[0].attack+weapon.baseAttack;
+    const correction=attack-sum(probe.analysis.atk);if(Math.abs(correction)>1)throw new Error('Duplicate-menu natural panel cannot align');
+    const alignedInput=structuredClone(probe.input);alignedInput.buffs=[{name:'ATKFixed',config:{ATKFixed:{value:correction}}}];
+    const aligned=api.CalculatorInterface.get_damage_analysis(alignedInput,null),ratio=sum(aligned.atk_ratio),ratios=spec.params.map(parameter=>stats[spec.id][spec.group][parameter][0]);
+    const factor=101/291*.9, expected=ratios.map(value=>attack*value*factor);
+    if(!actual.every((value,i)=>near(value,expected[i],1e-8)) || !near(sum(aligned.atk),attack,1e-8)
+      || !near(aligned.normal.non_critical,attack*ratio*factor,1e-8) || Math.abs(ratio-ratios[0])>.00005 || Math.abs(ratio-ratios[1])<.1) throw new Error('Duplicate-menu runtime or source ratio differs');
+    const row={spec,project,events,ratios,expected,actual,mona:{input:probe.input,nativeAttack:sum(probe.analysis.atk),nativeDamage:probe.analysis.normal.non_critical,
+      alignedInput,attack:sum(aligned.atk),damage:aligned.normal.non_critical,ratio,correction}};
+    const deps=[spec.source,'tools/lib/mona-ordinary-wrong-arms.mjs','tools/lib/mona-calculation-probes.mjs','tools/lib/roster-audit-settings.mjs',
+      'src/web/src/domain/real-project.ts','src/web/src/domain/workbench-project.ts',official+'/stats/talents.json'];
+    const proof={row,provenance:amplificationFingerprint(spec.id,spec.weapon),dependencies:Object.fromEntries(deps.map(path=>[path,createHash('sha256').update(readFileSync(resolve(root,path))).digest('hex')]))};
+    rows.push(row);mappings.push({id:`ordinary-duplicate-menu:${spec.name}:${spec.index}`,disposition:'different',coverage:'scenario',mona:[skill.id,branch.id],
+      leyline:[{id:target.id,revision:'3'}],scopedDuplicateMenuProof:proof,
+      explanation:'固定 Mona 两个邻近菜单标签绑定同一个第一段；该一级单次场景以原生面板和对齐面板分别核验，正式第二段使用独立原始倍率。',
+      sources:[spec.source, runtime, target.source, official+'/stats/talents.json#/'+spec.id+'/'+spec.group+'/'+spec.params[1],'tools/lib/mona-ordinary-wrong-arms.mjs'],
+      comparisons:[{name:'LeyLine first adjacent hit',expected:expected[0],actual:actual[0],tolerance:1e-8},
+        {name:'LeyLine requested second hit',expected:expected[1],actual:actual[1],tolerance:1e-8},
+        {name:'Mona aligned menu uses first hit',expected:expected[0],actual:aligned.normal.non_critical,tolerance:1e-8}]});
+  }
+  return {rows,mappings,scope:'Only these two C0 level-one single-hit menus, empty artifacts and level-90 enemy; Mona attack rounded with an explicit synthetic correction.'};
 }
 
 /** Strict source-verified wrong-arm findings; all remaining candidates stay open. */

@@ -1,5 +1,5 @@
 import { readContentSource } from './content-source.mjs';
-import { assembleCalculationLibrary, readCalculationLibrary } from './calculation-library.mjs';
+import { assembleCalculationLibrary } from './calculation-library.mjs';
 import { auditBuild } from './roster-audit-settings.mjs';
 import { probeMonaSkills } from './mona-calculation-probes.mjs';
 import { loadContentSchema } from './load-content-schema.mjs';
@@ -23,9 +23,11 @@ const reactionValue = (multiplier, coefficient, em, resistance) =>
   multiplier * coefficient * (1 + 16 * em / (2000 + em)) * resistanceFactor(resistance);
 
 /** Actual Mona public reaction API versus the maintained LeyLine reaction formula. */
-export async function auditMonaTransformative(entities, engine) {
-  const compiled = engine.compileCalculation(readCalculationLibrary());
-  if (!compiled.ok) throw new Error(JSON.stringify(compiled.diagnostics));
+export async function auditMonaTransformative(entities, engine, { keys } = {}) {
+  if (keys && (!keys.length || new Set(keys).size !== keys.length || keys.some(key => !reactions.some(row => row[0] === key)))) {
+    throw new Error('Reaction selection must contain unique known reaction keys');
+  }
+  const selected = keys ? reactions.filter(([key]) => keys.includes(key)) : reactions;
   const reactionData = readContentSource(new URL('../../src/game-data/data/calculation/reactions.json', import.meta.url));
   const rules = reactionData.rules;
   const { createEmptyProject } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
@@ -35,6 +37,8 @@ export async function auditMonaTransformative(entities, engine) {
   const set = entities.sets.find(row => row.id === 'gladiatorsfinale');
   const common = readContentSource(new URL('../../src/game-data/data/calculation/common.json', import.meta.url));
   const reactionRules = assembleCalculationLibrary(common, reactionData, []);
+  const compiled = engine.compileCalculation(reactionRules);
+  if (!compiled.ok) throw new Error(JSON.stringify(compiled.diagnostics));
   const { api, named } = await import('../../.references/mona-community/beta-tools/runtime-7106.mjs');
   const fixture = (await probeMonaSkills({ characters: ['Kaeya'], indices: [0], constellations: [0] })).rows[0];
   if (fixture?.status !== 'ok') throw new Error('Mona Kaeya fixture unavailable: ' + fixture?.error);
@@ -57,9 +61,9 @@ export async function auditMonaTransformative(entities, engine) {
     const build = { ...auditBuild(character, weapon), level, ascension: level === 90 ? 6 : level === 50 ? 2 : 0,
       sets: em ? [set] : [], artifacts: em ? [{ id: 'synthetic-em', setId: 'gladiatorsfinale', slot: 'flower', rarity: 5, level: 0, mainStat: 'hp', inventory: null, sourceRefs: [], substats: [{ stat: 'elementalMastery', value: em }] }] : [] };
     const actor = addActorFromBuild(project, build);
-    const records = reactions.map(([, family, element], index) => addTransformativeReaction(project, actor, family, element, index, reactionRules));
+    const records = selected.map(([, family, element], index) => addTransformativeReaction(project, actor, family, element, index, reactionRules));
     const evaluated = engine.evaluateTimeline(project);
-    for (const [index, [key, family, element, coefficient]] of reactions.entries()) {
+    for (const [index, [key, family, element, coefficient]] of selected.entries()) {
       const resistance = resistances[element];
       const multiplier = rules.levelMultipliers[level];
       const coefficientIndex = reactionData.calculation.attributes.findIndex(entry => entry.identity.id === 'attribute.reaction.' + family + '.coefficient');
@@ -91,7 +95,9 @@ export async function auditMonaTransformative(entities, engine) {
     status: zero?.state === 'known' && zero.value.value === 0 ? 'match' : 'mismatch', scope: 'LeyLine formula only; Mona has no coefficient input.' };
   const summary = { cases: rows.length, attributedDifferences: rows.filter(row => row.attribution).length };
   for (const row of rows) summary[row.status] = (summary[row.status] ?? 0) + 1;
-  return { rows, legalZero, summary, limitations: ['Crystallize is a shield, not a transformative damage output; not compared here.',
+  return { rows, legalZero, summary, ...(keys ? { selection: { keys: selected.map(row => row[0]),
+    selectedFamilies: selected.length, totalFamilies: reactions.length, scenariosPerFamily: scenarios.length,
+    selectedCases: scenarios.length * selected.length, fullCases: scenarios.length * reactions.length } } : {}), limitations: ['Crystallize is a shield, not a transformative damage output; not compared here.',
     'Direct lunar and stellar damage use separate APIs and are not covered by this standalone reaction comparison.',
     'Target aura and trigger ownership are not inputs of this standalone formula; compare them through event-level probes.',
     'The independent arithmetic uses explicitly listed coefficients and adopted level multipliers; it is not independent evidence for those constants.'] };
@@ -100,6 +106,13 @@ export async function auditMonaTransformative(entities, engine) {
 /** Check the persisted comparisons against the published Mona coefficients and the live runs. */
 export function validateMonaTransformativeReviews(reviews, audit, leylineRows) {
   const issues = [], accepted = [];
+  const keys = audit.selection?.keys;
+  if (keys !== undefined && (!Array.isArray(keys) || !keys.length || new Set(keys).size !== keys.length
+    || keys.some(key => !reactions.some(row => row[0] === key)))) {
+    return { reviews: [], issues: [{ side: 'reaction', issue: 'Invalid explicit reaction selection' }],
+      summary: { scenarios: 19, cases: audit.rows?.length ?? 0, accepted: 0, rejected: 0 } };
+  }
+  const selected = keys ? reactions.filter(([key]) => keys.includes(key)) : reactions;
   const fields = new Map(leylineRows.map(row => [row.id, row]));
   const scenarios = [1, 50, 90].flatMap(level => [0, 20].flatMap(em =>
     [-.2, .1, .8].map(resistance => ({ level, em, resistance }))));
@@ -107,14 +120,17 @@ export function validateMonaTransformativeReviews(reviews, audit, leylineRows) {
   const caseCount = scenarios.length + 1;
   const rows = audit.rows ?? [];
   const multipliers = readContentSource(new URL('../../' + rulesSource, import.meta.url)).rules.levelMultipliers;
-  if (rows.length !== caseCount * reactions.length) {
-    issues.push({ side: 'reaction', issue: 'Expected ' + caseCount * reactions.length + ' reaction cases', actual: rows.length });
+  if (rows.length !== caseCount * selected.length) {
+    issues.push({ side: 'reaction', issue: 'Expected ' + caseCount * selected.length + ' reaction cases', actual: rows.length });
   }
-  for (const [key, family, element, coefficient] of reactions) {
+  const foreignRows = keys && rows.some(row => !keys.includes(row.key));
+  if (foreignRows) issues.push({ side: 'reaction', issue: 'Reaction observations outside explicit selection' });
+  for (const [key, family, element, coefficient] of selected) {
     const id = 'transformative-' + key;
     const matches = reviews.filter(review => review.id === id);
     const cases = rows.filter(row => row.key === key);
     const errors = [];
+    if (foreignRows) errors.push('out-of-scope observation');
     const [review] = matches;
     const monaCoefficient = legacyCoefficients[key] ?? coefficient;
     const different = monaCoefficient !== coefficient;
@@ -159,6 +175,6 @@ export function validateMonaTransformativeReviews(reviews, audit, leylineRows) {
     && !reactions.some(([key]) => review.id === 'transformative-' + key));
   if (extra.length) issues.push({ side: 'reaction', issue: 'Unexpected transformative reviews', ids: extra.map(row => row.id) });
   return { reviews: accepted, issues, summary: {
-    scenarios: caseCount, cases: rows.length, accepted: accepted.length, rejected: reactions.length - accepted.length,
+    scenarios: caseCount, cases: rows.length, accepted: accepted.length, rejected: selected.length - accepted.length,
   } };
 }

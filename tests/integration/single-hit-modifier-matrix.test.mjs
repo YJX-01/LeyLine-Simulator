@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { auditSingleHitModifiers } from '../../tools/lib/single-hit-modifier-matrix.mjs';
 import { createRuntimeCatalog } from '../../tools/lib/runtime-catalog.mjs';
 import { loadContentSchema } from '../../tools/lib/load-content-schema.mjs';
-import { novice } from '../../tools/lib/roster-audit-settings.mjs';
+import { auditBuild, novice } from '../../tools/lib/roster-audit-settings.mjs';
 
 test('ordinary hits respect modifier scope, stacking, recipients, resistance and crit selection across the catalog', async t => {
   const catalog = await createRuntimeCatalog();
@@ -85,4 +85,28 @@ test('ordinary hits respect modifier scope, stacking, recipients, resistance and
       assert.ok(group.length >= minimum, 'Expected at least ' + minimum + ' cases');
     });
   }
+});
+
+test('timeline recorded zero targets contribute no damage, without changing omitted counts', async () => {
+  const catalog = await createRuntimeCatalog({ characters: ['amber'], weapons: ['huntersbow'], sets: [], actions: [] });
+  const engine = await loadContentSchema('/src/engine/src/index.ts');
+  const { createEmptyProject } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
+  const { addActorFromBuild, addSkillHit, defaultEnemy } = await loadContentSchema('/src/web/src/domain/real-project.ts');
+  const project = createEmptyProject(); project.enemy = defaultEnemy();
+  const actor = addActorFromBuild(project, auditBuild(await catalog.get('characters', 'amber'), await catalog.get('weapons', 'huntersbow')));
+  const id = addSkillHit(project, actor, 'amber.normal', 0, 1000, { crit: 'noncritical', reaction: 'none' });
+  project.objective.damageIds = [id];
+  const fact = value => ({ value: value === null ? null : { kind: 'quantity', unit: 'count', value }, provenance: 'explicit', sourceRefs: [] });
+  const evaluate = values => {
+    const p = structuredClone(project);
+    if (values) p.timeline.find(row => row.id === id).damage.facts = [{ subject: { kind: 'event' }, values }];
+    const result = engine.evaluateTimeline(p);
+    return { point: result.points.find(row => row.id === id).value, total: result.totalValue, objective: result.objectiveValue };
+  };
+  const original = evaluate(); assert.ok(original.point > 0);
+  for (const values of [{ targetsHit: fact(0) }, { targetsDamaged: fact(0) }, { targetsHit: fact(1), targetsDamaged: fact(0) }]) {
+    assert.deepEqual(evaluate(values), { point: 0, total: 0, objective: 0 });
+  }
+  assert.deepEqual(evaluate({ targetsHit: fact(null) }), { point: null, total: null, objective: null });
+  assert.deepEqual(evaluate({ targetsHit: fact(3), targetsDamaged: fact(2) }), original);
 });
