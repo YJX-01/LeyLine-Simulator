@@ -1074,6 +1074,25 @@
             "nearThundercloud"
           ],
           "support": "lunar-hit-unavailable"
+        },
+        {
+          "id": "flins.burst.param2-extra",
+          "name": "满辉雷暴云额外中间段月感电伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "family": "lunar-charged",
+          "when": [
+            "fullMoonsign",
+            "nearThundercloud"
+          ],
+          "selection": {
+            "repetitions": 2
+          },
+          "support": "lunar-hit-unavailable"
         }
       ],
       "energyCapacity": {
@@ -1411,7 +1430,8 @@
             }
           ],
           "stacking": {
-            "crossOwnerUnverified": true
+            "crossOwnerUnverified": true,
+            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
           }
         },
         {
@@ -1431,7 +1451,8 @@
             }
           ],
           "stacking": {
-            "crossOwnerUnverified": true
+            "crossOwnerUnverified": true,
+            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
           }
         },
         {
@@ -1453,7 +1474,8 @@
             }
           ],
           "stacking": {
-            "crossOwnerUnverified": true
+            "crossOwnerUnverified": true,
+            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
           }
         }
       ]

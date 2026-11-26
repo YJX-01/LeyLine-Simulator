@@ -963,7 +963,12 @@
                 "call": "kaedeharakazuha.poetics-em",
                 "inputs": {
                   "input": {
-                    "stat": "elementalMastery"
+                    "stat": "elementalMastery",
+                    "excludeNonConvertible": true,
+                    "at": {
+                      "kind": "source-event",
+                      "phase": "before"
+                    }
                   }
                 }
               }
@@ -1007,7 +1012,12 @@
                 "call": "kaedeharakazuha.poetics-em",
                 "inputs": {
                   "input": {
-                    "stat": "elementalMastery"
+                    "stat": "elementalMastery",
+                    "excludeNonConvertible": true,
+                    "at": {
+                      "kind": "source-event",
+                      "phase": "before"
+                    }
                   }
                 }
               }
@@ -1051,7 +1061,12 @@
                 "call": "kaedeharakazuha.poetics-em",
                 "inputs": {
                   "input": {
-                    "stat": "elementalMastery"
+                    "stat": "elementalMastery",
+                    "excludeNonConvertible": true,
+                    "at": {
+                      "kind": "source-event",
+                      "phase": "before"
+                    }
                   }
                 }
               }
@@ -1095,7 +1110,12 @@
                 "call": "kaedeharakazuha.poetics-em",
                 "inputs": {
                   "input": {
-                    "stat": "elementalMastery"
+                    "stat": "elementalMastery",
+                    "excludeNonConvertible": true,
+                    "at": {
+                      "kind": "source-event",
+                      "phase": "before"
+                    }
                   }
                 }
               }

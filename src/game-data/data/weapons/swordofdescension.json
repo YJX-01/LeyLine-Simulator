@@ -273,6 +273,21 @@
           "fact": "swordofdescension.descentTriggered"
         }
       ],
+      "confirmedProc": {
+        "group": "swordofdescension.descent",
+        "sourceCategories": [
+          "normal",
+          "charged"
+        ],
+        "cooldownMs": [
+          10000,
+          10000,
+          10000,
+          10000,
+          10000
+        ],
+        "confirmedFact": "swordofdescension.descentTriggered"
+      },
       "base": {
         "template": "attack-damage-base",
         "inputs": {

@@ -256,12 +256,11 @@ export function mixedEquipmentModifierNumbers(entities, results, engine) {
     check('athousandfloatingdreams', 'different', element + 'Bonus', { holder }, text => {
       const value = scalar(text, /不同：装备者元素类型的元素伤害加成提升([\d.]+)%/);
       const limit = amount(text, /每种至多叠加(\d+)层/);
-      const different = 'athousandfloatingdreams.differentElements';
       const other = ['cryo', 'pyro', 'anemo', 'hydro'].filter(candidate => candidate !== element)
         .map(candidate => candidate === 'pyro' ? 'amber' : candidate === 'hydro' ? 'barbara' : sword[candidate]);
-      return [0, 1, 2, limit].map(count => caseWithFacts({ [different]: count }, count * value, { other: other.slice(0, count) })).concat(
-        caseWithFacts({ [different]: 2 }, 0, { holder: element === 'electro' ? 'sucrose' : 'lisa', other: other.slice(0, 2) }),
-        caseWithFacts({ [different]: 2 }, 0, { other: other.slice(0, 2), recipient: 'peer0' }));
+      return [0, 1, 2, limit].map(count => caseWithFacts({}, count * value, { other: other.slice(0, count) })).concat(
+        caseWithFacts({}, 0, { holder: element === 'electro' ? 'sucrose' : 'lisa', other: other.slice(0, 2) }),
+        caseWithFacts({}, 0, { other: other.slice(0, 2), recipient: 'peer0' }));
     });
     check('jadefallssplendor', 'regalia', element + 'Bonus', { holder, sources: buildStatsSources(holder, 'jadefallssplendor') }, text => {
       const active = 'jadefallssplendor.regaliaActive';
@@ -492,8 +491,12 @@ export function mixedEquipmentModifierNumbers(entities, results, engine) {
     { ...window('wolfsgravestone', 'low-target-hitActive'), role: 'team' });
 
   for (const slot of [1, 2, 3]) {
-    exactLayers('jadevista', 'mastery' + slot, 'elementalMastery', 'jadevista.sameElements', slot, text => amount(text, /元素精通提升([\d.]+)点/),
-      { party: ['bennett', 'klee', 'xiangling'] });
+    check('jadevista', 'mastery' + slot, 'elementalMastery', { holder: 'amber' }, text => {
+      const amountPerMember = amount(text, /元素精通提升([\d.]+)点/);
+      const party = ['bennett', 'klee', 'xiangling'];
+      return [0, 1, 2, 3].map(count => caseWithFacts({}, count === slot ? count * amountPerMember : 0,
+        { other: party.slice(0, count) })).concat(caseWithFacts({}, 0, { other: party.slice(0, slot), recipient: 'peer0' }));
+    });
     exactLayers('newbough', 'verdure-mastery-' + slot, 'elementalMastery', 'newbough.verdureLayers', slot,
       text => amount(text, /元素精通提升([\d.]+)点/), { gates: { 'newbough.stellarGleam': false } });
     for (const entity of ['portablepowersaw', 'thedockhandsassistant']) {
@@ -503,9 +506,12 @@ export function mixedEquipmentModifierNumbers(entities, results, engine) {
     exactLayers('starsealededict', 'torch-mastery-' + slot, 'elementalMastery', 'starsealededict.torchLayers', slot,
       text => amount(text, /元素精通进一步提升([\d.]+)点/), window('starsealededict', 'crystalWindow'));
   }
-  stacks('jadevista', 'attack', 'attackPercent', 'jadevista.differentElements',
-    layers(/装备者的攻击力提升([\d.]+)%/, /上述两种效果总共至多叠加(\d+)层/),
-    { party: ['barbara', 'kaeya', 'noelle'], checkOverCap: false });
+  check('jadevista', 'attack', 'attackPercent', { holder: 'amber' }, text => {
+    const gain = scalar(text, /装备者的攻击力提升([\d.]+)%/);
+    const party = ['barbara', 'kaeya', 'noelle'];
+    return [0, 1, 2, 3].map(count => caseWithFacts({}, gain * count, { other: party.slice(0, count) }))
+      .concat(caseWithFacts({}, 0, { other: party, recipient: 'peer0' }));
+  });
   for (const [suffix, pattern, stellarGleam] of [
     ['verdure-atk', /攻击力提升([\d.]+)%，元素精通/, false], ['gleam-atk', /效果改为攻击力提升([\d.]+)%/, true],
   ]) stacks('newbough', suffix, 'attackPercent', 'newbough.verdureLayers',
@@ -698,12 +704,12 @@ export function mixedEquipmentModifierNumbers(entities, results, engine) {
   ]) check('gildeddreams', 'gilded', stat, { pieces: 4, holder: 'kaeya' }, text => {
     const gain = source(text);
     const max = amount(text, /每类效果至多计算(\d+)个角色/);
-    const window = 'gildeddreams.reactionWindow', count = 'gildeddreams.' + suffix;
+    const window = 'gildeddreams.reactionWindow';
     const members = suffix === 'sameElements' ? ['rosaria', 'diona', 'charlotte'] : ['amber', 'barbara', 'fischl'];
-    const cases = [0, 1, 2, max].map(n => caseWithFacts({ [window]: true, [count]: n }, n * gain, { other: members.slice(0, n) }));
-    cases.push(caseWithFacts({ [window]: false, [count]: 2 }, 0, { other: members.slice(0, 2) }),
-      caseWithFacts({ [window]: true, [count]: 2 }, 0, { other: members.slice(0, 2), recipient: 'peer0' }),
-      caseWithFacts({ [window]: true, [count]: 2 }, 0, { other: members.slice(0, 2), pieces: 3 }));
+    const cases = [0, 1, 2, max].map(n => caseWithFacts({ [window]: true }, n * gain, { other: members.slice(0, n) }));
+    cases.push(caseWithFacts({ [window]: false }, 0, { other: members.slice(0, 2) }),
+      caseWithFacts({ [window]: true }, 0, { other: members.slice(0, 2), recipient: 'peer0' }),
+      caseWithFacts({ [window]: true }, 0, { other: members.slice(0, 2), pieces: 3 }));
     return cases;
   });
   check('songofdayspast', 'waves', 'baseDamageBonus', { holder: 'kaeya', pieces: 4, role: 'team' }, text => {

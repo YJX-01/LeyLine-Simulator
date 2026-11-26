@@ -218,7 +218,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 #### 锁面板
 
-香菱「旋火轮」按段跟踪。本地 KQM TCL 的 `docs/characters/pyro/xiangling.md` 将起手第一、二段列为动态取值，第三段及后续旋转命中列为锁面板。当前正式定义的四段均未声明属性捕获。第三段和旋转命中分别登记为待核对项，需确认锁定的属性及取值时点。[香菱定义](../../src/game-data/data/characters/xiangling.json) · [锁面板规则](../../docs/calculation.md#锁面板)
+香菱「旋火轮」的起手第一、二段读取本击面板。第三段与后续旋转命中可关联时间轴上玩家记录的爆发捕获点，读取当时的攻击力、暴击率、暴击伤害、火元素伤害加成及增幅反应用的元素精通。敌人的抗性按各次命中时刻结算。本地 KQM TCL 的 `docs/characters/pyro/xiangling.md` 记录了各段和施放后约 46 帧的实测时机。[香菱定义](../../src/game-data/data/characters/xiangling.json) · [命中属性捕获](../../docs/calculation.md#命中属性捕获)
 
 #### 捕获、基础加值与内容规则
 
@@ -234,7 +234,11 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 战斗记录可指定敌方生命比例、元素附着、站场、护盾、生命变化、受伤、施予治疗和接受治疗。治疗事件可包含溢出量。受伤记录使用实际扣除的伤害值，生命消耗使用单独的生命变化记录。
 
-逐技能验收列出治疗量和护盾吸收量的每个详情字段。治疗的数值对照从本地天赋原始精度、角色和武器白值独立计算，并在施救者和受益人之间交换少女与游医二件套。施放治疗另核对受益人数、已有记录去重和海染泡沫伤害。擢升验收分别计算本人和队友的增幅，保留不同角色同时擢升同一伤害时的叠加缺口。逐项报告记录原文字段、相关输入、验过的分支及待补证据。[战斗条款](sources/catalog/combat-lifecycle.json) · [六命擢升依据](sources/kqm-web/2026-11-22/constellation-elevation-facts.json)
+玛拉妮的技能可分别选择撕咬和单枚鲨鲨飞弹。目标数填 1、2 或 3，3 表示三名及以上。飞弹还需确认锁定了另一名有标记的敌人。目标数回归用例在三层浪势下核对零命和一命、三档目标数及飞弹的触发条件。[天赋原文](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/mualani.json) · [多目标系数的独立实现](https://github.com/genshinsim/gcsim/blob/main/internal/characters/mualani/attack.go#L138-L160)
+
+在时间轴的“战斗事件记录”选择“创造护盾”，由当前选中队员在光标处记一次造盾。祭星者之望、尘光七谕和碧落之珑从这个时刻计算效果持续时间。碧落之珑也接受其持有者施放爆发的记录。[武器精炼原文](sources/catalog/genshin-db/weapons.json)
+
+逐技能验收列出治疗量和护盾吸收量的每个详情字段。治疗的数值对照从本地天赋原始精度、角色和武器白值独立计算，并在施救者和受益人之间交换少女与游医二件套。施放治疗另核对受益人数、已有记录去重和海染泡沫伤害。擢升验收分别计算本人和队友的增幅，逐命座核对哥伦比娅与六命菲林斯、奈芙尔的月曜擢升相加；其他来源组合仍按各自证据核验。逐项报告记录原文字段、相关输入、验过的分支及待补证据。[战斗条款](sources/catalog/combat-lifecycle.json) · [六命擢升依据](sources/kqm-web/2026-11-22/constellation-elevation-facts.json) · [跨角色月曜擢升依据](sources/kqm-web/2026-11-25/columbina-cross-owner-elevation.json)
 
 菲林斯爆发中间段和最终段、哥伦比娅月露涤荡单段及兹白月转时隙第四段额外伤害已绑定相应月伤模板。单段倍率与伤害类别来自固定天赋表。时间轴接入明确贡献者的月感电、月结晶与星扩散聚合，以及薇斯纳明确动作和初始状态求值。配装比较保留覆盖诊断。记录完整性、自动次数与冷却、完整修订类型和全目录机制仍待接入。
 

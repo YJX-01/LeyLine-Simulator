@@ -7,7 +7,7 @@ import GameIcon from '../components/GameIcon.vue';
 import ChoiceGroup from '../components/ChoiceGroup.vue';
 import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
-import { buffEventSelectors, equipmentHits, putHitFact, transformativeElements, transformativeFamilies, type TransformativeFamily, type HitRef, type HitFacts } from '@leyline/schema';
+import { buffEventSelectors, combatObservationUnits, equipmentHits, findBuildHit, subjectFacts, putHitFact, transformativeElements, transformativeFamilies, type TransformativeFamily, type HitRef, type HitFacts } from '@leyline/schema';
 import { getReactionCalculationBundle } from '@leyline/game-data';
 import { grantedDamageChanges } from '@leyline/engine';
 import { ordinaryReactions } from '@leyline/schema/hit-bindings';
@@ -57,6 +57,48 @@ const projectionReactions = computed(() => layer.value === 'damage' ? ordinaryRe
 watch([() => axis.actorId, layer, skillId], () => { coordinatedCrit.value = 'inherit'; coordinatedReaction.value = 'unknown'; }, { flush: 'sync' });
 watch([() => axis.actorId, skillId], () => { nearby.value = []; replace.value = ''; });
 const equipment = computed(() => axis.actor?.build ? equipmentHits(axis.actor.build) : []);
+const selectedHitRecord = computed(() => {
+  const record = axis.project.timeline.find(item => item.id === axis.selectedId);
+  if (!record?.damage) return;
+  const build = axis.project.candidate.actors.find(actor => actor.id === record.actor)?.build;
+  const rule = findBuildHit(build, record.damage.hit)?.hit.confirmedProc;
+  const facts = subjectFacts(record.damage.facts, { kind: 'event' });
+  const flag = rule && facts?.[rule.confirmedFact]?.value;
+  const contacts = facts?.targetsHit?.value;
+  const sources = rule ? axis.project.timeline.filter(source => {
+    if (source.actor !== record.actor || source.damage?.hit.definition.group !== 'characters') return false;
+    if (source.timeMs > record.timeMs || source.timeMs === record.timeMs && source.order >= record.order) return false;
+    const category = findBuildHit(build, source.damage.hit)?.hit.category;
+    return !!category && rule.sourceCategories.includes(category);
+  }) : [];
+  return { record, rule, sources, confirmation: flag?.kind === 'boolean' ? String(flag.value) : '',
+    contacts: contacts?.kind === 'quantity' ? contacts.value : '' };
+});
+function changeSource(id: string, value: string) {
+  axis.command(project => {
+    const record = project.timeline.find(item => item.id === id);
+    if (record) record.sourceEventIds = value ? [value] : [];
+  });
+}
+function changeContacts(value: string) {
+  const selected = selectedHitRecord.value;
+  const count = Number(value);
+  if (!selected || value && (!Number.isInteger(count) || count < 0 || count > 1000)) return;
+  axis.command(project => {
+    const damage = project.timeline.find(record => record.id === selected.record.id)?.damage;
+    if (damage) putHitFact(damage.facts ??= [], { kind: 'event' }, 'targetsHit', value === '' ? null : { kind: 'quantity', unit: 'count', value: count });
+  });
+}
+function changeProcConfirmation(value: string) {
+  const selected = selectedHitRecord.value;
+  const rule = selected?.rule;
+  if (!selected || !rule) return;
+  axis.command(project => {
+    const damage = project.timeline.find(item => item.id === selected.record.id)?.damage;
+    if (damage) putHitFact(damage.facts ??= [], { kind: 'event' }, rule.confirmedFact,
+      value === '' ? null : { kind: 'boolean', value: value === 'true' });
+  });
+}
 const reactionFamily = ref<TransformativeFamily>('swirl'), reactionElement = ref<typeof transformativeElements.swirl[number]>('pyro');
 watch(reactionFamily, family => { reactionElement.value = transformativeElements[family][0]; });
 async function addReaction() {
@@ -82,8 +124,9 @@ function setSeed(event: Event) {
 }
 const defeated = ref(''), remainingCooldown = ref<number | ''>('');
 watch([() => axis.actorId, skillId], () => { hitTargets.value = ''; criticalTargets.value = ''; triggerRoll.value = ''; defeated.value = ''; remainingCooldown.value = ''; });
-const observationLabels: Record<CombatObservation,string> = {hpRatioChange:'生命变化（%）',damageTaken:'实际受到的伤害',healingDone:'治疗量（含溢出）',healingReceived:'受到治疗量（含溢出）',bondOfLifeChange:'生命之契变化量',nightsoulChange:'夜魂值变化量',nightsoulBurst:'触发夜魂迸发'};
+const observationLabels: Record<CombatObservation,string> = {hpRatioChange:'生命变化（%）',damageTaken:'实际受到的伤害',healingDone:'治疗量（含溢出）',healingReceived:'受到治疗量（含溢出）',bondOfLifeChange:'生命之契变化量',nightsoulChange:'夜魂值变化量',nightsoulBurst:'触发夜魂迸发',shieldCreated:'创造护盾'};
 const healthField = ref<CombatObservation>('hpRatioChange'), healthValue = ref<number | string>('');
+const booleanObservation = computed(() => combatObservationUnits[healthField.value] === 'boolean');
 const energyReading=ref<number|''>(''), exitCrit=ref<NonNullable<Project['timeline'][number]['fieldSwitch']>['crit']>(null);
 function recordField(enter:boolean) {
   const id=axis.actor?.id;
@@ -94,8 +137,8 @@ function recordField(enter:boolean) {
 }
 function recordHealth() {
   const actor = axis.actor;
-  if (!actor || healthField.value !== 'nightsoulBurst' && (healthValue.value === '' || !Number.isFinite(Number(healthValue.value)))) { error.value = '请填写所选事件的变化量。'; return; }
-  const value = healthField.value === 'nightsoulBurst' ? true : Number(healthValue.value) / (healthField.value === 'hpRatioChange' ? 100 : 1);
+  if (!actor || !booleanObservation.value && (healthValue.value === '' || !Number.isFinite(Number(healthValue.value)))) { error.value = '请填写所选事件的变化量。'; return; }
+  const value = booleanObservation.value ? true : Number(healthValue.value) / (healthField.value === 'hpRatioChange' ? 100 : 1);
   try {
     axis.command(project => { axis.selectedId = addCombatObservation(project, actor.id, Math.round(cursor.value), healthField.value, value); });
     error.value = '';
@@ -260,12 +303,25 @@ onBeforeUnmount(() => { pause(); window.removeEventListener('keydown', key); });
       </template>
       <label v-if="hasDefeatTrigger">本击击败目标<select v-model="defeated"><option value="">未记录</option><option value="true">是</option><option value="false">否</option></select></label>
     </fieldset>
+    <div v-if="layer === 'damage' && selectedHitRecord" class="skill-palette">
+      <label v-if="selectedHitRecord.rule">{{ selectedHitRecord.record.damage?.hit.definition.group === 'characters' ? '所选角色伤害的触发来源' : '所选装备伤害的触发来源' }}
+        <select class="ui-control" :value="selectedHitRecord.record.sourceEventIds?.length === 1 ? selectedHitRecord.record.sourceEventIds[0] : ''" @change="changeSource(selectedHitRecord.record.id, ($event.target as HTMLSelectElement).value)">
+          <option value="">未指定</option><option v-for="entry in selectedHitRecord.sources" :key="entry.id" :value="entry.id">{{ (entry.timeMs / 1000).toFixed(2) }} 秒 {{ recordLabel(axis.project, entry.id) }}</option>
+        </select>
+      </label>
+      <label>所选命中的敌人数
+        <input type="number" min="0" max="1000" placeholder="未记录" :value="selectedHitRecord.contacts" @change="changeContacts(($event.target as HTMLInputElement).value)">
+      </label>
+      <label v-if="selectedHitRecord.rule">本次触发结果<select class="ui-control" :value="selectedHitRecord.confirmation" @change="changeProcConfirmation(($event.target as HTMLSelectElement).value)">
+        <option value="">未确认</option><option value="true">已触发</option><option value="false">未触发</option>
+      </select></label>
+    </div>
     <ReactionRecordForm v-if="axis.actor?.build" :project="axis.project" :actor="axis.actor.id" :time-ms="Math.round(cursor)" :changes="axis.result.combatChanges"
       @reaction="(actor,reaction,element)=>axis.command(draft=>{axis.selectedId=addReactionObservation(draft,actor,Math.round(cursor),reaction,element);})"
       @pickup="(actor,source,effect)=>axis.command(draft=>{axis.selectedId=addParticlePickup(draft,actor,source,Math.round(cursor),effect);})" />
     <details v-if="axis.actor?.build"><summary>战斗事件记录</summary>
       <div class="skill-palette"><label>记录类型<select v-model="healthField"><option v-for="(name,id) in observationLabels" :key="id" :value="id">{{ name }}</option></select></label>
-        <label v-if="healthField !== 'nightsoulBurst'">{{ observationLabels[healthField] }}<input v-model="healthValue" type="number" step="any"></label>
+        <label v-if="!booleanObservation">{{ observationLabels[healthField] }}<input v-model="healthValue" type="number" step="any"></label>
         <button class="ui-action" @click="recordHealth">在光标处记录</button></div>
     </details>
     <details v-if="axis.actor?.build && layer === 'action'"><summary>换人与能量</summary><div class="skill-palette">

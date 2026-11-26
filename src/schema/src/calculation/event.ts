@@ -6,8 +6,8 @@ import { hitFactsSchema } from '../project/hit-facts';
 import { definitionRefSchema } from './values';
 import { elements } from '../content/stats';
 
-export const confirmedBuffSchema = definitionRefSchema.extend({ remainingMs: millisecondsSchema.positive().optional() });
-export const combatObservationUnits = { hpRatioChange:'scalar', damageTaken:'hp', healingDone:'hp', healingReceived:'hp', bondOfLifeChange:'hp', nightsoulChange:'scalar', nightsoulBurst:'boolean' } as const;
+export const confirmedBuffSchema = definitionRefSchema.extend({ remainingMs: millisecondsSchema.positive().optional(), recipientId: idSchema.optional() });
+export const combatObservationUnits = { hpRatioChange:'scalar', damageTaken:'hp', healingDone:'hp', healingReceived:'hp', bondOfLifeChange:'hp', nightsoulChange:'scalar', nightsoulBurst:'boolean', shieldCreated:'boolean' } as const;
 export type CombatObservation = keyof typeof combatObservationUnits;
 export function validateCombatObservations(kind:string, facts:Record<string,CalculationFact>|undefined, validation:z.RefinementCtx, path:(string|number)[] = []) {
   if (!facts) return;
@@ -43,6 +43,7 @@ export const calculationEventSchema = z.object({
 });
 export const calculationEventSelectorSchema = z.object({
   kinds: z.array(z.enum(['action', 'hit', 'reaction', 'capture', 'state-change'])).min(1).max(5),
+  zeroDamage: z.literal('unknown').optional(),
   actionIds: z.array(idSchema).min(1).max(1000).optional(),
   actor: z.enum(['owner', 'any']), target: z.enum(['query', 'any', 'enemy']),
   skillIds: z.array(idSchema).min(1).max(1000).optional(), hitIds: z.array(idSchema).min(1).max(1000).optional(),
@@ -51,7 +52,7 @@ export const calculationEventSelectorSchema = z.object({
   reactionIds: z.array(idSchema).min(1).max(1000).optional(),
   reactionElements: z.record(idSchema,z.array(z.enum(elements)).min(1).max(elements.length)).optional(),
   observation: z.object({ key: idSchema, test: z.enum(['true', 'increase', 'decrease', 'change']) }).strict().optional(),
-}).strict();
+}).strict().refine(selector => !selector.zeroDamage || !selector.allowZeroDamage && selector.target !== 'any' && selector.kinds.includes('hit'), '零伤害未知须单独用于对敌命中。');
 export type CalculationEvent = z.infer<typeof calculationEventSchema>;
 export type CalculationEventSelector = z.infer<typeof calculationEventSelectorSchema>;
 

@@ -166,6 +166,12 @@ function evaluateEquipmentCase(engine, build, owner, row, expectedWhite, holderC
     const input = { kind: target ? 'enemy' : 'attribute', key: effect.target.attribute, at: { kind: 'current', phase: 'same' }, ...(target ? {} : { actor: { role: 'recipient' } }) };
     const evaluate = (world, applications, active = true, setConditions = true) => {
       const current = { ...frame, facts: { ...frame.facts }, factOverrides: structuredClone(frame.factOverrides), applications };
+      // This probe supplies an actual trigger event and checks its expiry. A
+      // defaulted manual window fact would override that event in the engine.
+      if (effect.windowFact) {
+        const ownerFacts = current.factOverrides.find(row => row.subject.kind === 'actor' && row.subject.id === 'actor')?.facts;
+        if (ownerFacts) delete ownerFacts[effect.windowFact];
+      }
       const trigger = world.events.find(event => event.id === 'trigger'), source = trigger && structuredClone(trigger);
       if (source) world = { ...world, events: world.events.map(event => event === trigger ? source : event) };
       const sample = holderCases?.get(id)?.[active ? 'included' : 'excluded'];

@@ -1425,7 +1425,8 @@
                 "call": "raidenshogun.enlightened-electro",
                 "inputs": {
                   "input": {
-                    "stat": "energyRecharge"
+                    "stat": "energyRecharge",
+                    "excludeNonConvertible": true
                   }
                 }
               }

@@ -1,21 +1,34 @@
-import { characterHitRef, hitBelongsToCharacter, findBuildHit, putHitFact, subjectFacts, talentParameterAt, type Diagnostic, type Project } from '@leyline/schema';
+import { definitionKey, characterHitRef, hitBelongsToCharacter, findBuildHit, putHitFact, subjectFacts, talentParameterAt, type Diagnostic, type Project } from '@leyline/schema';
 import { authoredHitEntries } from '@leyline/schema/hit-bindings';
 import { actorIsOnField } from './build-context';
 import { prepareProjectRuntime, recordedAttackApplies } from './project';
 import { resolveCombatChanges } from './combat-changes';
 
 type RecordEntry = Project['timeline'][number];
+type ActorBuilds = ReadonlyMap<string, Project['candidate']['actors'][number]['build']>;
 const activeFlag = { kind: 'boolean' as const, value: true };
 
+export function resolveTriggeredHits(project: Project) {
+  const byActor = new Map(project.candidate.actors.map(actor => [actor.id, actor.build]));
+  const coordinated = resolveCoordinatedHits(project, byActor);
+  const confirmed = applyConfirmedHits(coordinated.project, byActor);
+  return { project: confirmed.project, diagnostics: [...coordinated.diagnostics, ...confirmed.diagnostics] };
+}
+
+function withTriggerFact(record: RecordEntry, key: string, value: boolean | null): RecordEntry {
+  const damage = structuredClone(record.damage!);
+  putHitFact(damage.facts ??= [], { kind: 'event' }, key, value === null ? null : { kind: 'boolean', value }, 'derived');
+  return { ...record, damage };
+}
+
 /** A projection uses its own cooldown, cast charges and source. Its damage belongs to the on-field attacker. */
-export function resolveCoordinatedHits(project: Project): { project: Project; diagnostics: Diagnostic[] } {
+function resolveCoordinatedHits(project: Project, byActor: ActorBuilds): { project: Project; diagnostics: Diagnostic[] } {
   const diagnostics: Diagnostic[] = [];
   const rules = project.candidate.actors.flatMap(({ id: owner, build }) => !build ? [] : build.character.talents.flatMap(talent =>
     talent.hits.filter(hit => hit.coordinated).flatMap(hit => {
       const unlock = authoredHitEntries(build.character.metadata, talent.id).find(entry => entry.hit.id === hit.id)?.unlock;
       return unlock && build[unlock.state] < unlock.rank ? [] : [{ owner, build, talent, hit, rule: hit.coordinated! }];
     })));
-  const byActor = new Map(project.candidate.actors.map(actor => [actor.id, actor.build]));
   if (!rules.length || !project.timeline.some(entry => entry.damage && entry.damage.hit.definition.group === 'characters'
     && !findBuildHit(byActor.get(entry.actor), entry.damage.hit)?.hit.coordinated)) return { project, diagnostics };
   const prepared = prepareProjectRuntime(project);
@@ -99,10 +112,8 @@ export function resolveCoordinatedHits(project: Project): { project: Project; di
     }
     for (const entry of manual) {
       if (used.has(entry.id) || !entry.sourceEventIds?.some(id => sourceIds.has(id))) continue;
-      const damage = structuredClone(entry.damage!);
-      const ready = entry.sourceEventIds.some(id => unknownSources.has(id)) ? null : { kind: 'boolean' as const, value: false };
-      putHitFact(damage.facts ??= [], { kind: 'event' }, rule.readyFact, ready, 'derived');
-      excluded.set(entry.id, { ...entry, damage });
+      const ready = entry.sourceEventIds.some(id => unknownSources.has(id)) ? null : false;
+      excluded.set(entry.id, withTriggerFact(entry, rule.readyFact, ready));
     }
   }
   if (!after.size && !excluded.size) return { project, diagnostics };
@@ -115,4 +126,69 @@ export function resolveCoordinatedHits(project: Project): { project: Project; di
   });
   const objective = duplicates.size && project.objective.damageIds ? { damageIds: [...new Set(project.objective.damageIds.map(id => duplicates.get(id) ?? id))] } : project.objective;
   return { project: { ...project, timeline, objective }, diagnostics };
+}
+
+/** Validate recorded successful procs using only explicitly linked attack times. */
+function applyConfirmedHits(project: Project, byActor: ActorBuilds): { project: Project; diagnostics: Diagnostic[] } {
+  type Item = { record: RecordEntry; fact: string; cooldown: number; source?: RecordEntry; hasSource: boolean };
+  const records = new Map(project.timeline.map(record => [record.id, record]));
+  const groups = new Map<string, Item[]>(), diagnostics: Diagnostic[] = [];
+  const replacements = new Map<string, RecordEntry>();
+  let prepared: ReturnType<typeof prepareProjectRuntime> | undefined;
+  for (const record of project.timeline) {
+    if (!record.damage || !['weapons','characters'].includes(record.damage.hit.definition.group)) continue;
+    const build = byActor.get(record.actor);
+    if (!build) continue;
+    const selected = findBuildHit(build, record.damage.hit);
+    const rule = selected?.hit && 'confirmedProc' in selected.hit ? selected.hit.confirmedProc : undefined;
+    if (!rule) continue;
+    const cooldown = rule.cooldownMs[build.refinement - 1];
+    const flag = subjectFacts(record.damage.facts, { kind: 'event' })?.[rule.confirmedFact];
+    if (flag?.value?.kind !== 'boolean' || flag.value.value !== true) continue;
+    prepared ??= prepareProjectRuntime(project);
+    if (!prepared.ok) return { project, diagnostics };
+    const sourceIds = record.sourceEventIds ?? [];
+    const source = sourceIds.length === 1 ? records.get(sourceIds[0]) : undefined;
+    const sourceHit = source?.damage && findBuildHit(byActor.get(source.actor), source.damage.hit);
+    const sourceFacts = source?.damage && subjectFacts(source.damage.facts, { kind: 'event' });
+    const targetCount = sourceFacts?.targetsHit ?? source?.facts?.targetsHit;
+    const damaged = sourceFacts?.targetsDamaged ?? source?.facts?.targetsDamaged;
+    // A positive damage count proves contact even when the contact count is unknown.
+    const hitConfirmed = !targetCount || (targetCount.value?.kind === 'quantity' ? targetCount.value.value > 0
+      : damaged?.value?.kind === 'quantity' && damaged.value.value > 0 && damaged.provenance !== 'preset');
+    const valid = source && source.actor === record.actor && (source.timeMs < record.timeMs
+      || source.timeMs === record.timeMs && source.order < record.order)
+      && source.damage?.hit.definition.group === 'characters' && sourceHit?.hit.category
+      && rule.sourceCategories.includes(sourceHit.hit.category) && hitConfirmed && recordedAttackApplies(prepared.runtime, source) === true;
+    const key = JSON.stringify([record.actor, record.damage.hit.definition.group, definitionKey(record.damage.hit.definition), rule.group]);
+    const items = groups.get(key) ?? [];
+    items.push({ record, fact: rule.confirmedFact, cooldown, hasSource: sourceIds.length > 0, ...(valid ? { source } : {}) });
+    groups.set(key, items);
+  }
+  for (const items of groups.values()) {
+    const uncertain = items.filter(item => !item.source);
+    for (const item of uncertain) {
+      if (item.hasSource) {
+        replacements.set(item.record.id, withTriggerFact(item.record, item.fact, null));
+      }
+      diagnostics.push({ code: 'unknown', path: 'timeline.' + item.record.id,
+        message: `已确认的${item.record.damage?.hit.definition.group === 'weapons' ? '装备' : '角色'}触发缺少唯一、有效且已命中的来源攻击，无法核对冷却。` });
+    }
+    const known = items.filter((item): item is Item & { source: RecordEntry } => !!item.source)
+      .sort((a,b) => a.source.timeMs - b.source.timeMs || a.source.order - b.source.order || a.source.id.localeCompare(b.source.id));
+    let last = -Infinity;
+    for (const item of known) {
+      // An unlinked successful impact can have originated at any earlier time.
+      if (uncertain.some(other => other.record.timeMs >= item.source.timeMs - item.cooldown)) {
+        replacements.set(item.record.id, withTriggerFact(item.record, item.fact, null));
+        diagnostics.push({ code: 'unknown', path: 'timeline.' + item.record.id, message: '其他已确认触发的来源时刻未知，无法核对冷却。' });
+        continue;
+      }
+      if (item.source.timeMs < last + item.cooldown) {
+        replacements.set(item.record.id, withTriggerFact(item.record, item.fact, false));
+        diagnostics.push({ code: 'unknown', path: 'timeline.' + item.record.id, message: '已确认的触发与前一次触发的冷却冲突。' });
+      } else last = item.source.timeMs;
+    }
+  }
+  return { project: replacements.size ? { ...project, timeline: project.timeline.map(record => replacements.get(record.id) ?? record) } : project, diagnostics };
 }

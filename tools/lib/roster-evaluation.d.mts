@@ -1,4 +1,5 @@
 import type { ArtifactSetDefinition, Build, CalculationFact, CharacterDefinition, DamageRequest, WeaponDefinition } from '@leyline/schema';
+export { auditBuild } from './roster-audit-settings.mjs';
 
 export interface RosterReplayQuery {
   label: string;

@@ -159,7 +159,11 @@ export function resolveCombatChanges(project: Project, runtime: ProjectRuntime):
         const adjustment = seconds === undefined ? undefined : saved ?? skillReduction(entry.actor, entry.id);
         const duration = entry.facts?.skillCooldownMs ? number(entry.facts.skillCooldownMs)
           : seconds !== undefined && adjustment !== undefined ? Math.round(1000 * seconds * (1 - adjustment)) : undefined;
-        if (queue.length >= maxCharges) {
+        if (entry.facts?.skillCooldownRemaining?.value === null) {
+          events.get(entry.id)!.occurred = null;
+          results.push({ actor:entry.actor, source:entry.id, effect:talent.id, timeMs:entry.timeMs, kind:'skill-charge', status:'unknown', missing:['skillCooldownRemaining'] });
+          updateHitOccurrences(runtime, project.timeline);
+        } else if (queue.length >= maxCharges) {
           results.push({actor:entry.actor,source:entry.id,effect:talent.id,timeMs:entry.timeMs,kind:'skill-charge',status:'excluded',chargesAfter:0,cooldownAfterMs:queue[0]-entry.timeMs});
           reject(entry);
         } else if (duration !== undefined && duration > 0) {

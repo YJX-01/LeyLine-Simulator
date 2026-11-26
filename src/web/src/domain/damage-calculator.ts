@@ -1,6 +1,6 @@
 import { definitionKey, findBuildHit, matchingSceneHits } from '@leyline/schema';
 import { APP_VERSION } from '@leyline/schema/version';
-import { unpackDocument } from './content-document';
+import { readWorkbenchDocument } from './content-document';
 import { getArtifactSet, getCharacter, getWeapon } from '@leyline/game-data';
 import { damageCalculatorSchema, projectSchema, type AccountCharacter, type LocalAccount, type AxisRequest, type Build, type DamageCalculatorDocument, type DamageRequest, type Enemy, type Project, type SceneHitRequest } from '@leyline/schema';
 import { loadAccountGameData } from './account-presentation';
@@ -192,9 +192,11 @@ export function calculatorWorkerRequest(document: DamageCalculatorDocument, task
 
 export function parseDamageCalculator(content: string): DamageCalculatorDocument {
   if (new TextEncoder().encode(content).byteLength > 8 * 1024 * 1024) throw new Error('计算文件超过8 MiB。');
-  const document = damageCalculatorSchema.parse(unpackDocument('damage-calculator', JSON.parse(content)));
-  calculatorRequest(document, 0);
-  return document;
+  return readWorkbenchDocument('damage-calculator', JSON.parse(content), data => {
+    const document = damageCalculatorSchema.parse(data);
+    calculatorRequest(document, 0);
+    return document;
+  }, content);
 }
 
 export function copyProjectForCalculator(input: Project): DamageCalculatorDocument {

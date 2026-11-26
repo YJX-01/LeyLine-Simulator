@@ -594,6 +594,16 @@
         {
           "id": "fischl.skill.param1",
           "name": "奥兹攻击伤害",
+          "snapshot": {
+            "sourceSkillId": "fischl.skill",
+            "sourceKind": "action-or-capture",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "electroBonus"
+            ]
+          },
           "base": [
             {
               "stat": "attack",
@@ -851,6 +861,152 @@
       "name": "吾之后花园",
       "description": "在蒙德执行探索派遣任务时，消耗的时间缩短25%。",
       "unlockAscension": null
+    },
+    {
+      "id": "fischl.passive.hexerei-nocturne",
+      "name": "魔导·幽夜",
+      "description": "魔导·秘仪生效且奥兹在场时，附近队员触发超载后，菲谢尔与附近当前场上角色获得22.5%攻击力；触发感电或月感电后获得90点元素精通，各持续10秒。奥兹协同攻击后，上述效果提升100%，持续10秒。",
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "fischl.hexerei.overload-attack",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "fischl.hexereiSecretRite"
+              },
+              "term1": {
+                "fact": "fischl.hexereiOverloadActive"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.225,
+                "unit": "scalar"
+              },
+              "recipient": "owner"
+            },
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.225,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.225,
+                "unit": "scalar"
+              },
+              "recipient": "owner",
+              "condition": {
+                "fact": "fischl.hexereiCoordinationActive"
+              }
+            },
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.225,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "fischl.hexereiCoordinationActive"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        },
+        {
+          "id": "fischl.hexerei.electro-mastery",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "fischl.hexereiSecretRite"
+              },
+              "term1": {
+                "fact": "fischl.hexereiElectroActive"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 90,
+                "unit": "elementalMastery"
+              },
+              "recipient": "owner"
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 90,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 90,
+                "unit": "elementalMastery"
+              },
+              "recipient": "owner",
+              "condition": {
+                "fact": "fischl.hexereiCoordinationActive"
+              }
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 90,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "fischl.hexereiCoordinationActive"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -1108,6 +1264,34 @@
         "kind": "boolean"
       },
       "label": "奥兹不在场且菲谢尔普通攻击触发鸦眼协同"
+    },
+    "fischl.hexereiSecretRite": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "菲谢尔的魔导·秘仪生效"
+    },
+    "fischl.hexereiOverloadActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "奥兹在场时触发超载后的10秒内"
+    },
+    "fischl.hexereiElectroActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "奥兹在场时触发感电或月感电后的10秒内"
+    },
+    "fischl.hexereiCoordinationActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "奥兹协同攻击后的10秒内"
     }
   },
   "formulas": [

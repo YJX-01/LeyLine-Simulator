@@ -1009,6 +1009,9 @@
           "appliesTo": {
             "families": [
               "lunar-crystallize"
+            ],
+            "excludeHitIds": [
+              "linnea.skill.param3"
             ]
           },
           "modifiers": [
@@ -1279,6 +1282,9 @@
           "appliesTo": {
             "families": [
               "lunar-crystallize"
+            ],
+            "excludeHitIds": [
+              "linnea.skill.param3"
             ]
           },
           "modifiers": [
@@ -1326,7 +1332,7 @@
                     }
                   },
                   "rate": {
-                    "call": "linnea.megaton-count-turns",
+                    "call": "linnea.megaton-count-turns-c6",
                     "inputs": {
                       "input": {
                         "fact": "linnea.megatonCatalogueSpent"
@@ -1428,7 +1434,7 @@
       "type": {
         "kind": "boolean"
       },
-      "label": "此次月结晶伤害可消耗有效历览编录"
+      "label": "本次月结晶已消耗编录（六命须确认消耗2层）"
     },
     "linnea.megatonCatalogueSpent": {
       "scope": "query",
@@ -1477,6 +1483,21 @@
       }
     },
     {
+      "id": "linnea.megaton-count-turns-c6",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "maxInput": 10,
+        "output": "value"
+      }
+    },
+    {
       "id": "linnea.c1-catalogue-allies",
       "template": {
         "id": "linear-bonus",
@@ -1512,7 +1533,7 @@
         "input": "input",
         "inputUnit": "defense",
         "outputUnit": "damage",
-        "rate": 1.125,
+        "rate": 2.25,
         "offset": 0,
         "threshold": 0,
         "output": "value"

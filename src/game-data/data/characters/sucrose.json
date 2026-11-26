@@ -871,11 +871,13 @@
           "modifiers": [
             {
               "target": "attribute.elementalMastery",
+              "nonConvertible": true,
               "value": {
                 "call": "sucrose.mollis-favonius-share",
                 "inputs": {
                   "basis": {
                     "stat": "elementalMastery",
+                    "excludeNonConvertible": true,
                     "at": {
                       "kind": "source-event",
                       "phase": "after"

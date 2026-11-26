@@ -1165,7 +1165,7 @@
     {
       "rank": 6,
       "name": "猫尾打烊之时",
-      "description": "处在最烈特调领域内的角色，依据生命值获得如下效果：\n·生命值低于或等于50%时，受治疗加成提升30%；\n·生命值高于50%时，元素精通提升200。",
+      "description": "处在最烈特调领域内的角色，依据生命值获得如下效果：\n·生命值低于或等于50%时，受治疗加成提升30%；\n·生命值高于50%时，元素精通提升200。\n辉映·星超导：处在最烈特调领域内的角色造成的超导、星超导反应伤害提升40%。\n辉映·星扩散：处在最烈特调领域内的角色造成的冰元素扩散、星扩散反应伤害提升40%。\n完成魔女的谕示后：迪奥娜的生命值上限提升25%。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -1208,6 +1208,199 @@
                 },
                 "output": "active"
               }
+            }
+          ]
+        },
+        {
+          "id": "diona.c6.stellar-conduct-superconduct",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "diona.revelationUnlocked"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "diona.radiance-stellar-conduct",
+                    "inputs": {
+                      "mode": {
+                        "fact": "radiance"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "diona.signatureMixArea",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "transformative"
+            ],
+            "reactionIds": [
+              "superconduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "diona.c6.stellar-conduct-stellar",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "diona.revelationUnlocked"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "diona.radiance-stellar-conduct",
+                    "inputs": {
+                      "mode": {
+                        "fact": "radiance"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "diona.signatureMixArea",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-conduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "diona.c6.stellar-swirl-cryo-swirl",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "diona.revelationUnlocked"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "diona.radiance-stellar-swirl",
+                    "inputs": {
+                      "mode": {
+                        "fact": "radiance"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "diona.signatureMixArea",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "transformative"
+            ],
+            "reactionIds": [
+              "swirl"
+            ],
+            "elements": [
+              "cryo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "diona.c6.stellar-swirl-stellar",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "diona.revelationUnlocked"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "diona.radiance-stellar-swirl",
+                    "inputs": {
+                      "mode": {
+                        "fact": "radiance"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "diona.signatureMixArea",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "diona.c6.revelation-hp",
+          "condition": {
+            "fact": "diona.revelationUnlocked"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hpPercent",
+              "value": 0.25
             }
           ]
         }
@@ -1281,6 +1474,13 @@
         "kind": "boolean"
       },
       "label": "当前角色受猫爪冻冻的护盾保护"
+    },
+    "diona.revelationUnlocked": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "迪奥娜已完成魔女的谕示"
     }
   },
   "formulas": [
@@ -1339,6 +1539,34 @@
         "output": "value",
         "maxInput": 6,
         "cap": 1
+      }
+    },
+    {
+      "id": "diona.radiance-stellar-conduct",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "mode",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-conduct"
+      }
+    },
+    {
+      "id": "diona.radiance-stellar-swirl",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "mode",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-swirl"
       }
     }
   ],

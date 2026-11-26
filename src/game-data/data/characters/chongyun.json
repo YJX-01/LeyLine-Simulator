@@ -762,6 +762,7 @@
           "support": "hit-unavailable",
           "snapshot": {
             "sourceSkillId": "chongyun.skill",
+            "sourceKind": "action-or-capture",
             "attributes": [
               "attack",
               "critRate",

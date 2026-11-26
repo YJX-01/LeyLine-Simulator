@@ -124,6 +124,7 @@ export async function numericAudit(read = readAuditJson) {
     }
   }
   const lunarStellarFacts = read('tools/data/sources/kqm-web/2026-11-15/reaction-formulas.json');
+  reactionNumbers(read('src/game-data/data/tables/stellar-swirl.json'), lunarStellarFacts.eventFacts.stellarSwirlReactionCoefficients, 'stellar-swirl');
   for (const fact of lunarStellarFacts.constants) {
     const formula = formulaDefinition(fact.formula);
     check('lunar-stellar-formulas', formula.constants[fact.node]?.value, fact.value, `${fact.formula}/${fact.node}`);

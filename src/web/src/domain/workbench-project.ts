@@ -1,5 +1,5 @@
 import { APP_VERSION } from '@leyline/schema/version';
-import { unpackDocument } from './content-document';
+import { readWorkbenchDocument } from './content-document';
 import { projectSchema, type Project } from '@leyline/schema';
 import { evaluateTimeline } from '@leyline/engine';
 
@@ -10,7 +10,7 @@ export function createEmptyProject(id:string=crypto.randomUUID()):Project {
 export function importProject(content: string): Project {
   let input: unknown;
   try { input = JSON.parse(content); } catch { throw new Error('文件不是有效的 JSON，当前项目保持不变。'); }
-  return validateProject(unpackDocument('axis', input));
+  return readWorkbenchDocument('axis', input, validateProject, content);
 }
 
 export function validateProject(input: unknown): Project {

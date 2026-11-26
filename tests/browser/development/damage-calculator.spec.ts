@@ -1265,6 +1265,54 @@ test('a standalone swirl replaces the selected hit and reopens as one Worker occ
   await check();
 });
 
+test('single-contributor Lunar reactions retain their crit setting and Worker damage after reopening', async ({ page }) => {
+  test.setTimeout(60000);
+  const build: Build = { ...await catalogSnapshotFields('kaeya', 'dullblade'), level: 1, ascension: 0, constellation: 0,
+    weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
+  const { calc, open } = await openSingleBuild(page, build);
+  const levelMultiplier = 17.165606;
+  const recalculate = calc.getByRole('button', { name: '计算伤害', exact: true });
+  const output = calc.getByTestId('calculator-value');
+  const check = async (coefficient: number, critFactor: number) => {
+    // The sole qualified contribution takes the first weight in the adopted Lunar formula.
+    const expected = levelMultiplier * coefficient * 0.9 * 0.6 * critFactor;
+    await expect.poll(async () => Number(await output.textContent())).toBeCloseTo(expected, 1);
+  };
+  for (const [family, coefficient] of [['lunar-charged', 3], ['lunar-crystallize', 1.6]] as const) {
+    await calc.getByRole('button', { name: '选择伤害', exact: true }).click();
+    const group = calc.getByRole('region', { name: '月曜反应', exact: true });
+    await chooseDamageCard(group.locator(`button[data-reaction="${family}"]`));
+    await check(coefficient, 1);
+  }
+  const crit = calc.getByRole('combobox', { name: '暴击', exact: true });
+  await crit.selectOption('critical');
+  await recalculate.click();
+  await check(1.6, 1.5);
+  const download = page.waitForEvent('download');
+  await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
+  const saved = readFileSync((await (await download).path())!);
+  await open.setInputFiles({ name: 'lunar-crystallize.json', mimeType: 'application/json', buffer: saved });
+  await expect(crit).toHaveValue('critical');
+  await recalculate.click();
+  await check(1.6, 1.5);
+  await calc.getByRole('button', { name: '选择伤害', exact: true }).click();
+  await chooseDamageCard(calc.locator('button[data-reaction="stellar-swirl"]'));
+  const stage = calc.getByRole('combobox', { name: '星扩散伤害段' });
+  await expect(stage).toHaveValue('initialAnemo');
+  await check(0.75, 1);
+  await stage.selectOption('cryoLevel1');
+  await check(2, 1);
+  await stage.selectOption('cryoLevel2');
+  await check(3, 1);
+  const stellarDownload = page.waitForEvent('download');
+  await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
+  const stellar = readFileSync((await (await stellarDownload).path())!);
+  await open.setInputFiles({ name: 'stellar.json', mimeType: 'application/json', buffer: stellar });
+  await expect(stage).toHaveValue('cryoLevel2');
+  await recalculate.click();
+  await check(3, 1);
+});
+
 test('Nahida C2 marked Bloom keeps its target condition and expected crit in a reopened calculator', async ({ page }, info) => {
   const build: Build = { ...await catalogSnapshotFields('nahida', 'apprenticesnotes'), artifacts: [], sets: [], level: 1,
     ascension: 0, constellation: 2, weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 } };

@@ -422,5 +422,24 @@
         }
       ]
     }
+  ],
+  "sharedEventStacks": [
+    {
+      "countFact": "kagurasverity.danceLayers",
+      "initialStacks": 0,
+      "selector": {
+        "kinds": [
+          "action"
+        ],
+        "actor": "owner",
+        "target": "any",
+        "categories": [
+          "skill"
+        ]
+      },
+      "durationMs": 24000,
+      "cooldownMs": 0,
+      "maxStacks": 3
+    }
   ]
 }

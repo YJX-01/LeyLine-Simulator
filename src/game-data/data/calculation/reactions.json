@@ -201,6 +201,10 @@
       {
         "id": "mona.transformative-flat-crit",
         "kind": "definition"
+      },
+      {
+        "id": "kqm.superconduct.physical-resistance",
+        "kind": "definition"
       }
     ],
     "formulas": [
@@ -1580,7 +1584,66 @@
         ]
       }
     ],
-    "effects": [],
+    "effects": [
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "reaction.superconduct.physical-resistance",
+          "revision": "1"
+        },
+        "sources": [
+          "kqm.superconduct.physical-resistance"
+        ],
+        "activation": {},
+        "recipient": {
+          "role": "target"
+        },
+        "trigger": {
+          "kind": "event",
+          "selector": {
+            "kinds": [
+              "reaction"
+            ],
+            "actor": "any",
+            "target": "query",
+            "reactionIds": [
+              "superconduct"
+            ]
+          }
+        },
+        "lifetime": {
+          "kind": "interval",
+          "durationMs": 12000,
+          "phase": "after"
+        },
+        "value": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": -0.4
+          }
+        },
+        "target": {
+          "kind": "attribute",
+          "attribute": {
+            "namespace": "builtin",
+            "id": "target.resistance.physical",
+            "revision": "1"
+          }
+        },
+        "appliesTo": {},
+        "application": "always",
+        "priority": 0,
+        "stacking": {
+          "group": "reaction.superconduct.physical-resistance",
+          "scope": "team",
+          "policy": "replace",
+          "maxStacks": 1,
+          "retain": "latest"
+        }
+      }
+    ],
     "damageFamilies": [
       "transformative",
       "lunar-charged",

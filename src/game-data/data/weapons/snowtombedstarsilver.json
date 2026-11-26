@@ -287,6 +287,21 @@
           }
         },
         "output": "base"
+      },
+      "confirmedProc": {
+        "group": "snowtombedstarsilver.icicle",
+        "sourceCategories": [
+          "normal",
+          "charged"
+        ],
+        "cooldownMs": [
+          10000,
+          10000,
+          10000,
+          10000,
+          10000
+        ],
+        "confirmedFact": "snowtombedstarsilver.icicleTriggered"
       }
     },
     {
@@ -321,6 +336,21 @@
           }
         },
         "output": "base"
+      },
+      "confirmedProc": {
+        "group": "snowtombedstarsilver.icicle",
+        "sourceCategories": [
+          "normal",
+          "charged"
+        ],
+        "cooldownMs": [
+          10000,
+          10000,
+          10000,
+          10000,
+          10000
+        ],
+        "confirmedFact": "snowtombedstarsilver.icicleTriggered"
       }
     }
   ]

@@ -324,9 +324,6 @@
   "buffs": [
     {
       "id": "jadefallssplendor.regalia",
-      "condition": {
-        "fact": "jadefallssplendor.regaliaActive"
-      },
       "modifiers": [
         {
           "target": "attribute.anemoBonus",
@@ -573,7 +570,39 @@
             "dendro"
           ]
         }
-      ]
+      ],
+      "windowFact": "jadefallssplendor.regaliaActive",
+      "trigger": {
+        "kind": "event",
+        "selector": [
+          {
+            "kinds": [
+              "action"
+            ],
+            "actor": "owner",
+            "target": "any",
+            "categories": [
+              "burst"
+            ]
+          },
+          {
+            "kinds": [
+              "state-change"
+            ],
+            "actor": "owner",
+            "target": "any",
+            "observation": {
+              "key": "shieldCreated",
+              "test": "true"
+            }
+          }
+        ]
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 3000,
+        "phase": "after"
+      }
     },
     {
       "id": "jadefallssplendor.directEnergy",

@@ -16,6 +16,21 @@
   "kind": "artifact-set-definition",
   "namespace": "builtin",
   "revision": "1",
+  "categoryStacks": [
+    {
+      "fact": "nymphsdream.nymphLayers",
+      "durationMs": 8000,
+      "categories": [
+        "normal",
+        "charged",
+        "plunge",
+        "skill",
+        "burst"
+      ],
+      "maxStacks": 3,
+      "pieces": 4
+    }
+  ],
   "rarity": 5,
   "effects": [
     {

@@ -228,7 +228,7 @@
   "support": {
     "resolution": "complete",
     "evidence": "adopted",
-    "reason": "按精炼、白昼之刃窗口、受益角色和魔导·秘仪状态计算爆发暴伤及攻击力。",
+    "reason": "装备者爆发命中敌人后，白昼之刃持续3秒。装备者和当前场上其他角色按各自倍率获得攻击力，魔导·秘仪提供额外加成。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
@@ -260,7 +260,7 @@
             "revision": "1"
           }
         ],
-        "reason": "已采用当次条件、合法精炼及输出适用范围。"
+        "reason": "装备者爆发命中敌人后，白昼之刃持续3秒。装备者和当前场上其他角色按各自倍率获得攻击力，魔导·秘仪提供额外加成。"
       }
     ]
   },
@@ -291,8 +291,24 @@
     },
     {
       "id": "athameartis.daybreak-owner",
-      "condition": {
-        "fact": "athameartis.daybreakWindow"
+      "windowFact": "athameartis.daybreakWindow",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "categories": [
+            "burst"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 3000,
+        "phase": "after"
       },
       "modifiers": [
         {
@@ -312,8 +328,24 @@
     },
     {
       "id": "athameartis.daybreak-team",
-      "condition": {
-        "fact": "athameartis.daybreakWindow"
+      "windowFact": "athameartis.daybreakWindow",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "categories": [
+            "burst"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 3000,
+        "phase": "after"
       },
       "recipient": "team",
       "excludeOwner": true,
@@ -339,17 +371,27 @@
     },
     {
       "id": "athameartis.daybreak-owner-hexerei",
+      "windowFact": "athameartis.daybreakWindow",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "categories": [
+            "burst"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 3000,
+        "phase": "after"
+      },
       "condition": {
-        "call": "condition.all",
-        "inputs": {
-          "term0": {
-            "fact": "athameartis.daybreakWindow"
-          },
-          "term1": {
-            "fact": "athameartis.hexerei"
-          }
-        },
-        "output": "active"
+        "fact": "athameartis.hexerei"
       },
       "modifiers": [
         {
@@ -369,17 +411,27 @@
     },
     {
       "id": "athameartis.daybreak-team-hexerei",
+      "windowFact": "athameartis.daybreakWindow",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "categories": [
+            "burst"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 3000,
+        "phase": "after"
+      },
       "condition": {
-        "call": "condition.all",
-        "inputs": {
-          "term0": {
-            "fact": "athameartis.daybreakWindow"
-          },
-          "term1": {
-            "fact": "athameartis.hexerei"
-          }
-        },
-        "output": "active"
+        "fact": "athameartis.hexerei"
       },
       "recipient": "team",
       "excludeOwner": true,

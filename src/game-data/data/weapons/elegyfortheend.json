@@ -283,8 +283,9 @@
       "stacking": {
         "group": "millennial-movement.elementalMastery",
         "scope": "team",
-        "policy": "max",
-        "maxStacks": 4
+        "policy": "replace",
+        "maxStacks": 1,
+        "retain": "unverified"
       },
       "modifiers": [
         {
@@ -311,8 +312,9 @@
       "stacking": {
         "group": "millennial-movement.attackPercent",
         "scope": "team",
-        "policy": "max",
-        "maxStacks": 4
+        "policy": "replace",
+        "maxStacks": 1,
+        "retain": "unverified"
       },
       "modifiers": [
         {

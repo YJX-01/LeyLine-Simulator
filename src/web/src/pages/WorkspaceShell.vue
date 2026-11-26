@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { downloadJsonText } from '../domain/download';
 import LibraryNavIcon from '../components/LibraryNavIcon.vue';
 import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
 import LibraryEmptyState from '../components/LibraryEmptyState.vue';
@@ -278,6 +279,10 @@ async function importFile(event: Event) {
         <div v-if="axisStore.error" role="alert" class="shell-error">
           {{ errorLabel(axisStore.error) }}
           <details><summary>技术详情</summary>{{ axisStore.error }}</details>
+          <details v-if="axisStore.unreadDocument"><summary>查看未能计算的文件原文</summary>
+            <button class="ui-action" @click="downloadJsonText(axisStore.unreadDocument, '项目原文.json')">另存原文</button>
+            <pre>{{ axisStore.unreadDocument }}</pre>
+          </details>
         </div>
 
         <div v-if="page === 'timeline'" class="axis-timeline">

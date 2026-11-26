@@ -46,14 +46,16 @@ export function calculatorIntervals(project: Project, actor: string, timeMs: num
 export function calculatorOnFieldActor(project: Project, damage: DamageRequest, timeMs: number, recordId?: string) {
   const active = project.candidate.actors.filter(member => {
     const explicit = subjectFacts(damage.facts, { kind: 'actor', id: member.id })?.onField;
-    return explicit ? explicit.value?.value === true : calculatorIntervals(project, member.id, timeMs, recordId).onField === true;
+    if (explicit && explicit.provenance !== 'preset') return explicit.value?.value === true;
+    const interval = calculatorIntervals(project, member.id, timeMs, recordId).onField;
+    return (interval === undefined ? explicit?.value?.value : interval) === true;
   });
   return active.length === 1 ? active[0] : undefined;
 }
 export function withCurrentConditions(damage: DamageRequest, intervals: CombatConditions, actorId: string): DamageRequest {
   const copy: DamageRequest = { ...damage, facts: damage.facts?.map(row => ({ ...row, values: { ...row.values } })) ?? [] };
   const own = subjectFacts(copy.facts, { kind: 'actor', id: actorId });
-  for (const key of ['hpRatio', 'onField', 'shielded'] as const) if (intervals[key] !== undefined && !Object.hasOwn(own ?? {}, key)) {
+  for (const key of ['hpRatio', 'onField', 'shielded'] as const) if (intervals[key] !== undefined && (!Object.hasOwn(own ?? {}, key) || own?.[key]?.provenance === 'preset')) {
     setCalculatorCondition(copy, actorId, key, intervals[key]!);
   }
   return copy;
@@ -208,8 +210,8 @@ export function setCalculatorCondition(damage: DamageRequest, actorId: string, f
   putHitFact(damage.facts ??= [], { kind: 'actor', id: actorId }, field, value === null ? null : typeof value === 'number'
     ? { kind: 'quantity', unit: 'scalar', value } : { kind: 'boolean', value });
 }
-export function setCalculatorFact(damage: DamageRequest, { key, value, subject }: CalculatorFactSetting, actorId: string) {
-  putHitFact(damage.facts ??= [], subject ?? { kind: 'actor', id: actorId }, key, value);
+export function setCalculatorFact(damage: DamageRequest, { key, value, subject }: CalculatorFactSetting, actorId: string, provenance: CalculationFact['provenance'] = 'explicit') {
+  putHitFact(damage.facts ??= [], subject ?? { kind: 'actor', id: actorId }, key, value, provenance);
 }
 export function calculatorInfusion(project:Project,damage:DamageRequest,actor:string,fact:string,time:number,record?:string) {
   const selected=subjectFacts(damage.facts,{kind:'actor',id:actor})?.[fact];

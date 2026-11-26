@@ -35,7 +35,15 @@ export function assembleHit(hit, skillId, branches, facts = {}) {
     for (let i = 0; i < values.length; i += 9) groups.push(sum(values.slice(i, i + 9)));
     return sum(groups);
   }
-  const base = invocation(Array.isArray(scaling) ? sum(terms) : expression({ call: scaling.template, inputs: scaling.inputs, output: scaling.output }, facts));
+  function captureExpression(value) {
+    if (Array.isArray(value)) return value.map(captureExpression);
+    if (!value || typeof value !== 'object') return value;
+    if (value.kind === 'attribute' && value.actor?.role === 'owner' && value.at?.kind === 'current'
+      && value.key?.namespace === 'builtin' && value.key.id.startsWith('attribute.') && captured.includes(value.key.id.slice('attribute.'.length)))
+      return { ...value, at: { kind: 'capture', slot: 'panel' } };
+    return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, captureExpression(entry)]));
+  }
+  const base = invocation(Array.isArray(scaling) ? sum(terms) : captureExpression(expression({ call: scaling.template, inputs: scaling.inputs, output: scaling.output }, facts)));
   function assembleOutput(output) {
     const { condition } = output;
     const hitData = { ...hit, base };

@@ -38,11 +38,31 @@ test('timeline saves a pending hit and evaluates its selected character damage',
   await editor.getByRole('button', { name: '在光标处记录伤害点' }).click();
   await inspector.getByLabel('所选真实命中暴击').selectOption('critical');
   await inspector.getByLabel('所选真实命中反应').selectOption('none');
+  // Explicit scenario facts, not observations inferred from the showcase: no song or set window.
+  await page.evaluate(async () => {
+    // @ts-expect-error Vite browser source URL.
+    const { useAxisWorkspaceStore } = await import('/src/stores/axis-workspace.ts');
+    const axis = useAxisWorkspaceStore();
+    axis.command((project: Project) => {
+      const record = project.timeline.find(row => row.id === axis.selectedId)!;
+      record.damage!.facts = [{ subject: { kind: 'actor', id: record.actor }, values: {
+        'thewidsith.debutSong': { value: { kind: 'quantity', unit: 'count', value: 0 }, provenance: 'explicit', sourceRefs: [] },
+        'shimenawasreminiscence.energy-spentActive': { value: { kind: 'boolean', value: false }, provenance: 'explicit', sourceRefs: [] },
+      } }];
+    });
+  });
   await expect(inspector.locator('.inspector-damage')).toContainText(/\d[\d,]*\.\d/);
 
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.2.0')!).document.project as Project);
   expect(saved.timeline).toHaveLength(1);
   expect(saved.timeline[0].damage).toMatchObject({ hit: { hitId: 'varesa.burst.param5' }, crit: 'critical', reaction: 'none' });
+  await editor.getByText('战斗事件记录', { exact: true }).click();
+  await editor.getByLabel('记录类型').selectOption('shieldCreated');
+  await editor.getByRole('button', { name: '在光标处记录', exact: true }).click();
+  await expect.poll(() => page.evaluate(() => {
+    const project: Project = JSON.parse(localStorage.getItem('leyline-axis-recovery-0.2.0')!).document.project;
+    return project.timeline.some(row => row.kind === 'state-change' && row.facts?.shieldCreated?.value?.value === true);
+  })).toBe(true);
 });
 
 test('Cinnabar flat damage recalculates through actual Worker and file round-trip with an explicit application', async ({ page }) => {

@@ -276,6 +276,20 @@
           }
         },
         "output": "base"
+      },
+      "confirmedProc": {
+        "group": "halberd.heavy",
+        "sourceCategories": [
+          "normal"
+        ],
+        "cooldownMs": [
+          10000,
+          10000,
+          10000,
+          10000,
+          10000
+        ],
+        "confirmedFact": "halberd.heavyTriggered"
       }
     }
   ]

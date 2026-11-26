@@ -123,7 +123,7 @@ function referenceDamage(build, talent, hit, setup, request, party, withBuffs = 
       if (id === 'lyney.c6.reprised-strike') multiplier *= .8;
       if (id === 'mavuika.burst.param1') flat += stats.attack * valueOfFact('mavuika.fightingSpirit') * parameter(talent.id, 'param3');
       if (id === 'mona.skill.illusory-torrent') multiplier *= .5;
-      if (id === 'mualani.skill.param1' && valueOfFact('mualani.waveMomentum') === 3) flat += stats.hp * parameter(talent.id, 'param3');
+      if (['mualani.skill.param1', 'mualani.skill.shark-missile'].includes(id) && valueOfFact('mualani.waveMomentum') === 3) flat += stats.hp * parameter(talent.id, 'param3');
       if (id === 'shikanoinheizou.skill.param1' && valueOfFact('shikanoinheizou.declension') === 4) flat += stats.attack * parameter(talent.id, 'param3');
       if (id.startsWith('wanderer.c6.kuugo-param')) multiplier *= .4 * parameter('wanderer.skill', 'param2');
       if (id === 'wriothesley.a0.rebuke-vaulting-fist') damageBonus += build.constellation >= 1 ? 2 : .5;
@@ -134,7 +134,10 @@ function referenceDamage(build, talent, hit, setup, request, party, withBuffs = 
     }
     const attackLevel = build.level + 100, enemyLevel = target.level.value.value + 100;
     const defenseReduction = target.defenseReduction.value.value + (withBuffs && build.constellation >= 2 && (ring || riding && build.constellation >= 6) ? .2 : 0);
-    return (base * multiplier * steadyCore + flat) * attackLevel / (attackLevel + enemyLevel * (1 - defenseReduction)) * resistanceFactor * (1 + damageBonus) * strideFactor;
+    // Shark Bite and its missile share the target-count reduction after flat base additions.
+    const biteFactor = withBuffs && ['mualani.skill.param1', 'mualani.skill.shark-missile'].includes(id)
+      ? 1 - .14 * (valueOfFact('mualani.biteTargets') - 1) : 1;
+    return (base * multiplier * steadyCore + flat) * attackLevel / (attackLevel + enemyLevel * (1 - defenseReduction)) * resistanceFactor * (1 + damageBonus) * strideFactor * biteFactor;
   }
   const coefficient = family === 'stellar-conduct' ? attachmentRates[valueOfFact('stellarAttachments')]
     : reactionConstants.find(entry => entry.formula === family + '-direct' && entry.node === 'reactionCoefficient')?.value;
@@ -201,7 +204,8 @@ function gateCases(character, talent, declaration, owner, defaultParty) {
     if (node.teamCount) {
       const { elements, match, excludeOwner, cap, distinctElements } = node.teamCount;
       const party = excludeOwner ? testCase.party : [character.identity.element, ...testCase.party];
-      const matches = party.filter(element => elements.includes(element) === (match === 'include'));
+      const eligible = elements === 'owner' ? [character.identity.element] : elements;
+      const matches = party.filter(element => eligible.includes(element) === (match === 'include'));
       return Math.min(cap ?? Infinity, distinctElements ? new Set(matches).size : matches.length);
     }
     const definition = template(node.call);
@@ -219,7 +223,8 @@ function gateCases(character, talent, declaration, owner, defaultParty) {
   const parties = [defaultParty];
   if (teams.length) parties.push([]);
   for (const team of teams) {
-    const matching = (team.match === 'include' ? team.elements : elements.filter(element => !team.elements.includes(element)))
+    const eligible = team.elements === 'owner' ? [character.identity.element] : team.elements;
+    const matching = (team.match === 'include' ? eligible : elements.filter(element => !eligible.includes(element)))
       .filter(element => element !== 'physical');
     for (let count = 1; count <= Math.min(3, team.threshold + 1); count++) {
       if (team.distinctElements && matching.length < count) continue;

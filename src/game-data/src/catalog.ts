@@ -2,9 +2,11 @@
 import { DATA_VERSION } from './version.mjs';
 import loaders from 'virtual:leyline-catalog/loaders';
 import artifactMain from '../data/tables/artifact-main.json';
+import stellarSwirl from '../data/tables/stellar-swirl.json';
 import common from '../data/calculation/common.json';
 import { assembleCalculationLibrary } from './calculation-library.mjs';
 export { DATA_VERSION };
+export const stellarSwirlCoefficients = Object.freeze(stellarSwirl);
 import type { ArtifactItem, ArtifactMainTable, Build, CalculationBundle, CharacterActionsDefinition, CharacterDefinition, DefinitionRef, WeaponDefinition, ArtifactSetDefinition, StatKey, Element } from '@leyline/schema';
 export type { CharacterDefinition, WeaponDefinition, ArtifactSetDefinition, StatKey, Element, ContentSource, Support, Modifier } from '@leyline/schema';
 export interface GameCatalog {

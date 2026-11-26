@@ -2,6 +2,7 @@ import { catalogInventory, readCalculationData } from './catalog-data.mjs';
 import { readContentSource } from './content-source.mjs';
 import { readCalculationLibrary } from './calculation-library.mjs';
 import { createContentLinker } from '../../src/game-data/src/link-content.mjs';
+import { DATA_VERSION } from '../../src/game-data/src/version.mjs';
 import { loadContentSchema } from './load-content-schema.mjs';
 
 const data = new URL('../../src/game-data/data/', import.meta.url);
@@ -27,15 +28,15 @@ export function catalogList(inventory = catalogInventory()) {
   };
 }
 
-export async function createRuntimeCatalog() {
+export async function createRuntimeCatalog(selection) {
+  const inventory = selection ? { dataVersion: DATA_VERSION, ...selection } : catalogInventory();
   const schemas = await loadContentSchema(), engine = await loadContentSchema('/src/engine/src/index.ts');
-  const inventory = catalogInventory();
   const definitions = new Map();
   const library = readCalculationLibrary(path => {
     const definition = readCalculationData(path);
     definitions.set(path, definition);
     return definition;
-  });
+  }, inventory);
   const compiled = engine.compileCalculation(library);
   if (!compiled.ok) throw new Error(JSON.stringify(compiled.diagnostics));
   const linker = createContentLinker({ schemas, ...engine, library: compiled.program });

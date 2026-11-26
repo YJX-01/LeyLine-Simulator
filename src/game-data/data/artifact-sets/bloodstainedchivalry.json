@@ -54,9 +54,9 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "complete",
+        "resolution": "unavailable",
         "evidence": "adopted",
-        "reason": "按件数及击败敌人后的有效窗口计算重击增伤。",
+        "reason": "支持已记录的在场击败及手动窗口；项目当前使用单一抽象目标，重击起手体力不单独模拟。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
@@ -72,17 +72,44 @@
           },
           {
             "id": "charged-stamina",
-            "resolution": "irrelevant",
-            "ruleIds": [],
-            "reason": "重击的体力消耗由动作结算。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "bloodstainedchivalry.vanquished.1",
+                "revision": "1"
+              }
+            ],
+            "reason": "生效时重击体力消耗降低100%；动作开始所需最低体力仍需另行判断。"
           }
         ]
       },
       "buffs": [
         {
           "id": "bloodstainedchivalry.vanquished",
+          "windowFact": "bloodstainedchivalry.vanquishedActive",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "observation": {
+                "key": "enemyDefeated",
+                "test": "true"
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
           "condition": {
-            "fact": "bloodstainedchivalry.vanquishedActive"
+            "fact": "onField",
+            "at": "source-event"
           },
           "appliesTo": {
             "categories": [
@@ -93,6 +120,10 @@
             {
               "target": "attribute.damageBonus",
               "value": 0.5
+            },
+            {
+              "target": "attribute.staminaCostReduction.charged",
+              "value": 1
             }
           ]
         }

@@ -290,6 +290,7 @@
       "modifiers": [
         {
           "target": "attribute.energyRecharge",
+          "nonConvertible": true,
           "value": {
             "call": "xiphosmoonlight.mastery-to-recharge",
             "inputs": {
@@ -322,6 +323,7 @@
       "modifiers": [
         {
           "target": "attribute.energyRecharge",
+          "nonConvertible": true,
           "value": {
             "call": "xiphosmoonlight.mastery-to-recharge",
             "inputs": {

@@ -579,7 +579,14 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "kujousara.skill",
+            "sourceKind": "action-or-capture",
+            "attributes": [
+              "attack"
+            ]
+          }
         }
       ],
       "cooldownParameter": "param4",
@@ -732,7 +739,14 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "kujousara.burst",
+            "sourceKind": "action-or-capture",
+            "attributes": [
+              "attack"
+            ]
+          }
         },
         {
           "id": "kujousara.burst.param2",
@@ -743,7 +757,14 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "kujousara.burst",
+            "sourceKind": "action-or-capture",
+            "attributes": [
+              "attack"
+            ]
+          }
         }
       ],
       "energyCapacity": {
@@ -1009,7 +1030,7 @@
       "type": {
         "kind": "boolean"
       },
-      "label": "处于天狗咒雷的攻击增益状态"
+      "label": "天狗咒雷攻击加成"
     },
     "kujousara.c2WeakerCrowfeatherHit": {
       "scope": "query",

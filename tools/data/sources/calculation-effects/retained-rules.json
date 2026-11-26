@@ -731,5 +731,148 @@
       "source": "genshin-db.scarletproof.stellar",
       "status": "adopted-explicit-window"
     }
-  ]
+  ],
+  "sourceNotes": {
+    "beidou-stellar-conduct": {
+      "character": "beidou",
+      "scope": "Sixth constellation after Witch's Revelation, with Radiance: Stellar-Conduct explicitly confirmed.",
+      "accessed": "2026-11-25",
+      "sources": [
+        {
+          "url": "https://wiki.hoyolab.com/pc/genshin/entry/5654",
+          "description": "HoYoWiki describes the sixth constellation's additional 15% Cryo resistance reduction on nearby opponents while Stormbreaker and Radiance: Stellar-Conduct are active."
+        },
+        {
+          "url": "https://wiki.biligame.com/ys/%E5%8C%97%E6%96%97",
+          "description": "The character entry records the 15% nearby Cryo resistance reduction and 200 elemental mastery for the current active character; it states that Beidou enters Radiance: Stellar-Conduct in a Polestar Field after unlocking the corresponding Witch's Revelation."
+        },
+        {
+          "url": "https://gi.gachabase.net/characters/10000024/beidou/beta/6.6.54/45574465?lang=en",
+          "description": "Versioned beta 6.6.54 revision 45574465 records the same sixth-constellation Cryo resistance and elemental mastery values; the current KQM and BWIKI character entries corroborate the released text."
+        },
+        {
+          "url": "https://library.keqingmains.com/characters/electro/beidou",
+          "description": "Current character text corroborates both the Radiance state and the two sixth-constellation effects."
+        }
+      ],
+      "limitations": [
+        "Radiance activation and the distance of the enemy are explicit facts; the model does not automatically infer the revelation quest or field membership."
+      ]
+    },
+    "cyno-stellar-conduct": {
+      "character": "cyno",
+      "scope": "C1 Together We Rise elemental mastery after Witch's Revelation; recipients and remaining duration are explicitly confirmed.",
+      "accessed": "2026-11-25",
+      "sources": [
+        {
+          "url": "https://gi.gachabase.net/diff/characters/10000071/cyno?cur=release_6.7.0_45767575&lang=en&prev=release_6.6.0_45557904",
+          "description": "Release 6.7.0 revision 45767575 records 200 elemental mastery from Together We Rise and transfer to the incoming character for the remaining duration."
+        },
+        {
+          "url": "https://library.keqingmains.com/cyno/",
+          "description": "Independent character reference corroborates the C1 Radiance: Stellar-Conduct mastery grant."
+        }
+      ],
+      "limitations": [
+        "The recipient-specific active effect is an explicit fact. The implementation does not infer field entry, switching, transfer or the remaining duration."
+      ]
+    },
+    "diona-stellar-conduct": {
+      "character": "diona",
+      "scope": "Diona's post-Revelation C6 maximum HP, the original field healing and mastery thresholds, and the four reaction damage grants in Radiance: Stellar-Conduct and Radiance: Stellar Swirl; Choice Treasures trigger text.",
+      "accessed": "2026-11-25",
+      "sources": [
+        {
+          "url": "https://gi.gachabase.net/characters/10000039/diona/release/6.7.0/46033009?lang=chs",
+          "description": "Released version 6.7.0 revision 46033009 records a 40% Superconduct and Stellar-Conduct damage bonus for characters in Signature Mix while Radiance: Stellar-Conduct applies."
+        },
+        {
+          "url": "https://wiki.hoyolab.com/pc/genshin/entry/5654",
+          "description": "HoYoWiki's damage formula lists Diona's post-Revelation C6 Superconduct reaction bonus within Signature Mix."
+        },
+        {
+          "url": "https://gi.gachabase.net/diff/characters/10000039/diona?cur=release_7.0.0_47194594&lang=en&prev=release_6.7.0_46509556",
+          "description": "Released 7.0.0 revision 47194594 adds the distinct Stellar Swirl state: 40% Cryo Swirl and Stellar Swirl reaction damage within the field, alongside the existing HP-gated mastery. The enhanced C6 separately increases Diona's own maximum HP by 25%, without a Radiance or field condition."
+        },
+        {
+          "url": "https://library.keqingmains.com/characters/cryo/diona",
+          "description": "The character reference corroborates both Radiance branches and the HP threshold for the existing 200 elemental mastery."
+        },
+        {
+          "url": "https://github.com/KQM-git/TCL/blob/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/src/data/characters/Diona.json",
+          "description": "Pinned character text describes Choice Treasures' three Icy Paws after the four specified reactions, the 20-second skill window, 3.5-second cooldown and the absence of shields and particles. The text does not give the additional projectiles' damage multiplier."
+        }
+      ],
+      "limitations": [
+        "Witch's Revelation unlock, Radiance and each recipient's presence in Signature Mix are explicit facts. The two Radiance branches are separate.",
+        "A reported on-field-only restriction is not independently verified by an authorized recording.",
+        "The additional Icy Paws' multiplier, damage family, and interaction with C2 require an independent bullet or authorized game evidence before a new damage hit is adopted."
+      ]
+    },
+    "linnea-c6-catalogue": {
+      "entity": "linnea",
+      "subject": "c6-catalogue-consumption",
+      "sources": [
+        {
+          "kind": "game-text-capture",
+          "path": "src/game-data/data/characters/linnea.json#/constellations/0/description",
+          "scope": "一命每层75%防御，百万吨每层150%防御，最多5层。"
+        },
+        {
+          "kind": "game-text-capture",
+          "path": "src/game-data/data/characters/linnea.json#/constellations/5/description",
+          "scope": "六命消耗原本两倍层数，每层伤害提升为原本150%；满辉擢升单独计算。"
+        },
+        {
+          "kind": "attributed-guide-republication",
+          "url": "https://ol.3dmgame.com/gl/337138_6.html",
+          "attribution": "Asgater",
+          "scope": "转载署名文章明确每次普通月结晶消耗2层，每层112.5%，共225%防御；百万吨最多10层，每层225%，共2250%。"
+        },
+        {
+          "kind": "original-publication-identity-only",
+          "url": "https://www.miyoushe.com/ys/article/74448955",
+          "attribution": "Asgater",
+          "scope": "作者合集所列原帖；本次未能取得原帖正文，数值依署名转载核对。"
+        }
+      ],
+      "scope": {
+        "ordinaryC1": {
+          "actualStacksConsumed": 1,
+          "defenseRatioPerStack": 0.75
+        },
+        "ordinaryC6": {
+          "actualStacksConsumed": 2,
+          "defenseRatioPerStack": 1.125
+        },
+        "megatonC1": {
+          "actualStacksConsumedMax": 5,
+          "defenseRatioPerStack": 1.5
+        },
+        "megatonC6": {
+          "actualStacksConsumedMax": 10,
+          "defenseRatioPerStack": 2.25
+        },
+        "oneRemainingStack": "未有实测；不假定单层剩余时如何消耗。",
+        "nearbyAndAutomaticConsumption": "本记录仅验证明确可用的单击，不验证附近判定或层数自动追踪。"
+      }
+    },
+    "yanfei-proviso": {
+      "character": "yanfei",
+      "mechanism": "passive1-proviso",
+      "sources": [
+        {
+          "path": "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/yanfei.json#/passive1",
+          "claim": "Each seal consumed by a charged attack grants 5% Pyro damage bonus for 6 seconds; another charged attack first removes the prior effect."
+        },
+        {
+          "url": "https://library.keqingmains.com/evidence/characters/pyro/yanfei",
+          "claim": "The passive Pyro bonus applies before the triggering charged attack damage is calculated."
+        }
+      ],
+      "limitations": [
+        "A damage record is not the time of seal consumption; an absent source action cannot establish an exact expiration time."
+      ]
+    }
+  }
 }

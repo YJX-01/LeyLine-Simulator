@@ -45,6 +45,23 @@ export function packDocument(kind: DocumentKind, value: unknown) {
     content: Object.fromEntries(groups.map(group => [group, Object.fromEntries(content[group])])) };
 }
 
+export class DocumentReadError extends Error {
+  constructor(readonly original: string, cause: unknown) {
+    super(cause instanceof Error ? cause.message : '文档未通过校验。', { cause });
+  }
+}
+
+/** Keep the serialized source available when a recognized document cannot be evaluated. */
+export function readWorkbenchDocument<T>(kind: 'axis' | 'axis-recovery' | 'damage-calculator', input: unknown,
+  validate: (data: unknown) => T, original?: string): T {
+  try {
+    return validate(unpackDocument(kind, input));
+  } catch (cause) {
+    if (!record(input) || input.kind !== kind || !record(input.content) || !record(input.document)) throw cause;
+    throw new DocumentReadError(original ?? JSON.stringify(input), cause);
+  }
+}
+
 /** Resolve only definitions explicitly selected in this file. Domain readers validate the restored document. */
 export function unpackDocument(kind: DocumentKind, value: unknown): unknown {
   if (!record(value) || value.kind !== kind || value.schemaVersion !== schemas.APP_VERSION || !record(value.content) || !Object.hasOwn(value, 'document')) throw new Error('不支持此文件格式或版本。');

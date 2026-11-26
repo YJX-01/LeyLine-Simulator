@@ -52,7 +52,7 @@ export const effectDefinitionSchema = z.object({
   counter: teamHealthCounterSchema.optional(),
   windowFact: idSchema.optional(),
   charges: z.object({ perRecipient: z.number().int().positive().max(1000), categories: calculationHitSelectorSchema.shape.categories.unwrap() }).strict().optional(),
-  predicate: calculationBindingSchema.optional(), value: calculationBindingSchema, extraAttack: z.literal(true).optional(),
+  predicate: calculationBindingSchema.optional(), value: calculationBindingSchema, nonConvertible: z.literal(true).optional(), extraAttack: z.literal(true).optional(),
   target: z.discriminatedUnion('kind', [
     z.object({ kind: z.literal('attribute'), attribute: definitionRefSchema }).strict(),
     z.object({ kind: z.literal('port'), formula: definitionRefSchema, port: idSchema }).strict(),
@@ -60,11 +60,19 @@ export const effectDefinitionSchema = z.object({
   appliesTo: calculationHitSelectorSchema,
   application: z.enum(['always', 'explicit', 'observed']), priority: z.number().int().safe(),
   stacking: z.object({ group: idSchema, scope: z.enum(['owner', 'recipient', 'team']), policy: z.enum(['add', 'replace', 'max']),
-    maxStacks: z.number().int().min(1).max(10000), retain: z.enum(['earliest', 'latest', 'highest-priority']),
+    maxStacks: z.number().int().min(1).max(10000), retain: z.enum(['earliest', 'latest', 'highest-priority', 'unverified']),
     crossOwnerUnverified: z.literal(true).optional(),
-    refreshUnverified: z.literal(true).optional(),
+    crossOwnerAdditiveGroup: idSchema.optional(),
+    refreshUnverified: z.literal(true).optional(), refreshAll: z.literal(true).optional(),
     endOnNewTrigger: z.literal(true).optional() }).strict(),
 }).strict().superRefine((effect, context) => {
+  if (effect.stacking.crossOwnerAdditiveGroup && effect.target.kind !== 'attribute') context.addIssue({
+    code: 'custom', path: ['stacking', 'crossOwnerAdditiveGroup'], message: '加法叠加组只能用于属性效果。',
+  });
+  if (effect.nonConvertible && (effect.target.kind !== 'attribute' || !['attribute.elementalMastery','attribute.energyRecharge'].includes(effect.target.attribute.id))) {
+    context.addIssue({ code: 'custom', path: ['nonConvertible'], message: '该标记只适用于精通和充能效率。' });
+  }
+  if (effect.stacking.retain === 'unverified' && (effect.stacking.maxStacks !== 1 || effect.stacking.policy !== 'replace')) context.addIssue({ code: 'custom', path: ['stacking'], message: '未核定的取值优先级只适用于同名效果不叠加的情形。' });
   if (effect.extraAttack && (effect.target.kind !== 'attribute' || effect.target.attribute.id !== 'attribute.attack')) {
     context.addIssue({ code: 'custom', path: ['extraAttack'], message: '额外攻击力贡献须指向攻击力。' });
   }

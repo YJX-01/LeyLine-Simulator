@@ -49,7 +49,7 @@ export const calculationTemplateSchema = z.discriminatedUnion('id', [
     confirmedStep: finiteSchema.positive().optional(),
     cap: finiteSchema.nonnegative().optional(), capInput: idSchema.optional(),
     capIncreases: z.array(z.object({ input: idSchema, amount: finiteSchema.positive() }).strict()).min(1).max(6).optional() }).strict(),
-  z.object({ ...template('bounded-stat-bonus'), input: idSchema, stat: z.enum(['scalar', 'elementalMastery']), threshold: finiteSchema, channels }).strict(),
+  z.object({ ...template('bounded-stat-bonus'), input: idSchema, stat: z.enum(['scalar', 'elementalMastery', 'hp']), threshold: finiteSchema, channels }).strict(),
   z.object({ ...template('attribute-conversion'), stat: z.enum(['hp', 'defense', 'energy', 'elementalMastery']), target: z.enum(['attack', 'damage', 'scalar']), attribute: idSchema, rate: idSchema, output: idSchema,
     conditionalRate: z.object({ input: idSchema, relation, threshold: finiteSchema, rate: idSchema }).strict().optional() }).strict(),
   z.object({ ...template('stat-product'), unit: z.enum(['scalar', 'attack', 'hp', 'defense', 'elementalMastery', 'damage', 'count', 'energy']) }).strict(),

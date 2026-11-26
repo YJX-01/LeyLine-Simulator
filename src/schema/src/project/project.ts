@@ -19,6 +19,15 @@ import { characterActionsDefinitionSchema } from '../content/actions';
 import { definitionKey, definitionRefSchema, valueMatchesType } from '../calculation/values';
 import { auraObservationSchema, confirmedBuffSchema, validateCombatObservations } from '../calculation/event';
 import { projectReactionSchema } from './reaction-event';
+const preservedTimelineShape = {
+  actionVariant: idSchema.optional(),
+  confirmedCastConditions: z.array(idSchema).min(1).max(16).refine(keys => new Set(keys).size === keys.length, '同次施放条件不得重复。').optional(),
+  reactionActorFacts: z.record(idSchema, calculationFactSchema).optional(),
+  crystalPickup: z.enum(['pyro','hydro','electro','cryo']).optional(),
+  crystalFromPicker: z.boolean().optional(),
+};
+export const preservedTimelineFields = Object.freeze(Object.keys(preservedTimelineShape) as (keyof typeof preservedTimelineShape)[]);
+
 const projectFields = z.object({
   seed: z.number().int().min(0).max(4294967295).optional(),
   schemaVersion: z.literal(APP_VERSION), rulesVersion: z.literal('timeline-v1'), calculationProfile: z.enum(['direct', 'dependency']).optional(), id: idSchema, name: idSchema.optional(), revision: idSchema,
@@ -40,6 +49,7 @@ const projectFields = z.object({
   })).max(100).optional(),
   enemy: enemySchema.optional(),
   timeline: z.array(z.object({
+    ...preservedTimelineShape,
     id: idSchema, timeMs: millisecondsSchema, order: z.number().int().nonnegative(), actor: idSchema,
     kind: z.enum(['action', 'damage', 'capture', 'state-change']), definition: idSchema, skillId: idSchema.optional(), damage: damageRequestSchema.optional(),
     reactionEvent: projectReactionSchema.optional(), sceneHit: sceneHitRequestSchema.optional(), actionId: idSchema.optional(), captureFacts: hitFactsSchema.optional(),
@@ -209,6 +219,12 @@ export const projectSchema = projectFields.superRefine((project, context) => {
     if (!hit?.snapshot) { issue('此命中未声明属性捕获规则，不能附加捕获引用。'); return; }
     if (capture.recordId === null) return;
     const source = captureRecords.get(capture.recordId);
+    if (hit.snapshot.sourceKind === 'capture-only' && source?.kind !== 'capture') {
+      issue('此命中的实际快照时刻必须使用单独记录的属性捕获点。'); return;
+    }
+    if (hit.snapshot.sourceKind === 'action-or-capture' && source?.kind !== 'capture' && source?.kind !== 'action') {
+      issue('此命中的捕获来源须是对应技能施放或单独记录的属性捕获点。'); return;
+    }
     const skillId = source?.kind === 'damage' ? findCharacterHit(captureActors.get(source.actor)?.build?.character, source.damage?.hit)?.talent.id : source?.skillId;
     if (!source || source.actor !== record.actor || skillId !== hit.snapshot.sourceSkillId) {
       issue('捕获来源必须是同一队员快照中指定技能的明确记录。'); return;

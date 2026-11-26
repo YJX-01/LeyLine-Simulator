@@ -201,7 +201,10 @@ function magnitude(binding: CalculationBinding, build: Build, entity: Entity, ra
 function bindingInputs(binding: CalculationBinding, entity: Entity): string[] {
   if (binding.kind === 'attribute') return [buffTargetLabel(binding.key.id)];
   if (binding.kind === 'fact') return [entity.metadata.facts?.[binding.key]?.label ?? buffFactNames[binding.key] ?? binding.key];
-  if (binding.kind === 'team-count') return [(binding.match === 'exclude' ? '非' : '') + binding.elements.map(realElementLabel).join('、') + (binding.distinctElements ? '的元素种数' : '元素队员人数')];
+  if (binding.kind === 'team-count') {
+    if (binding.elements === 'owner') return [(binding.match === 'include' ? '同元素' : '异元素') + '队员人数' + (binding.excludeOwner ? '（除装备者外）' : '（含装备者）')];
+    return [(binding.match === 'exclude' ? '非' : '') + binding.elements.map(realElementLabel).join('、') + (binding.distinctElements ? '的元素种数' : '元素队员人数')];
+  }
   if (binding.kind === 'team-region') return [(binding.match === 'exclude' ? '非' : '') + binding.region + '队员人数'];
   return binding.kind === 'formula' ? Object.values(binding.inputs).flatMap(input => bindingInputs(input, entity)) : [];
 }
@@ -276,8 +279,19 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
   if (frame?.element) hitTargets.add('target.resistance.' + frame.element);
   if (reaction) {
     hitTargets.add('attribute.elementalMastery');
-    hitTargets.add('attribute.reaction.' + family + '.damageBonus');
-    hitTargets.add('attribute.reaction.' + reaction.family + '.coefficient');
+    const group = reaction.family.startsWith('lunar-') ? 'lunar' : family;
+    hitTargets.add('attribute.reaction.' + group + '.damageBonus');
+    hitTargets.add('attribute.reaction.' + group + '.flatBaseBonus');
+    if (isTransformative(reaction.family)) {
+      hitTargets.add('attribute.reaction.' + reaction.family + '.coefficient');
+      hitTargets.add('attribute.reaction.transformative.critRate');
+      hitTargets.add('attribute.reaction.transformative.critDamage');
+    } else {
+      hitTargets.add('attribute.critRate');
+      hitTargets.add('attribute.critDamage');
+      hitTargets.add('attribute.reaction.' + group + '.baseBonus');
+      hitTargets.add('attribute.reaction.' + group + (group === 'lunar' ? '.elevationFactor' : '.elevation'));
+    }
   }
   const disabled = new Set(project.effectRevisions?.filter(entry => entry.disabled).map(entry => entry.instanceId));
   const applications = new Map(damage.effectApplications?.map(entry => [entry.instanceId, entry.active]));
@@ -392,8 +406,9 @@ export function resolveBuffSelection(choices: readonly BuffSelection[], damage: 
     const enabled = selected.get(item.id) ?? (!item.disabled && (!item.explicit || item.checked));
     if (item.triggerSkill || item.confirmTrigger || item.disabled || enabled && buffConditionsMet(item, current)) continue;
     if (item.explicit && !damage.effectApplications?.some(entry => entry.instanceId === item.id && entry.active != null) && !selected.has(item.id)) selected.set(item.id, false);
-    if (item.toggleFact && absent(item.toggleFact)) setCalculatorFact(damage, { key: item.toggleFact, value: { kind: 'boolean', value: false } }, item.ownerId);
-    if (item.stacks && absent(item.stacks.key)) setCalculatorFact(damage, { key: item.stacks.key, value: { kind: 'quantity', unit: 'count', value: 0 } }, item.ownerId);
+    const provenance = changes.has(item.id) ? 'explicit' : 'preset';
+    if (item.toggleFact && absent(item.toggleFact)) setCalculatorFact(damage, { key: item.toggleFact, value: { kind: 'boolean', value: false } }, item.ownerId, provenance);
+    if (item.stacks && absent(item.stacks.key)) setCalculatorFact(damage, { key: item.stacks.key, value: { kind: 'quantity', unit: 'count', value: 0 } }, item.ownerId, provenance);
     if (!item.explicit && (item.hp && absent('hpRatio') || item.requirements.some(setting => absent(setting.key, setting.subject)))) selected.set(item.id, false);
   }
   return selected;

@@ -8,7 +8,7 @@ import { subjectFacts, findBuildHit, buildSchema, combatConditionsSchema, damage
 import { createStructuredCombatContext, evaluateStructuredHit, evaluateStructuredReaction, onFieldActor, prepareStructuredBuilds, structuredTeamFeasibility, type PreparedStructuredTeam } from './build-context';
 import { evaluateCombatBindings, type BoundAttributeReader } from './context';
 import { compiledData } from './compile';
-import { buffEndMs, collectEffectInstances } from './effects';
+import { applyEquipmentStacks, buffEndMs, collectEffectInstances } from './effects';
 import { damageBreakdown, lastTrace } from './damage-view';
 import { compileCharacterActions } from './actions';
 import { evaluateStateMachine } from './state-machine';
@@ -203,6 +203,7 @@ export function updateHitOccurrences(runtime: Runtime, timeline: RecordEntry[]) 
     event.occurred = states.some(state => state.state === 'known' && state.value.kind === 'boolean' && state.value.value)
       ? true : states.every(state => state.state === 'known') ? false : null;
   }
+  applyEquipmentStacks(timeline, runtime.context, runtime.builds, events);
 }
 export function readRuntimePanel(runtime: Runtime, actorId: string, record: RecordEntry, conditions: CombatConditions = {}, query = record.damage, phase: CombatFrame['phase'] = 'before'): AttributePanel {
   const build = runtime.builds.get(actorId);
@@ -325,6 +326,14 @@ export function evaluateRuntimeHit(runtime: Runtime, actorId: string, record: Re
   if (!damage || !build) return empty([issue('unknown', '尚未选择角色和明确输出。')]);
   const frame = frameFor(runtime, actorId, record, conditions), { ownerId, recipientId, contributorId, hit: metadata, ...requestFrame } = frame;
   const selected = findBuildHit(build, damage.hit), skill = selected?.talent, hit = selected?.hit;
+  if (hit?.snapshot?.sourceKind && damage.capture?.recordId) {
+    const source = runtime.context.events.find(event => event.id === damage.capture!.recordId);
+    const allowed = source && (hit.snapshot.sourceKind === 'capture-only' ? source.kind === 'capture'
+      : source.kind === 'capture' || source.kind === 'action');
+    if (!allowed || source?.occurred === false || source?.occurred === null) {
+      return empty([issue('unknown', '属性捕获来源尚未确认有效，请选择已发生的施放动作或属性捕获。')]);
+    }
+  }
   if (damage.hitOrdinal !== undefined && damage.hitOrdinal > (hit?.selection?.repetitions ?? 0)) {
     return empty([issue('invalid-input', '命中序号须在所选单击的重复次数内。')]);
   }
@@ -397,7 +406,7 @@ export function runtimeEffectViews(runtime: Runtime, visit: () => boolean): Effe
     if (previous) { previous.modifiers!.push(modifier); continue; }
     views.set(instance.id, { id: instance.id, owner: instance.owner.id, slot: 'content', definition: instance.definition.identity.id,
     version: instance.definition.identity.revision, effect: instance.definition.identity.id, action: instance.source?.id ?? null, startMs: instance.source?.timeMs ?? 0,
-      endMs: Math.min(buffEndMs(instance.definition, instance.source, instance.until), instance.replacedBy?.timeMs ?? Infinity),
+      endMs: Math.min(instance.certainEndMs ?? buffEndMs(instance.definition, instance.source, instance.until), instance.replacedBy?.timeMs ?? Infinity),
       ...(instance.possibleEndMs === undefined ? {} : { possibleEndMs: instance.possibleEndMs }),
     recipient: instance.definition.recipient.role === 'team' ? 'team' : instance.owner.id, attribute: modifier.attribute, unit: modifier.unit, modifiers: [modifier],
     disabled: runtime.context.effectRevisions?.some(revision => revision.instanceId === instance.id && revision.disabled) ?? false,

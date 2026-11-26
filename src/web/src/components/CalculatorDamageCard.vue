@@ -8,7 +8,7 @@ import CalculatorReactionIcon from './CalculatorReactionIcon.vue';
 import GameIcon from './GameIcon.vue';
 
 const props = defineProps<{ hit?: CalculatorHitChoice; scene?: SceneDefinition; family?: ProjectReaction['family'];
-  element?: ProjectReaction['element']; rules?: CalculationBundle; coefficient?: number | null }>();
+  element?: ProjectReaction['element']; rules?: CalculationBundle; coefficient?: number | null; singleContributor?: boolean }>();
 const reactionRate = computed(() => {
   if (props.coefficient != null) return props.coefficient;
   const base = props.rules?.attributes.find(attr => attr.identity.id === 'attribute.reaction.' + props.family + '.coefficient')?.base;
@@ -23,6 +23,7 @@ const reactionRate = computed(() => {
     </GameIcon></template>
   </CalculatorChoiceCard>
   <CalculatorChoiceCard v-else-if="family" :name="damageFamilyLabel(family)" :source="isTransformative(family) ? '剧变反应' : '反应伤害'"
+    :note="!isTransformative(family) && singleContributor ? '按所选队员的贡献计算' : undefined"
     :value="reactionRate != null ? '等级系数 × ' + reactionRate : undefined">
     <template #icon><CalculatorReactionIcon :family="family" :element="element" /></template>
   </CalculatorChoiceCard>

@@ -35,9 +35,10 @@ const support = z.object(calculationCoverageRecordSchema.shape).pick({ resolutio
   maxConstellation: z.number().int().min(0).max(6), mechanisms: z.array(z.object({ id: idSchema, resolution: z.enum(['implemented','irrelevant','unavailable']),
     reason: z.string().min(1).optional(), rules: ids.optional(), impact: coverageImpactSchema.optional() }).strict()).min(1),
 });
-const modifier = z.object({ target: idSchema, value: expression, extraAttack: z.literal(true).optional(), condition: expression.optional(), ownerElements:effectDefinitionSchema.shape.activation.shape.elements, appliesTo: effectDefinitionSchema.shape.appliesTo.optional(),
+const modifier = z.object({ target: idSchema, value: expression, nonConvertible: z.literal(true).optional(), extraAttack: z.literal(true).optional(), condition: expression.optional(), ownerElements:effectDefinitionSchema.shape.activation.shape.elements, appliesTo: effectDefinitionSchema.shape.appliesTo.optional(),
   recipientElements: effectDefinitionSchema.shape.activation.shape.elements, recipientWeaponTypes: effectDefinitionSchema.shape.activation.shape.weaponTypes,
   recipient: z.enum(['owner', 'team', 'target']).optional(), constellation: z.number().int().min(1).max(6).optional() }).strict()
+  .refine(entry => !entry.nonConvertible || ['attribute.elementalMastery', 'attribute.energyRecharge'].includes(entry.target), '该标记只适用于精通和充能效率。')
   .refine(entry => !entry.extraAttack || entry.target === 'attribute.attack', '额外攻击力贡献须指向攻击力。');
 const damageChange = z.object({
   critical: z.boolean(), categories: effectDefinitionSchema.shape.appliesTo.shape.categories,

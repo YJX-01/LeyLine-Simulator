@@ -94,7 +94,7 @@ export function auditRemainingAttributeDetails(entities, engine) {
 
   function measure(character, scenario, probe, output) {
     const { team, build, peerBuild } = scenario;
-    const { recipient = 'actor', hit: suffix, values = {}, recipientValues = {}, ownerOnField = recipient === 'actor',
+    const { recipient = 'actor', hit: suffix, values = {}, recipientValues = {}, peerValues = {}, ownerOnField = recipient === 'actor',
       onField = true, otherTarget = false, targetFacts = {}, application, cast, timeMs = 1000 } = probe;
     const dealer = recipient === 'actor' ? character : peerBuild.character;
     const talent = suffix ? dealer.talents.find(entry => entry.hits.some(hit => hit.id === dealer.id + '.' + suffix)) : dealer.talents[0];
@@ -118,16 +118,20 @@ export function auditRemainingAttributeDetails(entities, engine) {
       if (!input || character.metadata.facts?.[key]) scoped[key] = value;
     }
     setGateFacts(character, frame, scoped);
-    const dealerFacts = Object.fromEntries(Object.entries(recipientValues).map(([key, value]) => {
-      const kind = character.metadata.facts[key]?.type.kind;
-      const unit = character.metadata.facts[key]?.type.unit ?? 'scalar';
+    const convertFacts = (input, definitions) => Object.fromEntries(Object.entries(input).map(([key, value]) => {
+      const kind = definitions[key]?.type.kind;
+      const unit = definitions[key]?.type.unit ?? 'scalar';
       return [key, typeof value === 'boolean' ? bool(value) : typeof value === 'number' ? number(unit, value)
         : kind === 'enum' ? fact({ kind: 'enum', value }) : fact(null)];
     }));
+    const dealerFacts = convertFacts(recipientValues, character.metadata.facts);
+    const peerFacts = convertFacts(peerValues, peerBuild.character.metadata.facts);
     Object.assign(frame.factOverrides.find(row => row.subject.kind === 'actor').facts, { onField: bool(ownerOnField) });
     const currentRecipientFacts = { ...dealerFacts, onField: bool(onField), hpRatio: number('scalar', probe.hpRatio ?? 1) };
-    if (recipient === 'actor') Object.assign(frame.factOverrides.find(row => row.subject.kind === 'actor').facts, currentRecipientFacts);
-    else frame.factOverrides.push({ subject: actor(recipient), facts: currentRecipientFacts });
+    if (recipient === 'actor') {
+      Object.assign(frame.factOverrides.find(row => row.subject.kind === 'actor').facts, currentRecipientFacts);
+      if (Object.keys(peerFacts).length) frame.factOverrides.push({ subject: actor('peer'), facts: peerFacts });
+    } else frame.factOverrides.push({ subject: actor(recipient), facts: { ...peerFacts, ...currentRecipientFacts } });
     if (otherTarget) frame.factOverrides.push({ subject: { kind: 'target', id: targetId },
       facts: Object.fromEntries(Object.entries(targetFacts).map(([key, value]) => [key, bool(value)])) });
     if (application) frame.applications.push({ instanceId: engine.calculationEffectInstanceId('actor',
@@ -532,7 +536,9 @@ export function auditRemainingAttributeDetails(entities, engine) {
           : eligible ? index === 6 ? 'skill.param1' : 'skill.second' : 'normal.param1';
         const family = index === 7 && eligible ? 'stellar-conduct' : 'ordinary';
         check(output, radiance === mode && eligible && active ? stat('attack') * (rate() + added) : 0,
-          { recipient, hit, family, values: { radiance, 'valeriy.assaultOrder': active, 'valeriy.assaultOrderWindow': true, 'valeriy.spentImpactPotential': 40 } },
+          { recipient, hit, family, values: { radiance, 'valeriy.assaultOrder': active, 'valeriy.assaultOrderWindow': true, 'valeriy.spentImpactPotential': 40 },
+            ...(index === 6 ? { peerValues: { 'fischl.hexereiSecretRite': false,
+              'fischl.hexereiOverloadActive': false, 'fischl.hexereiCoordinationActive': false } } : {}) },
           { sources: [rawPath + '#passive2'] });
       }
     }, { panel: true, peer: index === 6 ? 'fischl' : 'sandrone', remaining: '按已确认消耗的当次命中验算，层数授予及扣除另验。' });
