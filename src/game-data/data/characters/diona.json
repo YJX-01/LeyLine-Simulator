@@ -626,6 +626,23 @@
             }
           ],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "diona.skill.treasured-paw",
+          "name": "珍选秘藏：协同猫爪（单枚）",
+          "element": "cryo",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "when": [
+            "diona.revelationUnlocked",
+            "diona.treasuredConcoctionPaw"
+          ],
+          "support": "hit-unavailable"
         }
       ],
       "buffs": [
@@ -1090,7 +1107,8 @@
           "id": "diona.c2.icy-paws-damage",
           "appliesTo": {
             "hitIds": [
-              "diona.skill.param1"
+              "diona.skill.param1",
+              "diona.skill.treasured-paw"
             ]
           },
           "modifiers": [
@@ -1481,6 +1499,13 @@
         "kind": "boolean"
       },
       "label": "迪奥娜已完成魔女的谕示"
+    },
+    "diona.treasuredConcoctionPaw": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "珍选秘藏本次触发协同猫爪"
     }
   },
   "formulas": [

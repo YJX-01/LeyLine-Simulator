@@ -226,9 +226,9 @@
   "namespace": "builtin",
   "revision": "1",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "治疗加成、生命上限和单层告真的蜜酿提供的场上角色攻击力已采用；多层攻击力加成与封顶规则仍待独立核对。",
+    "reason": "已采用治疗加成、生命值上限以及1至3层告真的蜜酿提供的场上角色攻击力加成与封顶规则。",
     "mechanisms": [
       {
         "id": "explicit-output-scope",
@@ -258,20 +258,9 @@
             "namespace": "builtin",
             "id": "hymnofthemaelstrom.mead-attack-single-reaction",
             "revision": "1"
-          },
-          {
-            "namespace": "builtin",
-            "id": "hymnofthemaelstrom.mead-attack-multilayer-observed",
-            "revision": "1"
           }
         ],
-        "reason": "已采用当次条件、合法精炼及输出适用范围。"
-      },
-      {
-        "id": "pending-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "治疗加成、生命上限和单层告真的蜜酿提供的场上角色攻击力已采用；多层攻击力加成与封顶规则仍待独立核对。"
+        "reason": "已采用当次条件、合法精炼、1至3层蜜酿叠加与封顶及输出适用范围。"
       }
     ]
   },
@@ -375,7 +364,7 @@
     {
       "id": "hymnofthemaelstrom.mead-attack-single",
       "condition": {
-        "call": "hymnofthemaelstrom.one-layer",
+        "call": "hymnofthemaelstrom.has-layer",
         "inputs": {
           "points": {
             "fact": "hymnofthemaelstrom.meadLayers"
@@ -392,36 +381,59 @@
             "of": "recipient"
           },
           "value": {
-            "call": "hymnofthemaelstrom.single-layer-attack",
+            "call": "product.scalar",
             "inputs": {
               "basis": {
-                "call": "hymnofthemaelstrom.hp-excess",
+                "call": "hymnofthemaelstrom.single-layer-attack",
                 "inputs": {
-                  "hp": {
-                    "stat": "hp"
+                  "basis": {
+                    "call": "hymnofthemaelstrom.hp-excess",
+                    "inputs": {
+                      "hp": {
+                        "stat": "hp"
+                      }
+                    },
+                    "output": "excess"
+                  },
+                  "rate": {
+                    "refinement": [
+                      0.004,
+                      0.005,
+                      0.006,
+                      0.007,
+                      0.008
+                    ],
+                    "unit": "scalar"
+                  },
+                  "cap": {
+                    "refinement": [
+                      0.08,
+                      0.1,
+                      0.12,
+                      0.14,
+                      0.16
+                    ],
+                    "unit": "scalar"
                   }
                 },
-                "output": "excess"
+                "output": "value"
               },
               "rate": {
-                "refinement": [
-                  0.004,
-                  0.005,
-                  0.006,
-                  0.007,
-                  0.008
-                ],
-                "unit": "scalar"
-              },
-              "cap": {
-                "refinement": [
-                  0.08,
-                  0.1,
-                  0.12,
-                  0.14,
-                  0.16
-                ],
-                "unit": "scalar"
+                "call": "hymnofthemaelstrom.mead-layer-count",
+                "inputs": {
+                  "basis": {
+                    "fact": "hymnofthemaelstrom.meadLayers"
+                  },
+                  "rate": {
+                    "amount": 1,
+                    "unit": "scalar"
+                  },
+                  "cap": {
+                    "amount": 3,
+                    "unit": "scalar"
+                  }
+                },
+                "output": "value"
               }
             },
             "output": "value"
@@ -435,7 +447,7 @@
         "call": "condition.all",
         "inputs": {
           "term0": {
-            "call": "hymnofthemaelstrom.one-layer",
+            "call": "hymnofthemaelstrom.has-layer",
             "inputs": {
               "points": {
                 "fact": "hymnofthemaelstrom.meadLayers"
@@ -458,64 +470,62 @@
             "of": "recipient"
           },
           "value": {
-            "call": "hymnofthemaelstrom.single-layer-attack",
+            "call": "product.scalar",
             "inputs": {
               "basis": {
-                "call": "hymnofthemaelstrom.hp-excess",
+                "call": "hymnofthemaelstrom.single-layer-attack",
                 "inputs": {
-                  "hp": {
-                    "stat": "hp"
+                  "basis": {
+                    "call": "hymnofthemaelstrom.hp-excess",
+                    "inputs": {
+                      "hp": {
+                        "stat": "hp"
+                      }
+                    },
+                    "output": "excess"
+                  },
+                  "rate": {
+                    "refinement": [
+                      0.003,
+                      0.00375,
+                      0.0045,
+                      0.00525,
+                      0.006
+                    ],
+                    "unit": "scalar"
+                  },
+                  "cap": {
+                    "refinement": [
+                      0.06,
+                      0.075,
+                      0.09,
+                      0.105,
+                      0.12
+                    ],
+                    "unit": "scalar"
                   }
                 },
-                "output": "excess"
+                "output": "value"
               },
               "rate": {
-                "refinement": [
-                  0.003,
-                  0.00375,
-                  0.0045,
-                  0.00525,
-                  0.006
-                ],
-                "unit": "scalar"
-              },
-              "cap": {
-                "refinement": [
-                  0.06,
-                  0.075,
-                  0.09,
-                  0.105,
-                  0.12
-                ],
-                "unit": "scalar"
+                "call": "hymnofthemaelstrom.mead-layer-count",
+                "inputs": {
+                  "basis": {
+                    "fact": "hymnofthemaelstrom.meadLayers"
+                  },
+                  "rate": {
+                    "amount": 1,
+                    "unit": "scalar"
+                  },
+                  "cap": {
+                    "amount": 3,
+                    "unit": "scalar"
+                  }
+                },
+                "output": "value"
               }
             },
             "output": "value"
-          }
-        }
-      ]
-    },
-    {
-      "id": "hymnofthemaelstrom.mead-attack-multilayer-observed",
-      "condition": {
-        "call": "hymnofthemaelstrom.multiple-layers",
-        "inputs": {
-          "points": {
-            "fact": "hymnofthemaelstrom.meadLayers"
-          }
-        },
-        "output": "active"
-      },
-      "recipient": "team",
-      "modifiers": [
-        {
-          "target": "attribute.attackPercent",
-          "condition": {
-            "fact": "onField",
-            "of": "recipient"
-          },
-          "value": {
-            "fact": "hymnofthemaelstrom.multilayerAttackBonus"
           }
         }
       ]
@@ -536,14 +546,6 @@
         "kind": "boolean"
       },
       "label": "队伍触发冻结或星扩散后的5秒内"
-    },
-    "hymnofthemaelstrom.multilayerAttackBonus": {
-      "scope": "owner",
-      "type": {
-        "kind": "quantity",
-        "unit": "scalar"
-      },
-      "label": "多层蜜酿对场上角色的攻击力加成（含反应增益，须有外部确认）"
     }
   },
   "formulas": [
@@ -568,14 +570,24 @@
       }
     },
     {
-      "id": "hymnofthemaelstrom.one-layer",
+      "id": "hymnofthemaelstrom.has-layer",
       "template": {
         "id": "quantity-condition",
         "revision": "1",
         "input": "points",
         "unit": "count",
-        "relation": "eq",
+        "relation": "gte",
         "threshold": 1
+      }
+    },
+    {
+      "id": "hymnofthemaelstrom.mead-layer-count",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "count",
+        "to": "scalar",
+        "per": 1
       }
     },
     {
@@ -603,17 +615,6 @@
         "from": "scalar",
         "to": "scalar",
         "per": 1000
-      }
-    },
-    {
-      "id": "hymnofthemaelstrom.multiple-layers",
-      "template": {
-        "id": "quantity-condition",
-        "revision": "1",
-        "input": "points",
-        "unit": "count",
-        "relation": "gte",
-        "threshold": 2
       }
     }
   ]

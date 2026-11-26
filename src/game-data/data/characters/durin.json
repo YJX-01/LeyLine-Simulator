@@ -1079,6 +1079,16 @@
                 "amount": -0.2,
                 "unit": "scalar"
               }
+            },
+            {
+              "target": "target.resistance.pyro",
+              "value": {
+                "amount": -0.15,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "durin.hexereiSecretRite"
+              }
             }
           ]
         },
@@ -1103,6 +1113,16 @@
               "value": {
                 "amount": -0.2,
                 "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.dendro",
+              "value": {
+                "amount": -0.15,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "durin.hexereiSecretRite"
               }
             }
           ]
@@ -1129,6 +1149,16 @@
                 "amount": -0.2,
                 "unit": "scalar"
               }
+            },
+            {
+              "target": "target.resistance.electro",
+              "value": {
+                "amount": -0.15,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "durin.hexereiSecretRite"
+              }
             }
           ]
         },
@@ -1153,6 +1183,16 @@
               "value": {
                 "amount": -0.2,
                 "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.anemo",
+              "value": {
+                "amount": -0.15,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "durin.hexereiSecretRite"
               }
             }
           ]
@@ -1179,6 +1219,16 @@
                 "amount": -0.2,
                 "unit": "scalar"
               }
+            },
+            {
+              "target": "target.resistance.geo",
+              "value": {
+                "amount": -0.15,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "durin.hexereiSecretRite"
+              }
             }
           ]
         },
@@ -1199,6 +1249,16 @@
               "value": {
                 "amount": 0.4,
                 "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.amplifyingReactionBonus",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "durin.hexereiSecretRite"
               }
             }
           ]
@@ -1763,6 +1823,13 @@
         "kind": "boolean"
       },
       "label": "战斗中进入白化之是或黑度之否，本次可回复能量（间隔至少6秒）"
+    },
+    "durin.hexereiSecretRite": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "杜林的魔导·秘仪生效"
     }
   }
 }

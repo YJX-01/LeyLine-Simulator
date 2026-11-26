@@ -892,6 +892,80 @@
               }
             }
           ]
+        },
+        {
+          "id": "mona.c1.hexerei-offfield-reactions",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "mona.hexereiAwakened"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "mona.c1Prophecy"
+                  },
+                  "term1": {
+                    "call": "condition.not",
+                    "inputs": {
+                      "term0": {
+                        "fact": "onField",
+                        "of": "recipient"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.amplifyingReactionBonus",
+              "value": 0.09,
+              "appliesTo": {
+                "reactionIds": [
+                  "vaporize"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": 0.09,
+              "appliesTo": {
+                "families": [
+                  "lunar-charged",
+                  "lunar-crystallize"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.09,
+              "appliesTo": {
+                "reactionIds": [
+                  "electro-charged"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.09,
+              "appliesTo": {
+                "reactionIds": [
+                  "swirl"
+                ],
+                "elements": [
+                  "hydro"
+                ]
+              }
+            }
+          ]
         }
       ]
     },

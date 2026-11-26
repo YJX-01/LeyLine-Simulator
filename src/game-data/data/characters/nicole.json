@@ -981,6 +981,82 @@
               }
             }
           ]
+        },
+        {
+          "id": "nicole.c2.blessed-direction-shred",
+          "recipient": "target",
+          "modifiers": [
+            {
+              "target": "target.resistance.pyro",
+              "value": {
+                "amount": -0.25,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "nicole.c2ShredPyro"
+              }
+            },
+            {
+              "target": "target.resistance.hydro",
+              "value": {
+                "amount": -0.25,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "nicole.c2ShredHydro"
+              }
+            },
+            {
+              "target": "target.resistance.electro",
+              "value": {
+                "amount": -0.25,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "nicole.c2ShredElectro"
+              }
+            },
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "amount": -0.25,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "nicole.c2ShredCryo"
+              }
+            },
+            {
+              "target": "target.resistance.anemo",
+              "value": {
+                "amount": -0.25,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "nicole.c2ShredAnemo"
+              }
+            },
+            {
+              "target": "target.resistance.geo",
+              "value": {
+                "amount": -0.25,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "nicole.c2ShredGeo"
+              }
+            },
+            {
+              "target": "target.resistance.dendro",
+              "value": {
+                "amount": -0.25,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "nicole.c2ShredDendro"
+              }
+            }
+          ]
         }
       ]
     },
@@ -1133,6 +1209,55 @@
         "kind": "boolean"
       },
       "label": "该角色当前拥有圣祝之引"
+    },
+    "nicole.c2ShredPyro": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "附近敌人受火元素角色圣祝之引减抗影响"
+    },
+    "nicole.c2ShredHydro": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "附近敌人受水元素角色圣祝之引减抗影响"
+    },
+    "nicole.c2ShredElectro": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "附近敌人受雷元素角色圣祝之引减抗影响"
+    },
+    "nicole.c2ShredCryo": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "附近敌人受冰元素角色圣祝之引减抗影响"
+    },
+    "nicole.c2ShredAnemo": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "附近敌人受风元素角色圣祝之引减抗影响"
+    },
+    "nicole.c2ShredGeo": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "附近敌人受岩元素角色圣祝之引减抗影响"
+    },
+    "nicole.c2ShredDendro": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "附近敌人受草元素角色圣祝之引减抗影响"
     }
   },
   "formulas": [

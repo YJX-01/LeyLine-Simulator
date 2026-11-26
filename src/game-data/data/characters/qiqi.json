@@ -1085,7 +1085,150 @@
       "id": "qiqi.passive2",
       "name": "玉签偶开",
       "description": "七七的普通攻击与重击命中敌人时，有50%的几率为敌人添加一枚度厄真符，持续6秒。该效果每30秒只能触发一次。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "qiqi.a4.stellar-conduct-superconduct",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "qiqi.heraldActive"
+              },
+              "term1": {
+                "call": "qiqi.radiance-stellar-conduct",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "transformative"
+            ],
+            "reactionIds": [
+              "superconduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.5
+            }
+          ]
+        },
+        {
+          "id": "qiqi.a4.stellar-conduct-stellar",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "qiqi.heraldActive"
+              },
+              "term1": {
+                "call": "qiqi.radiance-stellar-conduct",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-conduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": 0.5
+            }
+          ]
+        },
+        {
+          "id": "qiqi.a4.stellar-swirl-cryo-swirl",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "qiqi.heraldActive"
+              },
+              "term1": {
+                "call": "qiqi.radiance-stellar-swirl",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "transformative"
+            ],
+            "reactionIds": [
+              "swirl"
+            ],
+            "elements": [
+              "cryo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.5
+            }
+          ]
+        },
+        {
+          "id": "qiqi.a4.stellar-swirl-stellar",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "qiqi.heraldActive"
+              },
+              "term1": {
+                "call": "qiqi.radiance-stellar-swirl",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "qiqi.passive3",
@@ -1195,7 +1338,73 @@
       "rank": 6,
       "name": "起死回骸",
       "description": "施放仙法·救苦度厄时，复苏附近队伍中所有倒下的角色，并将其生命值恢复至50%。\n该效果每15分钟只能触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "qiqi.c6.dongxuan-stellar-flat",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "qiqi.c6DongxuanActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.flatBaseBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": 6
+                },
+                "output": "base"
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-conduct"
+                ],
+                "origins": [
+                  "talent",
+                  "triggered"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.flatBaseBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": 6
+                },
+                "output": "base"
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-swirl"
+                ],
+                "origins": [
+                  "talent",
+                  "triggered"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1280,6 +1489,50 @@
         "kind": "boolean"
       },
       "label": "受益角色在七七施放仙法·救苦度厄时处于附近"
+    },
+    "qiqi.heraldActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "寒病鬼差持续期间"
+    },
+    "qiqi.c6DongxuanActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "起死回骸洞玄层数生效中"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "qiqi.radiance-stellar-conduct",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "mode",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-conduct"
+      }
+    },
+    {
+      "id": "qiqi.radiance-stellar-swirl",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "mode",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-swirl"
+      }
+    }
+  ]
 }

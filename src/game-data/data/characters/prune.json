@@ -723,6 +723,61 @@
       "name": "改装！敲敲打打！",
       "description": "合成角色天赋素材时，有10%概率额外产生一份地区相同的其他随机天赋素材，等阶与合成后获得的素材相同。",
       "unlockAscension": null
+    },
+    {
+      "id": "prune.passive.hexerei-oath",
+      "name": "魔女的前夜礼·寻魔之誓",
+      "description": "魔导·秘仪生效时，队伍中处于「振铃鼓舞」效果影响下的魔导角色对敌人触发扩散反应后，其自身的攻击力额外提高30%，持续5秒。",
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "prune.hexerei.swirl-attack",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "prune.hexereiSecretRite"
+                  },
+                  "term1": {
+                    "fact": "prune.inspirationWindow",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "prune.recipientHexerei",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "prune.hexereiSwirlAttackWindow",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -994,6 +1049,27 @@
         "kind": "boolean"
       },
       "label": "战技或爆发产生的已转化狩灾誓锤命中后，本次弹跳已命中当前目标"
+    },
+    "prune.hexereiSecretRite": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "布伦妮的魔导·秘仪生效"
+    },
+    "prune.recipientHexerei": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受益者是魔导角色"
+    },
+    "prune.hexereiSwirlAttackWindow": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于振铃鼓舞的魔导角色触发扩散反应后的5秒内"
     }
   },
   "formulas": [

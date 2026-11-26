@@ -1363,6 +1363,48 @@
               }
             }
           ]
+        },
+        {
+          "id": "cyno.c2.stellar-conduct-damage",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "cyno.radiance-stellar-conduct",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "cyno.togetherWeRise",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-conduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": {
+                "call": "cyno.c2-stellar-conduct-bonus",
+                "inputs": {
+                  "stacks": {
+                    "fact": "cyno.c2StellarConductStacks",
+                    "of": "recipient"
+                  }
+                }
+              }
+            }
+          ]
         }
       ]
     },
@@ -1476,6 +1518,14 @@
         "kind": "boolean"
       },
       "label": "该角色正受赛诺偕日共升影响（含已转移的剩余时间）"
+    },
+    "cyno.c2StellarConductStacks": {
+      "scope": "recipient",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "偕日共升下普攻或重击叠层的星超导增伤层数"
     }
   },
   "formulas": [
@@ -1505,6 +1555,35 @@
         "threshold": 0,
         "output": "value",
         "revision": "1"
+      }
+    },
+    {
+      "id": "cyno.radiance-stellar-conduct",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "mode",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-conduct"
+      }
+    },
+    {
+      "id": "cyno.c2-stellar-conduct-bonus",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "stacks",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "maxInput": 5,
+        "output": "value"
       }
     }
   ]

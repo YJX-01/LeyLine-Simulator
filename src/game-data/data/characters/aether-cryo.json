@@ -515,6 +515,62 @@
             "fact": "aether-cryo.cryoFroststarInfusion",
             "element": "cryo"
           }
+        },
+        {
+          "id": "aether-cryo.normal.ice-condensation-1",
+          "name": "重击·冰凝-1",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param6"
+            },
+            {
+              "stat": "attack",
+              "ratio": 1.4
+            }
+          ],
+          "family": {
+            "by": "radiance",
+            "cases": {
+              "none": "ordinary",
+              "stellar-conduct": "stellar-conduct",
+              "stellar-swirl": "stellar-swirl"
+            }
+          },
+          "when": [
+            "aether-cryo.iceCondensationCharged"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "aether-cryo.normal.ice-condensation-2",
+          "name": "重击·冰凝-2",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            },
+            {
+              "stat": "attack",
+              "ratio": 1.4
+            }
+          ],
+          "family": {
+            "by": "radiance",
+            "cases": {
+              "none": "ordinary",
+              "stellar-conduct": "stellar-conduct",
+              "stellar-swirl": "stellar-swirl"
+            }
+          },
+          "when": [
+            "aether-cryo.iceCondensationCharged"
+          ],
+          "support": "hit-unavailable"
         }
       ]
     },
@@ -1365,6 +1421,13 @@
         "kind": "boolean"
       },
       "label": "旅行者造成星烁反应伤害，本次可回复能量（间隔至少0.5秒）"
+    },
+    "aether-cryo.iceCondensationCharged": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次重击消耗凝冰之刃触发重击·冰凝"
     }
   },
   "formulas": [

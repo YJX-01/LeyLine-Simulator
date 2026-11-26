@@ -1570,6 +1570,46 @@
               "value": 0.2
             }
           ]
+        },
+        {
+          "id": "illuga.lamp-oath-c6-full-moon",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "illuga.skill",
+                "illuga.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 20000,
+            "phase": "after"
+          },
+          "windowFact": "illuga.lampOath",
+          "recipient": "team",
+          "excludeOwner": true,
+          "activation": {
+            "ascension": 1
+          },
+          "condition": {
+            "fact": "fullMoonsign"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 30,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
         }
       ]
     }

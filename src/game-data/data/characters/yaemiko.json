@@ -578,6 +578,48 @@
             }
           ],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "yaemiko.a4.enhanced-bolt",
+          "name": "祓所之讬宣：强化落雷",
+          "element": "electro",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.8
+            }
+          ],
+          "when": [
+            "yaemiko.a4EnhancedBoltReady"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "yaemiko.a4.enhanced-bolt-stellar",
+          "name": "祓所之讬宣：落雷·星超导",
+          "element": "electro",
+          "category": "skill",
+          "family": "stellar-conduct",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 2
+            }
+          ],
+          "when": [
+            "yaemiko.a4EnhancedBoltReady",
+            {
+              "call": "yaemiko.radiance-stellar-conduct",
+              "inputs": {
+                "mode": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
         }
       ],
       "summon": {
@@ -740,6 +782,48 @@
             }
           ],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "yaemiko.a1.extra-thunder",
+          "name": "神篱之御荫：额外雷击",
+          "element": "electro",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.4
+            }
+          ],
+          "when": [
+            "yaemiko.a1ExtraStrikeReady"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "yaemiko.a1.extra-thunder-stellar",
+          "name": "神篱之御荫：额外雷击·星超导",
+          "element": "electro",
+          "category": "skill",
+          "family": "stellar-conduct",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.5
+            }
+          ],
+          "when": [
+            "yaemiko.a1ExtraStrikeReady",
+            {
+              "call": "yaemiko.radiance-stellar-conduct",
+              "inputs": {
+                "mode": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
         }
       ],
       "energyCapacity": {
@@ -798,7 +882,8 @@
               "yaemiko.skill.param1",
               "yaemiko.skill.param2",
               "yaemiko.skill.param3",
-              "yaemiko.skill.param4"
+              "yaemiko.skill.param4",
+              "yaemiko.a4.enhanced-bolt"
             ]
           },
           "modifiers": [
@@ -848,6 +933,49 @@
               }
             }
           ]
+        },
+        {
+          "id": "yaemiko.c1.stellar-conduct-bonus",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "yaemiko.radiance-stellar-conduct",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "yaemiko.c1StellarConductWindow"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-conduct"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -870,6 +998,175 @@
             {
               "target": "attribute.attackRangeBonus",
               "value": 0.6
+            }
+          ]
+        },
+        {
+          "id": "yaemiko.c2.stellar-conduct-mastery-owner",
+          "recipient": "owner",
+          "condition": {
+            "call": "yaemiko.radiance-stellar-conduct",
+            "inputs": {
+              "mode": {
+                "fact": "radiance"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 60,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "call": "yaemiko.c2.sakura-rank-1",
+                "inputs": {
+                  "rank": {
+                    "fact": "yaemiko.c2SakuraRank"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 90,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "call": "yaemiko.c2.sakura-rank-2",
+                "inputs": {
+                  "rank": {
+                    "fact": "yaemiko.c2SakuraRank"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 120,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "call": "yaemiko.c2.sakura-rank-3",
+                "inputs": {
+                  "rank": {
+                    "fact": "yaemiko.c2SakuraRank"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 200,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "call": "yaemiko.c2.sakura-rank-4",
+                "inputs": {
+                  "rank": {
+                    "fact": "yaemiko.c2SakuraRank"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        },
+        {
+          "id": "yaemiko.c2.stellar-conduct-mastery-team",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "yaemiko.radiance-stellar-conduct",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 60,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "call": "yaemiko.c2.sakura-rank-1",
+                "inputs": {
+                  "rank": {
+                    "fact": "yaemiko.c2SakuraRank"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 90,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "call": "yaemiko.c2.sakura-rank-2",
+                "inputs": {
+                  "rank": {
+                    "fact": "yaemiko.c2SakuraRank"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 120,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "call": "yaemiko.c2.sakura-rank-3",
+                "inputs": {
+                  "rank": {
+                    "fact": "yaemiko.c2SakuraRank"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 200,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "call": "yaemiko.c2.sakura-rank-4",
+                "inputs": {
+                  "rank": {
+                    "fact": "yaemiko.c2SakuraRank"
+                  }
+                },
+                "output": "active"
+              }
             }
           ]
         }
@@ -952,13 +1249,31 @@
               "yaemiko.skill.param1",
               "yaemiko.skill.param2",
               "yaemiko.skill.param3",
-              "yaemiko.skill.param4"
+              "yaemiko.skill.param4",
+              "yaemiko.a4.enhanced-bolt"
             ]
           },
           "modifiers": [
             {
               "target": "attribute.defenseIgnore",
               "value": 0.6
+            }
+          ]
+        },
+        {
+          "id": "yaemiko.c6.stellar-conduct-crit-damage",
+          "appliesTo": {
+            "families": [
+              "stellar-conduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 2,
+                "unit": "scalar"
+              }
             }
           ]
         }
@@ -1012,6 +1327,84 @@
         "revision": "1",
         "capacity": 3
       }
+    },
+    {
+      "id": "yaemiko.radiance-stellar-conduct",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "mode",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-conduct"
+      }
+    },
+    {
+      "id": "yaemiko.c2.sakura-rank-1",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "rank",
+        "values": [
+          "none",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "equals": "1"
+      }
+    },
+    {
+      "id": "yaemiko.c2.sakura-rank-2",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "rank",
+        "values": [
+          "none",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "equals": "2"
+      }
+    },
+    {
+      "id": "yaemiko.c2.sakura-rank-3",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "rank",
+        "values": [
+          "none",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "equals": "3"
+      }
+    },
+    {
+      "id": "yaemiko.c2.sakura-rank-4",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "rank",
+        "values": [
+          "none",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "equals": "4"
+      }
     }
   ],
   "facts": {
@@ -1044,6 +1437,41 @@
         "unit": "count"
       },
       "label": "本次爆发实际摧毁的杀生樱株数"
+    },
+    "yaemiko.c1StellarConductWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "野狐供真篇辉映·星超导增益持续中"
+    },
+    "yaemiko.c2SakuraRank": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "1",
+          "2",
+          "3",
+          "4"
+        ]
+      },
+      "label": "望月吼哕声在场杀生樱最高位阶"
+    },
+    "yaemiko.a1ExtraStrikeReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "神篱之御荫本次触发额外雷击"
+    },
+    "yaemiko.a4EnhancedBoltReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "祓所之讬宣本次触发强化落雷"
     }
   }
 }
