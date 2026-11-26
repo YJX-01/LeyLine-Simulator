@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { buildBehaviorLedger, reconcileBehaviors, reviewedNormalCurve } from '../../tools/lib/mona-behavior-ledger.mjs';
+import { buildBehaviorLedger, declaredFacets, reconcileBehaviors, reviewedNormalCurve } from '../../tools/lib/mona-behavior-ledger.mjs';
 import { readContentSource } from '../../tools/lib/content-source.mjs';
-import { leylineSingleHitInventory } from '../../tools/lib/leyline-single-hit-inventory.mjs';
-import { declaredFacets } from '../../tools/lib/mona-behavior-scope.mjs';
+import { leylineSingleHitInventory } from '../../tools/lib/mona-inventory-probes.mjs';
 
 const version = { mona: 'fixed', leyline: 'current' };
 test('independent category windows bind only to modifiers reading their stack count', async () => {

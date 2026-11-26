@@ -5,8 +5,7 @@ import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
-import { buildInventory } from '../../lib/audit-page-inventory.mjs';
-import { buildEvidence, summarizeMappings } from '../../lib/audit-page-evidence.mjs';
+import { buildEvidence, buildInventory, summarizeMappings } from '../../lib/audit-page-data.mjs';
 import { buildBehaviorLedger, reconcileBehaviors, facetNames, gapNames } from '../../lib/mona-behavior-ledger.mjs';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));

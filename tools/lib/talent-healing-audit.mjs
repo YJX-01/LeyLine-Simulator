@@ -3,6 +3,7 @@ import { loadContentSchema } from './load-content-schema.mjs';
 import { auditBuild } from './roster-evaluation.mjs';
 
 const read = name => readContentSource(new URL('../data/sources/catalog/genshin-db/' + name + '.json', import.meta.url));
+const textExcerpts = readContentSource(new URL('../data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/text-excerpts.json', import.meta.url));
 const characters = read('characters');
 const weapons = read('weapons');
 const curves = read('character-curves');
@@ -110,7 +111,7 @@ export async function auditTalentHealing(catalog, engine, onCase, entities = cat
     const character = await catalog.get('characters', id);
     if (!character.talents.some(t => t.heals?.length)) continue;
     const localSource = [...remainingDetails].some(key => key.startsWith(id + '.'))
-      ? readContentSource(new URL('../data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/' + id + '.json', import.meta.url)) : undefined;
+      ? textExcerpts.talents[id] : undefined;
     const castDetail = { barbara: 0, jean: 2, gaming: 1 }[id];
     const gearVariants = ['base','bonuses','swapped', ...(id === 'barbara' ? ['clam'] : []), ...(castDetail !== undefined ? ['cast','recorded-cast'] : []),
       ...(id === 'jahoda' ? ['hydro'] : []), ...(id === 'sayu' ? ['c1'] : [])];

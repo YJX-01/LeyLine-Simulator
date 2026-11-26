@@ -29,6 +29,7 @@ export async function numericAudit(read = readAuditJson) {
   const characterCurves = read('tools/data/sources/catalog/genshin-db/character-curves.json');
   const weaponCurves = read('tools/data/sources/catalog/genshin-db/weapon-curves.json');
   const talents = read(`tools/data/sources/genshin-db/${commit}/stats/talents.json`);
+  const textExcerpts = read(`tools/data/sources/genshin-db/${commit}/text-excerpts.json`);
   const supplement = read('tools/data/sources/character-text/base-and-manekin.json');
   const rawCharacters = new Map(read(`tools/data/sources/lunagc/${luna}/AvatarExcelConfigData.json`).map(row=>[row.id,row]));
   const proudSkills = new Map();
@@ -154,7 +155,7 @@ export async function numericAudit(read = readAuditJson) {
       weapon.refinements.forEach((rank, index) => check('effect-refinements', effect.value.values[index], sourceNumber(rank.values[valueIndex]), `${record.effect.id}/${index + 1}`));
     } else if (set) check('effect-static', effect.value.value.value, numbers(set.effect2Pc)[0], record.effect.id);
     else {
-      const talent = read(`tools/data/sources/genshin-db/${commit}/ChineseSimplified/talents/${record.entity}.json`);
+      const talent = textExcerpts.talents[record.entity];
       check('effect-static', effect.value.value.value, numbers(talent.passive2.description)[0], record.effect.id);
     }
   }
@@ -165,7 +166,7 @@ export async function numericAudit(read = readAuditJson) {
   }
   for (const [id, bindings] of [['hutao', [['half', 0], ['bonus', 1]]], ['nahida', [['threshold', 0], ['one-em', 1], ['bonus-rate', 2], ['crit-rate', 3], ['bonus-cap', 4], ['crit-cap', 5]]],
     ['neuvillette', [['threshold', 0], ['cap', 3]]]]) {
-    const source = read(`tools/data/sources/genshin-db/${commit}/ChineseSimplified/talents/${id}.json`), values = numbers(source.passive2.description);
+    const source = textExcerpts.talents[id], values = numbers(source.passive2.description);
     const formula = formulaDefinition(`${id}.ascension-four`);
     const selected = formula.template;
     const fields = id === 'hutao' ? { half: selected.threshold, bonus: selected.value }
@@ -175,8 +176,8 @@ export async function numericAudit(read = readAuditJson) {
     if (id === 'neuvillette') check('effect-formulas', selected.channels[0].rate, values[2] / values[1], `${id}/rate`);
   }
   const harbinger = formulaDefinition('harbingerofdawn.hp-condition');
-  const vesnaTalents = read(`tools/data/sources/genshin-db/${commit}/ChineseSimplified/talents/vesna.json`);
-  const vesnaConstellations = read(`tools/data/sources/genshin-db/${commit}/ChineseSimplified/constellations/vesna.json`);
+  const vesnaTalents = textExcerpts.talents.vesna;
+  const vesnaConstellations = textExcerpts.constellations.vesna;
   const discipline = numbers(vesnaTalents.passive1.description), composition = numbers(vesnaTalents.passive2.description), linchpin = numbers(vesnaTalents.passive3.description);
   const vesnaFormula = id => formulaDefinition('vesna.' + id).template;
   const linchpinFormula = formulaDefinition(effectDefinition('vesna.linchpin-base.effect').value.formula.id).template;

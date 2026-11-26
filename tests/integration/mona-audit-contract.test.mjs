@@ -1,22 +1,17 @@
-import { auditMonaCommonInputBranches } from '../../tools/lib/mona-common-input-batch.mjs';
-import { auditMonaOrdinaryBatch } from '../../tools/lib/mona-ordinary-batch.mjs';
-import { compareMonaOrdinaryScaling } from '../../tools/lib/mona-ordinary-scaling.mjs';
+import { auditMonaCommonInputBranches, auditMonaOrdinaryBatch, compareMonaOrdinaryScaling } from '../../tools/lib/mona-ordinary-audit.mjs';
 import { reviewLinks, singleHitCandidates } from '../../tools/lib/mona-single-hit-comparison.mjs';
-import { monaCalculationInventory } from '../../tools/lib/mona-calculation-inventory.mjs';
-import { reviewMonaEquipmentBatch } from '../../tools/lib/mona-equipment-damage.mjs';
-import { auditMonaEquipmentHits, equipmentEventInputSignature, scopedEquipmentEventEvidence } from '../../tools/lib/mona-equipment-hit-audit.mjs';
-import { leylineSingleHitInventory } from '../../tools/lib/leyline-single-hit-inventory.mjs';
+import { classifyMonaBuffDiagnostic, leylineSingleHitInventory, monaCalculationInventory, probeMonaSkills } from '../../tools/lib/mona-inventory-probes.mjs';
+import { auditMonaEquipmentHits, equipmentEventInputSignature, reviewMonaEquipmentBatch, scopedEquipmentEventEvidence } from '../../tools/lib/mona-equipment-audit.mjs';
 import { loadContentSchema } from '../../tools/lib/load-content-schema.mjs';
 import { createRuntimeCatalog } from '../../tools/lib/runtime-catalog.mjs';
-import { buildEvidence } from '../../tools/lib/audit-page-evidence.mjs';
+import { buildEvidence } from '../../tools/lib/audit-page-data.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { spawnSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { classifyMonaBuffDiagnostic, probeMonaSkills } from '../../tools/lib/mona-calculation-probes.mjs';
-import { classifyMonaDifferences } from '../../tools/lib/mona-difference-attribution.mjs';
+import { classifyMonaDifferences } from '../../tools/lib/mona-behavior-ledger.mjs';
 import { validateMonaTransformativeReviews } from '../../tools/lib/mona-transformative-audit.mjs';
 
 test('a focused audit preserves a full report at its output path', t => {
@@ -160,7 +155,7 @@ test('elemental ascension bonus enters common-input damage independently of atta
   const scope={characters:['ningguang','klee'],weapons:['apprenticesnotes'],sets:['gladiatorsfinale'],actions:[]};
   const engine=await loadContentSchema('/src/engine/src/index.ts'),catalog=await createRuntimeCatalog(scope),entities={};
   for(const group of ['characters','weapons','sets']) entities[group]=await Promise.all(scope[group].map(id=>catalog.get(group,id)));
-  const probes=await probeMonaSkills({characters:['Ningguang','Klee'],indices:[0],constellations:[0]});
+  const probes=await probeMonaSkills({characters:['Ningguang','Klee'],indices:[0,1],constellations:[0]});
   const inventory=(await monaCalculationInventory({probes})).rows, formal=(await leylineSingleHitInventory(entities)).rows;
   const candidates=singleHitCandidates(inventory.filter(r=>r.kind==='skill'),formal).candidates;
   const scaling=await compareMonaOrdinaryScaling(inventory,formal,candidates,probes.rows);
@@ -168,7 +163,7 @@ test('elemental ascension bonus enters common-input damage independently of atta
   const sourceMap=new Map(inventory.map(x=>[x.id,x])), targetMap=new Map(formal.map(x=>[x.id,x]));
   const reviews=reviewLinks(ordinary.mappings,sourceMap,targetMap,issues);
   const samples=[[1,0],[60,3],[90,6]].flatMap(([level,ascension])=>['501051','501054'].map(rollId=>({level,ascension,talentLevel:1,rollId})));
-  const targetIds=['character:ningguang:hit:/talents/0/hits/0','character:klee:hit:/talents/0/hits/0'];
+  const targetIds=['character:ningguang:hit:/talents/0/hits/1','character:klee:hit:/talents/0/hits/0'];
   const result=await auditMonaCommonInputBranches(inventory,formal,reviews,entities,engine,{targetIds,samples});
   assert.equal(result.summary.reviewed,2); assert.equal(reviewLinks(result.mappings,sourceMap,targetMap,issues).length,2); assert.deepEqual(issues,[]);
   for(const [id,bonuses] of [['ningguang',[0,.12,.24]],['klee',[0,.144,.288]]]) {

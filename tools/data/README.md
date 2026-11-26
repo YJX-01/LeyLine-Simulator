@@ -108,11 +108,11 @@ KQM 反应等级曲线收录1至100级，0级为 null。与固定 Mona 社区1�
 
 ### 圣遗物稀有度调查
 
-当前实物接受四星与五星，三星以下实物暂缓。schema、两条求值路径、Mona/Enka、展示、保存快照和手动表单均按实物星级取表；四星0–16、五星0–20。已采用来源及保守输入边界见[采用记录](sources/artifact-rarity/adoption.json)，套装合法部位见[固定来源字段](sources/artifact-rarity/set-slots.json)。
+当前实物接受四星与五星，三星以下实物暂缓。schema、两条求值路径、Mona/Enka、展示、保存快照和手动表单均按实物星级取表；四星0–16、五星0–20。套装合法部位见[固定来源字段](sources/artifact-rarity/set-slots.json)。
 
 #### 原始关联
 
-固定 LunaGC 提交为 `b0501c5d89767ead5f647869a2412521447f7682`。采用原件位于 sources/lunagc 同版本目录，候选关联原表位于 `.references/metadata/artifact-rarity/<提交>`。
+固定 LunaGC 提交为 `b0501c5d89767ead5f647869a2412521447f7682`。采用原件及按需摘录位于 `sources/lunagc` 同版本目录（其中 `ProudSkillExcelConfigData.json` 仅保留基础/奇偶形态引用的技能组，`AvatarExcelConfigData.json` 仅保留已收录角色基础面板字段），候选关联原表位于 `.references/metadata/artifact-rarity/<提交>`。`sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/` 保留全量参数表 `stats/talents.json` 与被校验引用的原文摘录 `text-excerpts.json`。
 
 | 来源 | 已取得内容 |
 | --- | --- |
@@ -180,7 +180,7 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 “行为缺口”视图按公式、命中、属性、触发、受益者、叠层、刷新与到期等来源声明拆分。点击某个期末缺口或本批变化的数字可查行为、缺少的证据与原始条目。菜单、配置与证据条款记录父项；纯治疗和护盾输出记录范围外理由。仍可能授予增益或伤害的条款留在待定范围。多个缺口可以属于同一行为，期末按唯一行为核算。运行场景数和映射数各自统计。
 
-玛拉妮的技能可分别选择撕咬和单枚鲨鲨飞弹。目标数填 1、2 或 3，3 表示三名及以上。飞弹还需确认锁定了另一名有标记的敌人。目标数回归用例在三层浪势下核对零命和一命、三档目标数及飞弹的触发条件。[天赋原文](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/mualani.json) · [多目标系数的独立实现](https://github.com/genshinsim/gcsim/blob/main/internal/characters/mualani/attack.go#L138-L160)
+玛拉妮的技能可分别选择撕咬和单枚鲨鲨飞弹。目标数填 1、2 或 3，3 表示三名及以上。飞弹还需确认锁定了另一名有标记的敌人。目标数回归用例在三层浪势下核对零命和一命、三档目标数及飞弹的触发条件。[天赋与命座原文摘录](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/text-excerpts.json) · [多目标系数的独立实现](https://github.com/genshinsim/gcsim/blob/main/internal/characters/mualani/attack.go#L138-L160)
 
 在时间轴的“战斗事件记录”选择“创造护盾”，由当前选中队员在光标处记一次造盾。祭星者之望、尘光七谕和碧落之珑从这个时刻计算效果持续时间。碧落之珑也接受其持有者施放爆发的记录。[武器精炼原文](sources/catalog/genshin-db/weapons.json)
 
@@ -205,17 +205,17 @@ pnpm exec playwright test --config tools/mona-audit/playwright.config.ts --worke
 
 报告的 `mona`、`leyline` 和 `links` 按条目标识互相引用。候选根据目录身份、天赋组、名称、伤害族或修饰属性提出。复核记录绑定正式字段与实体修订，附上适用条件和独立数值。`ordinaryScaling` 保留逐级倍率对照，`buffProbes` 保留启用、锁定和参数变化，`equipment` 保留精炼和触发场景，`transformative` 使用实际独立反应入口复算。默认配置下的结果、未触发的零值、版本差异和待核条件均可从条目追溯。[代表机制与复核记录](sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/single-hit-pilot.json)
 
-19 条秘境冲击可按输入的 `ElementLevelCo` 复核减伤前数值。固定系数表分别保留环境与角色两列。山脊守望 IV 的旧录像可辨 8419 白字，仍需改变目标抗性与防御的独立对照，以及关卡实际读取等级的证据。[秘境冲击系数与结算证据](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/scene-hit-settlement-evidence.json)
+19 条秘境冲击可按输入的 `ElementLevelCo` 复核减伤前数值。山脊守望 IV 的旧录像可辨 8419 白字，仍需改变目标抗性与防御的独立对照，以及关卡实际读取等级的证据。
 
-芬德尼尔之顶的严寒和平台、太山府的阴燃之火、菫色之庭的稚雷珠共 32 条说明指向空的关卡能力入口。已固定各阶的秘境与场景 ID。通用严寒、暖源与持续火伤配置仅作排查参考，当前场景仍需对应的区域或机关绑定。太山府 1.5 版测得开战后 3 秒首次附着、此后每 30 秒再次附着，当前版本的每跳伤害和间隔仍待证。菫色之庭 IV 的两份公开画面分别显示 50 级凯亚和 80 级班尼特触发后出现 74208 雷伤。凯亚画面发表于 2.0 期间，班尼特画面发表于 2022 年 7 月且游戏版本不明。两图可辨难度 IV 与 88 级敌人，日程和各伤害数字对应的敌方身份未能核定。[固定配置与实战来源](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/scene-environment-amount-facts.json)
+芬德尼尔之顶的严寒和平台、太山府的阴燃之火、菫色之庭的稚雷珠共 32 条说明指向空的关卡能力入口。太山府 1.5 版测得开战后 3 秒首次附着、此后每 30 秒再次附着，当前版本的每跳伤害和间隔仍待证。菫色之庭 IV 的两份公开画面分别显示 50 级凯亚和 80 级班尼特触发后出现 74208 雷伤，日程和各伤害数字对应的敌方身份未能核定。
 
-独立剧变伤害在精通与反应加成后计入固定加值，再应用适用的暴击和目标抗性。绽放等反应的暴击率和暴击伤害来自对应角色的明确授予。[固定版本计算依据](sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-modifiers.json)
+独立剧变伤害在精通与反应加成后计入固定加值，再应用适用的暴击和目标抗性。绽放等反应的暴击率和暴击伤害来自对应角色的明确授予。
 
-尼可的战技按施放时可用于转化的攻击力封顶。米提亚六命对稳态炉心归属的技能基数施加 1.15 倍率，固定反应加值另行计算。久岐忍的安心之所按施救者精通加算治疗。一心传名刀的祟灵治疗按实际武器版本取持有者攻击力。[尼可战技取值](sources/catalog/nicole-kenosis.json) · [米提亚稳态炉心](sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/mitya-steady-core.json) · [条件治疗依据](sources/catalog/conditional-healing-sources.json)
+尼可的战技按施放时可用于转化的攻击力封顶。米提亚六命对稳态炉心归属的技能基数施加 1.15 倍率，固定反应加值另行计算。久岐忍的安心之所按施救者精通加算治疗。一心传名刀的祟灵治疗按实际武器版本取持有者攻击力。[尼可战技取值](sources/catalog/nicole-kenosis.json)
 
-沃雅妮莎四命治疗严格低于 40% 生命的受益者时，固定值和生命倍率先乘 1.5，再应用常规治疗加成。芭芭拉六命的复苏治疗量含溢出并计入两项治疗加成，实际恢复至多回满。七七六命的复苏已核验施救者治疗加成，受益者自身常驻受治疗加成仍缺对照。塔利雅及哥伦比娅的复苏动作确认了生命上限比例，两项治疗加成交互仍需核验。[固定动作与复苏观测](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/character-healing-facts.json) · [月的守望复苏配置](sources/catalog/columbina-revival.json)
+沃雅妮莎四命治疗严格低于 40% 生命的受益者时，固定值和生命倍率先乘 1.5，再应用常规治疗加成。芭芭拉六命的复苏治疗量含溢出并计入两项治疗加成，实际恢复至多回满。七七六命的复苏已核验施救者治疗加成，受益者自身常驻受治疗加成仍缺对照。塔利雅及哥伦比娅的复苏动作确认了生命上限比例，两项治疗加成交互仍需核验。[月的守望复苏配置](sources/catalog/columbina-revival.json)
 
-法尔伽狂飙突进的常规重击中，右手使用 `param12`，左手使用 `param13`。左手始终造成风伤，右手按火、水、雷、冰的队伍优先级转化。队伍无对应元素且武器未获得外部元素时，右手为物理伤害。独立数值对照覆盖五种右手伤害、普攻左右手以及旧事件的出手侧输入。[固定配置](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/varka-charged-hands.json)
+法尔伽狂飙突进的常规重击中，右手使用 `param12`，左手使用 `param13`。左手始终造成风伤，右手按火、水、雷、冰的队伍优先级转化。队伍无对应元素且武器未获得外部元素时，右手为物理伤害。
 
 数值审计核对 TS 固定算法和 JSON 参数。防御与抗性常数采用 KQM 公式事实，增幅与激化采用 reaction-facts，模板常数通过 `describeCalculationTemplate` 核对。[KQM 公式事实](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/calculation-formula-facts.json)
 
@@ -225,7 +225,7 @@ pnpm exec playwright test --config tools/mona-audit/playwright.config.ts --worke
 
 菲林斯在 90 级零命、十级爆发、一级精一新手长枪、无圣遗物和敌方 10% 雷抗的条件下，攻击力为 374.8372196，固有天赋按攻击力的 8% 提供 29.986977568 元素精通。满辉且附近有雷暴云时，计入满辉的 20% 月感电增伤后，两段非暴击对照值约为 1677.438474、2439.910509。再计入月兆祝赐每 100 攻击力增加的 0.7% 月感电基础伤害，两段分别约为 1721.452121、2503.930358。关闭附近雷暴云条件仅排除额外一击。
 
-伊法的每点救援要义对扩散和感电提供 1.5% 增伤，对月感电提供 0.2%，对星扩散提供 0.24%。冒险家四件套的固定配置给出 1 秒间隔和每次 6% 生命上限，五秒全程的基础总量为 30%。这两项按实际受益人核验。装备回复与治疗加成的交互仍缺独立记录。[救援要义](sources/catalog/ifa-rescue-reactions.json) · [冒险家回复配置](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/equipment-healing-facts.json)
+伊法的每点救援要义对扩散和感电提供 1.5% 增伤，对月感电提供 0.2%，对星扩散提供 0.24%。冒险家四件套的固定配置给出 1 秒间隔和每次 6% 生命上限，五秒全程的基础总量为 30%。这两项按实际受益人核验。装备回复与治疗加成的交互仍缺独立记录。
 
 共同效果的[采用对应](sources/calculation-effects/retained-rules.json)关联现有内容规则、静态修饰与新的直接JSON定义。[固定来源字段](sources/calculation-effects/catalog-facts.json)保留原精炼字符串和套装效果文本；数值审计直接比较所有精炼档、静态数值、被动阈值/上限和持续时间。百分比按十进制指数解析为比例，避免转换时增加一次二进制除法舍入。绑定、属性、状态及捕获组件的独立计算检查见tests/unit/engine/calculation/context.test.ts；这些明确计算设定不声称为玩家配装或实录战斗。
 
@@ -237,7 +237,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 `tests/integration/calculation-coverage.test.mjs` 检查目录加载后保留原始数值、命中和解锁分支，并核对覆盖证书缺失时的报告。
 
-[星伤命中采用范围](sources/calculation-hits/stellar-bindings.json)登记薇斯纳的状态、单段规则、来源和C0–C6边界。tests/unit/engine/calculation/stellar-character.test.ts从固定成长与原天赋参数独立推导856组可用条件，另检查未知或不满足条件、层数越界、无突破门槛的星耀祝礼、队友元素身份和离线闭包。角色JSON的talents.hits集中维护34个命中及35个输出。
+tests/unit/engine/calculation/stellar-character.test.ts从固定成长与原天赋参数独立推导856组可用条件，另检查未知或不满足条件、层数越界、无突破门槛的星耀祝礼、队友元素身份和离线闭包。角色JSON的talents.hits集中维护34个命中及35个输出。
 
 [星伤装备采用](sources/calculation-effects/stellar-equipment.json)记录蝶变的两种风及血红之证的套装增益。获授权的Enka展柜原件覆盖薇斯纳90级C2、天赋8/10/10、蝶变精一及血红之证四件。`tests/integration/vesna-production-chain.test.ts`和`tests/browser/development/vesna-production-chain.spec.ts`核验同一真实配装经确认导入、显式补足战斗条件、同步和Worker复算、精炼比较、保存重开及角色参数重导入。展柜证明配装，战斗条件属于明确输入，游戏内伤害观测仍待补。原件缺失时跳过对应检查。
 
@@ -249,11 +249,11 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 月/星公式按 [KQM原图与符号记录](sources/kqm-web/2026-11-15/reaction-formulas.json)维护直接/反应分支、固定加值插入点及独立乘区，精通比例以小数存储。原图采集在忽略的审阅目录；纯公式组件的独立核算与实体绑定、事件及多人聚合的覆盖分别报告。系统验收按公式完整性、全目录覆盖度与软件检查执行，开发者后续手动进行实际游戏测试。
 
-同一展柜中瓦雷莎「大火山崩落」引用爆发的 param5，按下落攻击伤害匹配增益。类别依据为[瓦雷莎天赋 combat3 原文](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/varesa.json)。时间轴和独立计算器可用同一普通直伤求值器，保留所选输出相关的机制缺口。流浪乐章和追忆之注连四件套的效果范围按固定说明限定至装备者。薇斯纳与瓦雷莎、菲林斯、雷电将军组成的四人试配另核对三位非冰风队员提供的75点精通，数值对照见 `tests/helpers/recorded-vesna.ts`。
+同一展柜中瓦雷莎「大火山崩落」引用爆发的 param5，按下落攻击伤害匹配增益（参数见[全目录天赋参数表](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json)）。时间轴和独立计算器可用同一普通直伤求值器，保留所选输出相关的机制缺口。流浪乐章和追忆之注连四件套的效果范围按固定说明限定至装备者。薇斯纳与瓦雷莎、菲林斯、雷电将军组成的四人试配另核对三位非冰风队员提供的75点精通，数值对照见 `tests/helpers/recorded-vesna.ts`。
 
 #### 分项输入
 
-分项输入采用本地天赋、命座与 KQM 机制资料。绫人的浪闪按战技、命中、退场及到期更新。二命从三层起改变生命上限和后续瞬水剑伤害。突破四在后台且能量低于 40 点时每秒恢复 2 点。六命的两次追加瞬水剑各取 450% 攻击力，按各自记录的时刻结算。缺少时刻时保留已知小计。雷电将军的愿力参与首刀及后续刀击的独立倍率计算。优菈光降之剑可按给定层数求值。各角色尚待核验的条件列在逐项报告。[计数依据](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/count-scaling-facts.json)
+分项输入采用本地天赋、命座与 KQM 机制资料。绫人的浪闪按战技、命中、退场及到期更新。二命从三层起改变生命上限和后续瞬水剑伤害。突破四在后台且能量低于 40 点时每秒恢复 2 点。六命的两次追加瞬水剑各取 450% 攻击力，按各自记录的时刻结算。缺少时刻时保留已知小计。雷电将军的愿力参与首刀及后续刀击的独立倍率计算。优菈光降之剑可按给定层数求值。各角色尚待核验的条件列在逐项报告。
 
 #### 锁面板
 
@@ -265,7 +265,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 武器的固定数值贡献从各精炼档原文中按对应属性和条款取值。薙草之稻光精一将超出 100% 的充能效率乘 28%，攻击力加成上限为 80%。施放爆发后的 12 秒内另加 30% 充能，这部分充能同时参与武器和绝缘之旗印的换算。腐殖之剑在同一次授予中分别提高战技伤害与暴击率。[精炼条款对照](sources/catalog/equipment-modifier-checks.json)
 
-辰砂之纺锤取持有者命中时的防御力。战技在首次造成伤害时获得加值，随后 100 毫秒内的战技命中可共享加值，经过 1,500 毫秒可以再次触发。五个精炼档均核对场上、后台、其他队员、其他攻击类别与时间边界。旧版记录中刹那之花打盾后被动失效的情形缺少当前修订的复核。云堇的基础加值按受益队员分别扣除次数。[基础加值依据](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/base-damage-bonus-facts.json)
+辰砂之纺锤取持有者命中时的防御力。战技在首次造成伤害时获得加值，随后 100 毫秒内的战技命中可共享加值，经过 1,500 毫秒可以再次触发。五个精炼档均核对场上、后台、其他队员、其他攻击类别与时间边界。旧版记录中刹那之花打盾后被动失效的情形缺少当前修订的复核。云堇的基础加值按受益队员分别扣除次数。
 
 #### 反应、状态与入口
 
@@ -273,7 +273,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 战斗记录可指定敌方生命比例、元素附着、站场、护盾、生命变化、受伤、施予治疗和接受治疗。治疗事件可包含溢出量。受伤记录使用实际扣除的伤害值，生命消耗使用单独的生命变化记录。
 
-逐技能验收列出治疗量和护盾吸收量的每个详情字段。治疗的数值对照从本地天赋原始精度、角色和武器白值独立计算，并在施救者和受益人之间交换少女与游医二件套。施放治疗另核对受益人数、已有记录去重和海染泡沫伤害。擢升验收分别计算本人和队友的增幅，逐命座核对哥伦比娅与六命菲林斯、奈芙尔的月曜擢升相加；其他来源组合仍按各自证据核验。逐项报告记录原文字段、相关输入、验过的分支及待补证据。[战斗条款](sources/catalog/combat-lifecycle.json) · [六命擢升依据](sources/kqm-web/2026-11-22/constellation-elevation-facts.json) · [跨角色月曜擢升依据](sources/kqm-web/2026-11-25/columbina-cross-owner-elevation.json)
+逐技能验收列出治疗量和护盾吸收量的每个详情字段。治疗的数值对照从本地天赋原始精度、角色和武器白值独立计算，并在施救者和受益人之间交换少女与游医二件套。施放治疗另核对受益人数、已有记录去重和海染泡沫伤害。擢升验收分别计算本人和队友的增幅，满辉下哥伦比娅六个命座合计提供 20% 月曜擢升，与菲林斯六命自身的 45% 相加后为 65%，与奈芙尔六命自身的 15% 相加后为 35%；其他来源组合仍按各自证据核验。万叶的风物之诗咏和砂糖的小小的慧风读取触发时可转化的元素精通，圣显之钥按生命转化的精通和砂糖按自身精通分享的部分仍计入面板与扩散伤害但在下次转化分享时排除，迪奥娜六命等固定数值精通按触发时的受益条件计入。[战斗条款](sources/catalog/combat-lifecycle.json) · [哥伦比娅命座说明](https://keqingmains.com/q/columbina-quickguide/#Constellations)
 
 菲林斯爆发中间段和最终段、哥伦比娅月露涤荡单段及兹白月转时隙第四段额外伤害已绑定相应月伤模板。单段倍率与伤害类别来自固定天赋表。时间轴接入明确贡献者的月感电、月结晶与星扩散聚合，以及薇斯纳明确动作和初始状态求值。配装比较保留覆盖诊断。记录完整性、自动次数与冷却、完整修订类型和全目录机制仍待接入。
 

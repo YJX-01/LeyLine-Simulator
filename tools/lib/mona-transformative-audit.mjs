@@ -1,7 +1,7 @@
 import { readContentSource } from './content-source.mjs';
 import { assembleCalculationLibrary } from './calculation-library.mjs';
 import { auditBuild } from './roster-audit-settings.mjs';
-import { probeMonaSkills } from './mona-calculation-probes.mjs';
+import { probeMonaSkills } from './mona-inventory-probes.mjs';
 import { loadContentSchema } from './load-content-schema.mjs';
 
 const monaSource = '.references/mona-community/beta-tools/runtime-7106.mjs';
