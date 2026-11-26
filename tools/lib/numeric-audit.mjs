@@ -50,14 +50,17 @@ export async function numericAudit(read = readAuditJson) {
     });
     const talentKey = /^(aether|lumine)-/.test(character.id) ? `traveler${character.id.split('-')[1]}` : base;
     character.talents.forEach((talent,index)=>{
+      // genshin-db stores a single shared traveler<element> table using Lumine's normal-attack param7;
+      // verify elemental Aether normal attacks against Aether's adopted ProudSkill group (730) instead.
+      const sourceBinding = binding ?? (character.id.startsWith('aether-') && talent.category === 'normal' ? supplement.bindings.aether : undefined);
       let group;
-      if (binding) {
-        const depot = supplement.skillDepots[binding.skillDepotId];
+      if (sourceBinding) {
+        const depot = supplement.skillDepots[sourceBinding.skillDepotId];
         const skillId = talent.category==='burst' ? depot.energySkill : depot.skills[talent.category==='normal'?0:1];
         group = supplement.skills[skillId].proudSkillGroupId;
       }
       for (const parameter of talent.parameters) parameter.values.forEach((value,level)=>{
-        const expected = binding ? proudSkills.get(`${group}/${level+1}`).paramList[Number(parameter.id.replace('param',''))-1]
+        const expected = sourceBinding ? proudSkills.get(`${group}/${level+1}`).paramList[Number(parameter.id.replace('param',''))-1]
           : (talents[talentKey] ?? talents[base])[`combat${index+1}`][parameter.id][level];
         check('talent-parameters',value,expected,`${talent.id}/${parameter.id}/${level+1}`);
       });

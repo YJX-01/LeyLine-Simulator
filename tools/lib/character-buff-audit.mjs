@@ -34,7 +34,7 @@ export function auditCharacterBuffs(entities,engine) {
   }
   function read(b,team,key,{recipient='actor',category='normal',hitId,events=[],time=1,facts={},targetFacts,ownerInputs}={}) {
     const talent=b.character.talents[0],h=talent.hits[0],{setup,request}=auditHit(b.character,talent,h,b.level);
-    if (b.character.id === 'tighnari') setAuditDefaults(b.character, request.frame);
+    if (['tighnari', 'aether-anemo', 'lumine-anemo', 'albedo', 'yaemiko'].includes(b.character.id)) setAuditDefaults(b.character, request.frame);
     setup.events[0].timeMs=time;
     setup.events.push(...events);
     Object.assign(request.frame.factOverrides[0].facts,facts);
@@ -249,7 +249,7 @@ export function auditCharacterBuffs(entities,engine) {
         kukishinobu:1-health<=.5 ? .15 : 0,
         tighnari:category==='charged' ? .15 : 0,
         xingqiu:.2,
-        yaemiko:hit.name.startsWith('杀生樱伤害') ? .6 : 0,
+        yaemiko: hit.name.startsWith('杀生樱伤害') || hit.id === 'yaemiko.a4.enhanced-bolt' ? .6 : 0,
       }[id];
       const prior=read(b,before,stat,opts),current=read(b,after,stat,opts);
       record(id,field,{stat,health,recipient,hit:hit.id},current===null||prior===null?null:current-prior,recipient==='actor'?expected:0);
@@ -283,7 +283,7 @@ export function auditCharacterBuffs(entities,engine) {
             aratakiitto:hit.name.startsWith('荒泷逆袈裟')?panel*.35:0,
             thoma:hit.name==='炽火崩破伤害'?panel*.022:0,
             dehya:hit.id.startsWith('dehya.skill.')?panel*.036:hit.id.startsWith('dehya.burst.')?panel*.06:0,
-            yaemiko:hit.name.startsWith('杀生樱伤害')?panel*.0015:0,
+            yaemiko: hit.name.startsWith('杀生樱伤害') || hit.id === 'yaemiko.a4.enhanced-bolt' ? panel * .0015 : 0,
             tighnari:category==='charged'||hit.id.startsWith('tighnari.burst.')?Math.min(panel*.0006,.6):0,
             mona:panel*.2,
           }[id];

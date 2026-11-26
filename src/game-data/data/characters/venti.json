@@ -1164,6 +1164,59 @@
           ]
         }
       ]
+    },
+    {
+      "id": "venti.passive.hexerei-song-of-time",
+      "name": "魔女的前夜礼·颂时风若",
+      "description": "魔导·秘仪生效且元素爆发风神之诗创造的暴风之眼存在期间，附近的当前场上角色触发扩散反应后的4秒内，该角色造成的伤害提升50%。",
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "venti.hexerei.song-of-time",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "venti.hexerei"
+                  },
+                  "term1": {
+                    "fact": "venti.stormeye"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "venti.songOfTimeWindow",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -1586,6 +1639,13 @@
         "kind": "boolean"
       },
       "label": "分裂箭已命中目标"
+    },
+    "venti.songOfTimeWindow": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "暴风之眼存在期间触发扩散反应后的4秒内"
     }
   },
   "formulas": [

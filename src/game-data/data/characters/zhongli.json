@@ -771,6 +771,80 @@
               }
             }
           ]
+        },
+        {
+          "id": "zhongli.jade-shield-shred",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "zhongli.jadeShieldActive"
+              },
+              "term1": {
+                "fact": "zhongli.jadeShieldNear"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.pyro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.hydro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.electro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.anemo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.geo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.dendro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.physical",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
         }
       ],
       "heals": [
@@ -1201,6 +1275,13 @@
         "kind": "boolean"
       },
       "label": "当前场上角色由玉璋护盾庇护"
+    },
+    "zhongli.jadeShieldNear": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标处于玉璋护盾附近小范围内"
     },
     "zhongli.jadeShieldFortificationStacks": {
       "scope": "owner",

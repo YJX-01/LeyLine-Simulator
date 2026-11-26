@@ -895,6 +895,112 @@
       "name": "不稳定发现",
       "description": "合成角色与武器培养素材时，有10%概率获得2倍产出。",
       "unlockAscension": null
+    },
+    {
+      "id": "sucrose.passive.hexerei-secret-rite",
+      "name": "魔女的前夜礼·七重变幻",
+      "description": "魔导·秘仪生效时，召唤小型风灵（元素战技）后的15秒内，队伍中附近的角色的普通攻击、重击、下落攻击、元素战技和元素爆发造成的伤害提升5.71428%；召唤大型风灵（元素爆发）后的20秒内，队伍中附近的魔导角色的普通攻击、重击、下落攻击、元素战技和元素爆发造成的伤害提升7.14285%。",
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "sucrose.hexerei.small-spirit-damage",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "sucrose.skill"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "windowFact": "sucrose.hexereiSkillWindow",
+          "condition": {
+            "fact": "sucrose.hexereiSecretRite"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge",
+              "skill",
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.0571428,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sucrose.hexerei.large-spirit-damage",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "sucrose.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 20000,
+            "phase": "after"
+          },
+          "windowFact": "sucrose.hexereiBurstWindow",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "sucrose.hexereiSecretRite"
+              },
+              "term1": {
+                "fact": "sucrose.recipientHexerei",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge",
+              "skill",
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.0714285,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -1032,6 +1138,170 @@
               }
             }
           ]
+        },
+        {
+          "id": "sucrose.c6.hexerei-spirit-bonus-pyro",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "sucrose.hexereiSecretRite"
+                  },
+                  "term1": {
+                    "fact": "sucrose.recipientHexerei",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "sucrose.spirit-absorbed-pyro",
+                "inputs": {
+                  "value": {
+                    "fact": "sucrose.spiritAbsorbedElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "amount": 0.0857142,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sucrose.c6.hexerei-spirit-bonus-hydro",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "sucrose.hexereiSecretRite"
+                  },
+                  "term1": {
+                    "fact": "sucrose.recipientHexerei",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "sucrose.spirit-absorbed-hydro",
+                "inputs": {
+                  "value": {
+                    "fact": "sucrose.spiritAbsorbedElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": {
+                "amount": 0.0857142,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sucrose.c6.hexerei-spirit-bonus-cryo",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "sucrose.hexereiSecretRite"
+                  },
+                  "term1": {
+                    "fact": "sucrose.recipientHexerei",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "sucrose.spirit-absorbed-cryo",
+                "inputs": {
+                  "value": {
+                    "fact": "sucrose.spiritAbsorbedElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": {
+                "amount": 0.0857142,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sucrose.c6.hexerei-spirit-bonus-electro",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "sucrose.hexereiSecretRite"
+                  },
+                  "term1": {
+                    "fact": "sucrose.recipientHexerei",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "sucrose.spirit-absorbed-electro",
+                "inputs": {
+                  "value": {
+                    "fact": "sucrose.spiritAbsorbedElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "amount": 0.0857142,
+                "unit": "scalar"
+              }
+            }
+          ]
         }
       ]
     }
@@ -1077,6 +1347,34 @@
         ]
       },
       "label": "当前风灵产生的元素转化类型"
+    },
+    "sucrose.hexereiSecretRite": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "砂糖的魔导·秘仪生效"
+    },
+    "sucrose.hexereiSkillWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "召唤小型风灵后的15秒内"
+    },
+    "sucrose.hexereiBurstWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "召唤大型风灵后的20秒内"
+    },
+    "sucrose.recipientHexerei": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受益者是魔导角色"
     }
   },
   "formulas": [

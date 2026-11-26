@@ -225,6 +225,14 @@ function trialFacts(row, trial, healer, receiver) {
     actorDefaults.standardMovement = false;
     actorDefaults.kineticMarkerActive = false;
   }
+  if (row.id === 'yumemizukimizuki') actorDefaults.enhancedMasteryActive = false;
+  if (/^(aether|lumine)-/.test(row.id)) {
+    for (const key of [
+      ':traveler.enhancedResonance.anemo', ':traveler.enhancedResonance.geo', ':traveler.enhancedResonance.electro',
+      ':traveler.enhancedResonance.dendro', ':traveler.enhancedResonance.hydro', ':traveler.enhancedResonance.pyro',
+      ':traveler.enhancedResonance.cryo', ':traveler.enhancedAttribute.first', ':traveler.enhancedAttribute.second',
+    ]) actorDefaults[key] = false;
+  }
   const factRows = new Map([[healer, { ...actorDefaults, ...when.owner }]]);
   if (receiver === healer) factRows.set(healer, { ...receiverDefaults, ...factRows.get(healer), ...when.recipient });
   else factRows.set(receiver, { ...receiverDefaults, ...when.recipient });

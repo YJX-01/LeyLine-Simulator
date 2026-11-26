@@ -126,12 +126,17 @@ export function auditRemainingAttributeDetails(entities, engine) {
     }));
     const dealerFacts = convertFacts(recipientValues, character.metadata.facts);
     const peerFacts = convertFacts(peerValues, peerBuild.character.metadata.facts);
-    Object.assign(frame.factOverrides.find(row => row.subject.kind === 'actor').facts, { onField: bool(ownerOnField) });
+    const actorOverride = frame.factOverrides.find(row => row.subject.kind === 'actor').facts;
+    Object.assign(actorOverride, { onField: bool(ownerOnField) });
+    const peerDefaults = Object.fromEntries(Object.entries(character.metadata.facts ?? {})
+      .filter(([, field]) => field.scope === 'recipient')
+      .map(([key, field]) => [key, field.type.kind === 'quantity' ? number(field.type.unit, 0)
+        : field.type.kind === 'boolean' ? bool(false) : actorOverride[key]]));
     const currentRecipientFacts = { ...dealerFacts, onField: bool(onField), hpRatio: number('scalar', probe.hpRatio ?? 1) };
     if (recipient === 'actor') {
-      Object.assign(frame.factOverrides.find(row => row.subject.kind === 'actor').facts, currentRecipientFacts);
-      if (Object.keys(peerFacts).length) frame.factOverrides.push({ subject: actor('peer'), facts: peerFacts });
-    } else frame.factOverrides.push({ subject: actor(recipient), facts: { ...peerFacts, ...currentRecipientFacts } });
+      Object.assign(actorOverride, currentRecipientFacts);
+      if (Object.keys(peerFacts).length) frame.factOverrides.push({ subject: actor('peer'), facts: { ...peerDefaults, ...peerFacts } });
+    } else frame.factOverrides.push({ subject: actor(recipient), facts: { ...peerDefaults, ...peerFacts, ...currentRecipientFacts } });
     if (otherTarget) frame.factOverrides.push({ subject: { kind: 'target', id: targetId },
       facts: Object.fromEntries(Object.entries(targetFacts).map(([key, value]) => [key, bool(value)])) });
     if (application) frame.applications.push({ instanceId: engine.calculationEffectInstanceId('actor',

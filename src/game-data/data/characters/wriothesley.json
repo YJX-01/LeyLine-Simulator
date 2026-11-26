@@ -474,6 +474,245 @@
             }
           ],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "wriothesley.normal.stellar-hit3",
+          "name": "辉映·星超导：第三段斥逐拳",
+          "element": "cryo",
+          "category": "normal",
+          "family": "stellar-conduct",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "skill": "wriothesley.normal",
+                        "parameter": "param3"
+                      },
+                      "rate": {
+                        "skill": "wriothesley.skill",
+                        "parameter": "param1"
+                      }
+                    }
+                  },
+                  "rate": 0.4
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            {
+              "call": "wriothesley.radiance-stellar-conduct",
+              "inputs": {
+                "mode": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "wriothesley.normal.stellar-hit5",
+          "name": "辉映·星超导：第五段斥逐拳",
+          "element": "cryo",
+          "category": "normal",
+          "family": "stellar-conduct",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "skill": "wriothesley.normal",
+                        "parameter": "param6"
+                      },
+                      "rate": {
+                        "skill": "wriothesley.skill",
+                        "parameter": "param1"
+                      }
+                    }
+                  },
+                  "rate": 0.6
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            {
+              "call": "wriothesley.radiance-stellar-conduct",
+              "inputs": {
+                "mode": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "wriothesley.normal.celestial-vaulting-fist",
+          "name": "天辉·凌跃拳",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            }
+          ],
+          "when": [
+            "wriothesley.celestialVaultingFist"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "wriothesley.normal.celestial-vaulting-fist-stellar",
+          "name": "辉映·星超导：天辉·凌跃拳",
+          "element": "cryo",
+          "category": "charged",
+          "family": "stellar-conduct",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            }
+          ],
+          "when": [
+            "wriothesley.celestialVaultingFist",
+            {
+              "call": "wriothesley.radiance-stellar-conduct",
+              "inputs": {
+                "mode": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "wriothesley.normal.stellar-hit5-icicle",
+          "name": "辉映·星超导：第五段冰锥",
+          "element": "cryo",
+          "category": "charged",
+          "family": "stellar-conduct",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "wriothesley.normal",
+                    "parameter": "param7"
+                  },
+                  "rate": 0.2
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            "wriothesley.stellarIcicleReady",
+            {
+              "call": "wriothesley.radiance-stellar-conduct",
+              "inputs": {
+                "mode": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "wriothesley.normal.celestial-icicle-stellar",
+          "name": "辉映·星超导：天辉冰锥",
+          "element": "cryo",
+          "category": "charged",
+          "family": "stellar-conduct",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "wriothesley.normal",
+                    "parameter": "param7"
+                  },
+                  "rate": 0.2
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            "wriothesley.stellarIcicleReady",
+            {
+              "call": "wriothesley.radiance-stellar-conduct",
+              "inputs": {
+                "mode": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        }
+      ],
+      "buffs": [
+        {
+          "id": "wriothesley.radiance.stellar-conduct-bonus",
+          "condition": {
+            "call": "wriothesley.radiance-stellar-conduct",
+            "inputs": {
+              "mode": {
+                "fact": "radiance"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-conduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": 0.3
+            }
+          ]
         }
       ],
       "heals": [
@@ -1133,7 +1372,11 @@
           "appliesTo": {
             "hitIds": [
               "wriothesley.a0.rebuke-vaulting-fist",
-              "wriothesley.c6.gracious-icicle"
+              "wriothesley.c6.gracious-icicle",
+              "wriothesley.normal.stellar-hit3",
+              "wriothesley.normal.stellar-hit5",
+              "wriothesley.normal.celestial-vaulting-fist",
+              "wriothesley.normal.celestial-vaulting-fist-stellar"
             ]
           },
           "modifiers": [
@@ -1233,9 +1476,37 @@
         ]
       },
       "label": "溢出治疗触发后当前生效的攻速效果（站场触发4秒／后台触发6秒）"
+    },
+    "wriothesley.celestialVaultingFist": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次重击为天辉·凌跃拳"
+    },
+    "wriothesley.stellarIcicleReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "辉映·星超导本次生成额外星超导冰锥"
     }
   },
   "formulas": [
+    {
+      "id": "wriothesley.radiance-stellar-conduct",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "mode",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-conduct"
+      }
+    },
     {
       "id": "wriothesley.outside-stance",
       "template": {

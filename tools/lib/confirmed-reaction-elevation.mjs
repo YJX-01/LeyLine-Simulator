@@ -257,12 +257,13 @@ export function auditConfirmedReactionElevation(entities, engine) {
       }
       const splendorAtk = amount(description(clause('odette', 'constellations', 'c2')), /攻击力提升(\d+)%/) / 100;
       const attack = atk('odette', 'dullblade', 1) * (1 + 2 * splendorAtk);
+      const splendorReactionBonus = 1 + 2 * 0.15;
       probe({ ascension: 1, hitId: 'odette.skill.param3', dealerFacts: { radiance: 'stellar-swirl', 'odette.splendorStacks': 2 } }, 1 + source.personalWithSplendor,
-        6, { damage: attack * rates.odette.combat2.param4[3] * blessing(attack) * (1 - resistances.cryo),
+        6, { damage: attack * rates.odette.combat2.param4[3] * blessing(attack) * splendorReactionBonus * (1 - resistances.cryo),
           sources: [growthRoot + 'characters.json#odette', growthRoot + 'character-curves.json', growthRoot + 'weapons.json#dullblade',
-            talents + '#odette/combat2/param4', clause('odette', 'constellations', 'c2')] });
+            talents + '#odette/combat2/param4', clause('odette', 'constellations', 'c2'), clause('odette', 'talents', 'passive1')] });
       probe({ ascension: 1, hitId: 'odette.normal.param1', dealerFacts: { 'odette.splendorStacks': 2 } }, 1);
-      const one = levelMultiplier[20] * 2 * blessing(attack) * (1 - resistances.cryo) * math.rankedAggregation.weights[0];
+      const one = levelMultiplier[20] * 2 * blessing(attack) * splendorReactionBonus * (1 - resistances.cryo) * math.rankedAggregation.weights[0];
       reaction({ family: 'stellar-swirl', element: 'cryo', coefficient: 2, ascension: 1, facts: [
         { subject: { kind: 'actor', id: 'actor' }, values: { 'odette.splendorStacks': number('count', 2), 'odette.swanDream': bool(false) } },
         { subject: { kind: 'target', id: 'target' }, values: { 'odette.mirrorNearTarget': bool(false) } },

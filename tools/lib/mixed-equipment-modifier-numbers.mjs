@@ -738,7 +738,10 @@ export function mixedEquipmentModifierNumbers(entities, results, engine) {
       return cases;
     });
   }
-  const hpChange = (id, time) => event(id, 'state-change', time, { facts: { hpRatioChange: number('scalar', -.1) } });
+  const hpChange = (id, time) => event(id, 'state-change', time, {
+    facts: { hpRatioChange: number('scalar', -.1) },
+    subjectFacts: [{ subject: { kind: 'actor', id: 'actor' }, values: { onField: bool(true) } }],
+  });
   const talentCast = (id, time, holder) => event(id, 'action', time, { category: 'skill', skillId: holder + '.skill' });
   const talentHit = category => (id, time) => event(id, 'hit', time, { category });
   const react = reactionId => (id, time) => event(id, 'reaction', time, { reactionId, targetIds: ['enemy'] });

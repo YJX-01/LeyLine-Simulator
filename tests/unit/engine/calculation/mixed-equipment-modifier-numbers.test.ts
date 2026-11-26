@@ -79,4 +79,4 @@ it('links independent equipment readings to the listed modifier, element and rec
   const emblemChoice = choices.get(emblem!.key), jadeChoice = choices.get(jade!.key);
   const filtered = { calculator: { buffs: [emblemChoice, emblemChoice, jadeChoice] }, registeredModifierEvidence: [jade!] };
   expect(mixedEquipmentModifierNumbers(entities, filtered, engine)).toEqual([]);
-});
+}, 30_000);

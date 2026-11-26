@@ -80,7 +80,14 @@ function recoverySamples(id, healId, owner, recipient, active, hydro, constellat
   return [[.699,true], [.7,true], [.701,true], [.6,false], [null,true], [.6,null]]
     .map(([hp, picked]) => sample(selfCollected !== same || picked === false || hp !== null && hp > .7 ? false
       : picked === null || hp === null ? null : true,
-    [byActor(recipient, { 'yumemizukimizuki.snackHealCollector': flag(picked), hpRatio: ratio(hp) })], selfCollected ? 2 : 1));
+    [
+      ...(same ? [] : [byActor(owner, { 'yumemizukimizuki.enhancedMasteryActive': flag(false) })]),
+      byActor(recipient, {
+        ...(same ? { 'yumemizukimizuki.enhancedMasteryActive': flag(false) } : {}),
+        'yumemizukimizuki.snackHealCollector': flag(picked),
+        hpRatio: ratio(hp),
+      }),
+    ], selfCollected ? 2 : 1));
 }
 
 function recoveryAmount(id, slot, detail, healId, weaponId, outgoing, incoming, coefficient, level, ascension, source) {

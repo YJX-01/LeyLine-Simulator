@@ -32,6 +32,21 @@ export function auditHit(character, talent, hit, level = 1) {
     const capture = { id: slot.id, kind: 'capture', actorId: 'actor', targetIds: [], timeMs: 0, order: 0, skillId: slot.sourceSkillId, sourceEventIds: [], facts: {} };
     if (character.id === 'hutao') capture.subjectFacts = [{ subject, values: { onField: bool(true), 'hutao.paramitaPapilio': bool(false) } }];
     if (character.id === 'yaoyao') capture.subjectFacts = [{ subject, values: { onField: bool(true), 'yaoyao.radishBurstArea': bool(false) } }];
+    if (character.id === 'fischl') capture.subjectFacts = [{ subject, values: {
+      onField: bool(true), 'fischl.hexereiSecretRite': bool(false),
+      'fischl.hexereiOverloadActive': bool(false), 'fischl.hexereiCoordinationActive': bool(false),
+    } }];
+    if (character.id === 'kujousara') capture.subjectFacts = [{ subject, values: {
+      onField: bool(true), 'kujousara.tenguJuuraiRecipient': bool(false),
+    } }];
+    if (character.id === 'aether-geo' || character.id === 'lumine-geo') capture.subjectFacts = [{ subject, values: {
+      onField: bool(true),
+      'traveler.enhancedResonance.anemo': bool(false), 'traveler.enhancedResonance.geo': bool(false),
+      'traveler.enhancedResonance.electro': bool(false), 'traveler.enhancedResonance.dendro': bool(false),
+      'traveler.enhancedResonance.hydro': bool(false), 'traveler.enhancedResonance.pyro': bool(false),
+      'traveler.enhancedResonance.cryo': bool(false), 'traveler.enhancedAttribute.first': bool(false),
+      'traveler.enhancedAttribute.second': bool(false),
+    } }];
     if (hit.id === 'wanderer.a1.descent-arrow') capture.subjectFacts = [{ subject, values: {
       'wanderer.windfavored': bool(true), 'wanderer.jadeClaimed-pyro': bool(false), 'wanderer.jadeClaimed-cryo': bool(false),
     } }];

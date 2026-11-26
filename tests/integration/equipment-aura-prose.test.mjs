@@ -236,7 +236,7 @@ test('project shield observations reach both weapon windows and expire', async (
   }
 });
 
-test('Hymn single-layer bonus uses holder HP and leaves unconfirmed multi-layer bonus unknown', async () => {
+test('Hymn scales single and multi-layer attack bonus from holder HP up to three stacks', async () => {
   const catalog = await createRuntimeCatalog(), engine = await loadContentSchema('/src/engine/src/index.ts');
   const [owner, peer, weapon, sword, set] = await Promise.all([
     catalog.get('characters', 'neuvillette'), catalog.get('characters', 'kaeya'),
@@ -254,24 +254,26 @@ test('Hymn single-layer bonus uses holder HP and leaves unconfirmed multi-layer 
     skillId: talent.id, hitId: hit.id, category: hit.category, element: hit.element, origin: hit.origin, family: 'ordinary', reactionId: null } });
   const context = engine.createStructuredCombatContext(prepared.team, setup);
   const binding = key => ({ kind: 'attribute', actor: { role: 'owner' }, key: { namespace: 'builtin', id: 'attribute.' + key, revision: '1' }, at: { kind: 'current', phase: 'same' } });
-  function read(layers, reaction, observed) {
+  function read(layers, reaction) {
     request.frame.factOverrides = [{ subject: { kind: 'actor', id: 'actor' }, facts: {
-      'hymnofthemaelstrom.meadLayers': number('count', layers), 'hymnofthemaelstrom.reactionBuff': bool(reaction),
-      ...(observed === undefined ? {} : { 'hymnofthemaelstrom.multilayerAttackBonus': number('scalar', observed) }), onField: bool(false) } },
+      'hymnofthemaelstrom.meadLayers': number('count', layers), 'hymnofthemaelstrom.reactionBuff': bool(reaction), onField: bool(false) } },
     { subject: { kind: 'actor', id: 'peer' }, facts: { onField: bool(true) } }];
     const attack = engine.evaluateCombatBindings(prepared.team.program, context, { attack: binding('attackPercent') }, request.frame).outputs.attack;
     const hp = engine.evaluateCombatBindings(prepared.team.program, context, { hp: binding('hp') },
       { ...request.frame, ownerId: 'actor', recipientId: 'actor' }).outputs.hp;
     return { attack, hp };
   }
-  const zero = read(0, false), single = read(1, false), reacted = read(1, true), multi = read(2, false), confirmed = read(2, false, .1);
-  for (const result of [zero, single, reacted, confirmed]) assert.equal(result.attack.state, 'known');
-  assert.equal(multi.attack.state, 'unknown');
-  // R1 source: 0.4% per 1000 HP above 40000, capped at 8%; reaction increases this by 75%.
+  const zero = read(0, false), single = read(1, false), reacted = read(1, true);
+  const two = read(2, false), twoReacted = read(2, true), three = read(3, false), capped = read(4, false);
+  for (const result of [zero, single, reacted, two, twoReacted, three, capped]) assert.equal(result.attack.state, 'known');
+  // R1 source: 0.4% per 1000 HP above 40000, capped at 8% per stack, up to 3 stacks; reaction increases this by 75%.
   const expected = hp => Math.min(.08, Math.max(0, hp - 40000) * .004 / 1000);
   assert.ok(Math.abs(single.attack.value.value - zero.attack.value.value - expected(single.hp.value.value)) < 1e-9);
   assert.ok(Math.abs(reacted.attack.value.value - zero.attack.value.value - expected(reacted.hp.value.value) * 1.75) < 1e-9);
-  assert.ok(Math.abs(confirmed.attack.value.value - zero.attack.value.value - .1) < 1e-9);
+  assert.ok(Math.abs(two.attack.value.value - zero.attack.value.value - expected(two.hp.value.value) * 2) < 1e-9);
+  assert.ok(Math.abs(twoReacted.attack.value.value - zero.attack.value.value - expected(twoReacted.hp.value.value) * 2 * 1.75) < 1e-9);
+  assert.ok(Math.abs(three.attack.value.value - zero.attack.value.value - expected(three.hp.value.value) * 3) < 1e-9);
+  assert.ok(Math.abs(capped.attack.value.value - zero.attack.value.value - expected(capped.hp.value.value) * 3) < 1e-9);
 });
 
 test('Skyward Pride manual confirmed blade is independent physical damage', async () => {

@@ -154,7 +154,8 @@ function referenceDamage(build, talent, hit, setup, request, party, withBuffs = 
   if (c6 && character.id === 'flins' && family === 'lunar-charged') elevation = valueOfFact('fullMoonsign') ? 1.45 : 1.35;
   if (c6 && character.id === 'mitya' && family === 'stellar-conduct') elevation = 1.2;
   if (c6 && character.id === 'odette' && ['stellar-conduct', 'stellar-swirl'].includes(family)) elevation = valueOfFact('odette.splendorStacks') > 0 ? 1.45 : 1.2;
-  const lunarBonus = withBuffs && character.id === 'zibai' && family === 'lunar-crystallize' && build.constellation >= 2 && valueOfFact('zibai.lunarPhase') ? .3 : 0;
+  const lunarBonus = (withBuffs && character.id === 'zibai' && family === 'lunar-crystallize' && build.constellation >= 2 && valueOfFact('zibai.lunarPhase') ? .3 : 0)
+    + (withBuffs && character.id === 'wriothesley' && family === 'stellar-conduct' && valueOfFact('radiance') === 'stellar-conduct' ? .3 : 0);
   return (base * steadyCore * (1 + passive) * coefficient * (1 + 6 * mastery / (2000 + mastery) + lunarBonus) + flat) * resistanceFactor * elevation * strideFactor;
 }
 
@@ -517,6 +518,10 @@ export function auditReactionBlessings(entities, engine) {
     const prepared = engine.prepareStructuredBuilds([{ id: 'actor', build: recipient }, { id: 'source', build: owner }]);
     if (!prepared.ok) throw new Error(id + ': ' + JSON.stringify(prepared.diagnostics));
     const t = receiving.talents[0], h = t.hits[0], { setup, request } = auditHit(receiving, t, h);
+    const sourceFacts = Object.fromEntries(Object.entries(c.metadata.facts ?? {})
+      .filter(([, field]) => field.scope === 'owner' && field.type.kind === 'boolean')
+      .map(([key]) => [key, bool(false)]));
+    if (Object.keys(sourceFacts).length) request.frame.factOverrides.push({ subject: { kind: 'actor', id: 'source' }, facts: sourceFacts });
     const context = engine.createStructuredCombatContext(prepared.team, setup);
     const basis = source.stat === 'attack' ? c.attributes.base.attack + weapon.baseAttack
       : source.stat === 'elementalMastery' ? weapon.baseStat * weapon.statCurve[1] : c.attributes.base[source.stat];

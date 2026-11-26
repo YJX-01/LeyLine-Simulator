@@ -556,6 +556,100 @@
             }
           ],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "yumemizukimizuki.skill.enhanced-continuous",
+          "name": "廓然梦生：强化持续攻击",
+          "element": "anemo",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            },
+            {
+              "stat": "elementalMastery",
+              "ratio": 10
+            }
+          ],
+          "when": [
+            "yumemizukimizuki.enhancedContinuous"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "yumemizukimizuki.skill.enhanced-stellar-swirl",
+          "name": "廓然梦生：额外星扩散伤害",
+          "element": "anemo",
+          "category": "skill",
+          "family": "stellar-swirl",
+          "base": [
+            {
+              "stat": "elementalMastery",
+              "ratio": 10
+            }
+          ],
+          "when": [
+            "yumemizukimizuki.enhancedContinuous",
+            {
+              "call": "yumemizukimizuki.radiance-stellar-swirl",
+              "inputs": {
+                "mode": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "yumemizukimizuki.c1.night-anemo",
+          "name": "一命：二十三夜待额外风伤",
+          "element": "anemo",
+          "category": "skill",
+          "selection": {
+            "minConstellation": 1
+          },
+          "base": [
+            {
+              "stat": "elementalMastery",
+              "ratio": 10
+            }
+          ],
+          "when": [
+            "yumemizukimizuki.c1Night"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "yumemizukimizuki.c1.night-stellar-swirl",
+          "name": "一命：二十三夜待额外星扩散伤害",
+          "element": "anemo",
+          "category": "skill",
+          "family": "stellar-swirl",
+          "selection": {
+            "minConstellation": 1
+          },
+          "base": [
+            {
+              "stat": "elementalMastery",
+              "ratio": 4
+            }
+          ],
+          "when": [
+            "yumemizukimizuki.c1Night",
+            {
+              "call": "yumemizukimizuki.radiance-stellar-swirl",
+              "inputs": {
+                "mode": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
         }
       ],
       "cooldownParameter": "param3",
@@ -630,6 +724,27 @@
                 "families": [
                   "stellar-swirl"
                 ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "yumemizukimizuki.enhanced-mastery",
+          "condition": {
+            "fact": "yumemizukimizuki.enhancedMasteryActive"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "nonConvertible": true,
+              "value": {
+                "call": "yumemizukimizuki.enhanced-mastery-bonus",
+                "inputs": {
+                  "basis": {
+                    "stat": "elementalMastery",
+                    "excludeNonConvertible": true
+                  }
+                }
               }
             }
           ]
@@ -1123,6 +1238,9 @@
           "appliesTo": {
             "families": [
               "stellar-swirl"
+            ],
+            "origins": [
+              "reaction"
             ]
           },
           "modifiers": [
@@ -1470,9 +1588,51 @@
         "kind": "boolean"
       },
       "label": "本次拾取一个梦见风名物点心，且未达每次爆发4次上限"
+    },
+    "yumemizukimizuki.enhancedContinuous": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "廓然梦生本次强化持续攻击"
+    },
+    "yumemizukimizuki.enhancedMasteryActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "廓然梦生元素精通提升生效中"
     }
   },
   "formulas": [
+    {
+      "id": "yumemizukimizuki.radiance-stellar-swirl",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "mode",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-swirl"
+      }
+    },
+    {
+      "id": "yumemizukimizuki.enhanced-mastery-bonus",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "elementalMastery",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
     {
       "id": "yumemizukimizuki.swirl.scalar",
       "template": {

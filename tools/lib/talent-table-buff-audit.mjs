@@ -70,10 +70,14 @@ export function auditTalentTableBuffs(entities, engine) {
     const targetOverride = request.frame.factOverrides.find(row => row.subject.kind === 'target');
     const facts = values => Object.fromEntries(Object.entries(values).map(([key, value]) =>
       [key, typeof value === 'boolean' ? bool(value) : number(character.metadata.facts[key].type.unit, value)]));
+    const peerDefaults = Object.fromEntries(Object.entries(character.metadata.facts ?? {})
+      .filter(([, field]) => field.scope === 'recipient')
+      .map(([key, field]) => [key, field.type.kind === 'quantity' ? number(field.type.unit, 0)
+        : field.type.kind === 'boolean' ? bool(false) : actorOverride[key]]));
     const factOverrides = [
       { subject: actor('actor'), facts: { ...actorOverride, onField: bool(recipient === 'actor' && opts.onField !== false),
         ...facts(opts.actor ?? {}) } },
-      { subject: actor('peer'), facts: { onField: bool(recipient === 'peer' && opts.onField !== false),
+      { subject: actor('peer'), facts: { ...peerDefaults, onField: bool(recipient === 'peer' && opts.onField !== false),
         ...facts(opts.peer ?? {}) } },
       { subject: target('enemy'), facts: { ...targetOverride?.facts, ...facts(opts.target ?? {}) } },
       ...(targetId === 'enemy' ? [] : [{ subject: target(targetId), facts: facts(opts.otherTarget ?? {}) }]),

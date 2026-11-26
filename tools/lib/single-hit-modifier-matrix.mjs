@@ -42,6 +42,7 @@ export function auditSingleHitModifiers(entities, engine) {
   const sets = new Map(entities.sets.map(s => [s.id, s]));
   const rows = [], unsampled = [];
   const seenAliases = new Set();
+  const teamCache = new Map();
   const starter = c => weapons.get(novice[c.identity.weaponType]);
 
   function build(c, gear = [], weapon = starter(c), constellation = 0) {
@@ -57,11 +58,20 @@ export function auditSingleHitModifiers(entities, engine) {
     return result;
   }
 
+  function buildKey(b) {
+    const slots = (b.theoreticalSetSlots ?? []).map(s => s.setId + ':' + s.slot).join(',');
+    return `${b.character.id}|${b.weapon?.id ?? ''}|${b.constellation}|${slots}`;
+  }
+
   function team(dealer, peer) {
+    const key = buildKey(dealer) + '||' + (peer ? buildKey(peer) : '');
+    const cached = teamCache.get(key);
+    if (cached) return cached;
     const actors = [{ id: 'actor', build: dealer }];
     if (peer) actors.push({ id: 'peer', build: peer });
     const prepared = engine.prepareStructuredBuilds(actors);
     if (!prepared.ok) throw new Error(JSON.stringify(prepared.diagnostics));
+    teamCache.set(key, prepared.team);
     return prepared.team;
   }
 

@@ -54,8 +54,12 @@ export function auditAimChargeBuffs(entities, engine) {
       const hit = talent?.hits.find(hit => hit.id === hitId);
       if (!hit) throw new Error(recipient + ' 缺少瞄准蓄力验算命中 ' + hitId);
       const { setup, request } = auditHit(character, talent, hit);
-      const anchor = setup.events.find(event => event.id === 'hit');
-      Object.assign(anchor, { actorId: recipient, timeMs, order: casts.length });
+      for (const [index, event] of setup.events.entries()) {
+        event.actorId = recipient;
+        for (const row of event.subjectFacts ?? []) if (row.subject.kind === 'actor') row.subject = { kind: 'actor', id: recipient };
+        if (event.id === 'hit') Object.assign(event, { timeMs, order: casts.length + index });
+        else event.order = casts.length + index;
+      }
       for (const observation of request.frame.factOverrides) observation.subject = { kind: 'actor', id: recipient };
       for (const [key, setting] of Object.entries(conditions)) {
         const observation = setting === null ? fact(null) : bool(setting);

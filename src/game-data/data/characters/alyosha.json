@@ -971,6 +971,23 @@
                 "amount": 0.2,
                 "unit": "scalar"
               }
+            },
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              },
+              "constellation": 6,
+              "condition": {
+                "call": "alyosha.hunted-precision-2",
+                "inputs": {
+                  "value": {
+                    "fact": "alyosha.hunterPrecisionStacks"
+                  }
+                },
+                "output": "active"
+              }
             }
           ]
         }

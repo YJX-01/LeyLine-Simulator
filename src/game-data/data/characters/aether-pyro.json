@@ -258,21 +258,21 @@
           "id": "param7",
           "unit": "ratio",
           "values": [
-            0.7224,
-            0.7812,
-            0.84,
-            0.924,
-            0.9828,
-            1.05,
-            1.1424,
-            1.2348,
-            1.3272,
-            1.428,
-            1.5288,
-            1.6296,
-            1.7304,
-            1.8312,
-            1.932
+            0.60716,
+            0.65658,
+            0.706,
+            0.7766,
+            0.82602,
+            0.8825,
+            0.96016,
+            1.03782,
+            1.11548,
+            1.2002,
+            1.28492,
+            1.36964,
+            1.45436,
+            1.53908,
+            1.6238
           ]
         },
         {
@@ -1046,6 +1046,220 @@
         "kind": "boolean"
       },
       "label": "附近队员本次触发夜魂迸发"
+    },
+    "traveler.enhancedResonance.anemo": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旅行者强化共鸣·风（暴击率+10%）"
+    },
+    "traveler.enhancedResonance.geo": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旅行者强化共鸣·岩（防御力+20%）"
+    },
+    "traveler.enhancedResonance.electro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旅行者强化共鸣·雷（元素充能效率+20%）"
+    },
+    "traveler.enhancedResonance.dendro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旅行者强化共鸣·草（元素精通+60）"
+    },
+    "traveler.enhancedResonance.hydro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旅行者强化共鸣·水（生命值上限+20%）"
+    },
+    "traveler.enhancedResonance.pyro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旅行者强化共鸣·火（攻击力+20%）"
+    },
+    "traveler.enhancedResonance.cryo": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旅行者强化共鸣·冰（暴击伤害+20%）"
+    },
+    "traveler.enhancedAttribute.first": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旅行者强化属性·一阶（基础攻击力+3）"
+    },
+    "traveler.enhancedAttribute.second": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旅行者强化属性·二阶（基础攻击力+7、基础生命值+50、元素精通+15）"
     }
-  }
+  },
+  "buffs": [
+    {
+      "id": "aether-pyro.traveler.enhanced-resonance.anemo",
+      "condition": {
+        "fact": "traveler.enhancedResonance.anemo"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critRate",
+          "value": {
+            "amount": 0.1,
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "aether-pyro.traveler.enhanced-resonance.geo",
+      "condition": {
+        "fact": "traveler.enhancedResonance.geo"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.defensePercent",
+          "value": {
+            "amount": 0.2,
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "aether-pyro.traveler.enhanced-resonance.electro",
+      "condition": {
+        "fact": "traveler.enhancedResonance.electro"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.energyRecharge",
+          "value": {
+            "amount": 0.2,
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "aether-pyro.traveler.enhanced-resonance.dendro",
+      "condition": {
+        "fact": "traveler.enhancedResonance.dendro"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "amount": 60,
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    },
+    {
+      "id": "aether-pyro.traveler.enhanced-resonance.hydro",
+      "condition": {
+        "fact": "traveler.enhancedResonance.hydro"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.hpPercent",
+          "value": {
+            "amount": 0.2,
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "aether-pyro.traveler.enhanced-resonance.pyro",
+      "condition": {
+        "fact": "traveler.enhancedResonance.pyro"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "amount": 0.2,
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "aether-pyro.traveler.enhanced-resonance.cryo",
+      "condition": {
+        "fact": "traveler.enhancedResonance.cryo"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critDamage",
+          "value": {
+            "amount": 0.2,
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "aether-pyro.traveler.enhanced-attribute.first",
+      "condition": {
+        "fact": "traveler.enhancedAttribute.first"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.whiteAttack",
+          "value": {
+            "amount": 3,
+            "unit": "attack"
+          }
+        }
+      ]
+    },
+    {
+      "id": "aether-pyro.traveler.enhanced-attribute.second",
+      "condition": {
+        "fact": "traveler.enhancedAttribute.second"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.whiteAttack",
+          "value": {
+            "amount": 7,
+            "unit": "attack"
+          }
+        },
+        {
+          "target": "attribute.whiteHp",
+          "value": {
+            "amount": 50,
+            "unit": "hp"
+          }
+        },
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "amount": 15,
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    }
+  ]
 }

@@ -24,6 +24,17 @@ export function auditEquipmentContexts(entities,engine) {
       setup.events[0].timeMs=time;
       setup.events.unshift(...events);
       Object.assign(request.frame.factOverrides[0].facts,facts);
+      for (const [i,other] of others.entries()) {
+        if (!other?.character?.metadata?.facts) continue;
+        const peerDefaults={};
+        for (const [factKey,field] of Object.entries(other.character.metadata.facts)) {
+          if (field.scope!=='owner') continue;
+          peerDefaults[factKey]=field.type.kind==='quantity'?quantity(field.type.unit,0)
+            :field.type.kind==='boolean'?flag(false)
+              :{value:{kind:'enum',value:field.type.values.includes('none')?'none':field.type.values[0]},provenance:'explicit',sourceRefs:[]};
+        }
+        if (Object.keys(peerDefaults).length) request.frame.factOverrides.push({subject:{kind:'actor',id:'peer'+i},facts:peerDefaults});
+      }
       if (targetFacts) request.frame.factOverrides.push({subject:{kind:'target',id:'enemy'},facts:targetFacts});
       const context=engine.createStructuredCombatContext(prepared.team,setup);
       if (flatHp!==undefined) context.actors[0].inputs.flatHp=quantity('hp',flatHp);
