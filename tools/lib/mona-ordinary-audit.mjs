@@ -104,7 +104,8 @@ const inactiveWindows = new Set([
   'tighnari.wreathArrowFired', 'ganyu.celestialShowerArea', 'aether-dendro.lotusField',
   'lumine-dendro.lotusField', 'chiori.geoConstructMade', 'kamisatoayaka.senhoContact', 'sigewinne.restWindow',
   'fischl.hexereiSecretRite', 'fischl.hexereiOverloadActive', 'fischl.hexereiElectroActive', 'fischl.hexereiCoordinationActive',
-  'klee.hexereiAwakened', 'klee.chainedSparkAttackActive', 'mona.hexereiAwakened', 'mona.recipientHexerei',
+  'klee.hexereiAwakened', 'klee.chainedSparkAttackActive', 'mona.hexereiAwakened', 'mona.hexereiSecretRite', 'mona.recipientHexerei',
+  'vodyanitsa.a4LeadVocal', 'vodyanitsa.a4EnsembleVocal', 'vodyanitsa.a4VortexMode',
   'traveler.enhancedResonance.anemo', 'traveler.enhancedResonance.geo', 'traveler.enhancedResonance.electro',
   'traveler.enhancedResonance.dendro', 'traveler.enhancedResonance.hydro', 'traveler.enhancedResonance.pyro',
   'traveler.enhancedResonance.cryo', 'traveler.enhancedAttribute.first', 'traveler.enhancedAttribute.second',
@@ -163,7 +164,7 @@ export function ordinaryPanel(character, weapon) {
   const panel = Object.fromEntries(['hp', 'attack', 'defense'].map(stat => [stat,
     character.attributes.base[stat] * character.progression.curves[stat][90] + character.progression.promotion[6][stat]]));
   panel.attack += weapon.baseAttack;
-  panel.elementalMastery = 0;
+  panel.elementalMastery = character.attributes.base.elementalMastery ?? 0;
   const specialized = character.attributes.specialized, promotion = character.progression.promotion[6].specialized;
   if (specialized === 'elementalMastery') panel.elementalMastery += promotion;
   for (const stat of ['hp', 'attack', 'defense']) if (specialized === stat + 'Percent') panel[stat] *= 1 + promotion;

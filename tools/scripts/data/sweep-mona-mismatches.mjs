@@ -27,12 +27,20 @@ import {
   runSpecBuffScenarios,
   runSpecFourPieceScenarios,
 } from '../../lib/mona-spec-runner.mjs';
+import {
+  renderReactionsSummaryMarkdown,
+  runReactionsMode,
+} from '../../lib/mona-reactions-sweep.mjs';
+import {
+  renderDirectSpecialHitsSummaryMarkdown,
+  runDirectSpecialHitsMode,
+} from '../../lib/mona-special-hits-sweep.mjs';
 import { auditBuild, auditHit, novice, setGateFacts } from '../../lib/roster-audit-settings.mjs';
 import { combatFactDeclaration, conditionFactInputs } from '../../../src/schema/src/calculation/buffs.mjs';
 
 const ROOT = fileURLToPath(new URL('../../../', import.meta.url));
-const VALID_MODES = ['scaling', 'damage-c0', 'damage-c6', 'buffs', 'weapons', 'sets4pc', 'all'];
-const ALL_SUBMODES = ['scaling', 'damage-c0', 'damage-c6', 'buffs', 'weapons', 'sets4pc'];
+const VALID_MODES = ['scaling', 'damage-c0', 'damage-c6', 'buffs', 'weapons', 'sets4pc', 'reactions', 'direct-special-hits', 'all'];
+const ALL_SUBMODES = ['scaling', 'damage-c0', 'damage-c6', 'buffs', 'weapons', 'sets4pc', 'reactions', 'direct-special-hits'];
 const REL_TOLERANCE = 0.0001; // 0.01%
 
 const ELEMENT_RECIPIENT = {
@@ -2262,6 +2270,10 @@ function renderSummaryMarkdown(reportsByMode) {
       lines.push(`| \`damage-c0\` | ${r.elapsedMs} | matched=${s.matched}/${s.eligible}, unknown=${s.unexpectedUnknown} | **${s.mismatch + s.unexpectedUnknown}** | monaAdditional=${s.monaAdditionalEffect}, probeErr=${s.probeError} |`);
     } else if (mode === 'damage-c6') {
       lines.push(`| \`damage-c6\` | ${r.elapsedMs} | matched=${s.matched}/${s.eligibleC0Pairs}, unknown=${s.unexpectedUnknown} | **${s.mismatch + s.unexpectedUnknown + s.c6DeltaDivergence}** | monaC6Additional=${s.monaC6AdditionalEffect} (diverges=${s.c6DeltaDivergence}) |`);
+    } else if (mode === 'reactions') {
+      lines.push(`| \`reactions\` | ${r.elapsedMs} | matched=${s.matched}/${s.evaluatedEffects}, zeroOnLL=${s.zeroOnLeyline}, skipped=${s.skipped} | **${s.trueSuspectNumericMismatch}** (total numMismatch=${s.numericMismatch}) | knownArtifact=${s.numericMismatch - s.trueSuspectNumericMismatch} |`);
+    } else if (mode === 'direct-special-hits') {
+      lines.push(`| \`direct-special-hits\` | ${r.elapsedMs} | matched=${s.damageMatched}/${s.matchedPairs}, unknown=${s.unknownOnLeyline}, unmatched=${s.unmatchedLeylineHits} | **${s.trueSuspectMismatch}** (total dmgMismatch=${s.damageMismatch}) | knownArtifact=${s.knownArtifact}, probeErr=${s.probeErrors} |`);
     } else {
       lines.push(`| \`${mode}\` | ${r.elapsedMs} | matched=${s.matched}, zeroOnLL=${s.zeroOnLeyline}, incomplete=${s.autoConfigIncomplete} | **${s.trueSuspectNumericMismatch}** (total numMismatch=${s.numericMismatch}) | knownArtifact=${s.numericMismatch - s.trueSuspectNumericMismatch} |`);
     }
@@ -2352,6 +2364,13 @@ function renderSummaryMarkdown(reportsByMode) {
     }
   }
 
+  if (reportsByMode.reactions) {
+    lines.push('', renderReactionsSummaryMarkdown(reportsByMode.reactions).trimEnd());
+  }
+  if (reportsByMode['direct-special-hits']) {
+    lines.push('', renderDirectSpecialHitsSummaryMarkdown(reportsByMode['direct-special-hits']).trimEnd());
+  }
+
   return lines.join('\n') + '\n';
 }
 
@@ -2419,6 +2438,10 @@ async function main() {
       });
     } else if (mode === 'sets4pc') {
       result = await runSets4pcMode(options, shared);
+    } else if (mode === 'reactions') {
+      result = await runReactionsMode(options, shared);
+    } else if (mode === 'direct-special-hits') {
+      result = await runDirectSpecialHitsMode(options, shared);
     }
 
     ranReports[mode] = result;

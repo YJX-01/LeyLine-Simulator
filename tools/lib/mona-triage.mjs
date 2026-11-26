@@ -19,6 +19,17 @@ const normLabel = text => String(text ?? '')
   .replace(/\(第(\d+)击\)/g, '$1')
   .replace(/[^\p{L}\p{N}]/gu, '');
 
+const WEAPON_BUFF_ALIASES = {
+  VodyanitsaSignature: 'hymnofthemaelstrom',
+};
+
+// Traveler-shared buffs in Mona apply across all Traveler forms; map to aether-anemo
+// as the canonical representative Traveler entity so triage resolves them cleanly.
+const CHARACTER_BUFF_ALIASES = {
+  TravelerElements: 'aether-anemo',
+  TravelerEnhancedAttribute: 'aether-anemo',
+};
+
 const monaAttrToLeylineTargets = attr => {
   if (typeof attr !== 'string') return [];
   const exact = {
@@ -308,11 +319,15 @@ export async function runMonaTriage() {
     let wave = 'other';
     if (genre === 'Character') {
       kind = 'character';
-      entity = ids.charPrefixes.find(([prefix]) => row.key.startsWith(prefix))?.[1] ?? null;
+      entity = CHARACTER_BUFF_ALIASES[row.key]
+        ?? ids.charPrefixes.find(([prefix]) => row.key.startsWith(prefix))?.[1]
+        ?? null;
       wave = row.structured ? 'wave2-character-structured' : 'wave4-character-legacy';
     } else if (genre === 'Weapon') {
       kind = 'weapon';
-      entity = ids.weaponPrefixes.find(([prefix]) => row.key.startsWith(prefix))?.[1] ?? null;
+      entity = WEAPON_BUFF_ALIASES[row.key]
+        ?? ids.weaponPrefixes.find(([prefix]) => row.key.startsWith(prefix))?.[1]
+        ?? null;
       wave = 'wave1-weapons';
     } else if (genre === 'Artifact' || genre === 'ArtifactSet') {
       kind = 'set';

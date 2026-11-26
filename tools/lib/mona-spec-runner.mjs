@@ -14,7 +14,50 @@ const weaponDefaultCarrier = {
   WEAPON_POLE: 'xiangling',
 };
 
-const monaFieldSpec = target => {
+const TRANSFORMATIVE_KEY_MAP = {
+  bloom: 'bloom',
+  hyperbloom: 'hyperbloom',
+  burgeon: 'burgeon',
+  burning: 'burning',
+  overload: 'overload',
+  overloaded: 'overload',
+  electro_charged: 'electro_charged',
+  'electro-charged': 'electro_charged',
+  superconduct: 'superconduct',
+  shatter: 'shatter',
+  shattered: 'shatter',
+  swirl_cryo: 'swirl_cryo',
+  'swirl-cryo': 'swirl_cryo',
+  swirl_hydro: 'swirl_hydro',
+  'swirl-hydro': 'swirl_hydro',
+  swirl_pyro: 'swirl_pyro',
+  'swirl-pyro': 'swirl_pyro',
+  swirl_electro: 'swirl_electro',
+  'swirl-electro': 'swirl_electro',
+  crystallize: 'crystallize',
+};
+
+const SWIRL_ELEMENTS = new Set(['cryo', 'hydro', 'pyro', 'electro']);
+
+function resolveTransformativeKey(opts = {}) {
+  const mode = opts.reactionMode;
+  if (mode === 'swirl') {
+    const elem = SWIRL_ELEMENTS.has(opts.hitElement) ? opts.hitElement : 'cryo';
+    return `swirl_${elem}`;
+  }
+  if (mode && Object.hasOwn(TRANSFORMATIVE_KEY_MAP, mode)) {
+    return TRANSFORMATIVE_KEY_MAP[mode];
+  }
+  return 'bloom';
+}
+
+function resolveLunarPrefix(hitFamily) {
+  if (hitFamily === 'lunar-bloom' || hitFamily === 'moonbloom') return 'moonbloom';
+  if (hitFamily === 'lunar-crystallize' || hitFamily === 'mooncrystallize') return 'mooncrystallize';
+  return 'moonelectro';
+}
+
+export const monaFieldSpec = (target, opts = {}) => {
   if (target.startsWith('target.resistance.')) {
     return { source: 'damage', field: 'res_minus', sign: -1, base: null };
   }
@@ -23,6 +66,87 @@ const monaFieldSpec = target => {
   }
   if (target === 'attribute.defenseIgnore') {
     return { source: 'damage', field: 'def_penetration', sign: 1, base: null };
+  }
+  if (target === 'attribute.amplifyingReactionBonus') {
+    return { source: 'damage', field: opts.reactionMode === 'melt' ? 'melt_enhance' : 'vaporize_enhance', sign: 1, base: null };
+  }
+  if (target === 'attribute.additiveReactionBonus') {
+    return { source: 'damage', field: opts.reactionMode === 'spread' ? 'spread_compose' : 'aggravate_compose', sign: 1, base: null };
+  }
+  if (target === 'attribute.reaction.lunar.damageBonus') {
+    const lk = resolveLunarPrefix(opts.hitFamily);
+    const field = `direct_${lk}_compose`;
+    return { source: 'damage', field, fields: [field, 'enhance_moon_reaction_compose'], sign: 1, base: null };
+  }
+  if (target === 'attribute.reaction.lunar.baseBonus') {
+    const lk = resolveLunarPrefix(opts.hitFamily);
+    return { source: 'damage', field: `${lk}_base_compose`, sign: 1, base: null };
+  }
+  if (target === 'attribute.reaction.lunar.flatBaseBonus') {
+    const lk = resolveLunarPrefix(opts.hitFamily);
+    return { source: 'damage', field: `direct_${lk}_extra_fixed`, sign: 1, base: null };
+  }
+  if (target === 'attribute.reaction.lunar.elevationFactor') {
+    const lk = resolveLunarPrefix(opts.hitFamily);
+    const field = `elevate_${lk}_compose`;
+    return { source: 'damage', field, fields: [field, 'elevate_moon_reaction_compose'], sign: 1, base: null };
+  }
+  if (target === 'attribute.elevationFactor') {
+    if (opts.hitFamily === 'stellar-conduct' || opts.hitFamily === 'stellar-swirl') {
+      return { source: 'damage', field: 'elevate_stellar_glimmer_reaction_compose', sign: 1, base: null };
+    }
+    if (opts.hitFamily?.startsWith('lunar')) {
+      return { source: 'damage', field: 'elevate_moon_reaction_compose', sign: 1, base: null };
+    }
+    return {
+      source: 'damage',
+      field: 'elevate_moon_reaction_compose',
+      fields: ['elevate_moon_reaction_compose', 'elevate_stellar_glimmer_reaction_compose'],
+      sign: 1,
+      base: null,
+    };
+  }
+  if (target === 'attribute.reaction.transformative.damageBonus') {
+    return { source: 'transformativeRatio', field: resolveTransformativeKey(opts), sign: 1, base: null };
+  }
+  if (target === 'attribute.reaction.transformative.flatBaseBonus') {
+    return { source: 'transformativeFlat', field: resolveTransformativeKey(opts), sign: 1, base: null, resFactor: 0.9 };
+  }
+  if (target === 'attribute.critRate') {
+    if (opts.hitFamily === 'lunar-bloom' || opts.hitFamily === 'moonbloom') {
+      return { source: 'damage', field: 'critical_moonbloom', fields: ['critical', 'critical_moonbloom', 'critical_moon_reaction'], sign: 1, base: null };
+    }
+    if (opts.hitFamily === 'lunar-crystallize' || opts.hitFamily === 'mooncrystallize') {
+      return { source: 'damage', field: 'critical_mooncrystallize', fields: ['critical', 'critical_mooncrystallize', 'critical_moon_reaction'], sign: 1, base: null };
+    }
+    if (opts.hitFamily === 'lunar-charged' || opts.hitFamily === 'lunar-electro' || opts.hitFamily === 'moonelectro') {
+      return { source: 'damage', field: 'critical_moon_reaction', fields: ['critical', 'critical_moon_reaction'], sign: 1, base: null };
+    }
+    if (opts.hitFamily === 'stellar-conduct') {
+      return { source: 'damage', field: 'critical_stellarconduct', fields: ['critical', 'critical_stellarconduct'], sign: 1, base: null };
+    }
+    if (opts.hitFamily === 'stellar-swirl') {
+      return { source: 'damage', field: 'critical_stellarswirl', fields: ['critical', 'critical_stellarswirl'], sign: 1, base: null };
+    }
+    return { source: 'damage', field: 'critical', sign: 1, base: null };
+  }
+  if (target === 'attribute.critDamage') {
+    if (opts.hitFamily === 'lunar-bloom' || opts.hitFamily === 'moonbloom') {
+      return { source: 'damage', field: 'critical_damage_moonbloom', fields: ['critical_damage', 'critical_damage_moonbloom', 'critical_damage_moon_reaction'], sign: 1, base: null };
+    }
+    if (opts.hitFamily === 'lunar-crystallize' || opts.hitFamily === 'mooncrystallize') {
+      return { source: 'damage', field: 'direct_mooncrystallize_critical_damage', fields: ['critical_damage', 'direct_mooncrystallize_critical_damage', 'critical_damage_moon_reaction'], sign: 1, base: null };
+    }
+    if (opts.hitFamily === 'lunar-charged' || opts.hitFamily === 'lunar-electro' || opts.hitFamily === 'moonelectro') {
+      return { source: 'damage', field: 'critical_damage_moon_reaction', fields: ['critical_damage', 'critical_damage_moon_reaction'], sign: 1, base: null };
+    }
+    if (opts.hitFamily === 'stellar-conduct') {
+      return { source: 'damage', field: 'critical_damage_stellarconduct', fields: ['critical_damage', 'critical_damage_stellarconduct'], sign: 1, base: null };
+    }
+    if (opts.hitFamily === 'stellar-swirl') {
+      return { source: 'damage', field: 'critical_damage_stellarswirl', fields: ['critical_damage', 'critical_damage_stellarswirl'], sign: 1, base: null };
+    }
+    return { source: 'damage', field: 'critical_damage', sign: 1, base: null };
   }
   const map = {
     'attribute.attackPercent': { source: 'attribute', field: 'atk', sign: 1, base: 'attack' },
@@ -36,13 +160,45 @@ const monaFieldSpec = target => {
     'attribute.defense': { source: 'attribute', field: 'def', sign: 1, base: null },
     'attribute.elementalMastery': { source: 'attribute', field: 'elemental_mastery', sign: 1, base: null },
     'attribute.energyRecharge': { source: 'attribute', field: 'recharge', sign: 1, base: null },
-    'attribute.critRate': { source: 'damage', field: 'critical', sign: 1, base: null },
-    'attribute.critDamage': { source: 'damage', field: 'critical_damage', sign: 1, base: null },
     'attribute.healingBonus': { source: 'attribute', field: 'healing_bonus', sign: 1, base: null },
     'attribute.incomingHealingBonus': { source: 'attribute', field: 'incoming_healing_bonus', sign: 1, base: null },
     'attribute.shieldStrength': { source: 'attribute', field: 'shield_strength', sign: 1, base: null },
     'attribute.damageBonus': { source: 'damage', field: 'bonus', sign: 1, base: null },
     'attribute.baseDamageBonus': { source: 'damage', field: 'extra_damage', sign: 1, base: null },
+    'attribute.reaction.stellar-conduct.damageBonus': { source: 'damage', field: 'direct_stellarconduct_compose', sign: 1, base: null },
+    'attribute.reaction.stellar-conduct.baseBonus': { source: 'damage', field: 'direct_stellarconduct_base_compose', sign: 1, base: null },
+    'attribute.reaction.stellar-conduct.baseMultiplier': { source: 'damage', field: 'direct_stellarconduct_base_multiplier', sign: 1, base: null },
+    'attribute.reaction.stellar-conduct.flatBaseBonus': {
+      source: 'damage',
+      field: 'direct_stellarconduct_extra_fixed',
+      fields: ['direct_stellarconduct_extra_fixed', 'direct_stellarconduct_extra_damage'],
+      sign: 1,
+      base: null,
+    },
+    'attribute.reaction.stellar-conduct.elevation': {
+      source: 'damage',
+      field: 'elevate_stellarconduct_compose',
+      fields: ['elevate_stellarconduct_compose', 'elevate_stellar_glimmer_reaction_compose'],
+      sign: 1,
+      base: null,
+    },
+    'attribute.reaction.stellar-swirl.damageBonus': { source: 'damage', field: 'direct_stellarswirl_compose', sign: 1, base: null },
+    'attribute.reaction.stellar-swirl.baseBonus': { source: 'damage', field: 'direct_stellarswirl_base_compose', sign: 1, base: null },
+    'attribute.reaction.stellar-swirl.baseMultiplier': { source: 'damage', field: 'direct_stellarswirl_base_multiplier', sign: 1, base: null },
+    'attribute.reaction.stellar-swirl.flatBaseBonus': {
+      source: 'damage',
+      field: 'direct_stellarswirl_extra_fixed',
+      fields: ['direct_stellarswirl_extra_fixed', 'direct_stellarswirl_extra_damage'],
+      sign: 1,
+      base: null,
+    },
+    'attribute.reaction.stellar-swirl.elevation': {
+      source: 'damage',
+      field: 'elevate_stellarswirl_compose',
+      fields: ['elevate_stellarswirl_compose', 'elevate_stellar_glimmer_reaction_compose'],
+      sign: 1,
+      base: null,
+    },
   };
   if (Object.hasOwn(map, target)) return map[target];
   const elem = /^attribute\.(pyro|hydro|electro|cryo|anemo|geo|dendro|physical)Bonus$/.exec(target);
@@ -79,8 +235,8 @@ function resolveRecipientHit(character, scenario, actorId) {
       skillId: talent.id,
       hitId: hit.id,
       category: hit.category ?? talent.category,
-      element: hit.element ?? talent.element,
-      origin: hit.origin ?? 'talent',
+      element: scenario.hitElement ?? hit.element ?? talent.element,
+      origin: scenario.hitOrigin ?? hit.origin ?? 'talent',
       family: scenario.hitFamily ?? hit.family ?? (hit.damage ? Object.keys(hit.damage)[0] : undefined) ?? 'ordinary',
       reactionId: scenario.reactionMode ?? null,
     },
@@ -102,8 +258,14 @@ function readLeylineTarget(engine, team, setup, frame, targetId) {
 }
 
 function readMonaValue(sample, fieldInfo) {
+  if (fieldInfo.source === 'transformativeRatio' || fieldInfo.source === 'transformativeFlat') {
+    return sample.transformative?.[fieldInfo.field] ?? 0;
+  }
   const obj = fieldInfo.source === 'damage' ? sample.damage : sample.attribute;
-  return sum(obj[fieldInfo.field]);
+  if (Array.isArray(fieldInfo.fields)) {
+    return fieldInfo.fields.reduce((acc, f) => acc + sum(obj?.[f]), 0);
+  }
+  return sum(obj?.[fieldInfo.field]);
 }
 
 function readMonaBaseStat(attrPanel, baseKind) {
@@ -111,6 +273,65 @@ function readMonaBaseStat(attrPanel, baseKind) {
   if (baseKind === 'hp') return attrPanel.hp?.['角色基础生命'] ?? 0;
   if (baseKind === 'defense') return attrPanel.def?.['角色基础防御'] ?? 0;
   return 1;
+}
+
+function computeMonaDelta(monaBefore, monaAfter, monaDisabled, fieldInfo, expectedAmount, expectedMonaOverride) {
+  const mBefore = readMonaValue(monaBefore, fieldInfo);
+  const mAfter = readMonaValue(monaAfter, fieldInfo);
+  const mDisabled = monaDisabled ? readMonaValue(monaDisabled, fieldInfo) : mBefore;
+  const monaBaseStat = readMonaBaseStat(monaBefore.attribute, fieldInfo.base);
+
+  if (fieldInfo.source === 'transformativeRatio') {
+    const emBefore = sum(monaBefore.attribute?.elemental_mastery);
+    const emAfter = sum(monaAfter.attribute?.elemental_mastery);
+    const emBonus = fieldInfo.field === 'crystallize'
+      ? em => (4.44 * em) / (em + 1400)
+      : em => (16 * em) / (em + 2000);
+    const ratioDelta = mBefore > 0
+      ? (mAfter / mBefore) * (1 + emBonus(emBefore)) - (1 + emBonus(emAfter))
+      : 0;
+    const monaDeltaRaw = ratioDelta * fieldInfo.sign;
+    const monaDeltaNormalized = monaDeltaRaw;
+    const expectedMonaRaw = expectedMonaOverride != null
+      ? expectedMonaOverride
+      : expectedAmount * fieldInfo.sign;
+    return { mBefore, mAfter, mDisabled, monaBaseStat, monaDeltaRaw, monaDeltaNormalized, expectedMonaRaw };
+  }
+
+  if (fieldInfo.source === 'transformativeFlat') {
+    const resFactor = fieldInfo.resFactor ?? 0.9;
+    const monaDeltaRaw = mAfter - mBefore;
+    const monaDeltaNormalized = (monaDeltaRaw / resFactor) * fieldInfo.sign;
+    const expectedMonaRaw = expectedMonaOverride != null
+      ? expectedMonaOverride * resFactor
+      : expectedAmount * resFactor * fieldInfo.sign;
+    return { mBefore, mAfter, mDisabled, monaBaseStat, monaDeltaRaw, monaDeltaNormalized, expectedMonaRaw };
+  }
+
+  const monaDeltaRaw = mAfter - mBefore;
+  const monaDeltaNormalized = fieldInfo.base ? monaDeltaRaw / monaBaseStat : monaDeltaRaw * fieldInfo.sign;
+  const expectedMonaRaw = expectedMonaOverride != null
+    ? (fieldInfo.base ? expectedMonaOverride * monaBaseStat : expectedMonaOverride)
+    : (fieldInfo.base ? expectedAmount * monaBaseStat : expectedAmount * fieldInfo.sign);
+  return { mBefore, mAfter, mDisabled, monaBaseStat, monaDeltaRaw, monaDeltaNormalized, expectedMonaRaw };
+}
+
+function buildTeamCharacterMembers(teamCharacters, characters, weapons) {
+  return (teamCharacters ?? []).map((entry, i) => {
+    const charId = typeof entry === 'string' ? entry : entry.id;
+    const ch = characters.get(charId);
+    if (!ch) throw new Error(`Missing teamCharacter entity: ${charId}`);
+    const w = weapons.get(novice[ch.identity.weaponType]);
+    return {
+      id: `mate${i}`,
+      build: {
+        ...auditBuild(ch, w),
+        level: (typeof entry === 'object' && entry.level != null) ? entry.level : 90,
+        ascension: (typeof entry === 'object' && entry.ascension != null) ? entry.ascension : 6,
+        constellation: (typeof entry === 'object' && entry.constellation != null) ? entry.constellation : 0,
+      },
+    };
+  });
 }
 
 function setSubjectFacts(frame, subject, values, metadata) {
@@ -143,6 +364,10 @@ export function collectBuffSpecDependencies(scenarios, weaponCatalog) {
     }
     if (s.recipient) characters.add(s.recipient);
     if (s.carrier) characters.add(s.carrier);
+    for (const tc of s.teamCharacters ?? []) {
+      const charId = typeof tc === 'string' ? tc : tc?.id;
+      if (charId) characters.add(charId);
+    }
   }
   return { characters: [...characters], weapons: [...weapons], sets: [...sets] };
 }
@@ -241,6 +466,7 @@ export async function runSpecBuffScenarios({ scenarios, entities, engine, leylin
       const teamMembers = [
         { id: 'actor', build: ownerBuild },
         ...(!selfRecipient ? [{ id: 'peer', build: recipientBuild }] : []),
+        ...buildTeamCharacterMembers(spec.teamCharacters, characters, weapons),
         ...(spec.teamElements ?? []).map((element, i) => ({ id: 'extra' + i, element })),
       ];
       const prepared = engine.prepareStructuredBuilds(teamMembers);
@@ -288,6 +514,7 @@ export async function runSpecBuffScenarios({ scenarios, entities, engine, leylin
         return {
           attribute: api.CommonInterface.get_attribute(input),
           damage: api.CalculatorInterface.get_damage_analysis(input, null),
+          transformative: api.CalculatorInterface.get_transformative_damage(input),
         };
       };
       const monaBefore = sampleMona([]);
@@ -296,8 +523,19 @@ export async function runSpecBuffScenarios({ scenarios, entities, engine, leylin
 
       for (const eff of spec.effects ?? []) {
         const fieldInfo = eff.monaField
-          ? { source: eff.monaSource ?? 'attribute', field: eff.monaField, sign: eff.monaSign ?? 1, base: eff.monaBase ?? null }
-          : monaFieldSpec(eff.leylineTarget);
+          ? {
+            source: eff.monaSource ?? 'attribute',
+            field: eff.monaField,
+            ...(Array.isArray(eff.monaFields) ? { fields: eff.monaFields } : {}),
+            sign: eff.monaSign ?? 1,
+            base: eff.monaBase ?? null,
+            ...(eff.monaResFactor != null ? { resFactor: eff.monaResFactor } : {}),
+          }
+          : monaFieldSpec(eff.leylineTarget, {
+            hitFamily: eff.hitFamily ?? spec.hitFamily ?? null,
+            reactionMode: eff.reactionMode ?? spec.reactionMode ?? null,
+            hitElement: eff.hitElement ?? spec.hitElement ?? null,
+          });
         if (!fieldInfo) throw new Error(`Unsupported target for Mona mapping: ${eff.leylineTarget}`);
 
         const readings = {};
@@ -306,6 +544,10 @@ export async function runSpecBuffScenarios({ scenarios, entities, engine, leylin
           const active = phase === 'enabled' || (phase === 'disabled' && Boolean(disabledTeam));
           const phaseSetup = structuredClone(setup);
           const phaseFrame = structuredClone(request.frame);
+          if (eff.hitFamily) phaseFrame.hit.family = eff.hitFamily;
+          if (eff.reactionMode) phaseFrame.hit.reactionId = eff.reactionMode;
+          if (eff.hitElement) phaseFrame.hit.element = eff.hitElement;
+          if (eff.hitOrigin) phaseFrame.hit.origin = eff.hitOrigin;
           const eventWindowFacts = new Set();
           if (spec.event) {
             const meta = ownerEntity.metadata ?? ownerEntity;
@@ -408,25 +650,24 @@ export async function runSpecBuffScenarios({ scenarios, entities, engine, leylin
         const leylineDisabled = readings.disabled.value;
         const leylineDelta = (leylineBefore != null && leylineAfter != null) ? leylineAfter - leylineBefore : null;
 
-        const mBefore = readMonaValue(monaBefore, fieldInfo);
-        const mAfter = readMonaValue(monaAfter, fieldInfo);
-        const mDisabled = readMonaValue(monaDisabled, fieldInfo);
-        const monaBaseStat = readMonaBaseStat(monaBefore.attribute, fieldInfo.base);
-        const monaDeltaRaw = mAfter - mBefore;
-        const monaDeltaNormalized = fieldInfo.base ? monaDeltaRaw / monaBaseStat : monaDeltaRaw * fieldInfo.sign;
-
         const computedAmount = (eff.ownerStatScale != null && injectedOwnerStatValue != null)
           ? Math.min(eff.ownerStatCap ?? Infinity, injectedOwnerStatValue * eff.ownerStatScale)
           : eff.amount;
         const expectedLeyline = eff.expectedLeyline ?? computedAmount;
-        const expectedMonaRaw = eff.expectedMona != null
-          ? (fieldInfo.base ? eff.expectedMona * monaBaseStat : eff.expectedMona)
-          : (fieldInfo.base ? computedAmount * monaBaseStat : computedAmount * fieldInfo.sign);
+        const {
+          mBefore,
+          mAfter,
+          mDisabled,
+          monaBaseStat,
+          monaDeltaRaw,
+          monaDeltaNormalized,
+          expectedMonaRaw,
+        } = computeMonaDelta(monaBefore, monaAfter, monaDisabled, fieldInfo, computedAmount, eff.expectedMona);
         const tol = eff.tolerance ?? 1e-6;
 
         const leylineOk = close(leylineDelta, expectedLeyline, tol) && close(leylineDisabled, leylineBefore, tol);
         const monaOk = close(monaDeltaRaw, expectedMonaRaw, Math.max(tol, Math.abs(expectedMonaRaw) * 1e-6))
-          && close(mDisabled, mBefore, Math.max(tol, 1e-7));
+          && close(mDisabled, mBefore, Math.max(tol, Math.abs(mBefore) * 1e-6, 1e-7));
         const isDifferent = eff.disposition === 'different';
         const bilateralOk = isDifferent
           ? (leylineOk && monaOk)
@@ -757,7 +998,10 @@ export async function runSpecFourPieceScenarios({ scenarios, entities, engine, l
         ascension: 6,
         theoreticalSetSlots: setDoc.slots.slice(0, pieces).map(slot => ({ slot, setId: setDoc.id })),
       });
-      const extraMembers = (spec.teamElements ?? []).map((element, i) => ({ id: 'extra' + i, element }));
+      const extraMembers = [
+        ...buildTeamCharacterMembers(spec.teamCharacters, characters, weapons),
+        ...(spec.teamElements ?? []).map((element, i) => ({ id: 'extra' + i, element })),
+      ];
       const team3 = engine.prepareStructuredBuilds([{ id: 'actor', build: buildFor(3) }, ...extraMembers]);
       const team4 = engine.prepareStructuredBuilds([{ id: 'actor', build: buildFor(4) }, ...extraMembers]);
       if (!team3.ok || !team4.ok) throw new Error('Failed to prepare 3pc/4pc builds');
@@ -813,6 +1057,7 @@ export async function runSpecFourPieceScenarios({ scenarios, entities, engine, l
         return {
           attribute: api.CommonInterface.get_attribute(input),
           damage: api.CalculatorInterface.get_damage_analysis(input, null),
+          transformative: api.CalculatorInterface.get_transformative_damage(input),
         };
       };
       const m3 = sampleMona(arts3);
@@ -820,24 +1065,43 @@ export async function runSpecFourPieceScenarios({ scenarios, entities, engine, l
 
       for (const eff of spec.effects ?? []) {
         const fieldInfo = eff.monaField
-          ? { source: eff.monaSource ?? 'attribute', field: eff.monaField, sign: eff.monaSign ?? 1, base: eff.monaBase ?? null }
-          : monaFieldSpec(eff.leylineTarget);
+          ? {
+            source: eff.monaSource ?? 'attribute',
+            field: eff.monaField,
+            ...(Array.isArray(eff.monaFields) ? { fields: eff.monaFields } : {}),
+            sign: eff.monaSign ?? 1,
+            base: eff.monaBase ?? null,
+            ...(eff.monaResFactor != null ? { resFactor: eff.monaResFactor } : {}),
+          }
+          : monaFieldSpec(eff.leylineTarget, {
+            hitFamily: eff.hitFamily ?? spec.hitFamily ?? null,
+            reactionMode: eff.reactionMode ?? spec.reactionMode ?? null,
+            hitElement: eff.hitElement ?? spec.hitElement ?? null,
+          });
         if (!fieldInfo) throw new Error(`Unsupported 4pc target: ${eff.leylineTarget}`);
 
-        const r3 = readLeylineTarget(engine, team3.team, setup, request.frame, eff.leylineTarget);
-        const r4 = readLeylineTarget(engine, team4.team, setup, request.frame, eff.leylineTarget);
+        const effFrame = (eff.hitFamily || eff.reactionMode || eff.hitElement || eff.hitOrigin)
+          ? {
+            ...request.frame,
+            hit: {
+              ...request.frame.hit,
+              ...(eff.hitFamily ? { family: eff.hitFamily } : {}),
+              ...(eff.reactionMode ? { reactionId: eff.reactionMode } : {}),
+              ...(eff.hitElement ? { element: eff.hitElement } : {}),
+              ...(eff.hitOrigin ? { origin: eff.hitOrigin } : {}),
+            },
+          }
+          : request.frame;
+        const r3 = readLeylineTarget(engine, team3.team, setup, effFrame, eff.leylineTarget);
+        const r4 = readLeylineTarget(engine, team4.team, setup, effFrame, eff.leylineTarget);
         const leylineDelta = (r3.value != null && r4.value != null) ? r4.value - r3.value : null;
 
-        const mBefore = readMonaValue(m3, fieldInfo);
-        const mAfter = readMonaValue(m4, fieldInfo);
-        const monaBaseStat = readMonaBaseStat(m3.attribute, fieldInfo.base);
-        const monaDeltaRaw = mAfter - mBefore;
-        const monaDeltaNormalized = fieldInfo.base ? monaDeltaRaw / monaBaseStat : monaDeltaRaw * fieldInfo.sign;
-
         const expectedLeyline = eff.expectedLeyline ?? eff.amount;
-        const expectedMonaRaw = eff.expectedMona != null
-          ? (fieldInfo.base ? eff.expectedMona * monaBaseStat : eff.expectedMona)
-          : (fieldInfo.base ? eff.amount * monaBaseStat : eff.amount * fieldInfo.sign);
+        const {
+          monaDeltaRaw,
+          monaDeltaNormalized,
+          expectedMonaRaw,
+        } = computeMonaDelta(m3, m4, null, fieldInfo, eff.amount, eff.expectedMona);
         const tol = eff.tolerance ?? 1e-6;
 
         const leylineOk = close(leylineDelta, expectedLeyline, tol);
