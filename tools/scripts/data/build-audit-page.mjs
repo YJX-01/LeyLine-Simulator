@@ -7,8 +7,10 @@ import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { buildEvidence, buildInventory, summarizeMappings } from '../../lib/audit-page-data.mjs';
 import { buildBehaviorLedger, reconcileBehaviors, facetNames, gapNames } from '../../lib/mona-behavior-ledger.mjs';
+import { createEntityResolver } from '../../lib/audit-entity-catalog.mjs';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
+const resolveEntity = createEntityResolver(root);
 const auditPackage = resolve(root, 'tools/mona-audit');
 const output = resolve(root, 'artifacts/mona-audit-site/data');
 mkdirSync(output, { recursive: true });
@@ -103,7 +105,22 @@ function resolveTargets(refs, side) {
   const targets = refs.map(ref => sourceIndex.get(typeof ref === 'string' ? ref : ref.id));
   return [...new Set(targets.filter(row => row?.side === side))];
 }
-const reference = row => ({ id: row.id, name: row.entityName + ' · ' + row.name, side: row.side });
+const resolvedEntities = new Map(inventory.map(row => [row.id, resolveEntity(row)]));
+const reference = row => {
+  const resolved = resolvedEntities.get(row.id);
+  const entityLabel = resolved?.entityName ?? row.entityName;
+  return { id: row.id, name: [entityLabel, row.name].filter(Boolean).join(' / '), side: row.side };
+};
+function summarizeRowAttribution(attributions) {
+  if (!attributions.length) return {};
+  const status = attributions.some(item => item.status === 'open')
+    ? 'open'
+    : attributions.some(item => item.status === 'attributed-scoped')
+      ? 'attributed-scoped'
+      : 'attributed';
+  const causes = [...new Set(attributions.map(item => item.cause).filter(Boolean))];
+  return { attributionStatus: status, ...(causes.length ? { attributionCauses: causes } : {}) };
+}
 for (const row of inventory) {
   const { run, comparison, links, candidates, details } = evidenceFor(row);
   const other = row.side === 'mona' ? 'leyline' : 'mona';
@@ -111,12 +128,21 @@ for (const row of inventory) {
   const candidateRows = resolveTargets(candidates, other).filter(target => !counterparts.includes(target));
   const implementation = row.side === 'leyline' ? row.implementation :
     counterparts.find(target => target.implementation)?.implementation ?? '';
-  const entry = { id: row.id, side: row.side, category: row.category, name: row.name, entity: row.entity,
-    entityName: row.entityName, mechanism: row.mechanism, featureText: row.featureText,
-    roles: [...new Set(row.sourceIds.map(id => ledger.assignments.get(id).role))], implementation, run, comparison, chunk: '' };
+  const resolved = resolvedEntities.get(row.id);
+  const attribution = links.map(link => differenceById.get(link.id)).filter(Boolean);
+  const entry = {
+    id: row.id, side: row.side, category: row.category, name: row.name, entity: row.entity,
+    entityKey: resolved.entityKey, entityName: resolved.entityName, entityKind: resolved.entityKind,
+    ...(resolved.element ? { element: resolved.element } : {}),
+    mechanism: row.mechanism, featureText: row.featureText,
+    roles: [...new Set(row.sourceIds.map(id => ledger.assignments.get(id).role))],
+    implementation, run, comparison, chunk: '',
+    ...(counterparts.length ? { counterpartIds: counterparts.map(target => target.id) } : {}),
+    ...summarizeRowAttribution(attribution),
+  };
   const detail = JSON.stringify({ features: row.features, source: row.sourcePath, sourceIds: row.sourceIds,
     raw: row.source, links, candidates, counterparts: counterparts.map(reference), candidateRows: candidateRows.map(reference), details,
-    attribution: links.map(link => differenceById.get(link.id)).filter(Boolean),
+    attribution,
     assignments: row.sourceIds.map(id => ({ id, ...ledger.assignments.get(id) })) });
   const size = Buffer.byteLength(detail);
   if (bytes + size > 512 * 1024) flush();

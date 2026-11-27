@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import AuditPage from './AuditPage.vue';
-import './style.css';
+import App from './src/App.vue';
+import './src/styles/theme.css';
 
-createApp(AuditPage).mount('#app');
+createApp(App).mount('#app');
