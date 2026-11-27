@@ -5,14 +5,15 @@ import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createAccount } from '../../../../src/web/src/domain/account';
 import { previewEnkaImport, confirmEnkaImport } from '../../../../src/web/src/domain/enka-import';
-import { calculatorCritProject, calculatorSnapshotDraft, calculatorWorkerRequest, readCalculatorSource } from '../../../../src/web/src/domain/damage-calculator';
-import { projectSchema, putHitFact, type DamageCalculatorDocument } from '@leyline/schema';
+import { calculatorCritProject, calculatorSnapshotDraft, calculatorWorkerRequest, createDamageCalculation, parseDamageCalculator, prepareCalculatorEvaluationProject, readCalculatorSource } from '../../../../src/web/src/domain/damage-calculator';
+import { packDocument } from '../../../../src/web/src/domain/content-document';
+import { projectSchema, putHitFact, subjectFacts, type Build, type DamageCalculatorDocument, type Project } from '@leyline/schema';
 import { recordedVaresaPlunge, vesnaRecording } from '../../../helpers/recorded-vesna';
-import { applyCalculatorBuffs, calculatorBuffChoices } from '../../../../src/web/src/domain/calculator-buffs';
-import { addActorFromBuild, addSkillHit, defaultEnemy } from '../../../../src/web/src/domain/real-project';
+import { applyCalculatorBuffs, calculatorBuffChecked, calculatorBuffChoices, enableCalculatorBuff, resolveBuffSelection } from '../../../../src/web/src/domain/calculator-buffs';
+import { addActorFromBuild, addSingleContributorReaction, addSkillHit, defaultEnemy } from '../../../../src/web/src/domain/real-project';
 import { createEmptyProject, nextRecordId } from '../../../../src/web/src/domain/workbench-project';
 import { evaluateTimeline } from '@leyline/engine';
-import { getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
+import { getArtifactMain, getArtifactSet, getBuildSources, getCharacter, getReactionCalculationBundle, getWeapon, stellarSwirlCoefficients } from '@leyline/game-data';
 import { calculatorHitChoices } from '../../../../src/web/src/domain/calculator-hits';
 import { calculatorIntervals, setCalculatorCondition } from '../../../../src/web/src/domain/calculator-conditions';
 
@@ -201,4 +202,299 @@ it('exposes new character hits and explicit weapon windows in calculator control
     const fields = calculatorBuffChoices(project, actor, request, 1000, id).filter(row => row.effect.id.startsWith(weaponId + '.')).flatMap(row => row.fields);
     expect(fields).toContainEqual(expect.objectContaining({ key, fromTrigger: true, subject: { kind: 'actor', id: actor } }));
   }
+});
+
+it('preserves baseline invariants and evaluates critical and expected deltas when candidate introduces conditional and HP buffs', async () => {
+  const [artifactMain, sources, huTao, beginnersProtector, staffOfHoma, lisa, apprenticesNotes, theWidsith] = await Promise.all([
+    getArtifactMain(), getBuildSources(),
+    getCharacter('hutao'), getWeapon('beginnersprotector'), getWeapon('staffofhoma'),
+    getCharacter('lisa'), getWeapon('apprenticesnotes'), getWeapon('thewidsith'),
+  ]);
+
+  const cases = [
+    {
+      label: 'Hu Tao Beginner -> Staff of Homa C6',
+      hitId: 'hutao.normal.param1',
+      baselineBuild: {
+        ...sources, character: huTao, weapon: beginnersProtector, artifactMain, sets: [], artifacts: [],
+        schemaVersion: huTao.schemaVersion, dataVersion: huTao.dataVersion, kind: 'calculation-build' as const,
+        level: 90, ascension: 6, constellation: 0, weaponLevel: 70, weaponAscension: 4, refinement: 1,
+        talents: { normal: 10, skill: 10, burst: 10 },
+      },
+      candidateBuild: {
+        ...sources, character: huTao, weapon: staffOfHoma, artifactMain, sets: [], artifacts: [],
+        schemaVersion: huTao.schemaVersion, dataVersion: huTao.dataVersion, kind: 'calculation-build' as const,
+        level: 90, ascension: 6, constellation: 6, weaponLevel: 90, weaponAscension: 6, refinement: 1,
+        talents: { normal: 10, skill: 10, burst: 10 },
+      },
+    },
+    {
+      label: 'Lisa Apprentice -> The Widsith C6',
+      hitId: 'lisa.skill.param1',
+      baselineBuild: {
+        ...sources, character: lisa, weapon: apprenticesNotes, artifactMain, sets: [], artifacts: [],
+        schemaVersion: lisa.schemaVersion, dataVersion: lisa.dataVersion, kind: 'calculation-build' as const,
+        level: 90, ascension: 6, constellation: 0, weaponLevel: 70, weaponAscension: 4, refinement: 1,
+        talents: { normal: 10, skill: 10, burst: 10 },
+      },
+      candidateBuild: {
+        ...sources, character: lisa, weapon: theWidsith, artifactMain, sets: [], artifacts: [],
+        schemaVersion: lisa.schemaVersion, dataVersion: lisa.dataVersion, kind: 'calculation-build' as const,
+        level: 90, ascension: 6, constellation: 6, weaponLevel: 90, weaponAscension: 6, refinement: 1,
+        talents: { normal: 10, skill: 10, burst: 10 },
+      },
+    },
+  ];
+
+  for (const scenario of cases) {
+    const doc = createDamageCalculation(
+      scenario.baselineBuild,
+      { hit: characterHitRef(scenario.baselineBuild.character, scenario.hitId), crit: 'critical', reaction: 'none' },
+      defaultEnemy(),
+    );
+    doc.baseline = projectSchema.parse(doc.project);
+    // Option A: mutate ONLY candidate actor build on document.project while preserving baseline timeline/conditions/definitions.
+    doc.project.candidate.actors[0].build = scenario.candidateBuild;
+
+    const serialized = JSON.stringify(packDocument('damage-calculator', doc));
+    const reopened = parseDamageCalculator(serialized);
+    expect(reopened.baseline, scenario.label).toBeDefined();
+
+    const recordId = reopened.recordId!;
+    const baselinePrepared = prepareCalculatorEvaluationProject(reopened.baseline!, reopened.actorId, recordId);
+    const candidatePrepared = prepareCalculatorEvaluationProject(reopened.project, reopened.actorId, recordId);
+
+    const evaluateMode = (project: typeof baselinePrepared, mode: 'critical' | 'expected') => {
+      const evaluated = evaluateTimeline(calculatorCritProject(project, recordId, mode));
+      const point = evaluated.points.find(p => p.id === recordId)!;
+      expect(point.value, `${scenario.label}/${mode}`).not.toBeNull();
+      expect(Number.isFinite(point.value!), `${scenario.label}/${mode}`).toBe(true);
+      const missingDiagnostics = [
+        ...evaluated.diagnostics.filter(d => d.code === 'unknown' || d.code === 'invalid-input' || d.code === 'stale-revision'),
+        ...(point.real?.structured?.diagnostics ?? []).filter(d => d.code === 'missing-fact'),
+      ];
+      expect(missingDiagnostics, `${scenario.label}/${mode}`).toEqual([]);
+      return point.value!;
+    };
+
+    const baseCrit = evaluateMode(baselinePrepared, 'critical');
+    const baseExp = evaluateMode(baselinePrepared, 'expected');
+    const candCrit = evaluateMode(candidatePrepared, 'critical');
+    const candExp = evaluateMode(candidatePrepared, 'expected');
+
+    expect(candCrit - baseCrit, scenario.label).toBeGreaterThan(0);
+    expect(candExp - baseExp, scenario.label).toBeGreaterThan(0);
+  }
+});
+
+describe('multi-actor calculator evaluation and teammate conditional buffs', () => {
+  async function makePartyBuild(
+    characterId: string,
+    weaponId: string,
+    options: { constellation?: number; refinement?: number; setId?: string; setPieces?: number } = {},
+  ): Promise<Build> {
+    const [character, weapon, artifactMain, sources, set] = await Promise.all([
+      getCharacter(characterId),
+      getWeapon(weaponId),
+      getArtifactMain(),
+      getBuildSources(),
+      options.setId ? getArtifactSet(options.setId) : Promise.resolve(undefined),
+    ]);
+    const sets = set ? [set] : [];
+    const pieces = options.setPieces ?? (set ? 4 : 0);
+    return {
+      ...sources,
+      schemaVersion: character.schemaVersion,
+      dataVersion: character.dataVersion,
+      kind: 'calculation-build',
+      character,
+      weapon,
+      artifactMain,
+      level: 90,
+      ascension: 6,
+      weaponLevel: weapon.rarity >= 3 ? 90 : 70,
+      weaponAscension: weapon.rarity >= 3 ? 6 : 4,
+      constellation: options.constellation ?? 0,
+      refinement: options.refinement ?? 1,
+      talents: { normal: 10, skill: 10, burst: 10 },
+      artifacts: [],
+      sets,
+      ...(set && pieces ? { theoreticalSetSlots: set.slots.slice(0, pieces).map(slot => ({ slot, setId: set.id })) } : {}),
+    };
+  }
+
+  function evaluatePreparedModes(project: Project, actorId: string, recordId: string, label: string) {
+    const beforeRevisions = JSON.stringify(project.effectRevisions);
+    const prepared = prepareCalculatorEvaluationProject(project, actorId, recordId);
+    expect(JSON.stringify(project.effectRevisions), `${label}: input effectRevisions mutated`).toBe(beforeRevisions);
+
+    const results = {} as Record<'critical' | 'expected', number>;
+    for (const mode of ['critical', 'expected'] as const) {
+      const evaluated = evaluateTimeline(calculatorCritProject(prepared, recordId, mode));
+      const badDiagnostics = [
+        ...evaluated.diagnostics.filter(d => d.code === 'unknown' || d.code === 'invalid-input' || d.code === 'stale-revision'),
+      ];
+      expect(badDiagnostics, `${label}/${mode}`).toEqual([]);
+      expect(evaluated.status, `${label}/${mode}: ${JSON.stringify(evaluated.diagnostics)}`).not.toBe('invalid');
+      const point = evaluated.points.find(p => p.id === recordId)!;
+      expect(point, `${label}/${mode}`).toBeDefined();
+      expect(point.value, `${label}/${mode}`).not.toBeNull();
+      expect(Number.isFinite(point.value!), `${label}/${mode}`).toBe(true);
+      expect(point.value!, `${label}/${mode}`).toBeGreaterThan(0);
+      const missingFacts = (point.real?.structured?.diagnostics ?? []).filter(d => d.code === 'missing-fact');
+      expect(missingFacts, `${label}/${mode}`).toEqual([]);
+      results[mode] = point.value!;
+    }
+    return { prepared, ...results };
+  }
+
+  function enableChoicesOnPrepared(
+    prepared: Project,
+    actorId: string,
+    recordId: string,
+    effectIds: readonly string[],
+  ): Project {
+    const record = prepared.timeline.find(entry => entry.id === recordId)!;
+    const damage = structuredClone(record.damage!);
+    const choices = calculatorBuffChoices(prepared, actorId, damage, record.timeMs, recordId);
+    const changes = new Map<string, boolean>();
+    for (const effectId of effectIds) {
+      const match = choices.find(choice => choice.effect.id === effectId);
+      expect(match, `missing choice ${effectId}`).toBeDefined();
+      enableCalculatorBuff(match!, damage, {}, actorId);
+      expect(calculatorBuffChecked(match!, damage, true), `checked after enable ${effectId}`).toBe(true);
+      changes.set(match!.id, true);
+    }
+    const selected = resolveBuffSelection(choices, damage, {}, actorId, changes);
+    const applied = applyCalculatorBuffs(prepared, damage, choices, selected, record.timeMs, recordId);
+    const nextRecord = applied.project.timeline.find(entry => entry.id === recordId)!;
+    nextRecord.damage = { ...damage, effectApplications: applied.applications };
+    return applied.project;
+  }
+
+  it('evaluates Odette C6 hits and standalone Stellar-Swirl in a 4-member TTDS party and scales cleanly when TTDS and Odette C2 are enabled', async () => {
+    const [odette, vesna, lisa, fischl, reactionRules] = await Promise.all([
+      makePartyBuild('odette', 'dullblade', { constellation: 6 }),
+      makePartyBuild('vesna', 'dullblade', { constellation: 6 }),
+      makePartyBuild('lisa', 'thrillingtalesofdragonslayers', { constellation: 0, refinement: 5, setId: 'noblesseoblige', setPieces: 4 }),
+      makePartyBuild('fischl', 'thestringless', { constellation: 6, setId: 'tenacityofthemillelith', setPieces: 4 }),
+      getReactionCalculationBundle(),
+    ]);
+
+    const buildHitDoc = (hitId: string): DamageCalculatorDocument => {
+      const doc = createDamageCalculation(odette, { hit: characterHitRef(odette.character, hitId), crit: 'critical', reaction: 'none' }, defaultEnemy());
+      addActorFromBuild(doc.project, vesna);
+      addActorFromBuild(doc.project, lisa);
+      addActorFromBuild(doc.project, fischl);
+      return doc;
+    };
+
+    const hitIds = ['odette.skill.param6', 'odette.skill.param9', 'odette.c1.finale-conduct', 'odette.c1.finale-swirl'] as const;
+    const baselineResults = new Map<string, { doc: DamageCalculatorDocument; prepared: Project; critical: number; expected: number }>();
+
+    for (const hitId of hitIds) {
+      const doc = buildHitDoc(hitId);
+      expect(doc.project.effectRevisions).toBeUndefined();
+      const evaluated = evaluatePreparedModes(doc.project, doc.actorId, doc.recordId!, hitId);
+      baselineResults.set(hitId, { doc, ...evaluated });
+    }
+
+    // Standalone stellar-swirl reaction for Odette in the 4-member party.
+    {
+      const doc = buildHitDoc('odette.skill.param6');
+      doc.recordId = addSingleContributorReaction(
+        doc.project, doc.actorId, 'stellar-swirl', 'anemo', 0, reactionRules, doc.recordId, stellarSwirlCoefficients.initialAnemo,
+      );
+      evaluatePreparedModes(doc.project, doc.actorId, doc.recordId, 'odette.standalone.stellar-swirl');
+    }
+
+    for (const hitId of ['odette.skill.param6', 'odette.c1.finale-conduct'] as const) {
+      const base = baselineResults.get(hitId)!;
+      const { doc } = base;
+      const ttdsProject = enableChoicesOnPrepared(base.prepared, doc.actorId, doc.recordId!, ['thrillingtalesofdragonslayers.handoff-attack']);
+      const ttdsFact = subjectFacts(ttdsProject.timeline.find(entry => entry.id === doc.recordId)?.damage?.facts, { kind: 'actor', id: doc.actorId })
+        ?.['thrillingtalesofdragonslayers.switchRecipient'];
+      expect(ttdsFact?.value).toEqual({ kind: 'boolean', value: true });
+      const withTtds = evaluatePreparedModes(ttdsProject, doc.actorId, doc.recordId!, `${hitId}+TTDS`);
+      expect(withTtds.critical, `${hitId}+TTDS critical`).toBeGreaterThan(base.critical);
+      expect(withTtds.expected, `${hitId}+TTDS expected`).toBeGreaterThan(base.expected);
+
+      const ttdsAndC2Project = enableChoicesOnPrepared(withTtds.prepared, doc.actorId, doc.recordId!, [
+        'thrillingtalesofdragonslayers.handoff-attack',
+        'odette.c2.splendor-attack',
+      ]);
+      const splendorFact = subjectFacts(ttdsAndC2Project.timeline.find(entry => entry.id === doc.recordId)?.damage?.facts, { kind: 'actor', id: doc.actorId })
+        ?.['odette.splendorStacks'];
+      expect(splendorFact?.value).toEqual({ kind: 'quantity', unit: 'count', value: 6 });
+      const withBoth = evaluatePreparedModes(ttdsAndC2Project, doc.actorId, doc.recordId!, `${hitId}+TTDS+C2`);
+      expect(withBoth.critical, `${hitId}+TTDS+C2 critical`).toBeGreaterThan(withTtds.critical);
+      expect(withBoth.expected, `${hitId}+TTDS+C2 expected`).toBeGreaterThan(withTtds.expected);
+    }
+  });
+
+  it('respects excludeOwner on TTDS when the hit-owner holds it in a 4-member party including Vesna', async () => {
+    const [lisa, vesna, bennett, fischl, reactionRules] = await Promise.all([
+      makePartyBuild('lisa', 'thrillingtalesofdragonslayers', { constellation: 0, refinement: 5 }),
+      makePartyBuild('vesna', 'dullblade', { constellation: 6 }),
+      makePartyBuild('bennett', 'dullblade', { constellation: 1, setId: 'noblesseoblige', setPieces: 4 }),
+      makePartyBuild('fischl', 'thestringless', { constellation: 6 }),
+      getReactionCalculationBundle(),
+    ]);
+
+    const doc = createDamageCalculation(lisa, { hit: characterHitRef(lisa.character, 'lisa.skill.param1'), crit: 'critical', reaction: 'none' }, defaultEnemy());
+    addActorFromBuild(doc.project, vesna);
+    addActorFromBuild(doc.project, bennett);
+    addActorFromBuild(doc.project, fischl);
+
+    const { prepared } = evaluatePreparedModes(doc.project, doc.actorId, doc.recordId!, 'lisa.skill.param1');
+    const lisaDamage = prepared.timeline.find(entry => entry.id === doc.recordId)?.damage!;
+    const choices = calculatorBuffChoices(prepared, doc.actorId, lisaDamage, 0, doc.recordId);
+    expect(choices.some(choice => choice.effect.id === 'thrillingtalesofdragonslayers.handoff-attack')).toBe(false);
+
+    doc.recordId = addSingleContributorReaction(doc.project, doc.actorId, 'overloaded', 'pyro', 0, reactionRules, doc.recordId);
+    evaluatePreparedModes(doc.project, doc.actorId, doc.recordId, 'lisa.standalone.overloaded');
+  });
+
+  it('evaluates Xiangling snapshot burst hit cleanly in a 4-member party with TTDS and Vesna', async () => {
+    const [xiangling, vesna, lisa, bennett] = await Promise.all([
+      makePartyBuild('xiangling', 'beginnersprotector', { constellation: 6 }),
+      makePartyBuild('vesna', 'dullblade', { constellation: 6 }),
+      makePartyBuild('lisa', 'thrillingtalesofdragonslayers', { constellation: 0, refinement: 5 }),
+      makePartyBuild('bennett', 'dullblade', { constellation: 1, setId: 'noblesseoblige', setPieces: 4 }),
+    ]);
+
+    const doc = createDamageCalculation(xiangling, { hit: characterHitRef(xiangling.character, 'xiangling.burst.param4'), crit: 'critical', reaction: 'none' }, defaultEnemy());
+    addActorFromBuild(doc.project, vesna);
+    addActorFromBuild(doc.project, lisa);
+    addActorFromBuild(doc.project, bennett);
+
+    evaluatePreparedModes(doc.project, doc.actorId, doc.recordId!, 'xiangling.burst.param4');
+  });
+
+  it('evaluates Nahida A1 team max-EM conditional buff in a 4-member party without missing facts', async () => {
+    const [nahida, kuki, sucrose, lisa] = await Promise.all([
+      makePartyBuild('nahida', 'thewidsith', { constellation: 2, refinement: 1 }),
+      makePartyBuild('kukishinobu', 'ironsting', { constellation: 6, setId: 'gildeddreams', setPieces: 4 }),
+      makePartyBuild('sucrose', 'thewidsith', { constellation: 6, refinement: 5 }),
+      makePartyBuild('lisa', 'thrillingtalesofdragonslayers', { constellation: 0, refinement: 5 }),
+    ]);
+
+    for (const hitId of ['nahida.skill.param1', 'nahida.skill.param3'] as const) {
+      const doc = createDamageCalculation(nahida, { hit: characterHitRef(nahida.character, hitId), crit: 'critical', reaction: 'none' }, defaultEnemy());
+      addActorFromBuild(doc.project, kuki);
+      addActorFromBuild(doc.project, sucrose);
+      addActorFromBuild(doc.project, lisa);
+
+      const base = evaluatePreparedModes(doc.project, doc.actorId, doc.recordId!, hitId);
+      const shrineProject = enableChoicesOnPrepared(base.prepared, doc.actorId, doc.recordId!, ['nahida.compassion']);
+      const shrineFact = subjectFacts(shrineProject.timeline.find(entry => entry.id === doc.recordId)?.damage?.facts, { kind: 'actor', id: doc.actorId })
+        ?.['nahida.inShrine'];
+      expect(shrineFact?.value).toEqual({ kind: 'boolean', value: true });
+      const withShrine = evaluatePreparedModes(shrineProject, doc.actorId, doc.recordId!, `${hitId}+inShrine`);
+      if (hitId === 'nahida.skill.param3') {
+        expect(withShrine.critical, `${hitId}+inShrine critical`).toBeGreaterThan(base.critical);
+        expect(withShrine.expected, `${hitId}+inShrine expected`).toBeGreaterThan(base.expected);
+      }
+    }
+  });
 });

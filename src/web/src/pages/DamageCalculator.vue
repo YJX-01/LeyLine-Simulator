@@ -1,12 +1,6 @@
 <script setup lang="ts">
-import BattleSceneSettings from '../components/BattleSceneSettings.vue';
-import AuraObservationForm from '../components/AuraObservationForm.vue';
-import TalentHealingForm from '../components/TalentHealingForm.vue';
-import ReactionRecordForm from '../components/ReactionRecordForm.vue';
-import { addAuraObservation, addReactionObservation, addParticlePickup, addTalentHeal } from '../domain/real-project';
-import CombatChangeList from '../components/CombatChangeList.vue';
-import { grantedDamageChanges, resolveEquipmentPanel } from '@leyline/engine';
-import { definitionKey, matchingSceneHits, sceneHitInInterval, type SceneDefinition, type SceneHitRequest, type SceneSelection } from '@leyline/schema';
+import { resolveEquipmentPanel } from '@leyline/engine';
+import { definitionKey } from '@leyline/schema';
 import { combatFactDeclaration } from '@leyline/schema/buffs';
 import { absorbedElements, ordinaryReactions } from '@leyline/schema/hit-bindings';
 import { putHitFact, subjectFacts, findBuildHit, isTransformative, partyInfusionFact, talentInputMaximum, transformativeElements } from '@leyline/schema';
@@ -14,9 +8,9 @@ import { APP_VERSION } from '@leyline/schema/version';
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, ref, shallowRef, toRaw, watch } from 'vue';
 import { getReactionCalculationBundle, stellarSwirlCoefficients } from '@leyline/game-data';
 import type { TransformativeFamily, ProjectReaction } from '@leyline/schema';
-import { damageCalculatorSchema, projectSchema, type ValueType, createTalentRankReader, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest, type StatKey } from '@leyline/schema';
+import { damageCalculatorSchema, projectSchema, createTalentRankReader, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest, type Project, type RequiredInput, type StatKey } from '@leyline/schema';
 import type { AccountArtifact, AccountCharacter, LocalAccount } from '../domain/account';
-import { addCalculatorCapture, addCalculatorSceneHit, calculatorRequest, calculatorCritProject, calculatorSceneHits, calculatorSnapshotDraft, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
+import { addCalculatorCapture, calculatorRequest, calculatorCritProject, calculatorSnapshotDraft, calculatorWorkerRequest, parseDamageCalculator, prepareCalculatorContentUpdate, prepareCalculatorEvaluationProject, readCalculatorSource, reconcileCalculatorHitState } from '../domain/damage-calculator';
 import { addActorFromBuild, addSingleContributorReaction, defaultEnemy, singleContributorLunarElements, type SingleContributorReaction } from '../domain/real-project';
 import { createEmptyProject, nextRecordId } from '../domain/workbench-project';
 import { teamArtifactEntries, type TeamConfigurationRef } from '../domain/team-members';
@@ -29,9 +23,8 @@ import { applyCharacterDefinition, copyCharacterDefinition, parseCharacterDefini
 import { exportCharacterSnapshot } from '../domain/structured-character-import';
 import { DocumentReadError, packDocument } from '../domain/content-document';
 import { downloadJson, downloadJsonText } from '../domain/download';
-import { realElementLabel, realStatLabel, recordLabel, actorLabel, damageFamilyLabel, sceneHitLabel } from '../domain/workbench-labels';
+import { realElementLabel, realStatLabel, damageFamilyLabel } from '../domain/workbench-labels';
 import { useAccountStore } from '../stores/account';
-import { useAxisWorkspaceStore } from '../stores/axis-workspace';
 import { useUnsavedChanges } from '../composables/use-unsaved-changes';
 import CharacterStatPanel from '../components/CharacterStatPanel.vue';
 import EffectiveRollSummary from '../components/EffectiveRollSummary.vue';
@@ -52,9 +45,9 @@ import CalculatorEnemySettings from '../components/CalculatorEnemySettings.vue';
 import SlotPlaceholder from '../components/SlotPlaceholder.vue';
 import CalculatorFactorCards from '../components/CalculatorFactorCards.vue';
 import { calculatorHitChoices, type CalculatorHitChoice } from '../domain/calculator-hits';
-import { applyCalculatorBuffs, buffDisplayName, buffFactNames, calculatorBuffChoices, resolveBuffSelection } from '../domain/calculator-buffs';
-import { presetCalculatorHitInputs, missingCalculatorPresets, calculatorFactPreset, calculatorHitElement, calculatorIntervals, calculatorOnFieldActor, calculatorHitFactFields, calculatorPartyInfusionOptions, type CalculatorFactField, selectionFacts, selectionEnumFallback, setCalculatorFact } from '../domain/calculator-conditions';
-import { calculatorBuffReadouts, calculatorSupportText, damageNumber as number, reactionNames, critNames } from '../domain/calculator-factors';
+import { applyCalculatorBuffs, buffDisplayName, buffFactNames, calculatorBuffChoices } from '../domain/calculator-buffs';
+import { presetCalculatorHitInputs, missingCalculatorPresets, calculatorHitElement, calculatorIntervals, calculatorOnFieldActor, calculatorHitFactFields, calculatorHitRadiance, calculatorMainPageFactKeys, calculatorPartyInfusionOptions, calculatorPersonalInfusion, readCalculatorPersonalInfusion, readCalculatorRadiance, selectionFacts, writeCalculatorPersonalInfusion, writeCalculatorRadiance, type CalculatorFactField } from '../domain/calculator-conditions';
+import { calculatorBuffReadouts, calculatorSupportText, damageNumber as number, reactionNames } from '../domain/calculator-factors';
 import type { SavedTeam } from '../stores/saved-teams';
 import { loadSavedDamage, saveDamageSnapshot } from '../platform/saved-damage';
 const SavedDamageList = defineAsyncComponent(() => import('../components/SavedDamageList.vue'));
@@ -64,7 +57,7 @@ const ArtifactDetail = defineAsyncComponent(() => import('./ArtifactDetail.vue')
 const CharacterDetailDialog = defineAsyncComponent(() => import('./CharacterDetailDialog.vue'));
 const ManualCharacterImport = defineAsyncComponent(() => import('./ManualCharacterImport.vue'));
 
-const account = useAccountStore(), axis = useAxisWorkspaceStore();
+const account = useAccountStore();
 const document = shallowRef<DamageCalculatorDocument>();
 const working = ref(false), error = ref('');
 const unreadDocument = ref('');
@@ -72,13 +65,16 @@ const file = ref<HTMLInputElement>(), source = ref('');
 const savedSignature = ref('');
 const listed = shallowRef<{ id: string; signature: string }>();
 const savingDamage = ref(false);
-const response = shallowRef<AxisResponse>();
 const resultExpanded = ref(true);
 const inspectedArtifact = shallowRef<AccountArtifact>();
 const criticalFormat = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 0 });
 const expectedFormat = new Intl.NumberFormat('zh-CN', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const formatCritical = (value?: number | null) => value == null || !Number.isFinite(value) ? '—' : criticalFormat.format(value);
+const formatExpected = (value?: number | null) => value == null || !Number.isFinite(value) ? '—' : expectedFormat.format(value);
 const criticalResult = shallowRef<AxisResponse['result']>();
 const expectedResult = shallowRef<AxisResponse['result']>();
+const baselineCriticalResult = shallowRef<AxisResponse['result']>();
+const baselineExpectedResult = shallowRef<AxisResponse['result']>();
 const picker = ref<'team' | 'character' | 'candidate' | 'damage' | 'buff' | 'list'>();
 const characterSource = ref<'local' | 'showcase' | 'catalog'>('local');
 const sourceChoices = computed(() => [
@@ -99,7 +95,7 @@ let reviewSignature = '';
 const emptyDamage = (): DamageRequest => ({ hit: { definition: { group: 'characters', namespace: 'builtin', id: '', revision: '' }, hitId: '' }, crit: 'critical', reaction: 'none' });
 const damage = ref<DamageRequest>(emptyDamage());
 const enemy = ref(defaultEnemy());
-const hitTime = ref(0), captureTime = ref<number | string>('');
+const hitTime = ref(0);
 const actor = computed(() => document.value?.project.candidate.actors.find(actor => actor.id === document.value!.actorId));
 const hitOwner = computed(() => {
   const record = document.value?.project.timeline.find(record => record.id === document.value?.recordId);
@@ -128,15 +124,9 @@ const selectedChoice = computed(() => hitChoices.value.find(choice => choice.ref
   && choice.ref.definition.namespace === damage.value.hit.definition.namespace
   && choice.ref.definition.id === damage.value.hit.definition.id && choice.ref.definition.revision === damage.value.hit.definition.revision && choice.hitId === damage.value.hit.hitId));
 const standalone = computed(() => !damage.value.hit.hitId ? document.value?.project.timeline.find(r=>r.id===document.value?.recordId)?.reactionEvent : undefined);
-const sceneHit = computed(() => !damage.value.hit.hitId ? document.value?.project.timeline.find(record => record.id === document.value?.recordId)?.sceneHit : undefined);
-const sceneChoices = computed(() => calculatorSceneHits(document.value?.project));
-const sceneDefinition = computed(() => sceneHit.value && matchingSceneHits(document.value?.project.sceneEffects, sceneHit.value.scene)[0]?.definition);
-const sceneHitDefinition = computed(() => sceneDefinition.value?.hits?.[0]);
-const hasDamageCard = computed(() => !!(selectedChoice.value || standalone.value || sceneDefinition.value));
-const sceneBaseOnly = computed(() => sceneHitDefinition.value && 'settlement' in sceneHitDefinition.value);
+const hasDamageCard = computed(() => !!(selectedChoice.value || standalone.value));
 const editableStandaloneCrit = computed(() => standalone.value?.contributors.length === 1 && !standalone.value.jointCrit);
 const selectedLabel = computed(() => {
-  if (sceneHit.value) return sceneHitLabel(sceneDefinition.value);
   if (standalone.value) return damageFamilyLabel(standalone.value.family);
   const row = selectedChoice.value;
   if (!row) return '';
@@ -154,6 +144,7 @@ const buffIcons = computed(() => {
     rows: values.get(buff.id) ?? [],
   }));
 });
+const mainPageFactKeys = computed(() => calculatorMainPageFactKeys(selectedBinding.value, hitOwner.value?.build?.constellation ?? 0));
 const factFields = computed(() => {
   const hit = selectedHit.value;
   const owner = hitOwner.value?.id;
@@ -163,19 +154,18 @@ const factFields = computed(() => {
     key: 'onField', type: { kind: 'boolean' }, subject: { kind: 'actor', id: member.id },
   })) : [];
   const dealer = hit?.coordinated && document.value ? calculatorOnFieldActor(document.value.project, damage.value, Math.round(hitTime.value * 1000), document.value.recordId) : hitOwner.value;
-  const dealerBuild = dealer?.build;
-  const changes = dealerBuild ? grantedDamageChanges(dealerBuild).filter(({ rule }) => !rule.categories || hit?.category && rule.categories.includes(hit.category)) : [];
-  if (changes.length) {
-    const keys = ['targetsDamaged', 'triggerRoll', ...changes.some(({ rule }) => rule.critical) ? ['criticalTargets'] : []];
-    for (const key of keys) partyFields.push({ key, type: combatFactDeclaration(undefined, key)!.type, subject: { kind: 'event' } });
-  }
-  for (const key of ['hpRatio', 'onField', 'shielded'] as const) partyFields.push({
-    key, type: combatFactDeclaration(undefined, key)!.type, subject: { kind: 'actor', id: owner },
-  });
+  const ownerBuffFactKeys = new Set(
+    buffs.value.flatMap(buff => buff.fields)
+      .filter(field => !field.fromTrigger && field.subject?.kind === 'actor' && field.subject.id === owner)
+      .map(field => field.key),
+  );
   for (const field of [...partyFields, ...calculatorHitFactFields(selectedBinding.value, owner, dealer?.id, hitOwner.value?.build?.constellation), ...buffs.value.flatMap(buff => buff.fields)]) {
     const subject = field.subject;
-    if (!subject
-      || subject.kind === 'event' && (hitInputs.value.some(input => input.id === field.key) || ['critMode', 'reactionMode'].includes(field.key))) continue;
+    if (!subject) continue;
+    const onOwnerOrEvent = subject.kind === 'event' || (subject.kind === 'actor' && subject.id === owner);
+    if (onOwnerOrEvent && mainPageFactKeys.value.has(field.key)) continue;
+    if (subject.kind === 'actor' && subject.id === owner && ['hpRatio', 'onField', 'shielded'].includes(field.key)
+      && !(hit?.coordinated && field.key === 'onField') && !ownerBuffFactKeys.has(field.key)) continue;
     const name = subject.kind === 'actor' ? document.value?.project.candidate.actors.find(actor => actor.id === subject.id)?.build?.character.identity.name
       : subject.kind === 'team' ? '队伍' : subject.kind === 'target' ? '目标' : '本击';
     const label = field.label ?? selectedBinding.value?.entity.metadata.facts?.[field.key]?.label ?? buffFactNames[field.key] ?? field.key;
@@ -187,26 +177,6 @@ const factFields = computed(() => {
   return [...fields.values()];
 });
 const metadataFile = ref<HTMLInputElement>();
-function updateScenes(scenes: SceneSelection[]) {
-  if (!document.value || document.value.baseline) return;
-  invalidate();
-  document.value = { ...document.value, project: { ...document.value.project, sceneEffects: scenes } };
-  if (document.value.recordId) void calculate();
-}
-function updateSceneHit(patch: Partial<Pick<SceneHitRequest, 'elementLevelCo' | 'triggered' | 'targetHit'>>) {
-  const current = document.value;
-  if (!current || current.baseline || !sceneHit.value) return;
-  const timeline = current.project.timeline.map(record => record.id === current.recordId && record.sceneHit
-    ? { ...record, sceneHit: { ...record.sceneHit, ...patch } } : record);
-  document.value = { ...current, project: { ...current.project, timeline } };
-}
-const sceneTriggered = computed({ get: () => sceneHit.value?.triggered ?? true, set: triggered => updateSceneHit({ triggered }) });
-const sceneTargetHit = computed({ get: () => sceneHit.value?.targetHit ?? true, set: targetHit => updateSceneHit({ targetHit }) });
-function setSceneCoefficient(event: Event) {
-  const input = event.target as HTMLInputElement;
-  if (!input.value) input.value = '1';
-  updateSceneHit({ elementLevelCo: input.valueAsNumber });
-}
 function exportMetadata() {
   if (!actor.value?.build) return;
   try {
@@ -231,63 +201,93 @@ async function importMetadata(event: Event) {
     if (next.recordId) await calculate();
   } catch (cause) { showError(cause); }
 }
-const result = computed(() => response.value?.comparison?.candidates[0]?.result ?? response.value?.result);
-const point = computed(() => result.value?.points.find(point => point.id === document.value?.recordId));
-const inactiveHit = computed(() => {
-  const evaluation = point.value?.real?.structured;
-  const output = evaluation?.outputs.find(row => row.outputId === damage.value.hit.hitId);
-  if (output?.value.state !== 'known' || output.value.value.value !== 0
-    || !evaluation?.trace.some(node => node.id === output.value.traceId && node.nodeId === 'predicate')) return;
-  const binding = selectedBinding.value;
-  const excluded = binding && selectionFacts(binding.hit.damage[output.family]?.predicate, binding.entity.calculation.bundle, false);
-  return excluded?.some(setting => setting.key === 'radiance' && setting.value.value === 'none')
-    ? '需要辉映·星超导或辉映·星扩散' : '当前条件下不会触发此命中';
-});
+const result = computed(() => criticalResult.value ?? expectedResult.value);
+const criticalPoint = computed(() => criticalResult.value?.points.find(point => point.id === document.value?.recordId));
+const expectedPoint = computed(() => expectedResult.value?.points.find(point => point.id === document.value?.recordId));
+const point = computed(() => criticalPoint.value ?? expectedPoint.value);
+const baselineCriticalPoint = computed(() => baselineCriticalResult.value?.points.find(point => point.id === document.value?.recordId));
+const baselineExpectedPoint = computed(() => baselineExpectedResult.value?.points.find(point => point.id === document.value?.recordId));
+const criticalDelta = computed(() => criticalPoint.value?.value != null && baselineCriticalPoint.value?.value != null
+  ? criticalPoint.value.value - baselineCriticalPoint.value.value : undefined);
+const expectedDelta = computed(() => expectedPoint.value?.value != null && baselineExpectedPoint.value?.value != null
+  ? expectedPoint.value.value - baselineExpectedPoint.value.value : undefined);
+const radianceLabels: Record<string, string> = { none: '无', 'stellar-conduct': '星超导', 'stellar-swirl': '星扩散' };
 const radianceStatus = computed(() => {
   if (!result.value || !selectedBinding.value || !hitOwner.value || !document.value) return;
   const excluded = selectionFacts(selectedOutput.value?.predicate, selectedBinding.value.entity.calculation.bundle, false);
   if (excluded.length !== 1 || excluded[0].key !== 'radiance' || excluded[0].value.value !== 'none') return;
   const fact = point.value?.real?.structured?.trace.find(node => node.nodeId === 'radiance'
     && node.state === 'known' && node.value?.kind === 'enum');
-  const labels: Record<string, string> = { none: '无', 'stellar-conduct': '星超导', 'stellar-swirl': '星扩散' };
-  return fact?.value?.kind === 'enum' ? labels[fact.value.value] : undefined;
+  return fact?.value?.kind === 'enum' ? radianceLabels[fact.value.value] : undefined;
 });
-const criticalPoint = computed(() => criticalResult.value?.points.find(point => point.id === document.value?.recordId));
 const candidateBuild = computed(() => actor.value?.build);
 const equipmentPanel = computed(() => candidateBuild.value && resolveEquipmentPanel(candidateBuild.value));
 const candidatePanel = computed(() => {
-  if (!sceneHit.value && hitOwner.value?.id === actor.value?.id && point.value?.real) return point.value.real.panel;
+  if (hitOwner.value?.id === actor.value?.id && point.value?.real) return point.value.real.panel;
   return equipmentPanel.value;
 });
-const expectedPoint = computed(() => expectedResult.value?.points.find(point => point.id === document.value?.recordId));
-const baselinePoint = computed(() => response.value?.comparison?.baseline.points.find(point => point.id === document.value?.recordId));
-const comparisonPoint = computed(() => response.value?.comparison?.candidates[0]?.points.find(point => point.id === document.value?.recordId));
 
 const inputNames: Record<string, string> = { counterCharge: '反击档位', namisen: '浪闪层数', resolve: '施放时消耗的愿力', lightfallEnergy: '光降之剑能量层数' };
 const factLabels: Record<string, string> = { ...buffFactNames, ...inputNames, critMode: '暴击', reactionMode: '反应' };
-function diagnosticText(message: string) {
+function entityFactLabel(key: string, preferredActor?: Project['candidate']['actors'][number]) {
+  const actors = document.value?.project.candidate.actors ?? [];
+  const ordered = preferredActor ? [preferredActor, ...actors.filter(member => member.id !== preferredActor.id)] : actors;
+  for (const member of ordered) {
+    const build = member.build;
+    if (!build) continue;
+    for (const entity of [build.character, build.weapon, ...build.sets]) {
+      const label = entity?.metadata.facts?.[key]?.label;
+      if (label) return label;
+    }
+  }
+}
+function diagnosticText(message: string, requiredInputs?: RequiredInput[]) {
   const prefix = '计算事实尚未明确：';
   if (!message.startsWith(prefix)) return calculatorSupportText(message);
   const key = message.slice(prefix.length);
-  return '需填写' + (factLabels[key] ?? factFields.value.find(field => field.key === key)?.label ?? key);
+  const req = requiredInputs?.find(item => item.key === key && item.requiredBy.length)
+    ?? requiredInputs?.find(item => item.key === key);
+  const scope = req?.scope;
+  if (scope) {
+    const actors = document.value?.project.candidate.actors ?? [];
+    const matchedActor = actors.find(member => member.id === scope)
+      ?? actors.find(member => scope.endsWith(':' + member.id));
+    if (matchedActor) {
+      const matched = factFields.value.find(field => field.key === key
+        && field.subject?.kind === 'actor' && field.subject.id === matchedActor.id)?.label;
+      if (matched) return '需填写' + matched;
+      const actorName = matchedActor.build?.character.identity.name ?? matchedActor.name;
+      const label = entityFactLabel(key, matchedActor) ?? factLabels[key] ?? key;
+      return '需填写' + [actorName, label].filter(Boolean).join(' · ');
+    }
+    const subjectKind = scope === 'target' || scope.endsWith(':target') ? 'target'
+      : scope === 'team' || scope.endsWith(':team') ? 'team'
+      : scope === 'query' || scope.endsWith(':query') ? 'event'
+      : undefined;
+    if (subjectKind) {
+      const matched = factFields.value.find(field => field.key === key && field.subject?.kind === subjectKind)?.label;
+      if (matched) return '需填写' + matched;
+      const label = entityFactLabel(key) ?? factLabels[key] ?? key;
+      if (subjectKind === 'event') return '需填写' + (factLabels[key] ?? label);
+      return '需填写' + [subjectKind === 'target' ? '目标' : '队伍', label].join(' · ');
+    }
+  }
+  return '需填写' + (factLabels[key] ?? factFields.value.find(field => field.key === key)?.label ?? entityFactLabel(key) ?? key);
 }
-const missingBuff = computed(() => [point.value, criticalPoint.value, expectedPoint.value].some(point => point?.real?.structured?.requiredInputs.some(input =>
-  input.requiredBy.length && (factFields.value.some(field => field.key === input.key) || ['onField', 'shielded', 'hpRatio'].includes(input.key)))));
-const diagnostics = computed(() => {
-  const recordPath = document.value?.recordId && 'timeline.' + document.value.recordId;
-  const all = [...(result.value?.diagnostics ?? []), ...(criticalResult.value?.diagnostics ?? []), ...(expectedResult.value?.diagnostics ?? [])];
-  return [...new Set(all.filter(({ path }) => !recordPath || !path.startsWith('timeline.') || path === recordPath || path.startsWith(recordPath + '.'))
-    .map(diagnostic => diagnosticText(diagnostic.message)))];
-});
 function unavailable(assessment: AxisResponse['result'] | undefined, record: typeof point.value) {
   if (record?.real?.status === 'invalid' || assessment?.status === 'invalid') return '输入需修正';
   const missing = record?.real?.issues.find(issue => issue.code === 'unknown');
-  if (missing) return diagnosticText(missing.message);
+  if (missing) return diagnosticText(missing.message, record?.real?.structured?.requiredInputs);
   if (record?.real?.issues.some(issue => issue.code === 'unsupported')) return '机制尚未支持';
   return '未取得计算结果';
 }
-const reactionType = computed({ get: () => damage.value.reaction === null ? '' : damage.value.reaction === 'none' ? 'none' : damage.value.reaction.type,
-  set: (value: string) => { damage.value.reaction = !value ? null : value === 'none' ? 'none' : { type: value as 'melt' | 'vaporize' | 'aggravate' | 'spread', trigger: 'record-owner' }; } });
+const reactionType = computed({
+  get: () => damage.value.reaction === null ? '' : damage.value.reaction === 'none' ? 'none' : damage.value.reaction.type,
+  set: (value: string) => {
+    damage.value.reaction = !value ? null : value === 'none' ? 'none' : { type: value as 'melt' | 'vaporize' | 'aggravate' | 'spread', trigger: 'record-owner' };
+    void calculate();
+  },
+});
 const infusionChoices = computed(() => {
   if (!document.value || !selectedBinding.value || !hitOwner.value) return [];
   return [...calculatorPartyInfusionOptions(document.value.project, damage.value, selectedBinding.value,
@@ -302,6 +302,37 @@ const partyInfusion = computed({
   set: (value: string) => {
     putHitFact(damage.value.facts ??= [], { kind: 'event' }, partyInfusionFact, { kind: 'enum', value });
     if (reactionType.value && !reactionChoices.value.some(choice => choice === reactionType.value)) damage.value.reaction = 'none';
+    void calculate();
+  },
+});
+const personalInfusionSpec = computed(() =>
+  calculatorPersonalInfusion(selectedBinding.value, hitOwner.value?.build?.constellation ?? 0, hitOwner.value?.id));
+const personalInfusion = computed({
+  get: () => {
+    const spec = personalInfusionSpec.value;
+    if (!spec || !hitOwner.value) return false;
+    return readCalculatorPersonalInfusion(damage.value, hitOwner.value.id, spec.key) ?? spec.defaultValue;
+  },
+  set: (value: boolean) => {
+    const spec = personalInfusionSpec.value;
+    if (!spec || !hitOwner.value) return;
+    writeCalculatorPersonalInfusion(damage.value, hitOwner.value.id, spec.key, value);
+    if (reactionType.value && !reactionChoices.value.some(kind => kind === reactionType.value)) damage.value.reaction = 'none';
+    void calculate();
+  },
+});
+const radianceSpec = computed(() => calculatorHitRadiance(selectedBinding.value));
+const radianceMode = computed({
+  get: () => {
+    const spec = radianceSpec.value;
+    if (!spec || !hitOwner.value) return '';
+    const current = readCalculatorRadiance(damage.value, hitOwner.value.id);
+    return current && spec.validOptions.includes(current) ? current : spec.defaultValue;
+  },
+  set: (value: string) => {
+    if (!hitOwner.value) return;
+    writeCalculatorRadiance(damage.value, hitOwner.value.id, value);
+    void calculate();
   },
 });
 const absorbedElement = computed({
@@ -313,6 +344,7 @@ const absorbedElement = computed({
   set: (value: string) => {
     putHitFact(damage.value.facts ??= [], { kind: 'event' }, 'absorbedElement', { kind: 'enum', value });
     if (reactionType.value && !reactionChoices.value.some(kind => kind === reactionType.value)) damage.value.reaction = 'none';
+    void calculate();
   },
 });
 const hitElement = computed(() => {
@@ -327,73 +359,19 @@ const hitElement = computed(() => {
   return calculatorHitElement(project, damage.value, selected, hitOwner.value.id, timeMs, recordId);
 });
 const reactionChoices = computed(() => ['none' as const, ...selectedHit.value?.reactions === false ? [] : ordinaryReactions(hitElement.value)]);
-const records = computed(() => document.value?.project.timeline.filter(record => record.kind === 'damage' && (record.damage || record.reactionEvent || record.sceneHit)) ?? []);
-const captures = computed(() => {
-  const snapshot = selectedHit.value?.snapshot;
-  if (!snapshot) return [];
-  return document.value?.project.timeline.filter(record => record.actor === hitOwner.value?.id
-    && (snapshot.sourceKind === 'capture-only' ? record.kind === 'capture'
-      : snapshot.sourceKind === 'action-or-capture' ? record.kind === 'capture' || record.kind === 'action'
-      : true)
-    && (record.kind === 'damage' ? findBuildHit(hitOwner.value?.build, record.damage?.hit)?.talent?.id : record.skillId) === snapshot.sourceSkillId) ?? [];
-});
-const captureRecord = computed(() => captures.value.find(record => record.kind === 'capture' && record.id === damage.value.capture?.recordId));
-type CaptureRecord = DamageCalculatorDocument['project']['timeline'][number];
-type CaptureField = CalculatorFactField & { subject: NonNullable<CalculatorFactField['subject']> };
-function fieldsAtCapture(record: CaptureRecord, attributes?: Set<string>) {
-  if (!document.value) return [];
-  const choices = calculatorBuffChoices(document.value.project, record.actor, emptyDamage(), record.timeMs, record.id);
-  const fields = new Map<string, CaptureField>();
-  for (const buff of choices) for (const field of buff.fields) {
-    if (!field.subject || field.subject.kind === 'event') continue;
-    if (attributes && !buff.modifiers.some(modifier => attributes.has(modifier.target))) continue;
-    fields.set(JSON.stringify([field.subject, field.key]), { ...field, subject: field.subject });
-  }
-  return [...fields.values()];
-}
-const captureGroups = computed(() => {
-  const project = document.value?.project;
-  if (!project) return [];
-  const current = captureRecord.value;
-  const groups = current ? [{ record: current, title: '捕获时的增益条件', fields: fieldsAtCapture(current) }] : [];
-  const statsAtCast = new Map<string, Set<string>>();
-  for (const { capturedStats } of buffs.value) {
-    if (!capturedStats) continue;
-    const attributes = statsAtCast.get(capturedStats.recordId) ?? new Set<string>();
-    for (const attribute of capturedStats.attributes) {
-      attributes.add(attribute);
-      if (attribute === 'attribute.attack') { attributes.add('attribute.flatAttack'); attributes.add('attribute.attackPercent'); }
-    }
-    statsAtCast.set(capturedStats.recordId, attributes);
-  }
-  for (const [id, attributes] of statsAtCast) {
-    const record = project.timeline.find(entry => entry.id === id);
-    if (!record || record.id === current?.id) continue;
-    const fields = fieldsAtCapture(record, attributes);
-    if (fields.length) groups.push({ record, title: actorLabel(project, record.actor) + ' · ' + recordLabel(project, record.id) + '施放时的增益条件', fields });
-  }
-  return groups;
-});
-function captureFieldLabel(field: CaptureField) {
-  const label = field.label ?? buffFactNames[field.key] ?? inputNames[field.key] ?? field.key;
-  const subject = field.subject;
-  const name = subject.kind === 'actor' && document.value ? actorLabel(document.value.project, subject.id) : subject.kind === 'team' ? '队伍' : '目标';
-  return name + ' · ' + label;
-}
-function editCaptureFact(record: CaptureRecord, field: CaptureField, event: Event) {
-  const current = document.value;
-  if (!current) return;
-  const input = (event.target as HTMLInputElement).value;
-  const type = field.type;
-  const value = input === '' ? calculatorFactPreset(field, record.actor) : type.kind === 'quantity' ? { ...type, value: Number(input) }
-    : type.kind === 'boolean' ? { kind: 'boolean' as const, value: input === 'true' } : { kind: 'enum' as const, value: input };
-  if (value?.kind === 'quantity' && (!Number.isFinite(value.value) || value.unit === 'count' && (!Number.isSafeInteger(value.value) || value.value < 0))) return;
-  const facts = structuredClone(toRaw(record.captureFacts ?? []));
-  putHitFact(facts, field.subject, field.key, value);
-  const timeline = current.project.timeline.map(row => row.id === record.id ? { ...row, captureFacts: facts } : row);
-  document.value = { ...current, project: { ...current.project, timeline } };
-  void calculate();
-}
+const hasHitConditions = computed(() => Boolean(
+  document.value && (
+    selectedHit.value?.selection?.repetitions
+    || infusionChoices.value.length > 0
+    || personalInfusionSpec.value
+    || selectedHit.value?.elementBy === 'absorbedElement'
+    || radianceSpec.value
+    || standalone.value?.family === 'swirl'
+    || standalone.value?.family === 'stellar-swirl'
+    || (selectedChoice.value && !standalone.value && reactionChoices.value.length > 1)
+    || hitInputs.value.length > 0
+  )
+));
 const loadouts = useCharacterLoadoutsStore();
 const entries = computed(() => teamArtifactEntries(actor.value?.build, account.account));
 const basis = computed(() => buildRollBasis(actor.value?.build));
@@ -421,19 +399,31 @@ function stop() {
   activeWorker?.terminate(); activeWorker = undefined; working.value = false;
   finishCalculation?.(); finishCalculation = undefined; calculationFinished = undefined;
 }
-function invalidate() { stop(); response.value = undefined; criticalResult.value = undefined; expectedResult.value = undefined; }
+function invalidate() {
+  stop();
+  criticalResult.value = undefined;
+  expectedResult.value = undefined;
+  baselineCriticalResult.value = undefined;
+  baselineExpectedResult.value = undefined;
+}
 watch(document, invalidate, { flush: 'sync' });
 watch([damage, enemy, hitTime], invalidate, { deep: true, flush: 'sync' });
 onBeforeUnmount(stop);
 function install(next: DamageCalculatorDocument, saved = false) {
   unreadDocument.value = '';
-  const keepsActor = !saved && next.project.id === document.value?.project.id && next.actorId === document.value.actorId
-    && fileSignature(next.project.candidate.actors.find(member => member.id === next.actorId)?.build) === fileSignature(actor.value?.build);
+  let parsed = damageCalculatorSchema.parse(next);
+  let record = parsed.project.timeline.find(entry => entry.id === parsed.recordId);
+  if (!parsed.baseline && record?.damage) {
+    const reconciled = reconcileCalculatorHitState(parsed.project, record.actor, record.damage, record.timeMs, record.id);
+    parsed = { ...parsed, project: reconciled.project };
+    record = parsed.project.timeline.find(entry => entry.id === parsed.recordId);
+  }
+  const keepsActor = !saved && parsed.project.id === document.value?.project.id && parsed.actorId === document.value.actorId
+    && fileSignature(parsed.project.candidate.actors.find(member => member.id === parsed.actorId)?.build) === fileSignature(actor.value?.build);
   if (!keepsActor) { linkedConfiguration.value = undefined; source.value = ''; }
   sourceRead++;
   listed.value = undefined;
-  invalidate(); pendingTeam.value = undefined; contentReview.value = undefined; document.value = damageCalculatorSchema.parse(next);
-  const record = next.project.timeline.find(record => record.id === next.recordId);
+  invalidate(); pendingTeam.value = undefined; contentReview.value = undefined; document.value = parsed;
   damage.value = record?.damage ? JSON.parse(JSON.stringify(record.damage)) : emptyDamage();
   if (record?.reactionEvent) {
     const reaction = structuredClone(toRaw(record.reactionEvent));
@@ -442,8 +432,8 @@ function install(next: DamageCalculatorDocument, saved = false) {
     damage.value = { ...damage.value, crit,
       facts: reaction.facts, effectApplications: reaction.effectApplications };
   }
-  hitTime.value = (record?.timeMs ?? 0) / 1000; captureTime.value = '';
-  enemy.value = next.project.enemy ? JSON.parse(JSON.stringify(next.project.enemy)) : defaultEnemy();
+  hitTime.value = (record?.timeMs ?? 0) / 1000;
+  enemy.value = parsed.project.enemy ? JSON.parse(JSON.stringify(parsed.project.enemy)) : defaultEnemy();
   error.value = '';
   savedSignature.value = saved ? signature() : '';
 }
@@ -451,11 +441,10 @@ function clearCalculation() {
   sourceRead++;
   listed.value = undefined;
   invalidate(); pendingTeam.value = undefined; contentReview.value = undefined; document.value = undefined;
-  damage.value = emptyDamage(); enemy.value = defaultEnemy(); hitTime.value = 0; captureTime.value = '';
+  damage.value = emptyDamage(); enemy.value = defaultEnemy(); hitTime.value = 0;
   editor.value = undefined; linkedConfiguration.value = undefined; error.value = ''; source.value = '';
 }
 function newCalculation() { requestLeave(clearCalculation); }
-function copyAxis() { requestLeave(() => { try { const copy = copyProjectForCalculator(axis.project); install(copy); if (copy.recordId) void calculate(); } catch (cause) { showError(cause); } }); }
 function showError(cause: unknown) {
   unreadDocument.value = cause instanceof DocumentReadError ? cause.original : '';
   error.value = cause instanceof Error ? cause.message : '计算未完成。'; }
@@ -484,8 +473,11 @@ function chooseTeam(team?: SavedTeam) {
     const project = projectSchema.parse(toRaw(team.project));
     const member = project.candidate.actors.find(member => member.build && member.build.character.id === role);
     const identity = { id: team.id, name: team.name };
-    if (member) install({ schemaVersion: APP_VERSION, kind: 'damage-calculator', team: identity, project, actorId: member.id });
-    else pendingTeam.value = { ...identity, project };
+    if (member) {
+      const record = project.timeline.find(entry => entry.actor === member.id && entry.damage);
+      install({ schemaVersion: APP_VERSION, kind: 'damage-calculator', team: identity, project, actorId: member.id, recordId: record?.id });
+      if (record) void calculate();
+    } else pendingTeam.value = { ...identity, project };
   });
 }
 function chooseCharacter(id: string) {
@@ -523,62 +515,32 @@ function selectDamage(choice: CalculatorHitChoice) {
     return;
   }
   const previousInputs = hitInputs.value;
-  const previousSkill = skill.value?.id, previousReaction = reactionType.value;
-  if (sceneHit.value) damage.value = emptyDamage();
-  damage.value = { ...damage.value, hit: choice.ref };
-  if (selectedHit.value?.selection?.repetitions) damage.value.hitOrdinal = 1;
-  else delete damage.value.hitOrdinal;
-  if (selectedHit.value?.critical === 'always') damage.value.crit = 'critical';
-  const priorFacts = subjectFacts(damage.value.facts, { kind: 'event' });
-  if (previousSkill !== choice.skillId && priorFacts) for (const input of previousInputs) delete priorFacts[input.id];
-  delete damage.value.capture;
-  if (hitOwner.value) for (const setting of hitFacts.value) setCalculatorFact(damage.value, setting, hitOwner.value.id);
-  if (hitOwner.value && selectedBinding.value) {
-    const settings = selectionEnumFallback(selectedOutput.value?.predicate, selectedBinding.value.entity.calculation.bundle,
-      factFields.value, damage.value.facts, hitOwner.value.id);
-    for (const setting of settings) setCalculatorFact(damage.value, setting, hitOwner.value.id);
+  const previousSkill = skill.value?.id;
+  const previousReaction = reactionType.value;
+  const draft: DamageRequest = standalone.value ? emptyDamage() : JSON.parse(JSON.stringify(damage.value));
+  draft.hit = choice.ref;
+  delete draft.capture;
+  delete draft.hitOrdinal;
+  if (previousSkill !== choice.skillId) {
+    const priorFacts = subjectFacts(draft.facts, { kind: 'event' });
+    if (priorFacts) for (const input of previousInputs) delete priorFacts[input.id];
   }
-  if (previousReaction && !reactionChoices.value.some(kind => kind === previousReaction)) damage.value.reaction = 'none';
-  if (damage.value.effectApplications?.length) {
-    const applicable = new Set(buffs.value.filter(option => option.explicit && !option.triggerSkill && !option.confirmTrigger).map(option => option.id));
-    damage.value.effectApplications = damage.value.effectApplications.filter(entry => applicable.has(entry.instanceId));
-  }
-  if (!previousSkill || previousSkill !== choice.skillId) {
-    presetCalculatorHitInputs(damage.value, hitInputs.value);
-  }
-  if (hitOwner.value) {
-    const draft: DamageRequest = JSON.parse(JSON.stringify(damage.value));
-    // Set up the ordinary single-hit trial before resolving conditional passives.
-    if (!document.value?.project.timeline.length) {
-      for (const field of factFields.value) {
-        if (field.subject?.kind !== 'actor' || !['onField', 'hpRatio', 'shielded'].includes(field.key)) continue;
-        if (subjectFacts(draft.facts, field.subject)?.[field.key]?.value == null)
-          putHitFact(draft.facts ??= [], field.subject, field.key, calculatorFactPreset(field, hitOwner.value.id), 'preset');
-      }
+  const current = document.value;
+  const owner = hitOwner.value;
+  if (current && owner && !current.baseline) {
+    const nextHit = findBuildHit(owner.build, choice.ref);
+    if (nextHit?.hit.critical === 'always') draft.crit = 'critical';
+    const timeMs = Math.round(hitTime.value * 1000);
+    const reconciled = reconcileCalculatorHitState(current.project, owner.id, draft, timeMs, current.recordId);
+    damage.value = reconciled.damage;
+    document.value = { ...current, project: reconciled.project };
+    if (previousReaction && !reactionChoices.value.some(kind => kind === previousReaction)) {
+      damage.value.reaction = 'none';
     }
-    const changes = resolveBuffSelection(buffs.value, draft, intervals.value, hitOwner.value.id, new Map());
-    applyBuffs(changes, draft);
-  } else void calculate();
-}
-function selectSceneHit(definition: SceneDefinition) {
-  const current = document.value, owner = hitOwner.value?.id;
-  if (!current || !owner || current.baseline) return;
-  picker.value = undefined;
-  if (sceneHit.value && definitionKey(sceneHit.value.scene) === definitionKey(definition)) {
-    if (!result.value && !working.value) void calculate();
-    return;
+  } else {
+    damage.value = draft;
   }
-  try {
-    const scene = { namespace: 'builtin' as const, id: definition.id, revision: definition.revision };
-    const next = prepareDocument()!;
-    const matching = matchingSceneHits(next.project.sceneEffects, scene);
-    const currentTime = Math.round(hitTime.value * 1000), delay = definition.hits?.[0]?.delayMs ?? 0;
-    const earliest = matching.find(entry => entry.startMs + delay < entry.endMs);
-    const timeMs = earliest && !matching.some(entry => sceneHitInInterval(entry, currentTime)) ? earliest.startMs + delay : currentTime;
-    next.recordId = addCalculatorSceneHit(next.project, owner, scene, timeMs, next.recordId);
-    install(next);
-    void calculate();
-  } catch (cause) { showError(cause); }
+  void calculate();
 }
 function setReactionElement(event: Event) {
   const current = document.value, reaction = standalone.value;
@@ -627,10 +589,10 @@ async function selectReaction(family: SingleContributorReaction) {
     await calculate();
   } catch(cause) { showError(cause); }
 }
-function applyBuffs(changes: Map<string,boolean>, draft: DamageRequest, durations?: Map<string,number[]>) {
+function applyBuffs(changes: Map<string, boolean>, draft: DamageRequest) {
   if (!document.value || document.value.baseline) return;
   try {
-    const next = applyCalculatorBuffs(document.value.project, draft, buffs.value, changes, Math.round(hitTime.value * 1000), document.value.recordId, durations);
+    const next = applyCalculatorBuffs(document.value.project, draft, buffs.value, changes, Math.round(hitTime.value * 1000), document.value.recordId);
     if (next.project !== document.value.project) document.value = { ...document.value, project: next.project };
     damage.value = { ...draft, effectApplications: next.applications };
     picker.value = undefined;
@@ -707,23 +669,16 @@ function applyBuild(build: Build) {
   linkedConfiguration.value = undefined;
   const { project } = current;
   const actors = project.candidate.actors.map(member => member.id === current.actorId ? { ...member, build } : member);
-  document.value = { ...current, project: { ...project, candidate: { ...project.candidate, actors } } };
+  let nextProject = { ...project, candidate: { ...project.candidate, actors } };
+  if (!current.baseline && damage.value.hit.hitId) {
+    const timeMs = Math.round(hitTime.value * 1000);
+    const ownerId = hitOwner.value?.id ?? current.actorId;
+    const reconciled = reconcileCalculatorHitState(nextProject, ownerId, damage.value, timeMs, current.recordId);
+    nextProject = reconciled.project;
+    damage.value = reconciled.damage;
+  }
+  document.value = { ...current, project: nextProject };
   if (selectedLabel.value) void calculate();
-}
-function recordBeforeHit(add:(project:DamageCalculatorDocument['project'],timeMs:number)=>string) {
-  if (!document.value || document.value.baseline) return;
-  try {
-    const next=prepareDocument()!;
-    const id=add(next.project,Math.round(hitTime.value*1000));
-    const query=next.project.timeline.find(r=>r.id===next.recordId),source=next.project.timeline.find(r=>r.id===id)!;
-    if (query) {
-      const order=query.order;
-      for (const record of next.project.timeline) if (record!==source && record.timeMs===source.timeMs && record.order>=order) record.order++;
-      source.order=order;
-    }
-    install(next);
-    void calculate();
-  } catch (cause) { showError(cause); }
 }
 function prepareDocument() {
   const current = document.value;
@@ -739,26 +694,26 @@ function prepareDocument() {
     const existing = timeline.find(record => record.id === next.recordId);
     presetCalculatorHitInputs(damage.value, hitInputs.value, existing?.facts);
     const index = timeline.findIndex(record => record.id === next.recordId);
-    if (index >= 0) timeline[index] = { ...timeline[index], reactionEvent:undefined, sceneHit:undefined, timeMs, damage: damage.value };
+    if (index >= 0) timeline[index] = { ...timeline[index], reactionEvent: undefined, sceneHit: undefined, timeMs, damage: damage.value };
     else {
       next.recordId = nextRecordId(next.project);
       timeline.push({ id: next.recordId, actor: next.actorId, kind: 'damage', definition: `${next.actorId}-real-damage`,
         timeMs, order: Math.max(-1, ...timeline.map(record => record.order)) + 1, damage: damage.value });
     }
     const snapshot = selectedHit.value?.snapshot;
-    const allowedCapture = (record: CaptureRecord) => record.actor === hitOwner.value?.id
+    const allowedCapture = (record: Project['timeline'][number]) => record.actor === hitOwner.value?.id
       && (snapshot?.sourceKind === 'capture-only' ? record.kind === 'capture'
         : snapshot?.sourceKind === 'action-or-capture' ? record.kind === 'capture' || record.kind === 'action'
         : true)
       && (record.kind === 'damage' ? findBuildHit(hitOwner.value?.build, record.damage?.hit)?.talent?.id : record.skillId) === snapshot?.sourceSkillId;
     if (snapshot && damage.value.capture?.recordId) {
-      const current = timeline.find(record => record.id === damage.value.capture?.recordId);
-      if (!current || !allowedCapture(current)) delete damage.value.capture;
+      const currentCapture = timeline.find(record => record.id === damage.value.capture?.recordId);
+      if (!currentCapture || !allowedCapture(currentCapture)) delete damage.value.capture;
     }
     if (snapshot && !damage.value.capture?.recordId) {
       const hit = timeline.find(record => record.id === next.recordId)!;
       const source = timeline.filter(record => record.id !== hit.id && allowedCapture(record) && (record.timeMs < timeMs
-        || record.timeMs === timeMs && record.order < hit.order)).sort((a,b) => b.timeMs - a.timeMs || b.order - a.order)[0];
+        || record.timeMs === timeMs && record.order < hit.order)).sort((a, b) => b.timeMs - a.timeMs || b.order - a.order)[0];
       let recordId = source?.id;
       if (!recordId && !snapshot.sourceKind && skill.value?.id === snapshot.sourceSkillId) recordId = hit.id;
       recordId ??= addCalculatorCapture(next.project, hit.actor, snapshot.sourceSkillId, timeMs, hit.id);
@@ -766,32 +721,12 @@ function prepareDocument() {
       next.project.timeline.find(record => record.id === hit.id)!.damage = damage.value;
     } else if (damage.value.capture) damage.value.capture.phase ??= 'before';
   } else if (standalone.value) {
-    const i=timeline.findIndex(r=>r.id===next.recordId);
+    const i = timeline.findIndex(r => r.id === next.recordId);
     const reaction = standalone.value;
-    if (i>=0) timeline[i]={...timeline[i],timeMs,reactionEvent:{...reaction, facts:damage.value.facts, effectApplications:damage.value.effectApplications,
-      contributors: editableStandaloneCrit.value ? reaction.contributors.map(owner => ({ ...owner, crit: damage.value.crit })) : reaction.contributors }};
-  } else if (sceneHit.value) {
-    const index = timeline.findIndex(record => record.id === next.recordId);
-    if (index >= 0) {
-      const scene = sceneHit.value;
-      timeline[index] = { ...timeline[index], timeMs, sceneHit: { ...scene,
-        triggered: scene.triggered ?? true, targetHit: scene.targetHit ?? true, elementLevelCo: scene.elementLevelCo ?? 1 } };
-    }
+    if (i >= 0) timeline[i] = { ...timeline[i], timeMs, reactionEvent: { ...reaction, facts: damage.value.facts, effectApplications: damage.value.effectApplications,
+      contributors: editableStandaloneCrit.value ? reaction.contributors.map(owner => ({ ...owner, crit: damage.value.crit })) : reaction.contributors } };
   }
   return damageCalculatorSchema.parse(next);
-}
-async function createCapture() {
-  error.value = '';
-  try {
-    if (!document.value || document.value.baseline || !hitOwner.value || !selectedHit.value?.snapshot) return;
-    const timeMs = Math.round(Number(captureTime.value === '' ? hitTime.value : captureTime.value) * 1000);
-    if (timeMs > Math.round(hitTime.value * 1000)) throw new Error('属性捕获时刻应早于或等于命中时刻。');
-    const next = prepareDocument()!;
-    const recordId = addCalculatorCapture(next.project, hitOwner.value.id, selectedHit.value.snapshot.sourceSkillId, timeMs, next.recordId);
-    document.value = next;
-    damage.value.capture = { recordId, phase: 'before' };
-    captureTime.value = '';
-  } catch (cause) { showError(cause); }
 }
 async function calculate() {
   error.value = '';
@@ -800,43 +735,42 @@ async function calculate() {
     if (!next) return;
     if (!next.recordId) throw new Error('请选择伤害。');
     if (JSON.stringify(next) !== documentSignature.value) document.value = next;
-    const request = calculatorWorkerRequest(next, ++taskId);
+    if (next.baseline) calculatorWorkerRequest(next, 0);
+    const recordId = next.recordId;
+    const candidateBase = prepareCalculatorEvaluationProject(next.project, next.actorId, recordId);
+    const baselineBase = next.baseline ? prepareCalculatorEvaluationProject(next.baseline, next.actorId, recordId) : undefined;
+    type EvalSlot = 'candidateCritical' | 'candidateExpected' | 'baselineCritical' | 'baselineExpected';
+    const slots: [EvalSlot, Project][] = [
+      ['candidateCritical', calculatorCritProject(candidateBase, recordId, 'critical')],
+      ['candidateExpected', calculatorCritProject(candidateBase, recordId, 'expected')],
+      ...(baselineBase ? [
+        ['baselineCritical', calculatorCritProject(baselineBase, recordId, 'critical')] as [EvalSlot, Project],
+        ['baselineExpected', calculatorCritProject(baselineBase, recordId, 'expected')] as [EvalSlot, Project],
+      ] : []),
+    ];
     stop(); working.value = true;
     const worker = new Worker(new URL('../workers/axis.worker.ts', import.meta.url), { type: 'module' });
     activeWorker = worker;
     calculationFinished = new Promise<void>(resolve => { finishCalculation = resolve; });
-    const recordId = next.recordId;
-    const modes = ['critical', 'expected'] as const;
-    type Mode = typeof modes[number];
-    const results = new Map<Mode, AxisResponse['result']>();
-    const tasks = new Map<number, Mode>();
-    let actual: AxisResponse;
+    const results = new Map<EvalSlot, AxisResponse['result']>();
+    const tasks = new Map<number, EvalSlot[]>();
+    const byProject = new Map<Project, EvalSlot[]>();
+    for (const [slot, project] of slots) {
+      const list = byProject.get(project) ?? [];
+      list.push(slot);
+      byProject.set(project, list);
+    }
     let retry: Promise<void> | undefined;
-    function complete(critical: AxisResponse['result'], expected: AxisResponse['result']) {
-      const evaluation = actual.comparison?.candidates[0]?.result ?? actual.result;
-      const incomplete = [evaluation, critical, expected].flatMap(result => {
-        const point = result.points.find(point => point.id === recordId);
-        return point?.value == null && point?.real?.structured ? [point.real.structured] : [];
+    function complete() {
+      const critical = results.get('candidateCritical')!;
+      const expected = results.get('candidateExpected')!;
+      const incomplete = [critical, expected].flatMap(evaluation => {
+        const entry = evaluation.points.find(item => item.id === recordId);
+        return entry?.value == null && entry?.real?.structured ? [entry.real.structured] : [];
       });
       const missing = incomplete.flatMap(entry => entry.requiredInputs);
       const owner = hitOwner.value?.id;
-      if (owner && next && !next.baseline && missing.length) {
-        const updated = new Map<string, CaptureRecord>();
-        for (const { record, fields } of captureGroups.value) {
-          const atSource = incomplete.some(entry => entry.trace.some(node =>
-            node.context?.eventId === record.id && node.state === 'unknown'));
-          if (!atSource) continue;
-          const presets = missingCalculatorPresets(record.captureFacts, fields, missing, record.actor);
-          if (!presets.length) continue;
-          const facts = structuredClone(toRaw(record.captureFacts ?? []));
-          for (const preset of presets) putHitFact(facts, preset.subject, preset.key, preset.value, 'preset');
-          updated.set(record.id, { ...record, captureFacts: facts });
-        }
-        if (updated.size) {
-          document.value = { ...next, project: { ...next.project, timeline: next.project.timeline.map(row => updated.get(row.id) ?? row) } };
-          retry = calculate();
-          return;
-        }
+      if (owner && !next!.baseline && missing.length) {
         const presets = missingCalculatorPresets(damage.value.facts, factFields.value, missing, owner);
         if (presets.length) {
           const draft: DamageRequest = JSON.parse(JSON.stringify(damage.value));
@@ -846,39 +780,28 @@ async function calculate() {
           return;
         }
       }
-      response.value = actual;
       criticalResult.value = critical;
       expectedResult.value = expected;
+      baselineCriticalResult.value = results.get('baselineCritical');
+      baselineExpectedResult.value = results.get('baselineExpected');
       stop();
     }
     worker.onmessage = (event: MessageEvent<AxisResponse>) => {
       if (activeWorker !== worker) return;
       if (event.data.error) { error.value = event.data.error; stop(); return; }
       try {
-        if (event.data.taskId === request.taskId) {
-          actual = event.data;
-          const evaluation = actual.comparison?.candidates[0]?.result ?? actual.result;
-          for (const mode of modes) {
-            const project = calculatorCritProject(next.project, recordId, mode);
-            if (project === next.project) {
-              results.set(mode, evaluation);
-            } else {
-              const id = ++taskId;
-              tasks.set(id, mode);
-              worker.postMessage({ taskId: id, session: 1, revision: id, project });
-            }
-          }
-        } else {
-          const mode = tasks.get(event.data.taskId);
-          if (!mode) return;
-          results.set(mode, event.data.result);
-        }
-        const critical = results.get('critical'), expected = results.get('expected');
-        if (critical && expected) complete(critical, expected);
+        const assigned = tasks.get(event.data.taskId);
+        if (!assigned) return;
+        for (const slot of assigned) results.set(slot, event.data.result);
+        if (results.size === slots.length) complete();
       } catch (cause) { stop(); showError(cause); }
     };
     worker.onmessageerror = worker.onerror = () => { if (activeWorker === worker) { stop(); error.value = '计算进程未完成，请重新计算。'; } };
-    worker.postMessage(request);
+    for (const [project, assigned] of byProject) {
+      const id = ++taskId;
+      tasks.set(id, assigned);
+      worker.postMessage({ taskId: id, session: 1, revision: id, project });
+    }
     await calculationFinished;
     await retry;
   } catch (cause) { stop(); showError(cause); }
@@ -930,11 +853,13 @@ async function saveDamage() {
     const next = prepareDocument()!;
     const before = signature();
     if (before === listed.value?.signature) return true;
-    const value = point.value?.value ?? undefined;
+    const criticalValue = criticalPoint.value?.value ?? undefined;
+    const expectedValue = expectedPoint.value?.value ?? undefined;
+    const value = expectedValue ?? criticalValue;
     const id = await saveDamageSnapshot({
-      name: sceneHit.value ? selectedLabel.value : [roleName.value, selectedLabel.value,
+      name: [roleName.value, selectedLabel.value,
         ...(standalone.value?.family === 'swirl' ? [realElementLabel(standalone.value.element)] : [])].join(' / '),
-      team: next.team?.name, value, verification: point.value?.real?.status === 'partial' ? 'pending' : undefined,
+      team: next.team?.name, value, criticalValue, expectedValue,
     }, next);
     if (signature() !== before) return false;
     listed.value = { id, signature: before };
@@ -969,31 +894,20 @@ function switchActor(id: string) {
   picker.value = undefined;
   if (document.value && id !== document.value.actorId) document.value = { ...document.value, actorId: id };
 }
-async function selectRecord(id: string) {
-  if (!document.value) return;
-  try {
-    const next = prepareDocument()!;
-    const record = next.project.timeline.find(record => record.id === id);
-    if (!record?.damage && !record?.reactionEvent && !record?.sceneHit) return;
-    next.recordId = id; next.actorId = record.actor; install(next);
-    await calculate();
-  } catch (cause) { showError(cause); }
-}
-function setInput(id: string, event: Event) {
+function setInput(id: string, event: Event, recalculate = true) {
   const raw = (event.target as HTMLInputElement).value, input = hitInputs.value.find(input => input.id === id);
   if (!input) return;
   const value = raw.trim() ? Number(raw) : input.min;
+  if (!Number.isFinite(value)) return;
   putHitFact(damage.value.facts ??= [], { kind: 'event' }, id, { ...input.type, value });
   if (!raw.trim()) (event.target as HTMLInputElement).value = String(value);
+  if (recalculate) void calculate();
 }
 function setHitOrdinal(event: Event) {
   const control = event.target as HTMLSelectElement;
   if (control.value) damage.value.hitOrdinal = Number(control.value);
   else delete damage.value.hitOrdinal;
-}
-function setCapture(event: Event) {
-  const recordId = (event.target as HTMLSelectElement).value;
-  damage.value.capture = { recordId, phase: recordId === document.value?.recordId ? 'before' : damage.value.capture?.phase ?? 'before' };
+  void calculate();
 }
 function leaveCalculator(action: () => void) {
   if (catalogEditor.value) catalogEditor.value.requestLeave(() => { catalogCharacter.value = undefined; requestLeave(action); });
@@ -1027,12 +941,12 @@ defineExpose({ requestLeave: leaveCalculator });
       </button>
       <button type="button" class="selection-tile damage-slot" data-density="compact" :data-empty="!hasDamageCard" :data-card-action="hasDamageCard ? undefined : 'select'" :class="{ 'equipment-slot-card': !hasDamageCard }" aria-label="选择伤害" aria-haspopup="dialog" :data-hit-id="damage.hit.hitId"
         :disabled="!queryCharacter || !!document?.baseline" @click="picker = 'damage'">
-        <CalculatorDamageCard v-if="hasDamageCard" class="equipment-slot-card" data-density="compact" :hit="selectedChoice" :scene="sceneDefinition"
+        <CalculatorDamageCard v-if="hasDamageCard" class="equipment-slot-card" data-density="compact" :hit="selectedChoice"
           :family="standalone?.family" :element="standalone?.element" :coefficient="standalone?.coefficient" :rules="document?.project.reactionRules" :single-contributor="editableStandaloneCrit" />
         <SlotPlaceholder v-else label="选择伤害" />
       </button>
       <button type="button" class="selection-tile buff-slot equipment-slot-card" data-density="compact" :data-empty="!buffIcons.length" :class="{ 'filled-slot': buffIcons.length }" data-card-action="select" aria-label="选择增益" aria-haspopup="dialog"
-        :aria-describedby="buffIcons.length ? 'calculator-buff-summary' : undefined" :disabled="!queryCharacter || !!document?.baseline || !!sceneHit" @click="picker = 'buff'">
+        :aria-describedby="buffIcons.length ? 'calculator-buff-summary' : undefined" :disabled="!queryCharacter || !!document?.baseline" @click="picker = 'buff'">
         <span v-if="buffIcons.length" class="buff-icons" aria-hidden="true">
           <span v-for="buff in buffIcons" :key="buff.id" class="buff-icon" :title="[buff.label, ...buff.rows.map(row => row.join(' '))].join('\n')">
             <GameIcon :kind="buff.icon.kind" :id="buff.icon.id" :monochrome="buff.icon.kind === 'constellations'" :size="36"><template #fallback><GameIcon kind="stats" id="elementalMastery" :size="28" /></template></GameIcon>
@@ -1059,41 +973,38 @@ defineExpose({ requestLeave: leaveCalculator });
         <button class="ui-action" data-accent="anemo" :disabled="working || !selectedLabel" @click="calculate">{{ working ? '计算中' : document?.baseline ? '重算候选' : '计算伤害' }}</button>
       </div></header>
       <div class="damage-totals">
-        <div v-if="sceneHit"><span>{{ sceneHitDefinition?.recipient === 'character' ? '场上角色最终承伤' : '最终伤害值' }}</span>
-          <output v-if="result" data-testid="calculator-value">{{ point?.value != null ? number(point.value) : sceneBaseOnly && point?.real?.baseDamage != null ? '仅能计算减伤前基数' : unavailable(result, point) }}</output><strong v-else>—</strong></div>
-        <div v-if="sceneBaseOnly"><span>减伤前基数</span><output v-if="result" data-testid="calculator-scene-base">{{ number(point?.real?.baseDamage) }}</output><strong v-else>—</strong></div>
-        <template v-if="!sceneHit">
-          <div class="critical-total"><span>暴击伤害值 <small v-if="criticalPoint?.real?.status === 'partial'">模型估算</small></span>
-            <output v-if="result" data-testid="calculator-critical">{{ criticalPoint?.value != null ? criticalFormat.format(criticalPoint.value) : unavailable(criticalResult, criticalPoint) }}</output><strong v-else>—</strong></div>
-          <div class="expected-total"><span>期望伤害值 <small v-if="expectedPoint?.real?.status === 'partial'">模型估算</small></span>
-            <output v-if="result" data-testid="calculator-expected">{{ expectedPoint?.value != null ? expectedFormat.format(expectedPoint.value) : unavailable(expectedResult, expectedPoint) }}</output><strong v-else>—</strong></div>
-        </template>
+        <div class="critical-total"><span>暴击伤害值</span>
+          <output v-if="result" data-testid="calculator-critical">{{ criticalPoint?.value != null ? formatCritical(criticalPoint.value) : unavailable(criticalResult, criticalPoint) }}</output><strong v-else>—</strong></div>
+        <div class="expected-total"><span>期望伤害值</span>
+          <output v-if="result" data-testid="calculator-expected">{{ expectedPoint?.value != null ? formatExpected(expectedPoint.value) : unavailable(expectedResult, expectedPoint) }}</output><strong v-else>—</strong></div>
       </div>
       <div v-if="radianceStatus" class="library-page-actions" data-testid="calculator-radiance">
         星辉状态：{{ radianceStatus }}
       </div>
-      <div v-if="inactiveHit" class="library-page-actions" role="status">
-        <span>{{ inactiveHit }}</span>
-        <button v-if="!document?.baseline" type="button" class="ui-action soft" @click="picker = 'buff'">调整命中条件</button>
-      </div>
       <div id="calculator-result-details" v-show="result && resultExpanded" class="result-details">
+        <CalculatorFactorCards :real="criticalPoint?.real" :expected="expectedPoint?.real" :guaranteed-crit="!standalone && selectedHit?.critical === 'always'" :damage="damage" :buffs="buffs" />
         <template v-if="result">
-          <details v-if="diagnostics.length" class="result-support"
-            :open="point?.value == null || criticalPoint?.value == null || expectedPoint?.value == null"><summary>计算条件与支持范围</summary>
-            <ul aria-label="未完成的计算条件"><li v-for="message in diagnostics" :key="message">{{ message }}</li></ul>
-            <button v-if="missingBuff && !document?.baseline" type="button" class="ui-action soft" data-size="md" @click="picker = 'buff'">补充增益条件</button>
-          </details>
-          <details v-if="point?.real?.sceneHit" class="result-support"><summary>场景冲击倍率与来源</summary>
-            <dl><dt>冲击倍率</dt><dd>{{ number(point.real.sceneHit.multiplier) }}</dd>
-              <dt>ElementLevelCo 系数</dt><dd>{{ number(point.real.sceneHit.elementLevelCo) }}</dd></dl>
-            <p v-for="sourceRef in point.real.sceneHit.sourceRefs" :key="sourceRef">{{ sourceRef }}</p>
-          </details>
-        </template>
-        <CalculatorFactorCards v-if="!sceneHit" :real="point?.real" :expected="expectedPoint?.real" :guaranteed-crit="!standalone && selectedHit?.critical === 'always'" :damage="damage" :buffs="buffs" />
-        <template v-if="result">
-          <table v-if="response?.comparison"><thead><tr><th>基准</th><th>当前候选</th><th>差值</th></tr></thead><tbody><tr><td>{{ number(baselinePoint?.value) }}</td><td>{{ number(point?.value) }}</td><td data-testid="calculator-delta">{{ number(comparisonPoint?.delta) }}</td></tr></tbody></table>
-          <details v-if="!sceneHit" class="result-support"><summary>配装属性与来源</summary>
-            <dl><dt>{{ damage.crit ? critNames[damage.crit] + '命中伤害' : '本次命中伤害' }}</dt><dd><output data-testid="calculator-value">{{ point?.value != null ? number(point.value) : unavailable(result, point) }}</output></dd></dl>
+          <table v-if="document?.baseline && (baselineCriticalResult || baselineExpectedResult)">
+            <thead>
+              <tr><th>指标</th><th>基准</th><th>当前候选</th><th>差值</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">暴击伤害值</th>
+                <td>{{ formatCritical(baselineCriticalPoint?.value) }}</td>
+                <td>{{ formatCritical(criticalPoint?.value) }}</td>
+                <td data-testid="calculator-critical-delta">{{ formatCritical(criticalDelta) }}</td>
+              </tr>
+              <tr>
+                <th scope="row">期望伤害值</th>
+                <td>{{ formatExpected(baselineExpectedPoint?.value) }}</td>
+                <td>{{ formatExpected(expectedPoint?.value) }}</td>
+                <td data-testid="calculator-expected-delta">{{ formatExpected(expectedDelta) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <details class="result-support"><summary>配装属性与来源</summary>
+            <dl><dt>暴击命中伤害</dt><dd><output data-testid="calculator-value">{{ criticalPoint?.value != null ? number(criticalPoint.value) : unavailable(criticalResult, criticalPoint) }}</output></dd></dl>
             <p v-if="queryCharacter?.origin === 'custom'">角色来源 / 自定义声明</p>
             <p v-if="hitOwner?.build && skill">{{ skill.name }} / 天赋 {{ hitOwner.build.talents[skill.category] }} + {{ talentBonusLabel }}</p>
             <dl><template v-for="(value, key) in point?.real?.panel.stats" :key="key"><dt>{{ realStatLabel(key) }}</dt><dd>{{ number(value) }}</dd></template></dl>
@@ -1102,53 +1013,26 @@ defineExpose({ requestLeave: leaveCalculator });
         </template>
       </div>
     </section>
-    <section v-if="document" class="library-section calculator-conditions"><h3>命中条件</h3>
-      <label v-if="records.length > 1 && !document?.team">查看记录<select :value="document?.recordId" @change="selectRecord(($event.target as HTMLSelectElement).value)"><option v-for="record in records" :key="record.id" :value="record.id">{{ actorLabel(document!.project, record.actor) }} / {{ recordLabel(document!.project, record.id) }} / {{ record.timeMs / 1000 }}秒</option></select></label>
-      <fieldset v-if="selectedLabel || records.length" :disabled="!!document?.baseline"><div class="calculator-fields">
-            <label>命中时刻（秒）<input v-model.number="hitTime" type="number" min="0" max="3600" step="0.001"></label>
-            <label v-if="selectedHit?.selection?.repetitions">本次命中序号<select :value="damage.hitOrdinal ?? ''" @change="setHitOrdinal">
-              <option value="">未指定</option><option v-for="ordinal in selectedHit.selection.repetitions" :key="ordinal" :value="ordinal">第{{ ordinal }}击</option>
-            </select></label>
-            <template v-if="sceneHit">
-              <label>ElementLevelCo 系数<input type="number" min="0" step="any" :value="sceneHit.elementLevelCo ?? 1" @input="($event.target as HTMLInputElement).value && setSceneCoefficient($event)" @change="setSceneCoefficient"></label>
-              <label>冲击触发<select v-model="sceneTriggered"><option :value="true">已满足</option><option :value="false">未满足</option></select></label>
-              <label>{{ sceneHitDefinition?.recipient === 'character' ? '场上角色受到冲击' : '当前敌人受到冲击' }}<select v-model="sceneTargetHit"><option :value="true">命中</option><option :value="false">未命中</option></select></label>
-            </template>
-            <label v-else-if="!standalone || editableStandaloneCrit">暴击<select v-model="damage.crit" :disabled="selectedHit?.critical === 'always'"><option value="noncritical">非暴击</option><option value="critical">暴击</option><option value="expected">期望伤害</option></select></label>
-            <label v-if="infusionChoices.length">本击队伍附魔<select v-model="partyInfusion"><option value="none">无</option><option v-for="[element, sources] in infusionChoices" :key="element" :value="element">{{ realElementLabel(element) }}元素（{{ sources.join('、') }}）</option></select></label>
-            <label v-if="selectedHit?.elementBy === 'absorbedElement'">转化元素<select v-model="absorbedElement"><option value="none">无</option><option v-for="element in absorbedElements" :key="element" :value="element">{{ realElementLabel(element) }}</option></select></label>
-            <label v-if="standalone?.family === 'swirl'">扩散元素<select :value="standalone.element" @change="setReactionElement"><option v-for="element in transformativeElements.swirl" :key="element" :value="element">{{ realElementLabel(element) }}</option></select></label>
-            <label v-if="standalone?.family === 'stellar-swirl'">星扩散伤害段<select :value="stellarStage?.id ?? ''" :disabled="!!document?.baseline" @change="setStellarStage">
-              <option v-if="!stellarStage" value="" disabled>文件记录的系数：{{ standalone.coefficient ?? '未指定' }}</option>
-              <option v-for="stage in stellarStages" :key="stage.id" :value="stage.id">{{ stage.name }} × {{ stellarSwirlCoefficients[stage.id] }}</option>
-            </select></label>
-            <label v-if="!standalone && !sceneHit">反应<select v-model="reactionType"><option v-for="reaction in reactionChoices" :key="reaction" :value="reaction">{{ reactionNames[reaction] }}</option></select></label>
-            <label v-for="input in hitInputs" :key="input.id">{{ inputNames[input.id] ?? queryCharacter?.metadata.facts?.[input.id]?.label ?? buffFactNames[input.id] ?? input.id }}
-              <select v-if="input.id === 'counterCharge'" :value="subjectFacts(damage.facts, { kind: 'event' })?.[input.id]?.value?.value ?? ''" @change="setInput(input.id, $event)"><option :value="0">0 / 无反击加成</option><option :value="1">1 / 一档反击</option><option :value="2">2 / 满档／完美反击</option></select>
-              <input v-else type="number" :min="input.min" :max="talentInputMaximum(input, hitOwner?.build?.constellation ?? 0)" :step="input.integer ? 1 : 'any'" :value="subjectFacts(damage.facts, { kind: 'event' })?.[input.id]?.value?.value ?? ''" @input="($event.target as HTMLInputElement).value && setInput(input.id, $event)" @change="setInput(input.id, $event)">
-            </label>
-            <template v-if="selectedHit?.snapshot"><label>属性捕获来源<select :value="damage.capture?.recordId ?? ''" @change="setCapture"><option v-for="record in captures" :key="record.id" :value="record.id">{{ actorLabel(document!.project, record.actor) }} / {{ recordLabel(document!.project, record.id) }} / {{ record.timeMs / 1000 }}秒</option></select></label><label>捕获时点<select :value="damage.capture?.phase ?? ''" @change="damage.capture = { recordId: damage.capture?.recordId ?? null, phase: (($event.target as HTMLSelectElement).value || null) as 'before' | 'after' | null }"><option value="before">记录生效前</option><option :disabled="damage.capture?.recordId === document.recordId" value="after">记录生效后</option></select></label></template>
-          </div>
-          <p v-if="sceneHitDefinition" class="muted">{{ sceneHitDefinition.trigger }}。<template v-if="sceneHitDefinition.cooldownMs">冷却 {{ sceneHitDefinition.cooldownMs / 1000 }} 秒。</template>
-            <template v-if="sceneHitDefinition.delayMs">触发后 {{ sceneHitDefinition.delayMs }} 毫秒命中。</template><template v-if="sceneHitDefinition.radius">冲击范围 {{ sceneHitDefinition.radius }} 米。</template></p>
-          <details v-for="group in captureGroups" :key="group.record.id"><summary>{{ group.title }}</summary><div class="calculator-fields">
-            <label v-for="field in group.fields" :key="JSON.stringify([field.subject, field.key])">{{ captureFieldLabel(field) }}
-              <input v-if="field.type.kind === 'quantity'" type="number" :step="field.type.unit === 'count' ? 1 : 'any'"
-                :value="subjectFacts(group.record.captureFacts, field.subject)?.[field.key]?.value?.value ?? calculatorFactPreset(field, group.record.actor).value" @change="editCaptureFact(group.record, field, $event)">
-              <select v-else :value="String(subjectFacts(group.record.captureFacts, field.subject)?.[field.key]?.value?.value ?? calculatorFactPreset(field, group.record.actor).value)" @change="editCaptureFact(group.record, field, $event)">
-                <template v-if="field.type.kind === 'boolean'"><option value="true">是</option><option value="false">否</option></template>
-                <option v-else v-for="option in field.type.values" :key="option" :value="option">{{ option }}</option>
-              </select>
-            </label>
-          </div></details>
-      </fieldset>
-          <fieldset class="calculator-scene-settings" :disabled="!!document.baseline"><BattleSceneSettings :selections="document.project.sceneEffects" @change="updateScenes" /></fieldset>
-          <TalentHealingForm v-if="document && !document.baseline" :members="document.project.candidate.actors" @apply="(actor,recipient,heal,facts)=>recordBeforeHit((p,t)=>addTalentHeal(p,actor,recipient,heal,t,facts))" />
-          <AuraObservationForm v-if="document && hitOwner && !document.baseline" :members="document.project.candidate.actors.filter(a=>a.build)" :actor="hitOwner.id" @apply="(actor,aura)=>recordBeforeHit((p,t)=>addAuraObservation(p,actor,t,aura))" />
-          <ReactionRecordForm v-if="document && hitOwner && !document.baseline" :project="document.project" :actor="hitOwner.id" :time-ms="Math.round(hitTime*1000)" :before="document.recordId" :changes="result?.combatChanges"
-            @reaction="(actor,reaction,element)=>recordBeforeHit((p,t)=>addReactionObservation(p,actor,t,reaction,element))"
-            @pickup="(actor,source,effect)=>recordBeforeHit((p,t)=>addParticlePickup(p,actor,source,t,effect))" />
-          <fieldset v-if="selectedHit?.snapshot" :disabled="!!document?.baseline"><label>独立捕获时刻（秒）<input v-model="captureTime" type="number" min="0" max="3600" step="0.001" :placeholder="String(hitTime)"></label><button class="ui-action soft" data-accent="hydro" @click="createCapture">添加属性捕获点</button></fieldset>
+    <section v-if="hasHitConditions" class="library-section calculator-conditions"><h3>命中条件</h3>
+      <fieldset :disabled="!!document?.baseline"><div class="calculator-fields">
+        <label v-if="selectedHit?.selection?.repetitions">本次命中序号<select :value="damage.hitOrdinal ?? ''" @change="setHitOrdinal">
+          <option value="">未指定</option><option v-for="ordinal in selectedHit.selection.repetitions" :key="ordinal" :value="ordinal">第{{ ordinal }}击</option>
+        </select></label>
+        <label v-if="infusionChoices.length">本击队伍附魔<select v-model="partyInfusion"><option value="none">无</option><option v-for="[element, sources] in infusionChoices" :key="element" :value="element">{{ realElementLabel(element) }}元素（{{ sources.join('、') }}）</option></select></label>
+        <label v-if="personalInfusionSpec">自身附魔<select v-model="personalInfusion"><option :value="false">无</option><option :value="true">{{ realElementLabel(personalInfusionSpec.element) }}元素</option></select></label>
+        <label v-if="selectedHit?.elementBy === 'absorbedElement'">转化元素<select v-model="absorbedElement"><option value="none">无</option><option v-for="element in absorbedElements" :key="element" :value="element">{{ realElementLabel(element) }}</option></select></label>
+        <label v-if="radianceSpec">星辉状态<select v-model="radianceMode"><option v-for="mode in radianceSpec.validOptions" :key="mode" :value="mode">{{ radianceLabels[mode] ?? mode }}</option></select></label>
+        <label v-if="standalone?.family === 'swirl'">扩散元素<select :value="standalone.element" @change="setReactionElement"><option v-for="element in transformativeElements.swirl" :key="element" :value="element">{{ realElementLabel(element) }}</option></select></label>
+        <label v-if="standalone?.family === 'stellar-swirl'">星扩散伤害段<select :value="stellarStage?.id ?? ''" :disabled="!!document?.baseline" @change="setStellarStage">
+          <option v-if="!stellarStage" value="" disabled>文件记录的系数：{{ standalone.coefficient ?? '未指定' }}</option>
+          <option v-for="stage in stellarStages" :key="stage.id" :value="stage.id">{{ stage.name }} × {{ stellarSwirlCoefficients[stage.id] }}</option>
+        </select></label>
+        <label v-if="selectedChoice && !standalone && reactionChoices.length > 1">反应<select v-model="reactionType"><option v-for="reaction in reactionChoices" :key="reaction" :value="reaction">{{ reactionNames[reaction] }}</option></select></label>
+        <label v-for="input in hitInputs" :key="input.id">{{ inputNames[input.id] ?? queryCharacter?.metadata.facts?.[input.id]?.label ?? buffFactNames[input.id] ?? input.id }}
+          <select v-if="input.id === 'counterCharge'" :value="subjectFacts(damage.facts, { kind: 'event' })?.[input.id]?.value?.value ?? ''" @change="setInput(input.id, $event, true)"><option :value="0">0 / 无反击加成</option><option :value="1">1 / 一档反击</option><option :value="2">2 / 满档／完美反击</option></select>
+          <input v-else type="number" :min="input.min" :max="talentInputMaximum(input, hitOwner?.build?.constellation ?? 0)" :step="input.integer ? 1 : 'any'" :value="subjectFacts(damage.facts, { kind: 'event' })?.[input.id]?.value?.value ?? ''" @input="($event.target as HTMLInputElement).value && setInput(input.id, $event, false)" @change="setInput(input.id, $event, true)">
+        </label>
+      </div></fieldset>
     </section>
     <section v-if="character?.build" class="library-section calculator-build" aria-label="角色配置">
       <header class="result-heading"><h3>角色配置</h3>
@@ -1169,12 +1053,10 @@ defineExpose({ requestLeave: leaveCalculator });
       </details>
     </section>
     <ArtifactDetail v-if="inspectedArtifact" :item="inspectedArtifact" readonly @close="inspectedArtifact = undefined" />
-    <CombatChangeList v-if="document" :changes="result?.combatChanges" :team="document.project.candidate.actors" />
     <CalculatorEnemySettings :enemy="enemy" :element="standalone?.element ?? hitElement" :disabled="!document || !!document.baseline" @change="enemy = $event" />
     <footer class="library-page-toolbar">
       <span v-if="dirty || document" class="library-page-status">{{ dirty ? '未保存' : '已保存' }}</span>
       <div class="library-page-actions">
-        <button class="ui-action soft" data-accent="anemo" @click="copyAxis">复制当前轴</button>
         <button class="ui-action soft" @click="newCalculation">新建计算</button>
         <button class="ui-action soft" @click="requestLeave(() => file?.click())">打开计算</button>
         <button class="ui-action soft" :disabled="!character" @click="save">导出计算文件</button>
@@ -1198,11 +1080,11 @@ defineExpose({ requestLeave: leaveCalculator });
           @saved="useSavedCharacter" @close="catalogCharacter = undefined" />
       </template>
     </CharacterSelectionDialog>
-    <CalculatorDamagePicker v-if="picker === 'damage'" :choices="hitChoices" :group-settings="queryCharacter?.metadata.calculator?.groups" :selected="selectedChoice" :scenes="sceneChoices"
+    <CalculatorDamagePicker v-if="picker === 'damage'" :choices="hitChoices" :group-settings="queryCharacter?.metadata.calculator?.groups" :selected="selectedChoice"
       :swirl-element="standalone?.family === 'swirl' ? standalone.element : defaultReactionElement('swirl')" :selected-reaction="standalone?.family" :reaction-rules="document?.project.reactionRules"
-      :selected-scene="sceneHit && definitionKey(sceneHit.scene)" @close="picker = undefined" @select="selectDamage" @reaction="selectReaction" @scene="selectSceneHit" />
+      @close="picker = undefined" @select="selectDamage" @reaction="selectReaction" />
     <CalculatorBuffPicker v-if="picker === 'buff' && hitOwner" :choices="buffs" :damage="damage" :actor-id="hitOwner.id" :intervals="intervals"
-      :fields="factFields" :hit-facts="hitFacts" :time="hitTime" @close="picker = undefined" @apply="applyBuffs" />
+      :fields="factFields" :hit-facts="hitFacts" :main-page-fact-keys="mainPageFactKeys" @close="picker = undefined" @apply="applyBuffs" />
     <CharacterSelectionDialog v-if="picker === 'candidate' && document" title="试配队员" :members="document.project.candidate.actors" :selected-id="document.actorId" @close="picker = undefined" @select="switchActor" />
     <CharacterDetailDialog v-if="editor" ref="editorDialog" :character-id="editor.characterId" :preset-id="editor.presetId" :complete="editor.complete"
       :detached="editor.snapshot && { account: editor.snapshot, effectiveStats: effectiveStats(character?.name ?? ''), apply: saveSnapshotDraft }"
@@ -1221,7 +1103,7 @@ defineExpose({ requestLeave: leaveCalculator });
 .selection-tile { box-sizing:border-box; display:flex; align-items:center; min-width:0; width:100%; }
 .filled-slot:disabled,.calculator-team:disabled { opacity:1; }
 .selection-tile strong { display:block; overflow-wrap:anywhere; font-size:var(--font-control); }
-.selection-tile small,.damage-totals small { font-size:var(--font-body); color:var(--muted); font-weight:400; }
+.selection-tile small { font-size:var(--font-body); color:var(--muted); font-weight:400; }
 .filled-slot { justify-content:flex-start; padding:10px 16px; text-align:left; }
 .damage-slot[data-empty=false] { display:grid; grid-template-rows:minmax(0,1fr); align-items:stretch; padding:0; border:0 solid transparent; border-radius:10px; background:transparent; --button-hover-border:transparent; --damage-slot-highlight:color-mix(in srgb,var(--element-hydro-primary) 14%,var(--surface-raised)); }
 .damage-slot :deep(.choice-card) { box-sizing:border-box; min-height:0; grid-template-rows:minmax(0,1fr); }
@@ -1251,7 +1133,6 @@ button.calculator-team { container-type:inline-size; grid-template-columns:minma
 .damage-totals { display:grid; grid-template-columns:1fr 1fr; padding:16px; border:1px solid var(--line); border-radius:7px; background:var(--surface); }
 .damage-totals > div { display:grid; gap:4px; min-width:0; padding-inline:8px; }
 .damage-totals > div + div { padding-left:24px; border-left:1px solid var(--line); }
-.damage-totals small { margin-left:4px; }
 .damage-totals output,.damage-totals strong { font-size:var(--font-title); font-weight:700; font-variant-numeric:tabular-nums; color:inherit; overflow-wrap:anywhere; }
 .critical-total { color:var(--element-pyro-deep); }
 .expected-total { color:var(--element-anemo-deep); }
@@ -1262,11 +1143,7 @@ button.calculator-team { container-type:inline-size; grid-template-columns:minma
 .calculator-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr)); gap:12px; }
 label,input,select,fieldset { min-width:0; box-sizing:border-box; }
 fieldset { border:0; padding:0; margin:0; }
-.calculator-conditions fieldset + fieldset { display:grid; justify-items:start; gap:8px; }
-.calculator-conditions fieldset + .calculator-scene-settings { justify-items:stretch; }
-.calculator-conditions details { margin-top:12px; }
-.calculator-conditions summary,.result-support > summary { cursor:pointer; color:var(--ink); font-weight:700; line-height:var(--control-height-md); }
-.calculator-conditions details[open] > summary { margin-bottom:8px; }
+.result-support > summary { cursor:pointer; color:var(--ink); font-weight:700; line-height:var(--control-height-md); }
 .calculator-result table { width:100%; border-collapse:collapse; table-layout:fixed; font-variant-numeric:tabular-nums; }
 th,td { padding:8px 4px; border-bottom:1px solid var(--line); text-align:left; overflow-wrap:anywhere; font-size:var(--font-body); }
 dl { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:8px 0; font-variant-numeric:tabular-nums; }

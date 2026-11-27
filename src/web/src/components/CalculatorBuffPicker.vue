@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import type { CombatConditions, DamageRequest, FactSubject, Value } from '@leyline/schema';
-import { buffDisplayName, calculatorBuffChecked, calculatorLayerSeconds, enableCalculatorBuff, resolveBuffSelection, type CalculatorBuff } from '../domain/calculator-buffs';
+import { buffConditionsMet, buffDisplayName, calculatorBuffChecked, enableCalculatorBuff, resolveBuffSelection, type CalculatorBuff } from '../domain/calculator-buffs';
 import { calculatorFactPreset, hpMatches, setCalculatorFact, calculatorFactValue, withCurrentConditions, type CalculatorFactSetting, type CalculatorFactField } from '../domain/calculator-conditions';
 import CalculatorChoiceCard from './CalculatorChoiceCard.vue';
 import GameIcon from './GameIcon.vue';
@@ -9,13 +9,12 @@ import LibraryToolbar from './LibraryToolbar.vue';
 import WorkbenchDialog from './WorkbenchDialog.vue';
 
 const props = defineProps<{ choices: CalculatorBuff[]; damage: DamageRequest; actorId: string; intervals: CombatConditions;
-  fields: (CalculatorFactField & { label: string })[]; hitFacts: CalculatorFactSetting[]; time: number }>();
+  fields: (CalculatorFactField & { label: string })[]; hitFacts: CalculatorFactSetting[]; mainPageFactKeys: Set<string> }>();
 const emit = defineEmits<{
-  apply: [changes: Map<string, boolean>, damage: DamageRequest, durations: Map<string, number[]>];
+  apply: [changes: Map<string, boolean>, damage: DamageRequest];
   close: [];
 }>();
 const changes = ref(new Map<string, boolean>());
-const times = ref(new Map<string, string[]>());
 const draft = ref<DamageRequest>(JSON.parse(JSON.stringify(props.damage)));
 const current = computed(() => withCurrentConditions(draft.value, props.intervals, props.actorId));
 const query = ref('');
@@ -32,15 +31,18 @@ const enumLabels: Record<string, string> = { none: '无', left: '左手', right:
 const factMaximums: Record<string, number> = { 'vesna.disciplineStacks': 6, 'world.timeMinutes': 1439 };
 type Field = typeof props.fields[number];
 const fieldId = (field: { key: string; subject?: FactSubject }) => JSON.stringify([field.subject, field.key]);
+const isMainPageField = (field: Field) => Boolean(props.mainPageFactKeys.has(field.key)
+  && (field.subject?.kind === 'event' || (field.subject?.kind === 'actor' && field.subject.id === props.actorId)));
 const cardFields = computed(() => {
   const assigned = new Set<string>();
   const groups = new Map<string, Field[]>();
+  const eligible = props.fields.filter(field => !isMainPageField(field));
   for (const item of props.choices) {
     const keys = new Set(item.fields.map(fieldId));
-    groups.set(item.id, props.fields.filter(field => keys.has(fieldId(field))));
+    groups.set(item.id, eligible.filter(field => keys.has(fieldId(field))));
     for (const key of keys) assigned.add(key);
   }
-  groups.set('', props.fields.filter(field => !assigned.has(fieldId(field))));
+  groups.set('', eligible.filter(field => !assigned.has(fieldId(field))));
   return groups;
 });
 const cards = computed(() => [
@@ -62,31 +64,39 @@ function setField(field: Field, event: Event) {
     : type.kind === 'boolean' ? { kind: 'boolean', value: raw === 'true' } : { kind: 'enum', value: raw };
   setCalculatorFact(draft.value, { ...field, value }, props.actorId);
   if (raw === '') (event.target as HTMLInputElement).value = String(fieldValue(field));
+  for (const choice of props.choices) {
+    if (!choice.fields.some(entry => fieldId(entry) === fieldId(field))) continue;
+    const met = buffConditionsMet(choice, current.value);
+    const isToggle = choice.toggleFact === field.key
+      && JSON.stringify(choice.toggleSubject ?? { kind: 'actor', id: choice.ownerId }) === JSON.stringify(field.subject ?? { kind: 'actor', id: choice.ownerId });
+    if (isToggle && !choice.triggerSkill && !choice.confirmTrigger && !choice.disabled && (!choice.explicit || !met && (changes.value.get(choice.id) ?? choice.checked))) {
+      changes.value.set(choice.id, met);
+    } else if (!met && changes.value.get(choice.id) === true) {
+      changes.value.delete(choice.id);
+    } else if (met && !choice.explicit && !choice.triggerSkill && !choice.confirmTrigger && !choice.disabled && !choice.checked && !changes.value.has(choice.id)) {
+      changes.value.set(choice.id, true);
+    }
+  }
 }
 function toggle(item: CalculatorBuff, value: boolean) {
   if (value) {
     enableCalculatorBuff(item, draft.value, props.intervals, props.actorId);
-  } else if (item.toggleFact && !props.hitFacts.some(setting => setting.key === item.toggleFact)) {
-    setCalculatorFact(draft.value, { key: item.toggleFact, value: { kind: 'boolean', value: false } }, item.ownerId);
+  } else if (item.toggleFact) {
+    const targetSubject = item.toggleSubject ?? { kind: 'actor', id: item.ownerId };
+    const blockedByHit = props.hitFacts.some(setting => setting.key === item.toggleFact
+      && JSON.stringify(setting.subject ?? { kind: 'actor', id: props.actorId }) === JSON.stringify(targetSubject));
+    if (!blockedByHit) {
+      setCalculatorFact(draft.value, { key: item.toggleFact, subject: item.toggleSubject, value: { kind: 'boolean', value: false } }, item.ownerId);
+    }
   }
   changes.value.set(item.id, value);
 }
 function checked(item: CalculatorBuff) {
   return calculatorBuffChecked(item, current.value, changes.value.get(item.id));
 }
-function layerTimes(item: CalculatorBuff) {
-  return times.value.get(item.id) ?? [String(calculatorLayerSeconds(item.timing!))];
-}
-function setTime(item: CalculatorBuff, index: number, event: Event) {
-  const values = [...layerTimes(item)];
-  values[index] = (event.target as HTMLInputElement).value;
-  times.value.set(item.id, values);
-  changes.value.set(item.id, true);
-}
 function apply() {
   const selected = resolveBuffSelection(props.choices, draft.value, props.intervals, props.actorId, changes.value);
-  const durations = new Map([...times.value].map(([id, values]) => [id, values.filter(value => value !== '').map(value => Number(value) * 1000)]));
-  emit('apply', selected, draft.value, durations);
+  emit('apply', selected, draft.value);
 }
 </script>
 <template>
@@ -101,7 +111,6 @@ function apply() {
               <template #icon><GameIcon :kind="item.icon.kind" :id="item.icon.id" :monochrome="item.icon.kind === 'constellations'" :size="42"><template #fallback><GameIcon kind="stats" id="elementalMastery" :size="32" /></template></GameIcon></template>
               <small v-if="item.stacks && !checked(item)">勾选取满层 {{ item.stacks.max }}</small>
               <small v-if="item.hp">生命比例 {{ { gt:'>', gte:'≥', lt:'<', lte:'≤', eq:'=' }[item.hp.relation] }} {{ item.hp.threshold * 100 }}%<template v-if="!hpMatches(item.hp, calculatorFactValue(current, 'hpRatio', item.ownerId))">，勾选取 {{ item.hp.preset * 100 }}%</template></small>
-              <small v-if="item.triggerSkill && !times.get(item.id)?.some(Boolean)">在命中时刻 {{ time }} 秒施放</small>
             </CalculatorChoiceCard>
             <input type="checkbox" :aria-label="[item.source, buffDisplayName(item), item.description, item.note].filter(Boolean).join(' / ')" :checked="checked(item)"
               @change="toggle(item,($event.target as HTMLInputElement).checked)">
@@ -117,17 +126,6 @@ function apply() {
                 :step="field.type.unit === 'count' ? 1 : 'any'" :value="fieldValue(field)" @input="($event.target as HTMLInputElement).value && setField(field, $event)" @change="setField(field, $event)">
             </label>
           </div>
-          <div v-if="item && checked(item) && item.timing" class="layer-times">
-            <label v-for="(value,index) in layerTimes(item)" :key="index">
-              {{ item.timing.maxLayers > 1 ? '第' + (index + 1) + '层' : '' }}剩余时间（秒）
-              <input type="number" min="0.001" :max="item.timing.durationMs / 1000" step="0.001" :placeholder="String(item.timing.durationMs / 1000)"
-                :value="value" @input="setTime(item,index,$event)">
-            </label>
-            <button v-if="layerTimes(item).length < item.timing.maxLayers" type="button" class="ui-action soft" data-size="sm"
-              @click="times.set(item.id,[...layerTimes(item).map(v => v || String(item.timing!.durationMs / 1000)),String(item.timing.durationMs / 1000)])">增加一层</button>
-          </div>
-          <button v-if="item && item.explicit && !item.triggerSkill && !item.checked && !changes.has(item.id) && damage.effectApplications?.find(entry => entry.instanceId === item.id)?.active == null"
-            type="button" class="ui-action soft" data-size="sm" @click="toggle(item,false)">此命中不适用</button>
         </div>
       </div>
       <p v-else>{{ query ? '没有匹配的增益' : '当前配装与伤害没有可选增益' }}</p>
@@ -147,8 +145,6 @@ function apply() {
 .buff-entry .card-action-trigger { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:start; gap:10px; padding:12px; cursor:pointer; line-height:1.45; overflow-wrap:anywhere; }
 .buff-entry small { display:block; font-size:var(--font-body); color:var(--muted); line-height:1.5; font-weight:400; }
 .buff-entry input[type=checkbox] { width:18px; height:18px; min-height:0; accent-color:var(--element-hydro-deep); }
-.layer-times { display:grid; gap:6px; border-top:1px solid var(--line); padding:10px 12px; }
-.layer-times label { display:grid; align-items:center; gap:8px; grid-template-columns:1fr minmax(76px,100px); padding:0; }
-.buff-entry button { justify-self:end; margin:0 12px 10px; }.buff-fields label { min-width:0; }
+.buff-fields label { min-width:0; }
 h3 { margin:12px; font-size:var(--font-control); }.buff-actions { display:flex; justify-content:flex-end; }
 </style>

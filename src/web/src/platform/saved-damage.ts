@@ -8,7 +8,8 @@ export interface SavedDamageSummary {
   team?: string;
   savedAt: number;
   value?: number;
-  verification?: 'pending';
+  criticalValue?: number;
+  expectedValue?: number;
 }
 
 // Keep the list cheap to open, even when each entry carries a whole team's definitions.

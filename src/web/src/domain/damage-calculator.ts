@@ -1,4 +1,4 @@
-import { definitionKey, findBuildHit, matchingSceneHits } from '@leyline/schema';
+import { definitionKey, findBuildHit, matchingSceneHits, putHitFact, subjectFacts } from '@leyline/schema';
 import { APP_VERSION } from '@leyline/schema/version';
 import { readWorkbenchDocument } from './content-document';
 import { getArtifactSet, getCharacter, getWeapon } from '@leyline/game-data';
@@ -9,7 +9,9 @@ import { createEmptyProject, nextRecordId } from './workbench-project';
 import { accountSlotLabels, cloneAccount, type AccountArtifact } from './account';
 import { calculationArtifact, physicalArtifact, resolveBuildEquipment } from './build-snapshot';
 import { orderedArtifactContent } from './showcase-inventory';
-import { prepareStructuredBuilds } from '@leyline/engine';
+import { prepareStructuredBuilds, projectBuffContext } from '@leyline/engine';
+import { applyCalculatorBuffs, calculatorBuffChecked, calculatorBuffChoices, effectInstanceInRuntime, reconcileTeammateCalculatorEffects, resolveBuffSelection } from './calculator-buffs';
+import { calculatorFactPreset, calculatorHitFactFields, calculatorHitRadiance, calculatorIntervals, calculatorOnFieldActor, calculatorPersonalInfusion, derivedTeamFactKeys, hitPremiseFacts, presetCalculatorHitInputs, readCalculatorPersonalInfusion, readCalculatorRadiance, selectedHitBranchPredicate, selectionEnumFallback, writeCalculatorPersonalInfusion, writeCalculatorRadiance } from './calculator-conditions';
 
 /** Read wearing references even when Mona supplied no cultivation/weapon build. Never borrow a showcase. */
 export async function readCalculatorSource(account: LocalAccount, characterId: string, kind: 'local' | 'showcase') {
@@ -205,4 +207,289 @@ export function copyProjectForCalculator(input: Project): DamageCalculatorDocume
   const actorId = record?.actor ?? project.candidate.actors.find(actor => actor.build)?.id;
   if (!actorId) throw new Error('当前轴没有完整配装，请先准备队伍。');
   return damageCalculatorSchema.parse({ schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId, ...(record ? { recordId: record.id } : {}) });
+}
+
+function validEffectInstanceIds(project: Project): Set<string> | undefined {
+  const context = projectBuffContext(project, true);
+  if (!context) return undefined;
+  const ids = new Set<string>();
+  for (const group of context.instances.values()) {
+    for (const instance of group) {
+      if (effectInstanceInRuntime(instance, context)) ids.add(instance.id);
+    }
+  }
+  return ids;
+}
+
+function presetEnabledBuffFields(choices: ReturnType<typeof calculatorBuffChoices>, damage: DamageRequest, actorId: string) {
+  for (const choice of choices) {
+    if (choice.disabled || !calculatorBuffChecked(choice, damage)) continue;
+    for (const field of choice.fields) {
+      if (field.fromTrigger || field.inherited || !field.subject) continue;
+      if (field.subject.kind === 'team' && derivedTeamFactKeys.has(field.key)) continue;
+      if (field.subject.kind === 'event' && ['critMode', 'reactionMode'].includes(field.key)) continue;
+      if (subjectFacts(damage.facts, field.subject)?.[field.key]?.value != null) continue;
+      putHitFact(damage.facts ??= [], field.subject, field.key, calculatorFactPreset(field, actorId), 'preset');
+    }
+  }
+}
+
+function presetActorDefaults(damage: DamageRequest, targetActorId: string, intervals: ReturnType<typeof calculatorIntervals>, onFieldDefault: boolean) {
+  const target = { kind: 'actor' as const, id: targetActorId };
+  const existing = subjectFacts(damage.facts, target);
+  if (intervals.onField === undefined && existing?.onField?.value == null) {
+    putHitFact(damage.facts ??= [], target, 'onField', { kind: 'boolean', value: onFieldDefault }, 'preset');
+  }
+  if (intervals.hpRatio === undefined && existing?.hpRatio?.value == null) {
+    putHitFact(damage.facts ??= [], target, 'hpRatio', { kind: 'quantity', unit: 'scalar', value: 1 }, 'preset');
+  }
+  if (intervals.shielded === undefined && existing?.shielded?.value == null) {
+    putHitFact(damage.facts ??= [], target, 'shielded', { kind: 'boolean', value: false }, 'preset');
+  }
+}
+
+function reconcileState(inputProject: Project, actorId: string, inputDamage: DamageRequest, timeMs = 0, recordId?: string) {
+  let project: Project = JSON.parse(JSON.stringify(inputProject));
+  const damage: DamageRequest = JSON.parse(JSON.stringify(inputDamage));
+  const actor = project.candidate.actors.find(entry => entry.id === actorId);
+  const build = actor?.build;
+  const selected = findBuildHit(build, damage.hit);
+  const intervals = calculatorIntervals(project, actorId, timeMs, recordId);
+  if (!selected) return { project, damage, choices: [] as ReturnType<typeof calculatorBuffChoices>, intervals };
+
+  project.timeline = project.timeline.filter(entry => !entry.id.startsWith('calc-cast-') || (entry.actor === actorId && entry.skillId === selected.talent?.id));
+  damage.crit = selected.hit.critical === 'always' ? 'critical' : (damage.crit ?? 'critical');
+  damage.reaction ??= 'none';
+  if (selected.hit.selection?.repetitions) damage.hitOrdinal = Math.min(Math.max(1, damage.hitOrdinal ?? 1), selected.hit.selection.repetitions);
+  else delete damage.hitOrdinal;
+
+  const existingRecord = recordId ? project.timeline.find(entry => entry.id === recordId) : undefined;
+  presetCalculatorHitInputs(damage, selected.talent?.inputs ?? [], existingRecord?.facts);
+
+  const radiance = calculatorHitRadiance(selected);
+  if (radiance) {
+    const existing = subjectFacts(damage.facts, { kind: 'actor', id: actorId })?.radiance;
+    const current = readCalculatorRadiance(damage, actorId);
+    if (!current || !radiance.validOptions.includes(current) || existing?.provenance === 'preset') {
+      writeCalculatorRadiance(damage, actorId, radiance.defaultValue, 'preset');
+    }
+  }
+
+  const branchPredicate = selectedHitBranchPredicate(selected, radiance ? readCalculatorRadiance(damage, actorId) : undefined);
+  for (const setting of hitPremiseFacts(branchPredicate, selected.entity.calculation.bundle, {
+    constellation: build?.constellation ?? 0,
+    ascension: build?.ascension ?? 6,
+    hitInputs: selected.talent?.inputs,
+  })) {
+    if (radiance && setting.key === 'radiance') continue;
+    const subject = setting.subject ?? { kind: 'actor' as const, id: actorId };
+    const existing = subjectFacts(damage.facts, subject)?.[setting.key];
+    if (existing?.value == null || existing.provenance === 'preset') {
+      putHitFact(damage.facts ??= [], subject, setting.key, setting.value, 'preset');
+    }
+  }
+
+  const infusion = calculatorPersonalInfusion(selected, build?.constellation ?? 0, actorId);
+  if (infusion) {
+    const existing = subjectFacts(damage.facts, { kind: 'actor', id: actorId })?.[infusion.key];
+    if (readCalculatorPersonalInfusion(damage, actorId, infusion.key) === undefined || existing?.provenance === 'preset') {
+      writeCalculatorPersonalInfusion(damage, actorId, infusion.key, infusion.defaultValue, 'preset');
+    }
+  }
+
+  const dealer = selected.hit.coordinated ? calculatorOnFieldActor(project, damage, timeMs, recordId) : undefined;
+  const dealerId = dealer?.id ?? actorId;
+  if (dealer && dealer.id !== actorId) {
+    presetActorDefaults(damage, actorId, intervals, false);
+    presetActorDefaults(damage, dealer.id, calculatorIntervals(project, dealer.id, timeMs, recordId), true);
+  } else {
+    presetActorDefaults(damage, actorId, intervals, true);
+  }
+
+  const hitFields = calculatorHitFactFields(selected, actorId, dealerId, build?.constellation ?? 0);
+  for (const branch of Object.values(selected.hit.damage)) {
+    for (const setting of selectionEnumFallback(branch.predicate, selected.entity.calculation.bundle, hitFields, damage.facts, dealerId)) {
+      const subject = setting.subject ?? { kind: 'actor' as const, id: dealerId };
+      if (subjectFacts(damage.facts, subject)?.[setting.key]?.value == null) {
+        putHitFact(damage.facts ??= [], subject, setting.key, setting.value, 'preset');
+      }
+    }
+  }
+  for (const field of hitFields) {
+    if (!field.subject || field.subject.kind === 'team' && derivedTeamFactKeys.has(field.key)) continue;
+    if (field.subject.kind === 'event' && ['critMode', 'reactionMode'].includes(field.key)) continue;
+    if (subjectFacts(damage.facts, field.subject)?.[field.key]?.value != null) continue;
+    putHitFact(damage.facts ??= [], field.subject, field.key, calculatorFactPreset(field, actorId), 'preset');
+  }
+
+  if (existingRecord) existingRecord.damage = damage;
+  if (project.effectRevisions?.length) {
+    const validIds = validEffectInstanceIds(project);
+    if (validIds) {
+      const kept = project.effectRevisions.filter(entry => validIds.has(entry.instanceId));
+      project.effectRevisions = kept.length ? kept : undefined;
+    }
+  }
+
+  const choices = calculatorBuffChoices(project, actorId, damage, timeMs, recordId, intervals);
+  if (damage.effectApplications?.length) {
+    const applicable = new Set(choices.filter(option => option.explicit && !option.triggerSkill && !option.confirmTrigger).map(option => option.id));
+    const kept = damage.effectApplications.filter(entry => applicable.has(entry.instanceId));
+    damage.effectApplications = kept.length ? kept : undefined;
+  }
+
+  const selectedChanges = resolveBuffSelection(choices, damage, intervals, actorId, new Map());
+  const applied = applyCalculatorBuffs(project, damage, choices, selectedChanges, timeMs, recordId);
+  project = applied.project;
+  damage.effectApplications = applied.applications;
+  if (existingRecord) {
+    const updatedRecord = project.timeline.find(entry => entry.id === recordId);
+    if (updatedRecord) updatedRecord.damage = damage;
+  }
+  return { project, damage, choices, intervals };
+}
+
+/** Reconcile hit inputs, premise facts, stale revisions/applications, and default buff selection for a single damage query. */
+export function reconcileCalculatorHitState(inputProject: Project, actorId: string, inputDamage: DamageRequest, timeMs = 0, recordId?: string): { project: Project; damage: DamageRequest } {
+  const { project, damage } = reconcileState(inputProject, actorId, inputDamage, timeMs, recordId);
+  return { project, damage };
+}
+
+/** Build a self-consistent cloned project ready for direct engine or Worker evaluation of one record. */
+export function prepareCalculatorEvaluationProject(inputProject: Project, actorId: string, recordId: string): Project {
+  let project: Project = JSON.parse(JSON.stringify(inputProject));
+  const record = project.timeline.find(entry => entry.id === recordId);
+  if (!record?.damage?.hit.hitId) {
+    if (project.effectRevisions?.length) {
+      const validIds = validEffectInstanceIds(project);
+      if (validIds) {
+        const kept = project.effectRevisions.filter(entry => validIds.has(entry.instanceId));
+        project.effectRevisions = kept.length ? kept : undefined;
+      }
+    }
+    if (!record?.reactionEvent) return project;
+    const reactionDamage: DamageRequest = {
+      hit: { definition: { group: 'characters', namespace: 'builtin', id: '', revision: '' }, hitId: '' },
+      crit: record.reactionEvent.contributors[0]?.crit ?? 'critical',
+      reaction: 'none',
+      ...(record.reactionEvent.facts ? { facts: JSON.parse(JSON.stringify(record.reactionEvent.facts)) } : {}),
+      ...(record.reactionEvent.effectApplications ? { effectApplications: JSON.parse(JSON.stringify(record.reactionEvent.effectApplications)) } : {}),
+    };
+    const intervals = calculatorIntervals(project, record.actor, record.timeMs, record.id);
+    presetActorDefaults(reactionDamage, record.actor, intervals, true);
+    let choices = calculatorBuffChoices(project, record.actor, reactionDamage, record.timeMs, record.id, intervals);
+    if (reactionDamage.effectApplications?.length) {
+      const applicable = new Set(choices.filter(option => option.explicit && !option.triggerSkill && !option.confirmTrigger).map(option => option.id));
+      const kept = reactionDamage.effectApplications.filter(entry => applicable.has(entry.instanceId));
+      reactionDamage.effectApplications = kept.length ? kept : undefined;
+    }
+    const selectedChanges = resolveBuffSelection(choices, reactionDamage, intervals, record.actor, new Map());
+    if (selectedChanges.size) {
+      const applied = applyCalculatorBuffs(project, reactionDamage, choices, selectedChanges, record.timeMs, record.id);
+      project = applied.project;
+      reactionDamage.effectApplications = applied.applications;
+      choices = calculatorBuffChoices(project, record.actor, reactionDamage, record.timeMs, record.id, intervals);
+    }
+    presetEnabledBuffFields(choices, reactionDamage, record.actor);
+    const enabledPrimaryIds = new Set(choices.filter(choice => !choice.disabled && calculatorBuffChecked(choice, reactionDamage)).map(choice => choice.id));
+    reconcileTeammateCalculatorEffects(project, reactionDamage, record.actor, enabledPrimaryIds, record.timeMs, record.id);
+    const targetRecord = project.timeline.find(entry => entry.id === record.id);
+    if (targetRecord?.reactionEvent) {
+      if (reactionDamage.facts?.length) targetRecord.reactionEvent.facts = reactionDamage.facts;
+      else delete targetRecord.reactionEvent.facts;
+      if (reactionDamage.effectApplications?.length) targetRecord.reactionEvent.effectApplications = reactionDamage.effectApplications;
+      else delete targetRecord.reactionEvent.effectApplications;
+    }
+    return project;
+  }
+
+  const reconciled = reconcileState(project, record.actor, record.damage, record.timeMs, record.id);
+  project = reconciled.project;
+  const damage = reconciled.damage;
+  const intervals = reconciled.intervals;
+  let choices = reconciled.choices;
+
+  const guaranteed = new Map<string, boolean>();
+  for (const choice of choices) {
+    if (choice.guaranteedTrigger && calculatorBuffChecked(choice, damage)) guaranteed.set(choice.id, true);
+  }
+  if (guaranteed.size) {
+    const applied = applyCalculatorBuffs(project, damage, choices, guaranteed, record.timeMs, record.id);
+    project = applied.project;
+    damage.effectApplications = applied.applications;
+    const hitRecordAfter = project.timeline.find(entry => entry.id === record.id);
+    if (hitRecordAfter) hitRecordAfter.damage = damage;
+    choices = calculatorBuffChoices(project, record.actor, damage, record.timeMs, record.id, intervals);
+    const postSelected = resolveBuffSelection(choices, damage, intervals, record.actor, new Map());
+    if (postSelected.size) {
+      const postApplied = applyCalculatorBuffs(project, damage, choices, postSelected, record.timeMs, record.id);
+      project = postApplied.project;
+      damage.effectApplications = postApplied.applications;
+      choices = calculatorBuffChoices(project, record.actor, damage, record.timeMs, record.id, intervals);
+    }
+  }
+
+  const ownerBuild = project.candidate.actors.find(entry => entry.id === record.actor)?.build;
+  const selected = findBuildHit(ownerBuild, damage.hit);
+  const dealer = selected?.hit.coordinated ? calculatorOnFieldActor(project, damage, record.timeMs, record.id) : undefined;
+  const primaryRecipientId = dealer?.id ?? record.actor;
+  presetEnabledBuffFields(choices, damage, primaryRecipientId);
+  const enabledPrimaryIds = new Set(
+    choices.filter(choice => !choice.disabled && calculatorBuffChecked(choice, damage)).map(choice => choice.id),
+  );
+  reconcileTeammateCalculatorEffects(project, damage, primaryRecipientId, enabledPrimaryIds, record.timeMs, record.id);
+
+  const hitRecord = project.timeline.find(entry => entry.id === record.id);
+  if (hitRecord) hitRecord.damage = damage;
+  if (hitRecord && selected?.hit.snapshot) {
+    const snapshot = selected.hit.snapshot;
+    const allowedCapture = (entry: Project['timeline'][number]) => entry.actor === record.actor
+      && (snapshot.sourceKind === 'capture-only' ? entry.kind === 'capture'
+        : snapshot.sourceKind === 'action-or-capture' ? entry.kind === 'capture' || entry.kind === 'action'
+        : true)
+      && (entry.kind === 'damage' ? findBuildHit(ownerBuild, entry.damage?.hit)?.talent?.id : entry.skillId) === snapshot.sourceSkillId;
+    if (damage.capture?.recordId) {
+      const current = project.timeline.find(entry => entry.id === damage.capture?.recordId);
+      const ordered = current && (current.timeMs < hitRecord.timeMs || current.timeMs === hitRecord.timeMs
+        && (current.order < hitRecord.order || current.id === hitRecord.id && (damage.capture.phase ?? 'before') === 'before'));
+      if (!current || !ordered || !allowedCapture(current)) delete damage.capture;
+    }
+    if (!damage.capture?.recordId) {
+      const source = project.timeline.filter(entry => entry.id !== hitRecord.id && allowedCapture(entry)
+        && (entry.timeMs < hitRecord.timeMs || entry.timeMs === hitRecord.timeMs && entry.order < hitRecord.order))
+        .sort((a, b) => b.timeMs - a.timeMs || b.order - a.order)[0];
+      let captureId = source?.id;
+      if (!captureId && !snapshot.sourceKind && selected.talent?.id === snapshot.sourceSkillId) captureId = hitRecord.id;
+      captureId ??= addCalculatorCapture(project, hitRecord.actor, snapshot.sourceSkillId, hitRecord.timeMs, hitRecord.id);
+      damage.capture = { recordId: captureId, phase: 'before' };
+    } else {
+      damage.capture.phase ??= 'before';
+    }
+    const targetHit = project.timeline.find(entry => entry.id === record.id);
+    if (targetHit) targetHit.damage = damage;
+    if (targetHit && damage.capture.recordId && damage.capture.recordId !== targetHit.id) {
+      const captureRecord = project.timeline.find(entry => entry.id === damage.capture!.recordId);
+      if (captureRecord) {
+        if (captureRecord.kind === 'capture' && captureRecord.timeMs === targetHit.timeMs && captureRecord.order >= targetHit.order) {
+          const insertionOrder = targetHit.order;
+          for (const entry of project.timeline) {
+            if (entry !== captureRecord && entry.timeMs === targetHit.timeMs && entry.order >= insertionOrder) entry.order++;
+          }
+          captureRecord.order = insertionOrder;
+        }
+        if (captureRecord.kind === 'capture' || (captureRecord.kind === 'action' && captureRecord.skillId)) {
+          for (const row of damage.facts ?? []) {
+            if (row.subject.kind === 'event') continue;
+            for (const [key, fact] of Object.entries(row.values)) {
+              if (row.subject.kind === 'team' && derivedTeamFactKeys.has(key)) continue;
+              if (fact.value == null || subjectFacts(captureRecord.captureFacts, row.subject)?.[key]?.value != null) continue;
+              putHitFact(captureRecord.captureFacts ??= [], row.subject, key, fact.value, 'preset');
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return project;
 }

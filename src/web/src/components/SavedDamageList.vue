@@ -6,6 +6,10 @@ import WorkbenchDialog from './WorkbenchDialog.vue';
 import ConfirmationDialog from './ConfirmationDialog.vue';
 
 const emit = defineEmits<{ close: []; open: [id: string]; deleted: [id: string] }>();
+const criticalFormat = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 0 });
+const expectedFormat = new Intl.NumberFormat('zh-CN', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const formatCritical = (value: number) => Number.isFinite(value) ? criticalFormat.format(value) : '—';
+const formatExpected = (value: number) => Number.isFinite(value) ? expectedFormat.format(value) : '—';
 const rows = shallowRef<SavedDamageSummary[]>();
 const removing = shallowRef<SavedDamageSummary>();
 const error = ref('');
@@ -34,7 +38,11 @@ async function remove() {
       <li v-for="row in rows" :key="row.id">
         <button type="button" class="damage-entry" data-card-action="detail" @click="emit('open', row.id)">
           <strong>{{ row.name }}</strong>
-          <span v-if="row.value != null">{{ row.verification === 'pending' ? '模型估算伤害' : '伤害' }} {{ damageNumber(row.value) }}</span>
+          <template v-if="row.criticalValue != null || row.expectedValue != null">
+            <span v-if="row.criticalValue != null">暴击 {{ formatCritical(row.criticalValue) }}</span>
+            <span v-if="row.expectedValue != null">期望 {{ formatExpected(row.expectedValue) }}</span>
+          </template>
+          <span v-else-if="row.value != null">伤害 {{ damageNumber(row.value) }}</span>
           <small>{{ [row.team, new Date(row.savedAt).toLocaleString('zh-CN')].filter(Boolean).join(' / ') }}</small>
         </button>
         <button type="button" class="ui-action soft" data-size="md" data-accent="pyro" :aria-label="'删除 ' + row.name" @click="removing = row">删除</button>

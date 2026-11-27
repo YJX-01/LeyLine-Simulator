@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, shallowRef, useId, watch } from 'vue';
 import { damageGroupNames, hitSearchText, type CalculatorHitChoice } from '../domain/calculator-hits';
-import { damageFamilyLabel, sceneHitLabel } from '../domain/workbench-labels';
+import { damageFamilyLabel } from '../domain/workbench-labels';
 import { singleContributorLunarElements, type SingleContributorReaction } from '../domain/real-project';
-import { calculatorDamageGroups, definitionKey, type ProjectReaction, transformativeFamilies, type CharacterMetadata, type CalculatorDamageGroup, type CalculationBundle, type SceneDefinition } from '@leyline/schema';
+import { calculatorDamageGroups, definitionKey, type ProjectReaction, transformativeFamilies, type CharacterMetadata, type CalculatorDamageGroup, type CalculationBundle } from '@leyline/schema';
 import { getReactionCalculationBundle } from '@leyline/game-data';
 import CalculatorDamageCard from './CalculatorDamageCard.vue';
 import LibraryToolbar from './LibraryToolbar.vue';
 import WorkbenchDialog from './WorkbenchDialog.vue';
 
-const props = defineProps<{ choices: CalculatorHitChoice[]; selected?: CalculatorHitChoice; scenes: SceneDefinition[];
-  groupSettings?: NonNullable<CharacterMetadata['calculator']>['groups']; selectedScene?: string; swirlElement?: ProjectReaction['element']; selectedReaction?: string; reactionRules?: CalculationBundle }>();
-const emit = defineEmits<{ select: [choice: CalculatorHitChoice]; reaction: [family: SingleContributorReaction];
-  scene: [definition: SceneDefinition]; close: [] }>();
+const props = defineProps<{ choices: CalculatorHitChoice[]; selected?: CalculatorHitChoice;
+  groupSettings?: NonNullable<CharacterMetadata['calculator']>['groups']; swirlElement?: ProjectReaction['element']; selectedReaction?: string; reactionRules?: CalculationBundle }>();
+const emit = defineEmits<{ select: [choice: CalculatorHitChoice]; reaction: [family: SingleContributorReaction]; close: [] }>();
 const query = ref('');
 const term = computed(() => query.value.trim().toLowerCase());
 const panelId = useId();
@@ -26,15 +25,13 @@ const defaultRules = shallowRef<CalculationBundle>();
 onMounted(async () => {
   if (!props.reactionRules) defaultRules.value = await getReactionCalculationBundle();
 });
-const scenes = computed(() => props.scenes.filter(scene => (sceneHitLabel(scene) + ' 场景 ' + scene.hits?.[0]?.trigger)
-  .toLowerCase().includes(term.value)));
 const reactions = computed(() => transformativeFamilies.filter(family =>
   ('剧变反应 ' + damageFamilyLabel(family) + ' ' + family).toLowerCase().includes(term.value)));
 const lunarReactions = computed(() => lunarFamilies.filter(family =>
   ('月曜反应 ' + damageFamilyLabel(family) + ' ' + family).toLowerCase().includes(term.value)));
 const groups = computed(() => {
   const configured = props.groupSettings ?? [];
-  const order: Group[] = ['common', ...new Set([...configured.map(group => group.type), ...calculatorDamageGroups])];
+  const order: Group[] = ['common', ...new Set([...configured.map(group => group.type), ...calculatorDamageGroups].filter(id => id !== 'scene'))];
   order.splice(order.indexOf('reaction') + 1, 0, 'lunar-reaction', 'stellar-reaction');
   const hits = new Map<Group, CalculatorHitChoice[]>();
   for (const choice of props.choices) {
@@ -48,7 +45,7 @@ const groups = computed(() => {
     const rows = hits.get(id) ?? [];
     const familyChoices: SingleContributorReaction[] = id === 'reaction' ? reactions.value : id === 'lunar-reaction' ? lunarReactions.value
       : id === 'stellar-reaction' && '星烁反应 星扩散 stellar-swirl'.includes(term.value) ? ['stellar-swirl'] : [];
-    const count = id === 'scene' ? scenes.value.length : rows.length + familyChoices.length;
+    const count = rows.length + familyChoices.length;
     return { id, rows, count, familyChoices };
   }).filter(group => group.count);
   const firstType = visible.find(group => group.id !== 'common')?.id;
@@ -82,12 +79,6 @@ function toggle(group: Group, expanded: boolean) {
             :aria-pressed="selectedReaction === family" @click="emit('reaction', family)">
             <CalculatorDamageCard :family="family" :element="swirlElement" :rules="reactionRules ?? defaultRules" :single-contributor="true" />
           </button>
-          <template v-if="group.id === 'scene'">
-            <button v-for="scene in scenes" :key="definitionKey(scene)" type="button" data-card-action="select" :data-scene-hit="scene.id"
-              :aria-pressed="selectedScene === definitionKey(scene)" @click="emit('scene', scene)">
-              <CalculatorDamageCard :scene="scene" />
-            </button>
-          </template>
         </div>
       </section>
       <p v-if="!groups.length" class="empty">没有符合条件的伤害</p>

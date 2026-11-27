@@ -30,4 +30,4 @@ Playwright 辅助代码的运行时映射在 `browser/playwright-runtime.json`�
 
 [全目录测试](unit/web/domain/calculator-catalog-defaults.test.ts)随正式数据扩展，检查增益在初始和启用时的取值、计数的合法范围，以及已有的零值和“否”能否保留。伤害数值另用独立公式核对，具体案例见[计算支持与验证资料](../tools/data/README.md#计算支持与验证资料)。
 
-[伤害计算](browser/development/damage-calculator.spec.ts)、[场景冲击](browser/development/scene-damage.spec.ts)和[展柜配装重放](browser/development/vesna-production-chain.spec.ts)覆盖页面与 Worker 的实际操作。三组用例共用[浏览器检查](helpers/calculator-browser.ts)，在渲染时检查增益卡控件的初始值，并检查页面、弹窗、输入提示和无障碍标签是否出现旧的待确认文案。
+[伤害计算](browser/development/damage-calculator.spec.ts)和[展柜配装重放](browser/development/vesna-production-chain.spec.ts)覆盖页面与 Worker 的实际操作。两组用例共用[浏览器检查](helpers/calculator-browser.ts)，在渲染时检查增益卡控件的初始值，并检查页面、弹窗、输入提示和无障碍标签是否出现旧的待确认文案。

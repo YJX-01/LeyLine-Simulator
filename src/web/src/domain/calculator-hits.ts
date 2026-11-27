@@ -56,15 +56,16 @@ export function calculatorHitChoices(character: CharacterDefinition, build?: Bui
       const requirement = build && unlock && build[unlock.state] < unlock.rank
         ? (unlock.state === 'constellation' ? '需要命座 ' : '需要突破 ') + unlock.rank : undefined;
       const count = hit.selection?.repetitions;
+      const independent = !talent.noIndependentDamage || hit.origin === 'triggered';
       const notes = [
         card?.note,
         talent.hits.some(other => other.name === name && other.element !== hit.element) ? realElementLabel(hit.element) + '形态' : undefined,
         family && family !== 'ordinary' && !name.includes(damageFamilyLabel(family)) ? damageFamilyLabel(family) : undefined,
         count ? '单击，共' + count + '击' : undefined,
-        requirement ?? (families.length ? undefined : '尚未支持'),
+        requirement ?? (families.length && independent ? undefined : '尚未支持'),
       ];
       choices.push({ skillId: talent.id, hitId: hit.id, group: hit.category, source, code, alias, skillName: talent.name,
-        element: hit.element, icon, ref: characterHitRef(character, hit.id), available: !requirement && families.length > 0,
+        element: hit.element, icon, ref: characterHitRef(character, hit.id), available: !requirement && families.length > 0 && independent,
         requirement, name, note: notes.filter(Boolean).join('，'), scaling: scaling(hit.base), common: pinned.includes(hit.id) });
     }
   }

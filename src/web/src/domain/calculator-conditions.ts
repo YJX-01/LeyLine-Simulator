@@ -6,10 +6,13 @@ import { putHitFact, subjectFacts, definitionKey, partyInfusionFact, partyInfusi
 import { nextRecordId } from './workbench-project';
 import type { CalculationFact, Talent } from '@leyline/schema';
 
+export const derivedTeamFactKeys = new Set(['fullMoonsign', 'firstMoonsign', 'threeTeamElements']);
+const defaultRadianceOptions = ['none', 'stellar-conduct', 'stellar-swirl'] as const;
+
 export function presetCalculatorHitInputs(damage: DamageRequest, inputs: NonNullable<Talent['inputs']>, recorded?: Record<string, CalculationFact>) {
   const event = { kind: 'event' } as const;
   for (const input of inputs) {
-    if (subjectFacts(damage.facts, event)?.[input.id]?.value != null) continue;
+    if (input.usage === 'healing' || subjectFacts(damage.facts, event)?.[input.id]?.value != null) continue;
     const prior = recorded?.[input.id]?.value;
     const value = prior?.kind === 'quantity' && prior.unit === input.type.unit ? prior.value : input.min;
     putHitFact(damage.facts ??= [], event, input.id, { ...input.type, value });
@@ -33,7 +36,8 @@ export function missingCalculatorPresets(facts: DamageRequest['facts'], fields: 
     if (!subject || subjectFacts(facts, subject)?.[key]?.value != null) return [];
     const scope = subject.kind === 'event' ? 'query' : subject.kind === 'actor' ? subject.id : subject.kind;
     const missing = inputs.some(input => input.key === key && input.requiredBy.length
-      && (input.scope === scope || input.scope.endsWith(':' + scope)));
+      && (input.scope === scope || input.scope.endsWith(':' + scope)
+        || (subject.kind === 'actor' && subject.id === actorId && (input.scope === 'owner' || input.scope === 'recipient'))));
     return missing ? [{ key, subject, value: calculatorFactPreset(field, actorId) }] : [];
   });
 }
@@ -89,7 +93,7 @@ export function healingBonusFactFields(members: Project['candidate']['actors'], 
       if (effectRecipientMatches(effect.recipient, owner.id, beneficiary, identity) === false) continue;
       for (const binding of [effect.predicate, effect.value]) {
         if (!binding) continue;
-        const stack = stackChoice(binding, entity.calculation.bundle);
+        const stack = stackChoice(binding, entity.calculation.bundle, beneficiary);
         for (const field of bindingFactFields(binding, owner.id, beneficiary)) {
           fields.push({ ...field, label: entity.metadata.facts?.[field.key]?.label, ...(stack?.key === field.key && { max: stack.max }) });
         }
@@ -113,11 +117,22 @@ export function calculatorHitFactFields(selected: ReturnType<typeof findBuildHit
     .map(field => ({ ...field, label: entity.metadata.facts?.[field.key]?.label }));
 }
 
+function selectionScopeSubject(scope: Extract<CalculationBinding, { kind: 'fact' }>['scope'], recipient?: string): FactSubject | undefined | null {
+  if (scope === 'owner') return undefined;
+  if (scope === 'recipient') return recipient ? { kind: 'actor', id: recipient } : null;
+  if (scope === 'query') return { kind: 'event' };
+  if (scope === 'target') return { kind: 'target', id: 'target' };
+  if (scope === 'team') return { kind: 'team' };
+  return null;
+}
+
 /** Only facts uniquely implied by an explicit choice. Alternatives and open ranges stay editable. */
-export function selectionFacts(binding: CalculationBinding | undefined, bundle: CalculationBundle, active = true): CalculatorFactSetting[] {
+export function selectionFacts(binding: CalculationBinding | undefined, bundle: CalculationBundle, active = true, recipient?: string): CalculatorFactSetting[] {
   if (!binding) return [];
-  if (binding.kind === 'fact' && binding.at !== 'source-event' && binding.scope === 'owner' && binding.type.kind === 'boolean') {
-    return [{ key: binding.key, value: { kind: 'boolean', value: active } }];
+  if (binding.kind === 'fact' && binding.at !== 'source-event' && binding.type.kind === 'boolean') {
+    const subject = selectionScopeSubject(binding.scope, recipient);
+    if (subject === null) return [];
+    return [{ key: binding.key, ...(subject ? { subject } : {}), value: { kind: 'boolean', value: active } }];
   }
   if (binding.kind !== 'formula') return [];
   const template = bundle.formulas.find(entry => definitionKey(entry.identity) === definitionKey(binding.formula))?.template;
@@ -125,19 +140,124 @@ export function selectionFacts(binding: CalculationBinding | undefined, bundle: 
   if (template.id === 'condition-group') {
     const required = active !== template.negate;
     if (template.terms === 1 || required === (template.operator === 'all')) {
-      return Object.values(binding.inputs).flatMap(term => selectionFacts(term, bundle, required));
+      return Object.values(binding.inputs).flatMap(term => selectionFacts(term, bundle, required, recipient));
     }
     return [];
   }
   if (template.id !== 'enum-condition' && template.id !== 'quantity-condition') return [];
   const input = binding.inputs[template.input];
-  if (input?.kind !== 'fact' || input.scope !== 'owner') return [];
+  if (input?.kind !== 'fact' || input.at === 'source-event') return [];
+  const subject = selectionScopeSubject(input.scope, recipient);
+  if (subject === null) return [];
   if (template.id === 'enum-condition' && input.type.kind === 'enum') {
     const candidates = input.type.values.filter(value => (value === template.equals) === active);
-    return candidates.length === 1 ? [{ key: input.key, value: { kind: 'enum', value: candidates[0] } }] : [];
+    return candidates.length === 1 ? [{ key: input.key, ...(subject ? { subject } : {}), value: { kind: 'enum', value: candidates[0] } }] : [];
   }
   if (template.id === 'quantity-condition' && template.threshold !== undefined && template.relation === 'eq' && active && input.type.kind === 'quantity') {
-    return [{ key: input.key, value: { kind: 'quantity', unit: input.type.unit, value: template.threshold } }];
+    return [{ key: input.key, ...(subject ? { subject } : {}), value: { kind: 'quantity', unit: input.type.unit, value: template.threshold } }];
+  }
+  return [];
+}
+
+export interface HitPremiseOptions {
+  active?: boolean;
+  constellation?: number;
+  ascension?: number;
+  hitInputs?: readonly NonNullable<Talent['inputs']>[number][];
+}
+
+function staticRankSatisfied(binding: CalculationBinding | undefined, bundle: CalculationBundle, options: HitPremiseOptions): boolean | undefined {
+  if (binding?.kind !== 'formula') return undefined;
+  const template = bundle.formulas.find(entry => definitionKey(entry.identity) === definitionKey(binding.formula))?.template;
+  if (!template) return undefined;
+  if (template.id === 'condition-group') {
+    const results = Object.values(binding.inputs).map(term => staticRankSatisfied(term, bundle, options));
+    if (template.terms === 1) return results[0] === undefined ? undefined : results[0] !== template.negate;
+    if (template.operator === 'all') {
+      const value = results.includes(false) ? false : results.every(v => v === true) ? true : undefined;
+      return value === undefined ? undefined : value !== template.negate;
+    }
+    const value = results.includes(true) ? true : results.every(v => v === false) ? false : undefined;
+    return value === undefined ? undefined : value !== template.negate;
+  }
+  if (template.id !== 'threshold-condition' && template.id !== 'quantity-condition') return undefined;
+  const input = binding.inputs[template.input];
+  if (input?.kind !== 'actor-state' || template.threshold === undefined) return undefined;
+  const rank = input.property === 'constellation' ? options.constellation : options.ascension;
+  if (rank === undefined) return undefined;
+  switch (template.relation) {
+    case 'gt': return rank > template.threshold;
+    case 'gte': return rank >= template.threshold;
+    case 'lt': return rank < template.threshold;
+    case 'lte': return rank <= template.threshold;
+    case 'eq': return rank === template.threshold;
+  }
+}
+
+function thresholdSatisfaction(relation: 'gt' | 'gte' | 'lt' | 'lte' | 'eq', threshold: number, unit: Extract<Value, { kind: 'quantity' }>['unit'],
+  key: string, maxInput?: number, inputSpec?: NonNullable<Talent['inputs']>[number]): number {
+  const step = unit === 'count' || inputSpec?.integer ? 1 : key === 'hpRatio' || key === 'targetHpRatio' ? 0.25 : 1;
+  let value = relation === 'gte' || relation === 'lte' || relation === 'eq' ? threshold
+    : relation === 'gt' ? (key === 'hpRatio' && threshold < 1 ? 1 : threshold + step)
+    : Math.max(0, key === 'hpRatio' || key === 'targetHpRatio' ? threshold / 2 : threshold - step);
+  if (inputSpec) {
+    value = Math.max(inputSpec.min, value);
+    const limit = inputSpec.max;
+    if (limit !== undefined) value = Math.min(limit, value);
+  }
+  if (maxInput !== undefined) value = Math.min(maxInput, value);
+  return value;
+}
+
+/** Resolve fact presets needed so a selected hit's own `when` predicate evaluates active without missing-fact errors. */
+export function hitPremiseFacts(binding: CalculationBinding | undefined, bundle: CalculationBundle, options: HitPremiseOptions = {}): CalculatorFactSetting[] {
+  const active = options.active ?? true;
+  if (!binding) return [];
+  if (binding.kind === 'fact' && binding.at !== 'source-event' && binding.type.kind === 'boolean') {
+    if (binding.scope === 'team' && derivedTeamFactKeys.has(binding.key)) return [];
+    const subject = selectionScopeSubject(binding.scope);
+    if (subject === null) return [];
+    return [{ key: binding.key, ...(subject ? { subject } : {}), value: { kind: 'boolean', value: active } }];
+  }
+  if (binding.kind !== 'formula') return [];
+  const template = bundle.formulas.find(entry => definitionKey(entry.identity) === definitionKey(binding.formula))?.template;
+  if (!template) return [];
+  if (template.id === 'condition-group') {
+    const required = active !== template.negate;
+    const terms = Object.values(binding.inputs);
+    if (template.terms === 1 || required === (template.operator === 'all')) {
+      return terms.flatMap(term => hitPremiseFacts(term, bundle, { ...options, active: required }));
+    }
+    if (terms.some(term => staticRankSatisfied(term, bundle, options) === required)) return [];
+    for (const term of terms) {
+      const resolved = hitPremiseFacts(term, bundle, { ...options, active: required });
+      if (resolved.length) return resolved;
+    }
+    return [];
+  }
+  if (template.id === 'enum-condition') {
+    const input = binding.inputs[template.input];
+    if (input?.kind !== 'fact' || input.at === 'source-event' || input.type.kind !== 'enum') return [];
+    if (input.scope === 'team' && derivedTeamFactKeys.has(input.key)) return [];
+    const subject = selectionScopeSubject(input.scope);
+    if (subject === null) return [];
+    const candidates = input.type.values.filter(value => (value === template.equals) === active);
+    if (!candidates.length) return [];
+    const chosen = input.key === 'radiance' && !active && candidates.includes('stellar-conduct') ? 'stellar-conduct' : candidates[0];
+    return [{ key: input.key, ...(subject ? { subject } : {}), value: { kind: 'enum', value: chosen } }];
+  }
+  if ((template.id === 'quantity-condition' || template.id === 'threshold-condition') && template.threshold !== undefined) {
+    const input = binding.inputs[template.input];
+    if (input?.kind !== 'fact' || input.at === 'source-event' || input.type.kind !== 'quantity') return [];
+    if (input.scope === 'team' && derivedTeamFactKeys.has(input.key)) return [];
+    const subject = selectionScopeSubject(input.scope);
+    if (subject === null) return [];
+    const inverted = { gt: 'lte', gte: 'lt', lt: 'gte', lte: 'gt', eq: 'gt' } as const;
+    const relation = active ? template.relation : inverted[template.relation];
+    const inputSpec = options.hitInputs?.find(entry => entry.id === input.key);
+    const maxInput = 'maxInput' in template ? template.maxInput : undefined;
+    const value = thresholdSatisfaction(relation, template.threshold, input.type.unit, input.key, maxInput, inputSpec);
+    return [{ key: input.key, ...(subject ? { subject } : {}), value: { kind: 'quantity', unit: input.type.unit, value } }];
   }
   return [];
 }
@@ -167,12 +287,21 @@ export function selectionEnumFallback(binding: CalculationBinding | undefined, b
     value: typeof value === 'string' ? { kind: 'enum', value } : value! }];
 }
 
-export function stackChoice(binding: CalculationBinding, bundle: CalculationBundle) {
-  if (binding.kind !== 'formula') return;
+export function stackChoice(binding: CalculationBinding | undefined, bundle: CalculationBundle, recipient?: string) {
+  if (!binding || binding.kind !== 'formula') return;
   const template = bundle.formulas.find(entry => definitionKey(entry.identity) === definitionKey(binding.formula))?.template;
-  if (template?.id !== 'linear-bonus' || template.inputUnit !== 'count' || !template.maxInput) return;
+  if (!template) return;
+  const isLinearStack = template.id === 'linear-bonus' && template.inputUnit === 'count' && template.maxInput;
+  const isCountGate = template.id === 'quantity-condition' && template.unit === 'count' && template.relation === 'gt' && template.threshold === 0 && template.maxInput;
+  if (!isLinearStack && !isCountGate) return;
   const input = binding.inputs[template.input];
-  if (input?.kind === 'fact' && input.scope === 'owner') return { key: input.key, max: template.maxInput };
+  if (input?.kind === 'fact' && (input.scope === 'owner' || (input.scope === 'recipient' && Boolean(recipient)))) {
+    return {
+      key: input.key,
+      max: template.maxInput!,
+      ...(input.scope === 'recipient' && recipient ? { subject: { kind: 'actor' as const, id: recipient } } : {}),
+    };
+  }
 }
 
 /** Keep an entered HP value when it already activates the selected rule. */
@@ -245,4 +374,117 @@ export function calculatorHitElement(project: Project, damage: DamageRequest, se
     .find(element => element === infusion.value) : undefined;
   return effectiveHitElement(hit, hit.elementBy ? (event?.[hit.elementBy] ?? observations?.[hit.elementBy])?.value : undefined,
     project.candidate.actors.map(member => member.build?.character.identity.element ?? member.element), own, party);
+}
+
+function bindingUsesFact(binding: CalculationBinding | undefined, key: string): boolean {
+  if (!binding) return false;
+  if (binding.kind === 'fact') return binding.key === key;
+  if (binding.kind === 'formula') return Object.values(binding.inputs).some(input => bindingUsesFact(input, key));
+  return false;
+}
+
+function radianceBranchMatches(binding: CalculationBinding | undefined, bundle: CalculationBundle, value: string): boolean | undefined {
+  if (!binding || binding.kind !== 'formula') return undefined;
+  const template = bundle.formulas.find(entry => definitionKey(entry.identity) === definitionKey(binding.formula))?.template;
+  if (!template) return undefined;
+  if (template.id === 'enum-condition') {
+    const input = binding.inputs[template.input];
+    return input?.kind === 'fact' && input.key === 'radiance' ? value === template.equals : undefined;
+  }
+  if (template.id !== 'condition-group') return undefined;
+  const results = Object.values(binding.inputs).map(term => radianceBranchMatches(term, bundle, value)).filter((v): v is boolean => v !== undefined);
+  if (!results.length) return undefined;
+  const combined = template.operator === 'all' ? results.every(Boolean) : results.some(Boolean);
+  return combined !== template.negate;
+}
+
+export interface CalculatorRadianceSpec {
+  key: 'radiance';
+  options: readonly string[];
+  validOptions: readonly string[];
+  defaultValue: string;
+}
+
+export function calculatorHitRadiance(selected: ReturnType<typeof findBuildHit>): CalculatorRadianceSpec | undefined {
+  if (!selected) return undefined;
+  const { entity, hit, talent } = selected;
+  const family = entity.kind === 'character-definition' ? authoredHit(entity.metadata, talent?.id, hit.id)?.family : undefined;
+  const branchesOnRadiance = (typeof family === 'object' && family.by === 'radiance')
+    || Object.values(hit.damage).some(branch => bindingUsesFact(branch.predicate, 'radiance'));
+  if (!branchesOnRadiance) return undefined;
+  const declaration = combatFactDeclaration(entity.metadata.facts, 'radiance')?.type;
+  const options = declaration?.kind === 'enum' ? [...declaration.values] : [...defaultRadianceOptions];
+  const validOptions = options.filter(option => {
+    const mapped = typeof family === 'object' && family.by === 'radiance' ? hit.damage[family.cases[option]] : undefined;
+    const branches = mapped ? [mapped] : Object.values(hit.damage);
+    return branches.some(branch => !branch.predicate || radianceBranchMatches(branch.predicate, entity.calculation.bundle, option) !== false);
+  });
+  const candidates = validOptions.length ? validOptions : options;
+  const defaultValue = candidates.includes('none') ? 'none'
+    : candidates.includes('stellar-conduct') ? 'stellar-conduct' : candidates[0];
+  return { key: 'radiance', options, validOptions: candidates, defaultValue };
+}
+
+export function selectedHitBranchPredicate(selected: ReturnType<typeof findBuildHit>, radianceValue?: string): CalculationBinding | undefined {
+  if (!selected) return undefined;
+  const { entity, talent, hit } = selected;
+  const entries = Object.entries(hit.damage);
+  if (!entries.length) return undefined;
+  if (entries.length === 1) return entries[0][1].predicate;
+  const family = entity.kind === 'character-definition' ? authoredHit(entity.metadata, talent?.id, hit.id)?.family : undefined;
+  const spec = calculatorHitRadiance(selected);
+  const mode = radianceValue ?? spec?.defaultValue;
+  const key = typeof family === 'object' && mode ? family.cases[mode] : undefined;
+  return (key ? hit.damage[key]?.predicate : undefined) ?? entries[0][1].predicate;
+}
+
+export function readCalculatorRadiance(damage: DamageRequest, actorId: string): string | undefined {
+  const value = subjectFacts(damage.facts, { kind: 'actor', id: actorId })?.radiance?.value;
+  return value?.kind === 'enum' ? value.value : undefined;
+}
+
+export function writeCalculatorRadiance(damage: DamageRequest, actorId: string, value: string, provenance: CalculationFact['provenance'] = 'explicit') {
+  setCalculatorFact(damage, { key: 'radiance', value: { kind: 'enum', value } }, actorId, provenance);
+}
+
+export interface CalculatorPersonalInfusionSpec {
+  key: string;
+  element: string;
+  label: string;
+  subject?: FactSubject;
+  defaultValue: boolean;
+}
+
+export function calculatorPersonalInfusion(selected: ReturnType<typeof findBuildHit>, constellation = 0, ownerId?: string): CalculatorPersonalInfusionSpec | undefined {
+  if (!selected?.hit.infusion) return undefined;
+  const { infusion } = selected.hit;
+  if (constellation < (infusion.minConstellation ?? 0)) return undefined;
+  const required = Object.values(selected.hit.damage).some(branch =>
+    selectionFacts(branch.predicate, selected.entity.calculation.bundle).some(setting => setting.key === infusion.fact && setting.value.value === true));
+  return {
+    key: infusion.fact,
+    element: infusion.element,
+    label: selected.entity.metadata.facts?.[infusion.fact]?.label ?? infusion.fact,
+    ...(ownerId ? { subject: { kind: 'actor', id: ownerId } } : {}),
+    defaultValue: required,
+  };
+}
+
+export function readCalculatorPersonalInfusion(damage: DamageRequest, actorId: string, key: string): boolean | undefined {
+  const value = subjectFacts(damage.facts, { kind: 'actor', id: actorId })?.[key]?.value;
+  return value?.kind === 'boolean' ? value.value : undefined;
+}
+
+export function writeCalculatorPersonalInfusion(damage: DamageRequest, actorId: string, key: string, value: boolean, provenance: CalculationFact['provenance'] = 'explicit') {
+  setCalculatorFact(damage, { key, value: { kind: 'boolean', value } }, actorId, provenance);
+}
+
+export function calculatorMainPageFactKeys(selected: ReturnType<typeof findBuildHit>, constellation = 0): Set<string> {
+  const keys = new Set<string>(['critMode', 'reactionMode', partyInfusionFact]);
+  for (const input of selected?.talent?.inputs ?? []) if (input.usage !== 'healing') keys.add(input.id);
+  if (selected?.hit.elementBy === 'absorbedElement') keys.add('absorbedElement');
+  if (calculatorHitRadiance(selected)) keys.add('radiance');
+  const infusion = calculatorPersonalInfusion(selected, constellation);
+  if (infusion) keys.add(infusion.key);
+  return keys;
 }

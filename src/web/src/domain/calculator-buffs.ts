@@ -1,10 +1,10 @@
 import { authoredHit } from '@leyline/schema/hit-bindings';
-import { isCalculatorCombatModifier, buffEventSelectors, createTalentRankReader, findBuildHit, isTransformative, subjectFacts, talentParameterAt } from '@leyline/schema';
+import { isCalculatorDamageModifier, buffEventSelectors, createTalentRankReader, findBuildHit, isTransformative, partyInfusionFact, putHitFact, subjectFacts, talentParameterAt } from '@leyline/schema';
 import { buffEndMs, calculationEffectInstanceId, effectRecipientMatches, grantedBuildEffects, grantedGleamEffects, grantedResonances, hitMatches, instanceActive, projectBuffContext, stackExpiryUncertain } from '@leyline/engine';
-import { projectSchema, definitionKey, type Build, type CalculationBundle, type CalculationBinding, type CalculationFact, type CombatConditions, type CombatFrame, type DamageRequest, type DefinitionRef, type EffectDefinition, type Project } from '@leyline/schema';
+import { projectSchema, definitionKey, type Build, type CalculationBundle, type CalculationBinding, type CalculationFact, type CombatConditions, type CombatFrame, type DamageRequest, type DefinitionRef, type EffectDefinition, type FactSubject, type Project, type Value } from '@leyline/schema';
 import { addConfirmedBuff, addSkillAction } from './real-project';
 import { damageFamilyLabel, realElementLabel, realStatLabels } from './workbench-labels';
-import { calculatorFactPreset, setCalculatorCondition, calculatorHitElement, calculatorIntervals, calculatorOnFieldActor, hpChoice, hpMatches, bindingFactFields, selectionFacts, setCalculatorFact, stackChoice, calculatorFactValue, withCurrentConditions, type CalculatorFactField, type CalculatorFactSetting } from './calculator-conditions';
+import { bindingSubject, calculatorFactPreset, calculatorHitRadiance, calculatorPersonalInfusion, derivedTeamFactKeys, hitPremiseFacts, selectedHitBranchPredicate, setCalculatorCondition, calculatorHitElement, calculatorIntervals, calculatorOnFieldActor, hpChoice, hpMatches, bindingFactFields, selectionFacts, setCalculatorFact, stackChoice, calculatorFactValue, withCurrentConditions, type CalculatorFactField, type CalculatorFactSetting } from './calculator-conditions';
 
 export interface CalculatorBuff {
   id: string;
@@ -24,10 +24,17 @@ export interface CalculatorBuff {
   checked: boolean;
   explicit: boolean;
   toggleFact?: string;
+  toggleSubject?: FactSubject;
+  guaranteedTrigger?: boolean;
+  hasPredicateFact?: boolean;
+  hasValueFact?: boolean;
+  hitSatisfied?: boolean;
+  teammate?: boolean;
+  derivedTeamFacts?: Record<string, CalculationFact>;
   requirements: CalculatorFactSetting[];
   derivedFacts?: Record<string, CalculationFact>;
   fields: CalculatorFactField[];
-  stacks?: { key: string; max: number };
+  stacks?: { key: string; max: number; subject?: FactSubject };
   hp?: ReturnType<typeof hpChoice>;
   disabled: boolean;
   triggerSkill?: string;
@@ -128,22 +135,32 @@ export const buffFactNames: Record<string, string> = {
   'yelan.breakthroughBarbShot': '这发破局矢消耗已获得的破局状态',
 };
 type Entity = Build['character'] | NonNullable<Build['weapon']> | Build['sets'][number];
-type BuffFactSource = Pick<CalculatorBuff, 'ownerId' | 'derivedFacts'>;
+type BuffFactSource = Pick<CalculatorBuff, 'ownerId' | 'derivedFacts' | 'derivedTeamFacts'>;
 type BuffSelection = Pick<CalculatorBuff, 'id' | 'disabled' | 'triggerSkill' | 'confirmTrigger' | 'explicit' | 'checked'
-  | 'requirements' | 'stacks' | 'hp' | 'toggleFact'> & BuffFactSource;
+  | 'requirements' | 'stacks' | 'hp' | 'toggleFact' | 'toggleSubject'
+  | 'guaranteedTrigger' | 'hasPredicateFact' | 'hasValueFact' | 'hitSatisfied' | 'teammate'> & BuffFactSource;
 function buffFactValue(item: BuffFactSource, damage: DamageRequest, key: string, subject?: CalculatorFactSetting['subject']) {
   const explicit = calculatorFactValue(damage, key, item.ownerId, subject);
-  if (explicit !== undefined || subject && (subject.kind !== 'actor' || subject.id !== item.ownerId)) return explicit;
+  if (explicit !== undefined) return explicit;
+  if (subject?.kind === 'team') {
+    const teamDerived = item.derivedTeamFacts?.[key];
+    return teamDerived ? teamDerived.value?.value ?? null : undefined;
+  }
+  if (subject && (subject.kind !== 'actor' || subject.id !== item.ownerId)) return explicit;
   const derived = item.derivedFacts?.[key];
   return derived ? derived.value?.value ?? null : undefined;
 }
 export function buffConditionsMet(item: Pick<CalculatorBuff, 'requirements' | 'stacks' | 'hp'> & BuffFactSource, damage: DamageRequest) {
   return item.requirements.every(({ key, value, subject }) => buffFactValue(item, damage, key, subject) === value.value)
     && (!item.hp || hpMatches(item.hp, calculatorFactValue(damage, 'hpRatio', item.ownerId)))
-    && (!item.stacks || Number(calculatorFactValue(damage, item.stacks.key, item.ownerId)) > 0);
+    && (!item.stacks || Number(calculatorFactValue(damage, item.stacks.key, item.ownerId, item.stacks.subject)) > 0);
 }
 export function calculatorBuffChecked(item: BuffSelection, damage: DamageRequest, selection?: boolean) {
-  const enabled = selection ?? (!item.disabled && !item.triggerSkill && !item.confirmTrigger && (!item.explicit || item.checked));
+  if (item.hasPredicateFact === undefined && item.hasValueFact === undefined && item.guaranteedTrigger === undefined && item.hitSatisfied === undefined) {
+    const enabled = selection ?? (!item.disabled && !item.triggerSkill && !item.confirmTrigger && (!item.explicit || item.checked));
+    return enabled && buffConditionsMet(item, damage);
+  }
+  const enabled = selection ?? (!item.disabled && (item.guaranteedTrigger || (!item.triggerSkill && !item.confirmTrigger && item.checked)));
   return enabled && buffConditionsMet(item, damage);
 }
 
@@ -153,35 +170,56 @@ export function calculatorLayerSeconds(timing: NonNullable<CalculatorBuff['timin
 
 export function calculatorEffectControls(effect: EffectDefinition, bundle: CalculationBundle, owner: string, recipient: string, contributor: string) {
   const predicate = effect.predicate;
-  const toggleFact = predicate?.kind === 'fact' && predicate.scope === 'owner' && predicate.type.kind === 'boolean'
-    && !['onField', 'shielded'].includes(predicate.key) ? predicate.key : undefined;
-  const requirements = selectionFacts(predicate, bundle);
+  const toggleSubject = predicate?.kind === 'fact' && predicate.type.kind === 'boolean' && predicate.at !== 'source-event'
+    && !derivedTeamFactKeys.has(predicate.key)
+    && (predicate.scope !== 'owner' || !['onField', 'shielded'].includes(predicate.key))
+    ? bindingSubject(predicate.scope, owner, recipient, contributor)
+    : undefined;
+  const toggleFact = predicate?.kind === 'fact' && toggleSubject ? predicate.key : undefined;
+  const requirements = selectionFacts(predicate, bundle, true, recipient);
   const fields = [...bindingFactFields(predicate, owner, recipient, contributor), ...bindingFactFields(effect.value, owner, recipient, contributor)];
   const target = effect.target.kind === 'attribute' ? effect.target.attribute.id : effect.target.port;
+  if (toggleFact && toggleSubject && !requirements.some(entry => entry.key === toggleFact && JSON.stringify(entry.subject) === JSON.stringify(toggleSubject))) {
+    requirements.push({ key: toggleFact, subject: toggleSubject, value: { kind: 'boolean', value: true } });
+  }
   if ((target.startsWith('attribute.aimCharge') || effect.buff?.id === 'chasca.c6.fatal-round-crit')
     && predicate?.kind === 'fact' && predicate.type.kind === 'boolean' && (predicate.scope === 'query' || predicate.scope === 'recipient')) {
     const field = fields.find(entry => entry.key === predicate.key);
-    if (field?.subject) requirements.push({ key: field.key, subject: field.subject, value: { kind: 'boolean', value: true } });
+    if (field?.subject && !requirements.some(entry => entry.key === field.key && JSON.stringify(entry.subject) === JSON.stringify(field.subject))) {
+      requirements.push({ key: field.key, subject: field.subject, value: { kind: 'boolean', value: true } });
+    }
   }
   if (effect.windowFact) fields.push({ fromTrigger: true, key: effect.windowFact, type: { kind: 'boolean' }, subject: { kind: 'actor', id: owner } });
-  return { fields, toggleFact, requirements, stacks: stackChoice(effect.value, bundle),
+  return { fields, toggleFact, toggleSubject, requirements, stacks: stackChoice(effect.value, bundle, recipient) ?? stackChoice(predicate, bundle, recipient),
     hp: hpChoice(predicate, bundle) ?? hpChoice(effect.value, bundle) };
 }
 
 /** Apply the card's editable defaults before evaluating its activation requirements. */
-export function enableCalculatorBuff(item: Pick<CalculatorBuff, 'ownerId' | 'fields' | 'requirements' | 'hp' | 'stacks' | 'derivedFacts'>,
+export function enableCalculatorBuff(item: Pick<CalculatorBuff, 'ownerId' | 'fields' | 'requirements' | 'hp' | 'stacks' | 'derivedFacts' | 'derivedTeamFacts'>,
   damage: DamageRequest, intervals: CombatConditions, actorId: string) {
   const current = withCurrentConditions(damage, intervals, actorId);
   for (const field of item.fields) {
-    if (field.fromTrigger || field.inherited || buffFactValue(item, current, field.key, field.subject) != null) continue;
+    if (field.fromTrigger || field.inherited) continue;
+    const subject = field.subject ?? { kind: 'actor', id: actorId };
+    const existing = subjectFacts(damage.facts, subject)?.[field.key];
+    if (existing?.value != null && existing.provenance === 'preset') {
+      setCalculatorFact(damage, { ...field, value: existing.value }, actorId, 'explicit');
+      continue;
+    }
+    if (buffFactValue(item, current, field.key, field.subject) != null) continue;
     setCalculatorFact(damage, { ...field, value: calculatorFactPreset(field, actorId) }, actorId);
   }
   for (const setting of item.requirements) setCalculatorFact(damage, setting, item.ownerId);
-  if (item.hp && !hpMatches(item.hp, calculatorFactValue(current, 'hpRatio', item.ownerId))) {
-    setCalculatorCondition(damage, item.ownerId, 'hpRatio', item.hp.preset);
+  if (item.hp) {
+    const existing = subjectFacts(damage.facts, { kind: 'actor', id: item.ownerId })?.hpRatio;
+    if (!hpMatches(item.hp, calculatorFactValue(current, 'hpRatio', item.ownerId))) {
+      setCalculatorCondition(damage, item.ownerId, 'hpRatio', item.hp.preset);
+    } else if (existing?.provenance === 'preset' && existing.value?.kind === 'quantity') {
+      setCalculatorFact(damage, { key: 'hpRatio', value: existing.value }, item.ownerId, 'explicit');
+    }
   }
-  if (item.stacks && !(Number(calculatorFactValue(damage, item.stacks.key, item.ownerId)) > 0)) {
-    setCalculatorFact(damage, { key: item.stacks.key, value: { kind: 'quantity', unit: 'count', value: item.stacks.max } }, item.ownerId);
+  if (item.stacks && !(Number(calculatorFactValue(damage, item.stacks.key, item.ownerId, item.stacks.subject)) > 0)) {
+    setCalculatorFact(damage, { key: item.stacks.key, subject: item.stacks.subject, value: { kind: 'quantity', unit: 'count', value: item.stacks.max } }, item.ownerId);
   }
 }
 
@@ -267,6 +305,41 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
     : selected && hit && family ? { skillId: skill?.id ?? null, hitId: hit.id, category: hit.category,
     element: dealer?.build?.character.identity.element ?? dealer?.element ?? calculatorHitElement(project, current, selected, sourceId, timeMs, recordId, family),
     family, origin: hit.origin, reactionId: damage.reaction && damage.reaction !== 'none' ? damage.reaction.type : null } : null;
+  const hitFactValues = new Map<string, boolean | number | string>();
+  if (selected && hit) {
+    const ownerBuild = builds.get(sourceId);
+    const radiance = calculatorHitRadiance(selected);
+    const currentRadiance = radiance ? calculatorFactValue(current, 'radiance', sourceId) : undefined;
+    const radianceValue = radiance ? (typeof currentRadiance === 'string' && radiance.validOptions.includes(currentRadiance) ? currentRadiance : radiance.defaultValue) : undefined;
+    if (radiance && radianceValue !== undefined) {
+      hitFactValues.set(JSON.stringify([{ kind: 'actor', id: sourceId }, 'radiance']), radianceValue);
+    }
+    const branchPredicate = selectedHitBranchPredicate(selected, radianceValue);
+    const premise = branchPredicate ? hitPremiseFacts(branchPredicate, selected.entity.calculation.bundle, {
+      constellation: ownerBuild?.constellation ?? 0,
+      ascension: ownerBuild?.ascension ?? 6,
+      hitInputs: skill?.inputs,
+    }) : [];
+    for (const setting of premise) {
+      if (radiance && setting.key === 'radiance') continue;
+      hitFactValues.set(JSON.stringify([setting.subject ?? { kind: 'actor', id: sourceId }, setting.key]), setting.value.value);
+    }
+    const infusion = calculatorPersonalInfusion(selected, ownerBuild?.constellation ?? 0, sourceId);
+    if (infusion) {
+      const value = calculatorFactValue(current, infusion.key, sourceId);
+      hitFactValues.set(JSON.stringify([{ kind: 'actor', id: sourceId }, infusion.key]), typeof value === 'boolean' ? value : infusion.defaultValue);
+    }
+    if (hit.elementBy) {
+      const value = calculatorFactValue(current, hit.elementBy, sourceId, { kind: 'event' });
+      if (value != null) hitFactValues.set(JSON.stringify([{ kind: 'event' }, hit.elementBy]), value);
+    }
+    const partyInfusion = calculatorFactValue(current, partyInfusionFact, sourceId, { kind: 'event' });
+    if (partyInfusion != null) hitFactValues.set(JSON.stringify([{ kind: 'event' }, partyInfusionFact]), partyInfusion);
+    for (const input of skill?.inputs ?? []) {
+      const value = calculatorFactValue(current, input.id, sourceId, { kind: 'event' });
+      if (value != null) hitFactValues.set(JSON.stringify([{ kind: 'event' }, input.id]), value);
+    }
+  }
   const order = project.timeline.find(record => record.id === recordId)?.order ?? Infinity;
   const hitTargets = new Set<string>();
   function readTargets(binding: CalculationBinding) {
@@ -315,6 +388,14 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
   }
   for (const row of event?.subjectFacts ?? []) mergeFacts(row.subject, row.values);
   if (event) mergeFacts({ kind: 'event' }, event.facts);
+  const hasExplicitFact = (factKey: string, defaultOwner: string, subject?: FactSubject) => {
+    const targetSubject = subject ?? { kind: 'actor', id: defaultOwner };
+    const fact = subjectFacts(current.facts, targetSubject)?.[factKey];
+    if (fact) return fact.provenance !== 'preset' && fact.value != null;
+    if (targetSubject.kind === 'actor' && ['onField', 'hpRatio', 'shielded'].includes(factKey)) return false;
+    const inheritedFact = inherited.get(JSON.stringify(targetSubject))?.[factKey];
+    return inheritedFact !== undefined && inheritedFact.provenance !== 'preset' && inheritedFact.value != null;
+  };
   for (const { id: ownerId, build } of members) {
     if (!build) continue;
     const { character } = build;
@@ -330,7 +411,7 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
       const name = scene?.name ?? resonance ?? gleam ?? passive?.name ?? constellation?.name ?? talent?.name
         ?? (entity.kind === 'character-definition' ? source : entity.name + (set ? ' ' + set.pieces + '件套' : ''));
       const card = scene || resonance || gleam ? undefined : entity.metadata.calculator?.buffs?.[effect.buff?.id ?? effect.identity.id];
-      if (!isCalculatorCombatModifier(target, card)) continue;
+      if (!isCalculatorDamageModifier(target, card)) continue;
       const relevant = hitTargets.has(target) || hitTargets.has(target.replace(/Percent$/, ''))
         || target === 'base-flat' && !!hit?.damage.ordinary;
       const icon: CalculatorBuff['icon'] = entity.kind === 'weapon-definition' ? { kind: 'weapons', id: entity.id }
@@ -345,38 +426,75 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
       const fields = controls.fields.filter(field => field.key !== scene?.id).map(field => ({ ...field, label: declarations?.[field.key]?.label,
         inherited: inherited.get(JSON.stringify(field.subject))?.[field.key]?.value ?? undefined }));
       const counterFacts = effect.counter && [effect.counter.fact, ...(effect.counter.overflowFact ? [effect.counter.overflowFact] : [])];
+      const predicateFields = bindingFactFields(effect.predicate, ownerId, recipientId, sourceId).filter(field => !field.fromTrigger);
+      const nonDerivedPredicateFields = predicateFields.filter(field => !(field.subject?.kind === 'team' && derivedTeamFactKeys.has(field.key)));
+      const valueFields = bindingFactFields(effect.value, ownerId, recipientId, sourceId)
+        .filter(field => !field.fromTrigger && field.key !== 'hpRatio' && field.subject?.kind !== 'event'
+          && !(field.subject?.kind === 'team' && derivedTeamFactKeys.has(field.key)));
+      const hasPredicateFact = nonDerivedPredicateFields.length > 0 || Boolean(controls.hp);
+      const hasValueFact = valueFields.length > 0;
+      const teammate = ownerId !== sourceId;
       const common = { ownerId, effect: effect.buff ?? effect.identity, name, alias: card?.alias, code: card?.code, intro: card?.note,
-        relevant, source, description, icon, target, derivedFacts: derived?.[ownerId],
-        modifiers: [{ id: effect.identity.id, target }], explicit: effect.application === 'explicit', ...controls, fields, counterFacts };
+        relevant, source, description, icon, target, derivedFacts: derived?.[ownerId], derivedTeamFacts: context.teamFacts,
+        modifiers: [{ id: effect.identity.id, target }], explicit: effect.application === 'explicit', ...controls, fields, counterFacts,
+        teammate, hasPredicateFact, hasValueFact };
       const trigger = effect.trigger;
       const timing = effect.lifetime.kind === 'interval' ? { durationMs: effect.lifetime.durationMs, maxLayers: effect.stacking.maxStacks } : undefined;
-      const position = {id: recordId ?? '', timeMs, order};
-      const sources = (context.instances.get(calculationEffectInstanceId(ownerId,effect.identity,null)) ?? [])
+      const position = { id: recordId ?? '', timeMs, order };
+      const sources = (context.instances.get(calculationEffectInstanceId(ownerId, effect.identity, null)) ?? [])
         .filter(instance => (trigger.kind === 'permanent' || instance.source) && (instanceActive(instance, position, 'before') === true
-          || stackExpiryUncertain(instance,timeMs)));
+          || stackExpiryUncertain(instance, timeMs)));
+      const hitSatisfied = Boolean(
+        !teammate && trigger.kind === 'permanent' && nonDerivedPredicateFields.length > 0 && !common.explicit && !controls.hp && !controls.stacks && !hasValueFact
+        && controls.requirements.length > 0
+        && nonDerivedPredicateFields.every(field => hitFactValues.has(JSON.stringify([field.subject ?? { kind: 'actor', id: ownerId }, field.key])))
+        && controls.requirements.every(req => {
+          const subject = req.subject ?? { kind: 'actor', id: ownerId };
+          return subject.kind === 'team' && derivedTeamFactKeys.has(req.key)
+            ? context.teamFacts[req.key]?.value?.value === req.value.value
+            : hitFactValues.get(JSON.stringify([subject, req.key])) === req.value.value;
+        })
+      );
+      const hpExplicit = !controls.hp || hasExplicitFact('hpRatio', ownerId);
+      const predicateFactsExplicit = (!nonDerivedPredicateFields.length || hitSatisfied
+        || nonDerivedPredicateFields.some(field => hasExplicitFact(field.key, ownerId, field.subject))) && hpExplicit;
+      const valueFactsActive = !hasValueFact || valueFields.every(field => hasExplicitFact(field.key, ownerId, field.subject));
+      const choiceCommon = { ...common, hitSatisfied };
       const nextLayer = timing && sources.length < timing.maxLayers ? { ...timing, maxLayers: timing.maxLayers - sources.length } : undefined;
       const castSelectors = trigger.kind === 'event' ? buffEventSelectors(trigger.selector).filter(branch => branch.kinds.includes('action') && !branch.observation) : [];
+      const matchesCast = (talent: NonNullable<typeof skill>) => castSelectors.some(branch => (!branch.skillIds || branch.skillIds.includes(talent.id))
+        && (!branch.categories || branch.categories.includes(talent.category)));
       if ((!sources.length || nextLayer) && castSelectors.length) {
-        const skill = character.talents.find(talent => castSelectors.some(branch => (!branch.skillIds || branch.skillIds.includes(talent.id))
-          && (!branch.categories || branch.categories.includes(talent.category))));
-        if (skill) choices.push({ ...common, id: calculationEffectInstanceId(ownerId,effect.buff ?? effect.identity,null), checked: false, disabled:false, triggerSkill: skill.id, timing: nextLayer,
-          note: '施放' + skill.name + '后' + (effect.lifetime.kind === 'interval' ? '持续' + effect.lifetime.durationMs / 1000 + '秒' : '生效') });
+        const castSkill = !teammate && skill && matchesCast(skill) ? skill : character.talents.find(matchesCast);
+        if (castSkill) {
+          const id = calculationEffectInstanceId(ownerId, effect.buff ?? effect.identity, null);
+          const guaranteedTrigger = Boolean(
+            !sources.length && !teammate && skill && castSkill.id === skill.id && !choiceCommon.explicit
+            && !controls.toggleFact && !controls.requirements.length && !controls.hp && !controls.stacks
+            && !hasPredicateFact && !hasValueFact && !effect.windowFact
+          );
+          choices.push({ ...choiceCommon, id, checked: guaranteedTrigger && !disabled.has(id) && buffConditionsMet(choiceCommon, current),
+            disabled: disabled.has(id), triggerSkill: castSkill.id, guaranteedTrigger, timing: nextLayer,
+            note: '施放' + castSkill.name + '后' + (effect.lifetime.kind === 'interval' ? '持续' + effect.lifetime.durationMs / 1000 + '秒' : '生效') });
+        }
       } else if (nextLayer && trigger.kind === 'event' && effect.lifetime.kind === 'interval') {
-        choices.push({ ...common, id: calculationEffectInstanceId(ownerId,effect.buff ?? effect.identity,null), checked: false, disabled: false, confirmTrigger: true, timing: nextLayer,
+        choices.push({ ...choiceCommon, id: calculationEffectInstanceId(ownerId, effect.buff ?? effect.identity, null),
+          checked: false, disabled: false, confirmTrigger: true, guaranteedTrigger: false, timing: nextLayer,
           note: '确认命中前已触发，持续' + effect.lifetime.durationMs / 1000 + '秒' });
       }
       for (const instance of sources) {
         const event = instance.source;
         const captured = event?.kind === 'action' ? sourceAttributes(effect.value) : [];
-        const endMs = Math.min(buffEndMs(effect,event,instance.until), instance.replacedBy?.timeMs ?? Infinity);
-        const unknownExpiry = stackExpiryUncertain(instance,timeMs);
-        const explicit = common.explicit || unknownExpiry;
+        const endMs = Math.min(buffEndMs(effect, event, instance.until), instance.replacedBy?.timeMs ?? Infinity);
+        const unknownExpiry = stackExpiryUncertain(instance, timeMs);
+        const explicit = choiceCommon.explicit || unknownExpiry;
         const id = calculationEffectInstanceId(ownerId, effect.buff ?? effect.identity, event?.id ?? null);
-        choices.push({ ...common, id, explicit, unknownExpiry, disabled:disabled.has(id), checked: !disabled.has(id) && (!explicit || applications.get(id) === true)
-            && buffConditionsMet(common, current),
-          triggerTime: event?.timeMs, ...(event?.confirmedBuff && event.timeMs === timeMs && timing ? { timing: { ...timing, maxLayers: 1, source: event.id, remainingMs: endMs-timeMs } } : {}),
+        choices.push({ ...choiceCommon, id, explicit, unknownExpiry, guaranteedTrigger: false, disabled: disabled.has(id),
+          checked: !disabled.has(id) && (explicit ? applications.get(id) === true : predicateFactsExplicit && valueFactsActive)
+            && buffConditionsMet(choiceCommon, current),
+          triggerTime: event?.timeMs, ...(event?.confirmedBuff && event.timeMs === timeMs && timing ? { timing: { ...timing, maxLayers: 1, source: event.id, remainingMs: endMs - timeMs } } : {}),
           ...(event && captured.length ? { capturedStats: { recordId: event.id, attributes: captured } } : {}),
-          note: unknownExpiry ? '缺少本层的刷新记录' : event && timing ? '剩余' + (endMs-timeMs) / 1000 + '秒' : undefined });
+          note: unknownExpiry ? '缺少本层的刷新记录' : event && timing ? '剩余' + (endMs - timeMs) / 1000 + '秒' : undefined });
       }
     }
   }
@@ -386,11 +504,38 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
     if (previous) {
       previous.relevant ||= choice.relevant;
       previous.description += '；' + choice.description;
-      previous.fields.push(...choice.fields);
+      for (const field of choice.fields) {
+        if (!previous.fields.some(existing => existing.key === field.key && JSON.stringify(existing.subject) === JSON.stringify(field.subject))) {
+          previous.fields.push(field);
+        }
+      }
       previous.modifiers.push(...choice.modifiers);
+      for (const req of choice.requirements) {
+        if (!previous.requirements.some(existing => existing.key === req.key && JSON.stringify(existing.subject) === JSON.stringify(req.subject))) {
+          previous.requirements.push(req);
+        }
+      }
+      previous.explicit ||= choice.explicit;
+      previous.disabled ||= choice.disabled;
+      const hitSatisfied = (!previous.hasPredicateFact || Boolean(previous.hitSatisfied))
+        && (!choice.hasPredicateFact || Boolean(choice.hitSatisfied));
+      previous.hasPredicateFact = Boolean(previous.hasPredicateFact || choice.hasPredicateFact);
+      previous.hasValueFact = Boolean(previous.hasValueFact || choice.hasValueFact);
+      previous.hitSatisfied = previous.hasPredicateFact && hitSatisfied;
+      previous.teammate = Boolean(previous.teammate || choice.teammate);
+      previous.guaranteedTrigger = Boolean((previous.guaranteedTrigger || choice.guaranteedTrigger)
+        && (!previous.triggerSkill || previous.guaranteedTrigger) && (!choice.triggerSkill || choice.guaranteedTrigger));
+      previous.toggleFact ??= choice.toggleFact;
+      previous.toggleSubject ??= choice.toggleSubject;
+      previous.hp ??= choice.hp;
+      previous.stacks ??= choice.stacks;
+      previous.checked &&= choice.checked;
       if (choice.capturedStats) {
-        if (previous.capturedStats) previous.capturedStats.attributes.push(...choice.capturedStats.attributes);
-        else previous.capturedStats = choice.capturedStats;
+        if (previous.capturedStats) {
+          for (const attr of choice.capturedStats.attributes) {
+            if (!previous.capturedStats.attributes.includes(attr)) previous.capturedStats.attributes.push(attr);
+          }
+        } else previous.capturedStats = choice.capturedStats;
       }
     } else grouped.set(choice.id, choice);
   }
@@ -403,13 +548,35 @@ export function resolveBuffSelection(choices: readonly BuffSelection[], damage: 
   const current = withCurrentConditions(damage, intervals, actorId);
   for (const item of choices) {
     const absent = (key: string, subject?: CalculatorFactSetting['subject']) => buffFactValue(item, current, key, subject) === undefined;
-    const enabled = selected.get(item.id) ?? (!item.disabled && (!item.explicit || item.checked));
-    if (item.triggerSkill || item.confirmTrigger || item.disabled || enabled && buffConditionsMet(item, current)) continue;
-    if (item.explicit && !damage.effectApplications?.some(entry => entry.instanceId === item.id && entry.active != null) && !selected.has(item.id)) selected.set(item.id, false);
+    const isChecked = selected.has(item.id)
+      ? Boolean(selected.get(item.id) && buffConditionsMet(item, current))
+      : calculatorBuffChecked(item, current);
+    if (isChecked) continue;
+    if (item.triggerSkill || item.confirmTrigger || item.disabled) {
+      if (item.guaranteedTrigger && selected.get(item.id) === false) selected.set(item.id, false);
+      continue;
+    }
+    if (item.explicit && !damage.effectApplications?.some(entry => entry.instanceId === item.id && entry.active != null) && !selected.has(item.id)) {
+      selected.set(item.id, false);
+    }
     const provenance = changes.has(item.id) ? 'explicit' : 'preset';
-    if (item.toggleFact && absent(item.toggleFact)) setCalculatorFact(damage, { key: item.toggleFact, value: { kind: 'boolean', value: false } }, item.ownerId, provenance);
-    if (item.stacks && absent(item.stacks.key)) setCalculatorFact(damage, { key: item.stacks.key, value: { kind: 'quantity', unit: 'count', value: 0 } }, item.ownerId, provenance);
-    if (!item.explicit && (item.hp && absent('hpRatio') || item.requirements.some(setting => absent(setting.key, setting.subject)))) selected.set(item.id, false);
+    if (item.toggleFact && absent(item.toggleFact, item.toggleSubject)) {
+      setCalculatorFact(damage, { key: item.toggleFact, subject: item.toggleSubject, value: { kind: 'boolean', value: false } }, item.ownerId, provenance);
+    }
+    if (item.stacks && absent(item.stacks.key, item.stacks.subject)) {
+      setCalculatorFact(damage, { key: item.stacks.key, subject: item.stacks.subject, value: { kind: 'quantity', unit: 'count', value: 0 } }, item.ownerId, provenance);
+    }
+    if (!item.explicit) {
+      for (const field of 'fields' in item ? (item as Pick<CalculatorBuff, 'fields'>).fields : []) {
+        if (field.fromTrigger || field.inherited || field.key === 'hpRatio' || field.subject?.kind === 'event') continue;
+        if (field.subject?.kind === 'team' && derivedTeamFactKeys.has(field.key)) continue;
+        if (!absent(field.key, field.subject)) continue;
+        setCalculatorFact(damage, { key: field.key, subject: field.subject, value: calculatorFactPreset(field, actorId) }, item.ownerId, provenance);
+      }
+      const latest = withCurrentConditions(damage, intervals, actorId);
+      const toggleHandlesDisable = Boolean(item.toggleFact && buffFactValue(item, latest, item.toggleFact, item.toggleSubject) === false);
+      if (!toggleHandlesDisable) selected.set(item.id, false);
+    }
   }
   return selected;
 }
@@ -466,9 +633,24 @@ export function applyCalculatorBuffs(input: Project, damage: DamageRequest, choi
         beforeHit(event);
       }
       id = calculationEffectInstanceId(option.ownerId, option.effect, event);
+    } else if (option.guaranteedTrigger && option.triggerSkill && !enabled) {
+      const key = JSON.stringify([option.ownerId, option.triggerSkill]);
+      let event = addedActions.get(key);
+      if (!event) {
+        const added = addSkillAction(project, option.ownerId, option.triggerSkill, time);
+        const calcId = `calc-cast-${added}`;
+        const record = project.timeline.find(entry => entry.id === added)!;
+        record.id = calcId;
+        event = calcId;
+        addedActions.set(key, event);
+        beforeHit(event);
+      }
+      id = calculationEffectInstanceId(option.ownerId, option.effect, event);
     }
     if (option.explicit) applications = [...applications.filter(entry => entry.instanceId !== id), { instanceId: id, active: enabled }];
-    if (enabled || !option.explicit && (!option.toggleFact || calculatorFactValue(damage, option.toggleFact, option.ownerId) === true)) {
+    const toggleFalse = option.toggleFact && calculatorFactValue(damage, option.toggleFact, option.ownerId, option.toggleSubject) === false;
+    const untriggered = (option.triggerSkill || option.confirmTrigger) && !enabled && !option.guaranteedTrigger;
+    if (enabled || !option.explicit && !toggleFalse && !untriggered) {
       const revisions = project.effectRevisions ?? [];
       const revision = revisions.find(entry => entry.instanceId === id);
       if (revision) {
@@ -478,4 +660,141 @@ export function applyCalculatorBuffs(input: Project, damage: DamageRequest, choi
     }
   }
   return { project, applications: applications.length ? applications : undefined };
+}
+
+type RuntimeBuffContext = NonNullable<ReturnType<typeof projectBuffContext>>;
+type RuntimeEffectInstance = RuntimeBuffContext['instances'] extends Map<string, (infer V)[]> ? V : never;
+
+export function effectInstanceInRuntime(instance: RuntimeEffectInstance, context: RuntimeBuffContext): boolean {
+  if (instance.definition.trigger.kind !== 'permanent' && !instance.source) return false;
+  const window = instance.definition.windowFact;
+  if (!instance.source && window) {
+    const subject = { kind: 'actor' as const, id: instance.owner.id };
+    const observed = instance.owner.facts[window] || context.events.some(event =>
+      subjectFacts(event.subjectFacts, subject)?.[window] || event.derivedStates?.before[subject.id]?.[window] || event.derivedStates?.after[subject.id]?.[window])
+      || [...context.factIntervals, ...(context.stateFrames ?? [])].some(entry =>
+        entry.subject.kind === 'actor' && entry.subject.id === subject.id && entry.facts[window]);
+    if (!observed) return false;
+  }
+  return true;
+}
+
+/**
+ * Reconcile actor condition defaults and conditional/stacked/explicit effects matching non-primary teammates
+ * on the evaluation clone so teammate attribute reads never trigger missing-fact or stale-switch errors.
+ */
+export function reconcileTeammateCalculatorEffects(
+  project: Project,
+  damage: DamageRequest,
+  primaryRecipientId: string,
+  enabledPrimaryIds: ReadonlySet<string>,
+  timeMs: number,
+  recordId?: string,
+): void {
+  const context = projectBuffContext(project, true);
+  if (!context) return;
+  const members = project.candidate.actors;
+  const order = project.timeline.find(record => record.id === recordId)?.order ?? Infinity;
+  const position = { id: recordId ?? '', timeMs, order };
+  const publicBuffs = grantedResonances(members);
+  const gleamGrants = grantedGleamEffects(members);
+
+  for (const member of members) {
+    if (member.id === primaryRecipientId) continue;
+    const teammateIntervals = calculatorIntervals(project, member.id, timeMs, recordId);
+    const subject = { kind: 'actor' as const, id: member.id };
+    const existing = subjectFacts(damage.facts, subject);
+    if (teammateIntervals.onField === undefined && existing?.onField?.value == null) {
+      putHitFact(damage.facts ??= [], subject, 'onField', { kind: 'boolean', value: false }, 'preset');
+    }
+    if (teammateIntervals.hpRatio === undefined && existing?.hpRatio?.value == null) {
+      putHitFact(damage.facts ??= [], subject, 'hpRatio', { kind: 'quantity', unit: 'scalar', value: 1 }, 'preset');
+    }
+    if (teammateIntervals.shielded === undefined && existing?.shielded?.value == null) {
+      putHitFact(damage.facts ??= [], subject, 'shielded', { kind: 'boolean', value: false }, 'preset');
+    }
+  }
+
+  interface TeammateEffectEntry {
+    ownerId: string;
+    controls: ReturnType<typeof calculatorEffectControls>;
+    sceneId?: string;
+    hasConditionOrInput: boolean;
+    isUnconditionalPermanent: boolean;
+  }
+  const grouped = new Map<string, TeammateEffectEntry[]>();
+
+  for (const { id: ownerId, build } of members) {
+    if (!build) continue;
+    for (const { entity, effect, scene } of [
+      ...grantedBuildEffects(build),
+      ...(publicBuffs?.ownerId === ownerId ? publicBuffs.grants : []),
+      ...(gleamGrants.get(ownerId) ?? []),
+      ...(context.sceneGrants.get(ownerId) ?? []),
+    ]) {
+      const interval = scene && project.sceneEffects?.find(s => s.definition.id === scene.id && s.startMs <= timeMs && timeMs < s.endMs);
+      if (scene && !interval) continue;
+      const instances = (context.instances.get(calculationEffectInstanceId(ownerId, effect.identity, null)) ?? [])
+        .filter(instance => effectInstanceInRuntime(instance, context)
+          && (instanceActive(instance, position, 'before') !== false || stackExpiryUncertain(instance, timeMs)));
+      if (!instances.length) continue;
+
+      for (const member of members) {
+        if (member.id === primaryRecipientId) continue;
+        if (effectRecipientMatches(effect.recipient, ownerId, member.id, member.build?.character.identity) === false) continue;
+        const controls = calculatorEffectControls(effect, entity.calculation.bundle, ownerId, member.id, primaryRecipientId);
+        const nonDerivedPredicateFields = bindingFactFields(effect.predicate, ownerId, member.id, primaryRecipientId)
+          .filter(field => !field.fromTrigger && field.key !== scene?.id && !(field.subject?.kind === 'team' && derivedTeamFactKeys.has(field.key)));
+        const valueFields = bindingFactFields(effect.value, ownerId, member.id, primaryRecipientId)
+          .filter(field => !field.fromTrigger && field.key !== 'hpRatio' && field.key !== scene?.id && field.subject?.kind !== 'event'
+            && !(field.subject?.kind === 'team' && derivedTeamFactKeys.has(field.key)));
+        for (const instance of instances) {
+          const hasConditionOrInput = effect.application === 'explicit'
+            || Boolean(effect.windowFact)
+            || nonDerivedPredicateFields.length > 0
+            || Boolean(controls.hp)
+            || Boolean(controls.stacks)
+            || valueFields.length > 0
+            || effect.recipient.role === 'fact-actor'
+            || stackExpiryUncertain(instance, timeMs);
+          const isUnconditionalPermanent = effect.trigger.kind === 'permanent' && !hasConditionOrInput;
+          const list = grouped.get(instance.id) ?? [];
+          list.push({ ownerId, controls, sceneId: scene?.id, hasConditionOrInput, isUnconditionalPermanent });
+          grouped.set(instance.id, list);
+        }
+      }
+    }
+  }
+
+  for (const [instanceId, entries] of grouped) {
+    if (!entries.some(entry => entry.hasConditionOrInput)) continue;
+    if (!enabledPrimaryIds.has(instanceId) && !entries.some(entry => entry.isUnconditionalPermanent)) {
+      const revisions = project.effectRevisions ?? [];
+      const existing = revisions.find(entry => entry.instanceId === instanceId);
+      if (existing) existing.disabled = true;
+      else project.effectRevisions = [...revisions, { instanceId, disabled: true }];
+      continue;
+    }
+    for (const { ownerId, controls, sceneId } of entries) {
+      if (controls.toggleFact && controls.toggleFact !== sceneId) {
+        const targetSubject = controls.toggleSubject ?? { kind: 'actor' as const, id: ownerId };
+        if (subjectFacts(damage.facts, targetSubject)?.[controls.toggleFact]?.value == null) {
+          putHitFact(damage.facts ??= [], targetSubject, controls.toggleFact, { kind: 'boolean', value: false }, 'preset');
+        }
+      }
+      if (controls.stacks) {
+        const stackSubject = controls.stacks.subject ?? { kind: 'actor' as const, id: ownerId };
+        if (subjectFacts(damage.facts, stackSubject)?.[controls.stacks.key]?.value == null) {
+          putHitFact(damage.facts ??= [], stackSubject, controls.stacks.key, { kind: 'quantity', unit: 'count', value: 0 }, 'preset');
+        }
+      }
+      for (const field of controls.fields) {
+        if (field.fromTrigger || !field.subject || field.key === 'hpRatio' || field.key === sceneId || field.subject.kind === 'event') continue;
+        if (field.subject.kind === 'team' && derivedTeamFactKeys.has(field.key)) continue;
+        if (subjectFacts(damage.facts, field.subject)?.[field.key]?.value == null) {
+          putHitFact(damage.facts ??= [], field.subject, field.key, calculatorFactPreset(field, primaryRecipientId), 'preset');
+        }
+      }
+    }
+  }
 }

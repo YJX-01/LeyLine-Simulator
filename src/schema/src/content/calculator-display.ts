@@ -20,6 +20,23 @@ const explorationTargets = new Set([
 export function isCalculatorCombatModifier(target: string, card?: { scope?: 'exploration' }) {
   return card?.scope !== 'exploration' && !explorationTargets.has(target);
 }
+const damageTargets = new Set([
+  'attribute.hp', 'attribute.flatHp', 'attribute.hpPercent', 'attribute.whiteHp',
+  'attribute.attack', 'attribute.flatAttack', 'attribute.attackPercent', 'attribute.whiteAttack',
+  'attribute.defense', 'attribute.flatDefense', 'attribute.defensePercent', 'attribute.whiteDefense',
+  'attribute.critRate', 'attribute.critDamage', 'attribute.elementalMastery',
+  'attribute.energyRecharge', 'attribute.healingBonus',
+  'attribute.damageBonus', 'attribute.physicalBonus', 'attribute.anemoBonus', 'attribute.geoBonus',
+  'attribute.electroBonus', 'attribute.hydroBonus', 'attribute.pyroBonus', 'attribute.cryoBonus', 'attribute.dendroBonus',
+  'attribute.baseDamageBonus', 'base-flat', 'attribute.baseMultiplier', 'attribute.elevationFactor', 'attribute.defenseIgnore',
+  'attribute.amplifyingReactionBonus', 'attribute.additiveReactionBonus',
+  'target.defenseReduction', 'target.ordinaryDamageReduction',
+]);
+export function isCalculatorDamageModifier(target: string, card?: { scope?: 'exploration' }): boolean {
+  if (card?.scope === 'exploration') return false;
+  if (damageTargets.has(target) || target.startsWith('target.resistance.')) return true;
+  return target.startsWith('attribute.reaction.') && target !== 'attribute.reaction.electro-charged.rangeBonus';
+}
 export const characterCalculatorDisplaySchema = calculatorDisplaySchema.extend({
   groups: z.array(z.object({ type: z.enum(calculatorDamageGroups), expanded: z.boolean() }).strict()).optional(),
   pinnedHits: z.array(idSchema).optional(),
