@@ -51,6 +51,7 @@ const causes = computed(() => {
 
 const presetCounts = computed(() => {
   let openDiff = 0;
+  let scopedDiff = 0;
   let allDiff = 0;
   let matched = 0;
   let monaDamage = 0;
@@ -60,7 +61,8 @@ const presetCounts = computed(() => {
   for (const row of props.rows) {
     if (row.comparison === '有差异') {
       allDiff++;
-      if (row.attributionStatus !== 'attributed') openDiff++;
+      if (row.attributionStatus === 'attributed-scoped') scopedDiff++;
+      else if (row.attributionStatus !== 'attributed') openDiff++;
     } else if (row.comparison === '一致') {
       matched++;
     }
@@ -69,7 +71,7 @@ const presetCounts = computed(() => {
     else if (row.side === 'leyline' && row.category === 'damage') leylineDamage++;
     else if (row.side === 'leyline' && row.category === 'buff') leylineBuff++;
   }
-  return { openDiff, allDiff, matched, monaDamage, monaBuff, leylineDamage, leylineBuff };
+  return { openDiff, scopedDiff, allDiff, matched, monaDamage, monaBuff, leylineDamage, leylineBuff };
 });
 
 const filtered = computed(() => {
@@ -82,7 +84,7 @@ const filtered = computed(() => {
     if (props.filters.mechanism && row.mechanism !== props.filters.mechanism) return false;
     if (props.filters.role && !row.roles?.includes(props.filters.role)) return false;
     if (props.filters.attr) {
-      if (props.filters.attr === 'open' && row.attributionStatus === 'attributed') return false;
+      if (props.filters.attr === 'open' && (row.attributionStatus === 'attributed' || row.attributionStatus === 'attributed-scoped')) return false;
       if (props.filters.attr === 'attributed' && row.attributionStatus !== 'attributed') return false;
       if (props.filters.attr === 'attributed-scoped' && row.attributionStatus !== 'attributed-scoped') return false;
     }
@@ -185,6 +187,16 @@ function comparisonText(row: AuditRow): string {
         >
           <span>待核对差异</span>
           <strong class="num">{{ formatInt(presetCounts.openDiff) }}</strong>
+        </button>
+        <button
+          v-if="presetCounts.scopedDiff > 0"
+          type="button"
+          class="pill-btn"
+          :aria-pressed="isPreset({ comparison: '有差异', attr: 'attributed-scoped' })"
+          @click="applyPreset({ comparison: '有差异', attr: 'attributed-scoped' })"
+        >
+          <span>限定范围归因</span>
+          <strong class="num">{{ formatInt(presetCounts.scopedDiff) }}</strong>
         </button>
         <button
           type="button"

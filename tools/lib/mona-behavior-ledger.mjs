@@ -227,21 +227,42 @@ function scopedAmplificationBatch(link, cache) {
     });
   } catch { return false; }
 }
+function liveAmplificationBatch(link, amplificationRows, leylineRows) {
+  if (!link.id.startsWith('amplification-batch:') || !Array.isArray(amplificationRows) || !amplificationRows.length) return false;
+  if (link.disposition !== 'different' || link.mona?.length !== 1 || link.leyline?.length !== 1) return false;
+  const target = link.leyline[0]?.id;
+  const row = amplificationRows.find(item => item.id === link.mona[0] && item.leyline === target);
+  if (!row || row.status !== 'different' || row.cases?.length !== 3) return false;
+  const direction = { pyro: { melt: [2, 'cryo'], vaporize: [1.5, 'hydro'] }, hydro: { vaporize: [2, 'pyro'] }, cryo: { melt: [1.5, 'pyro'] } };
+  const config = direction[row.element]?.[row.reaction];
+  if (!config || row.aura !== config[1]) return false;
+  if (leylineRows.length) {
+    const anchored = leylineRows.find(item => item.id === target);
+    if (!anchored || row.element !== anchored.binding?.element) return false;
+  }
+  return row.cases.every((item, index) => {
+    const m = item.mona, y = item.leyline;
+    return item.level === [1, 6, 10][index] && m?.otherBonus === 0 && m.em > 0 && y?.em > 0
+      && close(m.expected, m.normal * config[0] * (1 + (25 / 9) * m.em / (1400 + m.em)))
+      && close(y.expected, y.normal * config[0] * (1 + 2.78 * y.em / (1400 + y.em)))
+      && close(m.actual, m.expected) && close(y.actual, y.expected);
+  });
+}
 /** Classify the existing difference mappings without treating an untested event sequence as resolved. */
-export function classifyMonaDifferences(links, wrongArmRows = [], transformative, leylineRows = []) {
+export function classifyMonaDifferences(links, wrongArmRows = [], transformative, leylineRows = [], amplificationRows = []) {
   const cache = {};
   const verifiedReactions = new Set(validateMonaTransformativeReviews(links, transformative ?? { rows: [] }, leylineRows)
     .reviews.map(review => review.id));
   return links.filter(link => link.disposition === 'different').map(link => {
     const id = link.id;
-    let cause = 'unclassified', status = 'open', batchProof = false;
+    let cause = 'unclassified', status = 'open', batchProof = false, liveAmp = false;
     if (verifiedReactions.has(id)) {
       cause = 'reaction-coefficient-version';
       status = 'attributed';
     } else if (scopedDuplicateMenu(link)) {
       cause = 'duplicate-menu-binding';
       status = 'attributed-scoped';
-    } else if ((batchProof = scopedAmplificationBatch(link, cache))) {
+    } else if ((liveAmp = liveAmplificationBatch(link, amplificationRows, leylineRows)) || (batchProof = scopedAmplificationBatch(link, cache))) {
       cause = 'amplification-coefficient-and-talent-precision';
       status = 'attributed-scoped';
     } else if (/^spec-(?:buff|hit|set4pc):/.test(id) && Array.isArray(link.sources) && link.sources.length && Array.isArray(link.comparisons) && link.comparisons.length) {
@@ -261,8 +282,8 @@ export function classifyMonaDifferences(links, wrongArmRows = [], transformative
       }
     }
     return { id, cause, status, ...(status === 'attributed-scoped' ? {
-      scope: batchProof ? 'independent-natural-panels-only' : 'level-one-single-hit-only',
-      proof: batchProof ? 'artifacts/amplification-shared-review.json' : 'live:duplicateMenus',
+      scope: liveAmp || batchProof ? 'independent-natural-panels-only' : 'level-one-single-hit-only',
+      proof: liveAmp ? 'live:amplification' : batchProof ? 'artifacts/amplification-shared-review.json' : 'live:duplicateMenus',
     } : {}), evidence: Array.isArray(link.sources) ? [...link.sources] : [],
       explanation: link.explanation ?? '', comparisons: Array.isArray(link.comparisons) ? link.comparisons : [] };
   });
@@ -462,7 +483,7 @@ export function buildBehaviorLedger(report, inventory = buildInventory(report), 
   const behaviors = [], assignments = new Map(), seen = new Set(), product = {};
   const formal = new Map(report.leyline.map(item => [item.id, item]));
   const menus = new Map(report.mona.filter(item => item.kind === 'skill').map(item => [item.character.toLowerCase() + ':' + item.index, item.id]));
-  const attribution = new Map(classifyMonaDifferences(report.links, report.batches?.ordinarySourceDifferences, report.transformative, report.leyline).map(item => [item.id, item]));
+  const attribution = new Map(classifyMonaDifferences(report.links, report.batches?.ordinarySourceDifferences, report.transformative, report.leyline, report.batches?.amplification).map(item => [item.id, item]));
   const ownerCounts = {};
   for (const row of inventory) {
     const grouped = new Map();

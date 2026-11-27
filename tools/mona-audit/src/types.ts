@@ -66,7 +66,33 @@ export interface AuditSummary {
   limitations: string[];
   delta: Record<string, Record<string, number>> | null;
   attributedMappings: number;
+  attributedScopedMappings?: number;
   attributedScenarios: number;
+}
+
+export interface SweepModeSummary {
+  mode: string;
+  label: string;
+  matched: number;
+  total: number;
+  suspect: number;
+  knownArtifact: number;
+  zeroOnLeyline?: number;
+  unknown?: number;
+  skipped?: number;
+  elapsedMs?: number;
+}
+
+export interface SweepSummary {
+  generatedAt: string;
+  modes: SweepModeSummary[];
+  totals: {
+    modes: number;
+    matched: number;
+    total: number;
+    suspect: number;
+    knownArtifact: number;
+  };
 }
 
 export interface BehaviorCounts {
@@ -126,6 +152,7 @@ export interface AuditIndex {
   worktree?: string;
   summary: AuditSummary;
   coverage?: BehaviorCoverage;
+  sweep?: SweepSummary | null;
   rows: AuditRow[];
 }
 

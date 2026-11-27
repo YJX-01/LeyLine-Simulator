@@ -209,7 +209,9 @@ export function displayValue(value: unknown): string {
 
 export function comparisonTone(comparison: string, attributionStatus?: string): 'success' | 'danger' | 'warning' | 'info' | 'purple' | 'neutral' {
   if (comparison === '一致') return 'success';
-  if (comparison === '有差异') return attributionStatus === 'attributed' ? 'warning' : 'danger';
+  if (comparison === '有差异') {
+    return attributionStatus === 'attributed' || attributionStatus === 'attributed-scoped' ? 'warning' : 'danger';
+  }
   if (comparison === '待确认' || comparison === '条件不可比') return 'warning';
   if (comparison === '仅 Mona') return 'info';
   if (comparison === '仅 LeyLine') return 'purple';

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { AuditIndex, AuditRow, InventoryFilters } from '../types';
-import { causeLabel, formatInt, formatPercent, formatSignedDelta, sideLabel } from '../utils/format';
+import { causeLabel, formatInt, formatPercent, formatSignedDelta, formatTimestamp, sideLabel } from '../utils/format';
 import StackedBar, { type BarSegment } from './StackedBar.vue';
 import StatusBadge from './StatusBadge.vue';
 
@@ -22,7 +22,7 @@ const diffStats = computed(() => {
   let open = 0;
   let attributed = 0;
   let scoped = 0;
-  const causes = new Map<string, { cause: string; total: number; open: number; attributed: number }>();
+  const causes = new Map<string, { cause: string; total: number; open: number; scoped: number; attributed: number }>();
 
   for (const row of props.index.rows) {
     if (row.comparison !== '有差异') continue;
@@ -33,9 +33,10 @@ const diffStats = computed(() => {
 
     const rowCauses = row.attributionCauses?.length ? row.attributionCauses : ['unclassified'];
     for (const cause of rowCauses) {
-      const current = causes.get(cause) ?? { cause, total: 0, open: 0, attributed: 0 };
+      const current = causes.get(cause) ?? { cause, total: 0, open: 0, scoped: 0, attributed: 0 };
       current.total++;
       if (row.attributionStatus === 'attributed') current.attributed++;
+      else if (row.attributionStatus === 'attributed-scoped') current.scoped++;
       else current.open++;
       causes.set(cause, current);
     }
@@ -46,7 +47,7 @@ const diffStats = computed(() => {
     open,
     attributed,
     scoped,
-    causes: [...causes.values()].sort((a, b) => b.open - a.open || b.total - a.total),
+    causes: [...causes.values()].sort((a, b) => b.open - a.open || b.scoped - a.scoped || b.total - a.total),
   };
 });
 
@@ -72,12 +73,13 @@ const behaviorTotals = computed(() => {
 });
 
 function sideBreakdown(side: 'mona' | 'leyline') {
-  const counts = { matched: 0, openDiff: 0, attrDiff: 0, pending: 0, exclusive: 0, unmapped: 0 };
+  const counts = { matched: 0, openDiff: 0, scopedDiff: 0, attrDiff: 0, pending: 0, exclusive: 0, unmapped: 0 };
   for (const row of props.index.rows as AuditRow[]) {
     if (row.side !== side) continue;
     if (row.comparison === '一致') counts.matched++;
     else if (row.comparison === '有差异') {
       if (row.attributionStatus === 'attributed') counts.attrDiff++;
+      else if (row.attributionStatus === 'attributed-scoped') counts.scopedDiff++;
       else counts.openDiff++;
     } else if (row.comparison === '待确认' || row.comparison === '条件不可比') counts.pending++;
     else if (row.comparison === '仅 Mona' || row.comparison === '仅 LeyLine') counts.exclusive++;
@@ -93,6 +95,7 @@ function buildComparisonSegments(side: 'mona' | 'leyline', counts: ReturnType<ty
   return [
     { key: '一致', label: '一致', value: counts.matched, tone: 'success', clickable: true },
     { key: '有差异:open', label: '待核对差异', value: counts.openDiff, tone: 'danger', clickable: true },
+    { key: '有差异:attributed-scoped', label: '限定范围归因', value: counts.scopedDiff, tone: 'warning', clickable: true },
     { key: '有差异:attributed', label: '已归因差异', value: counts.attrDiff, tone: 'warning', clickable: true },
     { key: '待确认', label: '待确认', value: counts.pending, tone: 'warning', clickable: true },
     {
@@ -119,6 +122,8 @@ function buildRunSegments(side: 'mona' | 'leyline'): BarSegment[] {
 function drillComparison(side: 'mona' | 'leyline', key: string) {
   if (key === '有差异:open') {
     emit('drillInventory', { side, comparison: '有差异', attr: 'open' });
+  } else if (key === '有差异:attributed-scoped') {
+    emit('drillInventory', { side, comparison: '有差异', attr: 'attributed-scoped' });
   } else if (key === '有差异:attributed') {
     emit('drillInventory', { side, comparison: '有差异', attr: 'attributed' });
   } else {
@@ -166,6 +171,18 @@ function deltaClass(value: number, positiveIsGood = true): string {
   const good = positiveIsGood ? value > 0 : value < 0;
   return good ? 'delta-pos' : 'delta-neg';
 }
+
+const groupedIssues = computed(() => {
+  const map = new Map<string, { message: string; ids: string[]; count: number }>();
+  for (const item of summary.value.issues) {
+    const message = String(item.issue ?? item.message ?? JSON.stringify(item));
+    const bucket = map.get(message) ?? { message, ids: [], count: 0 };
+    bucket.count++;
+    if (typeof item.id === 'string' && item.id) bucket.ids.push(item.id);
+    map.set(message, bucket);
+  }
+  return [...map.values()].sort((a, b) => b.count - a.count);
+});
 </script>
 
 <template>
@@ -189,7 +206,7 @@ function deltaClass(value: number, positiveIsGood = true): string {
           <span class="kpi-sub">{{ formatInt(summary.mappings.matched) }} / {{ formatInt(summary.mappings.comparable ?? summary.mappings.total) }}</span>
         </div>
         <span class="muted num">
-          差异映射 {{ formatInt(summary.mappings.different) }}（已归因 {{ formatInt(summary.attributedMappings) }}）
+          差异映射 {{ formatInt(summary.mappings.different) }}（已归因 {{ formatInt(summary.attributedMappings) }}<template v-if="summary.attributedScopedMappings"> / 限定归因 {{ formatInt(summary.attributedScopedMappings) }}</template>）
         </span>
       </button>
 
@@ -202,12 +219,14 @@ function deltaClass(value: number, positiveIsGood = true): string {
           <span>差异条目与归因</span>
           <StatusBadge
             :tone="diffStats.open > 0 ? 'danger' : 'success'"
-            :label="diffStats.open > 0 ? `待核对 ${formatInt(diffStats.open)}` : '全部已归因'"
+            :label="diffStats.open > 0 ? `待核对 ${formatInt(diffStats.open)}` : '无未归因差异'"
           />
         </div>
         <div class="kpi-main">
           <span class="kpi-figure">{{ formatInt(diffStats.total) }}</span>
-          <span class="kpi-sub">已归因 {{ formatInt(diffStats.attributed) }} / 待核对 {{ formatInt(diffStats.open + diffStats.scoped) }}</span>
+          <span class="kpi-sub">
+            已归因 {{ formatInt(diffStats.attributed) }}<template v-if="diffStats.scoped > 0"> / 限定 {{ formatInt(diffStats.scoped) }}</template> / 待核对 {{ formatInt(diffStats.open) }}
+          </span>
         </div>
         <span class="muted">点击直接筛选待核对差异条目</span>
       </button>
@@ -338,6 +357,7 @@ function deltaClass(value: number, positiveIsGood = true): string {
                 <span class="cause-row-title">{{ causeLabel(item.cause) }}</span>
                 <span class="cause-counts">
                   <StatusBadge v-if="item.open > 0" tone="danger" :label="`待核对 ${item.open}`" />
+                  <StatusBadge v-if="item.scoped > 0" tone="warning" :label="`限定归因 ${item.scoped}`" />
                   <StatusBadge v-if="item.attributed > 0" tone="warning" :label="`已归因 ${item.attributed}`" />
                 </span>
               </div>
@@ -346,6 +366,7 @@ function deltaClass(value: number, positiveIsGood = true): string {
                 :show-legend="false"
                 :segments="[
                   { key: 'open', label: '待核对', value: item.open, tone: 'danger' },
+                  { key: 'scoped', label: '限定归因', value: item.scoped, tone: 'warning' },
                   { key: 'attr', label: '已归因', value: item.attributed, tone: 'warning' },
                 ]"
               />
@@ -392,6 +413,73 @@ function deltaClass(value: number, positiveIsGood = true): string {
       </article>
     </div>
 
+    <!-- Stateless Full-Catalog Sweep Summary (Read-only supplementary view) -->
+    <article v-if="index.sweep?.modes?.length" class="panel" aria-label="无状态全量扫雷覆盖">
+      <div class="panel-head">
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <h2>无状态全量数值扫雷（{{ index.sweep.totals.modes }} 个专项模式）</h2>
+          <StatusBadge
+            :tone="index.sweep.totals.suspect === 0 ? 'success' : 'danger'"
+            :label="index.sweep.totals.suspect === 0 ? '0 疑似真误差' : `疑似真误差 ${formatInt(index.sweep.totals.suspect)}`"
+          />
+          <StatusBadge
+            tone="warning"
+            :label="`已知 Mona 误差 ${formatInt(index.sweep.totals.knownArtifact)}`"
+          />
+        </div>
+        <span class="muted num">
+          匹配 {{ formatInt(index.sweep.totals.matched) }} / {{ formatInt(index.sweep.totals.total) }}，更新于 {{ formatTimestamp(index.sweep.generatedAt) }}
+        </span>
+      </div>
+      <div class="table-scroll">
+        <table class="data-table num">
+          <thead>
+            <tr>
+              <th>专项模式</th>
+              <th style="width: 190px;">通过率</th>
+              <th style="text-align: right;">已匹配 / 总计</th>
+              <th style="text-align: right;">疑似真误差</th>
+              <th style="text-align: right;">已知 Mona 误差</th>
+              <th style="text-align: right;">耗时</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="m in index.sweep.modes" :key="m.mode">
+              <td>
+                <strong>{{ m.label }}</strong>
+                <span class="muted" style="margin-left: 8px;">{{ m.mode }}</span>
+              </td>
+              <td>
+                <StackedBar
+                  compact
+                  :show-legend="false"
+                  :segments="[
+                    { key: 'ok', label: '匹配', value: m.matched, tone: 'success' },
+                    { key: 'known', label: '已知 Mona 误差', value: m.knownArtifact, tone: 'warning' },
+                    { key: 'suspect', label: '疑似真误差', value: m.suspect, tone: 'danger' },
+                    { key: 'other', label: '其他', value: Math.max(0, m.total - m.matched - m.knownArtifact - m.suspect), tone: 'neutral' },
+                  ]"
+                />
+              </td>
+              <td style="text-align: right;">
+                <strong>{{ formatInt(m.matched) }}</strong> / {{ formatInt(m.total) }}
+                <span class="muted">({{ formatPercent(m.matched, m.total) }})</span>
+              </td>
+              <td style="text-align: right;">
+                <StatusBadge :tone="m.suspect === 0 ? 'success' : 'danger'" :label="formatInt(m.suspect)" />
+              </td>
+              <td style="text-align: right;">
+                <StatusBadge :tone="m.knownArtifact > 0 ? 'warning' : 'neutral'" :label="formatInt(m.knownArtifact)" />
+              </td>
+              <td style="text-align: right;" class="muted">
+                {{ m.elapsedMs ? `${(m.elapsedMs / 1000).toFixed(1)}s` : '—' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
     <!-- Issues & Limitations -->
     <article v-if="summary.issues.length || summary.limitations.length" class="panel">
       <div class="panel-head">
@@ -399,9 +487,18 @@ function deltaClass(value: number, positiveIsGood = true): string {
         <span class="muted num">问题 {{ summary.issues.length }} 项 / 范围说明 {{ summary.limitations.length }} 项</span>
       </div>
       <div class="panel-body block-gap">
-        <ul v-if="summary.issues.length" class="issue-list">
-          <li v-for="(issue, idx) in summary.issues" :key="idx" class="issue-item">
-            {{ issue.issue ?? issue.message ?? JSON.stringify(issue) }}
+        <ul v-if="groupedIssues.length" class="issue-list">
+          <li v-for="group in groupedIssues" :key="group.message" class="issue-item" style="display: grid; gap: 6px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+              <strong>{{ group.message }}</strong>
+              <StatusBadge tone="danger" :label="`${formatInt(group.count)} 项`" />
+            </div>
+            <details v-if="group.ids.length" style="font-size: 13px;">
+              <summary style="cursor: pointer; color: var(--pyro-deep);">查看涉及条目（{{ formatInt(group.ids.length) }}）</summary>
+              <div style="margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px 10px;">
+                <span v-for="(id, idx) in group.ids" :key="idx">{{ id }}</span>
+              </div>
+            </details>
           </li>
         </ul>
         <ul v-if="summary.limitations.length" class="issue-list">

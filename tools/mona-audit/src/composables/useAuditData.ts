@@ -120,7 +120,7 @@ export function useAuditData() {
       } else if (row.comparison === '有差异') {
         entry.different++;
         entry.comparable++;
-        if (row.attributionStatus === 'attributed') entry.attributedDiff++;
+        if (row.attributionStatus === 'attributed' || row.attributionStatus === 'attributed-scoped') entry.attributedDiff++;
         else entry.openDiff++;
       } else if (row.comparison === '待确认' || row.comparison === '条件不可比') {
         entry.pending++;

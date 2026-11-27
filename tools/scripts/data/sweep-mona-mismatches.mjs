@@ -2374,6 +2374,57 @@ function renderSummaryMarkdown(reportsByMode) {
   return lines.join('\n') + '\n';
 }
 
+const SWEEP_MODE_LABELS = {
+  scaling: '技能倍率对照',
+  'damage-c0': '零命普通直伤',
+  'damage-c6': '六命普通直伤',
+  buffs: '角色增益数值',
+  weapons: '武器增益数值',
+  sets4pc: '圣遗物四件套',
+  reactions: '反应 / 月曜 / 星烁增益',
+  'direct-special-hits': '直接月伤 / 星伤命中',
+};
+
+function buildSweepSummaryJson(reportsByMode) {
+  const modes = [];
+  for (const mode of ALL_SUBMODES) {
+    const r = reportsByMode[mode];
+    if (!r?.summary) continue;
+    const s = r.summary;
+    let entry;
+    if (mode === 'scaling') {
+      const matched = s.matched ?? 0;
+      const total = matched + (s.exactLabelMismatch ?? 0) + (s.probeError ?? 0);
+      entry = { mode, label: SWEEP_MODE_LABELS[mode], matched, total, suspect: s.trueSuspectMismatch ?? 0, knownArtifact: s.knownArtifactMismatch ?? 0, elapsedMs: r.elapsedMs ?? 0 };
+    } else if (mode === 'damage-c0') {
+      entry = { mode, label: SWEEP_MODE_LABELS[mode], matched: s.matched ?? 0, total: s.eligible ?? 0, suspect: (s.mismatch ?? 0) + (s.unexpectedUnknown ?? 0), knownArtifact: s.monaAdditionalEffect ?? 0, unknown: s.unexpectedUnknown ?? 0, elapsedMs: r.elapsedMs ?? 0 };
+    } else if (mode === 'damage-c6') {
+      entry = { mode, label: SWEEP_MODE_LABELS[mode], matched: s.matched ?? 0, total: s.eligibleC0Pairs ?? 0, suspect: (s.mismatch ?? 0) + (s.unexpectedUnknown ?? 0) + (s.c6DeltaDivergence ?? 0), knownArtifact: s.monaC6AdditionalEffect ?? 0, unknown: s.unexpectedUnknown ?? 0, elapsedMs: r.elapsedMs ?? 0 };
+    } else if (mode === 'reactions') {
+      const numMismatch = s.numericMismatch ?? 0;
+      const suspect = s.trueSuspectNumericMismatch ?? 0;
+      entry = { mode, label: SWEEP_MODE_LABELS[mode], matched: s.matched ?? 0, total: s.evaluatedEffects ?? 0, suspect, knownArtifact: Math.max(0, numMismatch - suspect), zeroOnLeyline: s.zeroOnLeyline ?? 0, skipped: s.skipped ?? 0, elapsedMs: r.elapsedMs ?? 0 };
+    } else if (mode === 'direct-special-hits') {
+      entry = { mode, label: SWEEP_MODE_LABELS[mode], matched: s.damageMatched ?? 0, total: s.matchedPairs ?? 0, suspect: s.trueSuspectMismatch ?? 0, knownArtifact: s.knownArtifact ?? 0, unknown: s.unknownOnLeyline ?? 0, elapsedMs: r.elapsedMs ?? 0 };
+    } else {
+      const matched = s.matched ?? 0;
+      const numMismatch = s.numericMismatch ?? 0;
+      const zeroOnLeyline = s.zeroOnLeyline ?? 0;
+      const suspect = s.trueSuspectNumericMismatch ?? 0;
+      entry = { mode, label: SWEEP_MODE_LABELS[mode], matched, total: matched + numMismatch + zeroOnLeyline, suspect, knownArtifact: Math.max(0, numMismatch - suspect), zeroOnLeyline, elapsedMs: r.elapsedMs ?? 0 };
+    }
+    modes.push(entry);
+  }
+  const totals = {
+    modes: modes.length,
+    matched: modes.reduce((acc, m) => acc + m.matched, 0),
+    total: modes.reduce((acc, m) => acc + m.total, 0),
+    suspect: modes.reduce((acc, m) => acc + m.suspect, 0),
+    knownArtifact: modes.reduce((acc, m) => acc + m.knownArtifact, 0),
+  };
+  return { generatedAt: new Date().toISOString(), modes, totals };
+}
+
 // ---------------------------------------------------------------------------
 // Main CLI Entry
 // ---------------------------------------------------------------------------
@@ -2465,6 +2516,7 @@ async function main() {
     }
   }
   writeFileSync(resolve(options.outDir, 'summary.md'), renderSummaryMarkdown(allReportsForSummary), 'utf8');
+  writeFileSync(resolve(options.outDir, 'summary.json'), JSON.stringify(buildSweepSummaryJson(allReportsForSummary), null, 2) + '\n', 'utf8');
 
   const compact = Object.fromEntries(
     Object.entries(ranReports).map(([m, r]) => [m, { elapsedMs: r.elapsedMs, summary: r.summary }]),

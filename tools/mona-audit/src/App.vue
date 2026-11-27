@@ -34,7 +34,9 @@ const {
 } = useAuditData();
 
 const openDiffCount = computed(() =>
-  (data.value?.rows ?? []).filter(row => row.comparison === '有差异' && row.attributionStatus !== 'attributed').length,
+  (data.value?.rows ?? []).filter(
+    row => row.comparison === '有差异' && row.attributionStatus !== 'attributed' && row.attributionStatus !== 'attributed-scoped',
+  ).length,
 );
 
 function inspectFromChild(id: string) {

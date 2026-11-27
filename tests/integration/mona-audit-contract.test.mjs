@@ -44,6 +44,33 @@ test('a difference remains open without independent evidence', () => {
   assert.equal(classifyMonaDifferences([link], [row])[0].status, 'open');
 });
 
+test('live amplification batch differences require complete 3-level formula proofs on both sides', () => {
+  const link = { id: 'amplification-batch:Citlali:0:melt', disposition: 'different',
+    mona: ['mona:branch:Citlali:0:c0:default:melt'], leyline: [{ id: 'character:citlali:hit:/talents/0/hits/0', revision: '3' }] };
+  const target = { id: 'character:citlali:hit:/talents/0/hits/0', binding: { element: 'cryo' } };
+  const makeCase = level => {
+    const mNormal = 100 * level, mEm = 115, mExpected = mNormal * 1.5 * (1 + (25 / 9) * mEm / (1400 + mEm));
+    const yNormal = 101 * level, yEm = 115.2, yExpected = yNormal * 1.5 * (1 + 2.78 * yEm / (1400 + yEm));
+    return { level, mona: { normal: mNormal, em: mEm, otherBonus: 0, expected: mExpected, actual: mExpected },
+      leyline: { normal: yNormal, em: yEm, expected: yExpected, actual: yExpected } };
+  };
+  const row = { id: link.mona[0], leyline: target.id, reaction: 'melt', element: 'cryo', aura: 'pyro', status: 'different',
+    cases: [1, 6, 10].map(makeCase) };
+  const classified = classifyMonaDifferences([link], [], undefined, [target], [row])[0];
+  assert.equal(classified.status, 'attributed-scoped');
+  assert.equal(classified.cause, 'amplification-coefficient-and-talent-precision');
+  assert.equal(classified.proof, 'live:amplification');
+  const missingLevel = structuredClone(row);
+  missingLevel.cases.pop();
+  assert.equal(classifyMonaDifferences([link], [], undefined, [target], [missingLevel])[0].status, 'open');
+  const extraBonus = structuredClone(row);
+  extraBonus.cases[0].mona.otherBonus = 0.15;
+  assert.equal(classifyMonaDifferences([link], [], undefined, [target], [extraBonus])[0].status, 'open');
+  const tampered = structuredClone(row);
+  tampered.cases[1].leyline.actual += 1;
+  assert.equal(classifyMonaDifferences([link], [], undefined, [target], [tampered])[0].status, 'open');
+});
+
 test('reaction attribution requires the complete, consistent two-sided observations', () => {
   const file = new URL('../../tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-comparison.json', import.meta.url);
   const link = JSON.parse(readFileSync(file, 'utf8')).mappings.find(row => row.id === 'transformative-overload');

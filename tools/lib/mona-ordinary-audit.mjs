@@ -1009,7 +1009,7 @@ export async function auditMonaAmplificationBatch(monaRows, leylineRows, ordinar
         record.status=record.cases.some(item=>item.mona.em!==0)?'different':'matched';
         mappings.push({id:'amplification-batch:'+branch.character+':'+branch.index+':'+reaction,disposition:record.status,mona:[branch.id],leyline:[{id:hit.id,revision:hit.revision}],
           explanation:'C0 默认分支，分别按同一反应方向、目标元素附着、90 级角色、1 级武器及空圣遗物核验；三个天赋等级各自使用面板数值和独立反应公式，逐项重建 Mona 整数面板及四位小数倍率，精通非零时 Mona 采用 25/9、LeyLine 采用 2.78 的精通系数，故分别按各自公式比较。',
-          sources:[branch.source.path,hit.source,'tools/lib/mona-amplification-batch.mjs','src/engine/src/calculation/templates-reactions.ts','.references/mona-community/mona_core/src/damage/reaction.rs','tools/data/sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/reaction-facts.json'],
+          sources:[branch.source.path,hit.source,'tools/lib/mona-ordinary-audit.mjs','src/engine/src/calculation/templates-reactions.ts','.references/mona-community/mona_core/src/damage/reaction.rs','tools/data/sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/reaction-facts.json'],
           comparisons:record.cases.flatMap(item=>[{name:'Mona level '+item.level,expected:item.mona.expected,actual:item.mona.actual,tolerance:Math.max(1e-8,Math.abs(item.mona.expected)*1e-8)},{name:'LeyLine level '+item.level,expected:item.leyline.expected,actual:item.leyline.actual,tolerance:Math.max(1e-8,Math.abs(item.leyline.expected)*1e-8)}])});
       } catch(error) {record.reason=String(error?.message??error);}
     }

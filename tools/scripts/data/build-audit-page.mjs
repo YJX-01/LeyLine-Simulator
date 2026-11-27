@@ -14,7 +14,7 @@ const resolveEntity = createEntityResolver(root);
 const auditPackage = resolve(root, 'tools/mona-audit');
 const output = resolve(root, 'artifacts/mona-audit-site/data');
 mkdirSync(output, { recursive: true });
-const { values } = parseArgs({ options: { report: { type: 'string' }, 'previous-report': { type: 'string' } } });
+const { values } = parseArgs({ options: { report: { type: 'string' }, 'previous-report': { type: 'string' }, 'sweep-summary': { type: 'string' } } });
 const reportFile = resolve(root, values.report ?? 'artifacts/mona-audit-current.json');
 const indexPath = resolve(output, 'index.json');
 const published = existsSync(indexPath) ? JSON.parse(readFileSync(indexPath, 'utf8')) : null;
@@ -90,6 +90,7 @@ const sides = Object.fromEntries(sideNames.map(side => [side, {
 const limits = report.limitations ?? [];
 const summary = { sides, ...summarizeMappings(report), issues: report.gaps?.issues ?? [], limitations: limits, delta: null,
   attributedMappings: [...differenceById.values()].filter(item => item.status === 'attributed').length,
+  attributedScopedMappings: [...differenceById.values()].filter(item => item.status === 'attributed-scoped').length,
   attributedScenarios: (report.transformative?.rows ?? []).filter(item => differenceById.get('transformative-' + item.key)?.status === 'attributed').length };
 const rows = [];
 let pending = [], bytes = 0;
@@ -170,11 +171,14 @@ if (previous?.sides && previous.comparisons && previous.scenarios) {
     if (previous[key]) summary.delta[key] = difference(summary[key], previous[key]);
   }
 }
+const sweepPath = resolve(root, values['sweep-summary'] ?? 'artifacts/mona-sweep/summary.json');
+const sweep = existsSync(sweepPath) ? JSON.parse(readFileSync(sweepPath, 'utf8')) : null;
 const provenance = report.provenance;
 const index = {
   versions: { mona: provenance ? provenance.mona : report.baselines.mona, leyline: provenance?.leyline ?? null },
   generatedAt: provenance?.generatedAt ?? statSync(reportFile).mtime.toISOString(),
   dirty: provenance?.dirty ?? null, worktree: provenance?.worktree, summary, rows, coverage,
+  ...(sweep ? { sweep } : {}),
 };
 // Publish the index last so readers can finish loading their previous snapshot.
 const vite = resolve(dirname(createRequire(resolve(auditPackage, 'package.json')).resolve('vite/package.json')), 'bin/vite.js');

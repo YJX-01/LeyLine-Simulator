@@ -260,6 +260,7 @@ h3 { font-size: 16px; font-weight: 700; line-height: 1.35; }
 
 /* Cards & Panels */
 .panel {
+  min-width: 0;
   background: var(--neutral-raised);
   border: 1px solid var(--neutral-line);
   border-radius: var(--radius);
