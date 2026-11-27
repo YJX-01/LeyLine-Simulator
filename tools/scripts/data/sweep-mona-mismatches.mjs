@@ -328,6 +328,18 @@ function annotateBuffMonaArtifact({ key, entity, target, monaDelta, leylineDelta
       note: 'Known Mona bug: FurinaQ writes healing_bonus instead of incoming_healing_bonus.',
     };
   }
+  if (key === 'ChevreuseTalent2') {
+    return {
+      kind: 'mona-chevreuse-hp-floor',
+      note: 'Mona floors floor(hp / 1000) * 1%, whereas LeyLine applies continuous 0.001% ATK per Max HP up to 40%.',
+    };
+  }
+  if (key === 'CandaceTalent2') {
+    return {
+      kind: 'mona-candace-a4-isolated-and-hp-floor',
+      note: 'Mona isolates A4 without Q 20% base bonus and floors hp/1000; LeyLine activates Q 20% + continuous A4 together on candace.prayer.',
+    };
+  }
   if (Number.isFinite(monaDelta) && Number.isFinite(leylineDelta) && Math.abs(leylineDelta) > 1e-9) {
     const absDiff = Math.abs(monaDelta - leylineDelta);
     const rel = absDiff / Math.max(Math.abs(monaDelta), Math.abs(leylineDelta));
@@ -1444,6 +1456,10 @@ function buildAutoBuffScenario(triageRow, doc, probed, inferred, entityById) {
     // Isolate Q (20% NA elemental bonus) from A4 (unlockAscension: 4) which shares candace.prayer
     ascension = 0;
     level = 20;
+  }
+  if (triageRow.key === 'IllugaQ') {
+    // Team has Geo owner (illuga) + Geo recipient (noelle) = 2 Hydro/Geo members.
+    monaParams.team_hydro_geo_count = 2;
   }
 
   if (primary) {

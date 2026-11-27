@@ -12,7 +12,7 @@
       ],
       "leyline": [
         {
-          "id": "public:reactions:attributes:18",
+          "id": "public:reactions:attributes:19",
           "revision": "1"
         }
       ],
@@ -20,7 +20,7 @@
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
-        "src/game-data/data/calculation/reactions.json#/calculation/attributes/18",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/19",
         "tools/lib/mona-transformative-audit.mjs"
       ],
       "comparisons": [
@@ -52,7 +52,7 @@
       ],
       "leyline": [
         {
-          "id": "public:reactions:attributes:19",
+          "id": "public:reactions:attributes:20",
           "revision": "1"
         }
       ],
@@ -60,7 +60,7 @@
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
-        "src/game-data/data/calculation/reactions.json#/calculation/attributes/19",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/20",
         "tools/lib/mona-transformative-audit.mjs",
         "tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json"
       ],
@@ -100,7 +100,7 @@
       ],
       "leyline": [
         {
-          "id": "public:reactions:attributes:20",
+          "id": "public:reactions:attributes:21",
           "revision": "1"
         }
       ],
@@ -108,7 +108,7 @@
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
-        "src/game-data/data/calculation/reactions.json#/calculation/attributes/20",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/21",
         "tools/lib/mona-transformative-audit.mjs"
       ],
       "comparisons": [
@@ -140,7 +140,7 @@
       ],
       "leyline": [
         {
-          "id": "public:reactions:attributes:20",
+          "id": "public:reactions:attributes:21",
           "revision": "1"
         }
       ],
@@ -148,7 +148,7 @@
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
-        "src/game-data/data/calculation/reactions.json#/calculation/attributes/20",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/21",
         "tools/lib/mona-transformative-audit.mjs"
       ],
       "comparisons": [
@@ -180,7 +180,7 @@
       ],
       "leyline": [
         {
-          "id": "public:reactions:attributes:20",
+          "id": "public:reactions:attributes:21",
           "revision": "1"
         }
       ],
@@ -188,7 +188,7 @@
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
-        "src/game-data/data/calculation/reactions.json#/calculation/attributes/20",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/21",
         "tools/lib/mona-transformative-audit.mjs"
       ],
       "comparisons": [
@@ -220,7 +220,7 @@
       ],
       "leyline": [
         {
-          "id": "public:reactions:attributes:20",
+          "id": "public:reactions:attributes:21",
           "revision": "1"
         }
       ],
@@ -228,7 +228,7 @@
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
-        "src/game-data/data/calculation/reactions.json#/calculation/attributes/20",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/21",
         "tools/lib/mona-transformative-audit.mjs"
       ],
       "comparisons": [
@@ -260,7 +260,7 @@
       ],
       "leyline": [
         {
-          "id": "public:reactions:attributes:21",
+          "id": "public:reactions:attributes:22",
           "revision": "1"
         }
       ],
@@ -268,7 +268,7 @@
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
-        "src/game-data/data/calculation/reactions.json#/calculation/attributes/21",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/22",
         "tools/lib/mona-transformative-audit.mjs",
         "tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json"
       ],
@@ -308,7 +308,7 @@
       ],
       "leyline": [
         {
-          "id": "public:reactions:attributes:22",
+          "id": "public:reactions:attributes:23",
           "revision": "1"
         }
       ],
@@ -316,7 +316,7 @@
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
-        "src/game-data/data/calculation/reactions.json#/calculation/attributes/22",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/23",
         "tools/lib/mona-transformative-audit.mjs",
         "tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json"
       ],
@@ -356,7 +356,7 @@
       ],
       "leyline": [
         {
-          "id": "public:reactions:attributes:23",
+          "id": "public:reactions:attributes:24",
           "revision": "1"
         }
       ],
@@ -364,7 +364,7 @@
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
-        "src/game-data/data/calculation/reactions.json#/calculation/attributes/23",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/24",
         "tools/lib/mona-transformative-audit.mjs",
         "tools/data/sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-version-evidence.json"
       ],
@@ -404,7 +404,7 @@
       ],
       "leyline": [
         {
-          "id": "public:reactions:attributes:24",
+          "id": "public:reactions:attributes:25",
           "revision": "1"
         }
       ],
@@ -412,7 +412,7 @@
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
-        "src/game-data/data/calculation/reactions.json#/calculation/attributes/24",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/25",
         "tools/lib/mona-transformative-audit.mjs"
       ],
       "comparisons": [
@@ -444,7 +444,7 @@
       ],
       "leyline": [
         {
-          "id": "public:reactions:attributes:25",
+          "id": "public:reactions:attributes:26",
           "revision": "1"
         }
       ],
@@ -452,7 +452,7 @@
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
-        "src/game-data/data/calculation/reactions.json#/calculation/attributes/25",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/26",
         "tools/lib/mona-transformative-audit.mjs"
       ],
       "comparisons": [
@@ -484,7 +484,7 @@
       ],
       "leyline": [
         {
-          "id": "public:reactions:attributes:26",
+          "id": "public:reactions:attributes:27",
           "revision": "1"
         }
       ],
@@ -492,7 +492,7 @@
       "sources": [
         ".references/mona-community/mona_core/src/damage/transformative_damage.rs",
         ".references/mona-community/beta-tools/runtime-7106.mjs",
-        "src/game-data/data/calculation/reactions.json#/calculation/attributes/26",
+        "src/game-data/data/calculation/reactions.json#/calculation/attributes/27",
         "tools/lib/mona-transformative-audit.mjs"
       ],
       "comparisons": [
