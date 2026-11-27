@@ -253,6 +253,7 @@ export function ordinaryReaction(recipe: FormulaDefinition, element: Element, am
 export function fixedReactionHit(recipe: FormulaDefinition, mastery: DefinitionRef, baseInput: string, coefficient: number, baseMultiplier = false): FormulaGraph {
   const b = new TemplateBuilder(recipe);
   b.input(baseInput, q('damage'), {'required':true,'min':0});
+  b.input('baseDamageBonus', q('damage'), { required: false, default: { kind: 'quantity', unit: 'damage', value: 0 } });
   b.input('reactionBaseBonus', q('scalar'), {'required':true});
   b.input('em', q('elementalMastery'), {'required':true,'min':0});
   b.input('reactionBonus', q('scalar'), {'required':true});
@@ -267,7 +268,8 @@ export function fixedReactionHit(recipe: FormulaDefinition, mastery: DefinitionR
   b.add('baseFactor', 'one', 'reactionBaseBonus');
   b.add('combinedReactionBonus', 'emBonus', 'reactionBonus');
   b.add('reactionFactor', 'one', 'combinedReactionBonus');
-  b.multiply('reactionBase', scaledBase, 'reactionCoefficient');
+  b.add('totalBase', scaledBase, 'baseDamageBonus');
+  b.multiply('reactionBase', 'totalBase', 'reactionCoefficient');
   b.multiply('afterBaseBonus', 'reactionBase', 'baseFactor');
   b.multiply('afterReactionBonus', 'afterBaseBonus', 'reactionFactor');
   b.add('withFlat', 'afterReactionBonus', 'flatBaseBonus');

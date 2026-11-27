@@ -1102,6 +1102,30 @@
       {
         "identity": {
           "namespace": "builtin",
+          "id": "attribute.reaction.lunar.baseDamageBonus",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "damage"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "damage",
+            "value": 0
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
           "id": "attribute.reaction.lunar.flatBaseBonus",
           "revision": "1"
         },

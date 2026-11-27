@@ -20,7 +20,8 @@
       "attack": 19.84892,
       "defense": 52.0521,
       "critRate": 0.05,
-      "critDamage": 0.5
+      "critDamage": 0.5,
+      "elementalMastery": 200
     },
     "specialized": "elementalMastery"
   },

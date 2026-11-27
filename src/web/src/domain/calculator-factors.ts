@@ -177,20 +177,27 @@ export function calculatorFactors(real: DamageResult, damage: DamageRequest, buf
     const skill = port('basis') ?? scaled ?? rootNodes.get('levelMultiplier');
     const rate = port('rate');
     const multiplier = rootNodes.get('baseMultiplier');
+    const baseBonus = rootNodes.get('baseDamageBonus');
+    const hasBaseBonus = baseBonus !== undefined && numeric(baseBonus) !== 0;
     const coefficient = rootNodes.get('reactionCoefficient');
     const base = stages.get('reaction-base')!;
     const factors: [CalculationTraceNode | undefined, string][] = [[rate, '反应基数倍率'], [multiplier, '技能基数倍率'], [coefficient, '反应系数']];
+    const baseBonusRows = hasBaseBonus ? contributions(baseBonus.id).map(row => ({ ...row, value: /^\d/.test(row.value) ? '+' + row.value : row.value })) : [];
     const rows = [
       ...(!real.scaling.length && skill ? [{ id: skill.id, label: scaled ? '技能基础伤害' : '等级基数', value: damageNumber(numeric(skill)) }] : []),
+      ...(!real.scaling.length && hasBaseBonus ? [{ id: baseBonus.id, label: '附加基础伤害', value: '+' + damageNumber(numeric(baseBonus)) }, ...contributions(baseBonus.id)] : []),
       ...factors.flatMap(([node, label]) => node
         ? [{ id: node.id, label, value: '× ' + damageNumber(numeric(node)) }, ...contributions(node.id)] : []),
     ];
     const operands = [skill, ...factors.map(([node]) => node)].filter(node => node !== undefined);
+    const preCoefficient = [skill, rate, multiplier].filter(node => node !== undefined).map(node => damageNumber(numeric(node))).join(' × ');
+    const equation = hasBaseBonus
+      ? `(${preCoefficient} + ${damageNumber(numeric(baseBonus))}) × ${damageNumber(numeric(coefficient))} = ${damageNumber(numeric(base))}`
+      : operands.map(node => damageNumber(numeric(node))).join(' × ') + ' = ' + damageNumber(numeric(base));
     cards.push({ id: 'reaction-base', label: '反应基础伤害', value: numeric(base), multiplier: false, rows,
-      detail: skill && coefficient ? { columns: [], label: '反应基础伤害', equation:
-        operands.map(node => damageNumber(numeric(node))).join(' × ') + ' = ' + damageNumber(numeric(base)) } : undefined,
+      detail: skill && coefficient ? { columns: [], label: '反应基础伤害', equation } : undefined,
       scaling: real.scaling.length ? { terms, attributes: contributions(skill?.id), multipliers: [],
-        subtotal: numeric(skill), flat: [], reaction: [] } : undefined });
+        subtotal: numeric(skill), flat: baseBonusRows.length ? baseBonusRows : hasBaseBonus ? [{ id: baseBonus.id, label: '附加基础伤害', value: '+' + damageNumber(numeric(baseBonus)) }] : [], reaction: [] } : undefined });
     const factor = stages.get('reaction-base-factor');
     if (factor) {
       const bonusInput = rootNodes.get('reactionBaseBonus');

@@ -238,7 +238,7 @@ export function auditConditionalCastCooldowns(entities, engine) {
   const mastery = roster + '#/lauma/stats/promotion/4/specialized';
   verify({ entity: 'lauma', clause: '/passives/1', buff: 'lauma.a4.spirit-envoy-cooldown',
     output: modifiers.spirit, gate: 'lauma.a4.spiritEnvoyFormEnded', ascension: 4, hit: 'lauma.normal.param9',
-    expected: Math.min(masteryCap, raw(mastery) * masteryRate), sources: [lauma, talent('lauma', 'combat1'), mastery],
+    expected: Math.min(masteryCap, ((characters.get('lauma')?.attributes.base.elementalMastery ?? 0) + raw(mastery)) * masteryRate), sources: [lauma, talent('lauma', 'combat1'), mastery],
     label: '灵使化形每点元素精通缩短0.02%，最高20%' });
 
   const mavuika = talent('mavuika', 'passive4');

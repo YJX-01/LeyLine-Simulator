@@ -112,7 +112,7 @@ export function auditMityaSteadyCore(entities, engine) {
       || hitId === c4Hit && (!consumed || rank < 4);
     const multiplier = rank === 6 && steady && steadyHits.includes(hitId) ? steadyFactor : 1;
     const elevation = rank === 6 && reaction ? elevationFactor : 1;
-    const sourceMastery = weaponStats.magicguide.stats.base.specialized + (rank >= 2 ? steady ? steadyMastery : overload ? overloadMastery : 0 : 0);
+    const sourceMastery = (cast.character.attributes.base.elementalMastery ?? 0) + weaponStats.magicguide.stats.base.specialized + (rank >= 2 ? steady ? steadyMastery : overload ? overloadMastery : 0 : 0);
     const mastery = dealer === cast ? sourceMastery : rank >= 2 && steady ? steadyMastery : 0;
     const stat = reaction && dealer === cast ? mastery : attack(dealer);
     const skill = dealer === cast ? hitId === 'mitya.normal.param10' ? 'combat1' : 'combat2' : 'combat3';

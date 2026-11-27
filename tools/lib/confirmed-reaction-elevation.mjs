@@ -226,7 +226,7 @@ export function auditConfirmedReactionElevation(entities, engine) {
     '过载消耗时的概率返还，以及与奥黛塔、桑多涅等提供的同次星超导擢升重叠待核验。', (text, _, probe) => {
       const elevation = amount(text, /星超导反应伤害\*\*擢升\*\*(\d+)%/) / 100;
       const own = { hitId: 'mitya.normal.param10', dealerFacts: { stellarAttachments: 1, 'mitya.overloadedWithBeacon': true } };
-      const em = weaponGrowth.magicguide.stats.base.specialized;
+      const em = (characters.get('mitya')?.attributes.base.elementalMastery ?? 0) + weaponGrowth.magicguide.stats.base.specialized;
       probe(own, 1 + elevation, 6, { damage: em * rates.mitya.combat1.param10[3] * 1.45 * (1 + Math.min(.14, .00028 * em))
         * masteryFactor(em) * (1 - resistances.electro), sources: [talents + '#mitya/combat1/param10', growthRoot + 'weapons.json#magicguide'] });
       probe(own, 1, 5);

@@ -87,6 +87,7 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
       inputs['white' + stat[0].toUpperCase() + stat.slice(1)] = derived(quantity(stat, white), [...character.sources, ...stat === 'attack' && weapon ? weapon.sources : []]);
     }
     add('critRate', character.attributes.base.critRate, character.sources); add('critDamage', character.attributes.base.critDamage, character.sources); add('energyRecharge', 1, character.sources);
+    if (character.attributes.base.elementalMastery) add('elementalMastery', character.attributes.base.elementalMastery, character.sources);
     add(character.attributes.specialized, promotion.specialized, character.sources);
     if (weapon) add(weapon.stat, weapon.baseStat * weapon.statCurve[build.weaponLevel], weapon.sources);
     const ids = new Set<string>(), slots = new Set<string>(), setCounts = buildSetCounts(build);

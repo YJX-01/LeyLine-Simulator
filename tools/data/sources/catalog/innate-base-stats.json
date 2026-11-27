@@ -1,0 +1,14 @@
+{
+  "description": "Innate level-1 character base elemental mastery absent from genshin-db and LunaGC AvatarExcelConfigData base tables.",
+  "characters": {
+    "lauma": {
+      "elementalMastery": 200
+    },
+    "mitya": {
+      "elementalMastery": 100
+    },
+    "nefer": {
+      "elementalMastery": 100
+    }
+  }
+}

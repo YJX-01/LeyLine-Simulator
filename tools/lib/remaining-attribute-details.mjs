@@ -51,7 +51,7 @@ function panel(build, stat) {
     defense: () => charBase('defense') * (1 + specialized('FIGHT_PROP_DEFENSE_PERCENT')),
     attack: () => whiteAttack * (1 + specialized('FIGHT_PROP_ATTACK_PERCENT')),
     whiteAttack: () => whiteAttack,
-    elementalMastery: () => specialized('FIGHT_PROP_ELEMENT_MASTERY'),
+    elementalMastery: () => (build.character.attributes.base.elementalMastery ?? 0) + specialized('FIGHT_PROP_ELEMENT_MASTERY'),
     healingBonus: () => specialized('FIGHT_PROP_HEAL_ADD'),
     hydroBonus: () => specialized('FIGHT_PROP_WATER_ADD_HURT'),
   };

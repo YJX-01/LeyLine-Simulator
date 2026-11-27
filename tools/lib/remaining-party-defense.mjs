@@ -36,7 +36,7 @@ function panel(build, stat) {
   const id = build.character.id, stats = growth[id].stats, promoted = stats.promotion[build.ascension];
   const known = stat === 'hp'
     ? (stats.base.hp * curves[build.level][stats.curve.hp] + promoted.hp) * (1 + (stats.specialized === 'FIGHT_PROP_HP_PERCENT' ? promoted.specialized : 0))
-    : stats.specialized === 'FIGHT_PROP_ELEMENT_MASTERY' ? promoted.specialized : 0;
+    : (build.character.attributes.base.elementalMastery ?? 0) + (stats.specialized === 'FIGHT_PROP_ELEMENT_MASTERY' ? promoted.specialized : 0);
   return { value: known, sources: [catalogue + 'characters.json#' + id, catalogue + 'character-curves.json#' + build.level] };
 }
 

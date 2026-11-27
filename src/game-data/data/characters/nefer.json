@@ -20,7 +20,8 @@
       "attack": 26.8128,
       "defense": 62.2232,
       "critRate": 0.05,
-      "critDamage": 0.5
+      "critDamage": 0.5,
+      "elementalMastery": 100
     },
     "specialized": "critDamage"
   },
@@ -1416,7 +1417,7 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.flatBaseBonus",
+              "target": "attribute.reaction.lunar.baseDamageBonus",
               "value": {
                 "call": "product.damage",
                 "inputs": {
