@@ -36,7 +36,7 @@
 
 ### Mona 社区版
 
-参考 https://github.com/TwiceDrop/genshin_artifact，版本 7.2.02，固定提交 `589ac6919057709924c0c20d5a9d673fe9b0be1a`，唯一本地检出为 `.references/mona-community`。目录与中文身份采用记录见[目录快照](sources/catalog/mona-community/catalog.json)。
+参考 https://github.com/TwiceDrop/genshin_artifact，版本 7.2.02，固定提交 `589ac6919057709924c0c20d5a9d673fe9b0be1a`，唯一本地检出为 `.references/mona-community`。运行期使用的[套装别名表](../../src/game-data/data/tables/mona-set-aliases.json)与[Enka 目录映射](../../src/game-data/data/tables/enka-catalog.json)以及 `character-effective-stats.json`、`effective-roll-basis.json`、`artifact-set-short-names.json`、`catalog-release-metadata.json` 均直接在 `src/game-data/data/tables/` 中维护。
 
 套装按精确中文名对应，社区导出键作为别名。社区中的石英大剑、琥珀玥、黑檀弓属于待核对目录差异。生成目录和中文词典提供身份及图片线索，机制规则单独审查。
 
@@ -108,7 +108,7 @@ KQM 反应等级曲线收录1至100级，0级为 null。与固定 Mona 社区1�
 
 ### 圣遗物稀有度调查
 
-当前实物接受四星与五星，三星以下实物暂缓。schema、两条求值路径、Mona/Enka、展示、保存快照和手动表单均按实物星级取表；四星0–16、五星0–20。已采用来源及保守输入边界见[采用记录](sources/artifact-rarity/adoption.json)，套装合法部位见[固定来源字段](sources/artifact-rarity/set-slots.json)。
+当前实物接受四星与五星，三星以下实物暂缓。schema、两条求值路径、Mona/Enka、展示、保存快照和手动表单均按实物星级取表；四星0–16、五星0–20。套装合法部位见[固定来源字段](sources/artifact-rarity/set-slots.json)。
 
 #### 原始关联
 
@@ -170,7 +170,7 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 芬德尼尔之顶的严寒和平台、太山府的阴燃之火、菫色之庭的稚雷珠共 32 条说明指向空的关卡能力入口。已固定各阶的秘境与场景 ID。通用严寒、暖源与持续火伤配置仅作排查参考，当前场景仍需对应的区域或机关绑定。太山府 1.5 版测得开战后 3 秒首次附着、此后每 30 秒再次附着，当前版本的每跳伤害和间隔仍待证。菫色之庭 IV 的两份公开画面分别显示 50 级凯亚和 80 级班尼特触发后出现 74208 雷伤。凯亚画面发表于 2.0 期间，班尼特画面发表于 2022 年 7 月且游戏版本不明。两图可辨难度 IV 与 88 级敌人，日程和各伤害数字对应的敌方身份未能核定。[固定配置与实战来源](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/scene-environment-amount-facts.json)
 
-独立剧变伤害在精通与反应加成后计入固定加值，再应用适用的暴击和目标抗性。绽放等反应的暴击率和暴击伤害来自对应角色的明确授予。[固定版本计算依据](sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-modifiers.json)
+独立剧变伤害在精通与反应加成后计入固定加值，再应用适用的暴击和目标抗性。绽放等反应的暴击率和暴击伤害来自对应角色的明确授予。
 
 尼可的战技按施放时可用于转化的攻击力封顶。米提亚六命对稳态炉心归属的技能基数施加 1.15 倍率，固定反应加值另行计算。久岐忍的安心之所按施救者精通加算治疗。一心传名刀的祟灵治疗按实际武器版本取持有者攻击力。[尼可战技取值](sources/catalog/nicole-kenosis.json) · [米提亚稳态炉心](sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/mitya-steady-core.json) · [条件治疗依据](sources/catalog/conditional-healing-sources.json)
 
@@ -198,7 +198,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 `tests/integration/calculation-coverage.test.mjs` 检查目录加载后保留原始数值、命中和解锁分支，并核对覆盖证书缺失时的报告。
 
-[星伤命中采用范围](sources/calculation-hits/stellar-bindings.json)登记薇斯纳的状态、单段规则、来源和C0–C6边界。tests/unit/engine/calculation/stellar-character.test.ts从固定成长与原天赋参数独立推导856组可用条件，另检查未知或不满足条件、层数越界、无突破门槛的星耀祝礼、队友元素身份和离线闭包。角色JSON的talents.hits集中维护34个命中及35个输出。
+[薇斯纳定义](../../src/game-data/data/characters/vesna.json)登记薇斯纳的状态、单段规则、来源和C0–C6边界。tests/unit/engine/calculation/stellar-character.test.ts从固定成长与原天赋参数独立推导856组可用条件，另检查未知或不满足条件、层数越界、无突破门槛的星耀祝礼、队友元素身份和离线闭包。角色JSON的talents.hits集中维护34个命中及35个输出。
 
 [星伤装备采用](sources/calculation-effects/stellar-equipment.json)记录蝶变的两种风及血红之证的套装增益。获授权的Enka展柜原件覆盖薇斯纳90级C2、天赋8/10/10、蝶变精一及血红之证四件。`tests/integration/vesna-production-chain.test.ts`和`tests/browser/development/vesna-production-chain.spec.ts`核验同一真实配装经确认导入、显式补足战斗条件、同步和Worker复算、精炼比较、保存重开及角色参数重导入。展柜证明配装，战斗条件属于明确输入，游戏内伤害观测仍待补。原件缺失时跳过对应检查。
 
@@ -214,7 +214,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 #### 分项输入
 
-分项输入采用本地天赋、命座与 KQM 机制资料。绫人的浪闪按战技、命中、退场及到期更新。二命从三层起改变生命上限和后续瞬水剑伤害。突破四在后台且能量低于 40 点时每秒恢复 2 点。六命的两次追加瞬水剑各取 450% 攻击力，按各自记录的时刻结算。缺少时刻时保留已知小计。雷电将军的愿力参与首刀及后续刀击的独立倍率计算。优菈光降之剑可按给定层数求值。各角色尚待核验的条件列在逐项报告。[计数依据](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/count-scaling-facts.json)
+分项输入采用本地天赋、命座与 KQM 机制资料。绫人的浪闪按战技、命中、退场及到期更新。二命从三层起改变生命上限和后续瞬水剑伤害。突破四在后台且能量低于 40 点时每秒恢复 2 点。六命的两次追加瞬水剑各取 450% 攻击力，按各自记录的时刻结算。缺少时刻时保留已知小计。雷电将军的愿力参与首刀及后续刀击的独立倍率计算。优菈光降之剑可按给定层数求值。各角色尚待核验的条件列在逐项报告。
 
 #### 锁面板
 
@@ -226,7 +226,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 武器的固定数值贡献从各精炼档原文中按对应属性和条款取值。薙草之稻光精一将超出 100% 的充能效率乘 28%，攻击力加成上限为 80%。施放爆发后的 12 秒内另加 30% 充能，这部分充能同时参与武器和绝缘之旗印的换算。腐殖之剑在同一次授予中分别提高战技伤害与暴击率。[精炼条款对照](sources/catalog/equipment-modifier-checks.json)
 
-辰砂之纺锤取持有者命中时的防御力。战技在首次造成伤害时获得加值，随后 100 毫秒内的战技命中可共享加值，经过 1,500 毫秒可以再次触发。五个精炼档均核对场上、后台、其他队员、其他攻击类别与时间边界。旧版记录中刹那之花打盾后被动失效的情形缺少当前修订的复核。云堇的基础加值按受益队员分别扣除次数。[基础加值依据](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/base-damage-bonus-facts.json)
+辰砂之纺锤取持有者命中时的防御力。战技在首次造成伤害时获得加值，随后 100 毫秒内的战技命中可共享加值，经过 1,500 毫秒可以再次触发。五个精炼档均核对场上、后台、其他队员、其他攻击类别与时间边界。旧版记录中刹那之花打盾后被动失效的情形缺少当前修订的复核。云堇的基础加值按受益队员分别扣除次数。
 
 #### 反应、状态与入口
 

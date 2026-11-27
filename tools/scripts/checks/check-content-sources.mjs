@@ -57,7 +57,9 @@ for (const [avatarId, item] of Object.entries(read('tools/data/sources/catalog/e
     throw new Error(`Enka catalog entry differs from the adopted skill supplement: ${avatarId}`);
   }
 }
-displayData('mona-set-aliases'); // The projection rejects conflicting export aliases.
+for (const [alias, setId] of Object.entries(displayData('mona-set-aliases'))) {
+  if (!alias || !Object.hasOwn(sets, setId)) throw new Error(`Invalid Mona set alias: ${alias} -> ${setId}`);
+}
 
 await checkCatalog();
 const audit = await numericAudit();

@@ -12,7 +12,7 @@ Vite 的 `catalog-plugin.mjs` 向列表提供索引字段，按需加载所选�
 
 可选动作按完整 `DefinitionRef` 关联角色，`getCharacterActions` 在版本不匹配时返回 `null`。装配时共同编译动作及其所选角色，动作时序、规则和来源在独立文件维护。具体动作和缺口见[计算支持与验证资料](../../tools/data/README.md#计算支持与验证资料)。
 
-[套装简称表](data/tables/artifact-set-short-names.json)、`character-effective-stats.json` 和 `effective-roll-basis.json` 提供展示和有效条数的运行数据。`artifact-main.json` 分别保存四星 17 项与五星 21 项主词条值。套装 `rarities` 保存合法星级集合，目录 `rarity` 展示其最高值。
+[套装简称表](data/tables/artifact-set-short-names.json)、`enka-catalog.json`、`mona-set-aliases.json`、`character-effective-stats.json` 和 `effective-roll-basis.json` 提供展示、导入映射和有效条数的运行数据。`artifact-main.json` 分别保存四星 17 项与五星 21 项主词条值。套装 `rarities` 保存合法星级集合，目录 `rarity` 展示其最高值。
 
 [内容规范](../../docs/content.md)维护通用语义，[资料与来源](../../tools/data/README.md#内容采用与精度核对)记录使用的来源及数值、文本和星级采用。
 

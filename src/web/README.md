@@ -190,7 +190,7 @@ Line凯尔特三角用于圣遗物库，组合版叠交织内圆与完整外圆�
 
 ### Enka公开展柜
 
-协议依据为 https://github.com/EnkaNetwork/API-docs/blob/master/api.md 及其docs/gi/api.md。固定元数据采用 `b94bc40528941126590e0eefb0f03278e7a44ec8`，目录与补充顺序在tools/data/sources/catalog/enka。网络契约公开入口为 `@leyline/schema/enka`。
+协议依据为 https://github.com/EnkaNetwork/API-docs/blob/master/api.md 及其docs/gi/api.md。固定元数据采用 `b94bc40528941126590e0eefb0f03278e7a44ec8`，运行时映射表在 `src/game-data/data/tables/enka-catalog.json`，离线技能补充顺序在 `tools/data/sources/catalog/enka`。网络契约公开入口为 `@leyline/schema/enka`。
 
 UID为9至10位数字。桌面通过固定主机IPC查询，网页开发和本地预览提供同源/api/enka/:uid，子路径按应用base处理；静态托管需配置同源通道。查询使用自定义User-Agent，按服务TTL缓存，合并同UID进行中请求，上限16个UID；响应上限2MiB，超时15秒。取消中止网页请求或丢弃桌面迟到结果，400/404/424/429及服务异常就近反馈。
 

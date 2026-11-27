@@ -34,7 +34,7 @@
       "release": "7.2.02",
       "localPath": ".references/mona-community",
       "purpose": "canonical pinned community Git checkout; catalog identity, mechanics research and verified image sources; upstream code is not executed",
-      "canonicalSnapshot": "tools/data/sources/catalog/mona-community/catalog.json",
+      "canonicalSnapshot": "src/game-data/data/tables/mona-set-aliases.json",
       "licenseFiles": [
         "LICENSE",
         "THIRD_PARTY_NOTICES.md"
@@ -76,7 +76,7 @@
       "url": "https://github.com/EnkaNetwork/API-docs",
       "commit": "b94bc40528941126590e0eefb0f03278e7a44ec8",
       "localPath": ".references/enka",
-      "canonicalSnapshot": "tools/data/sources/catalog/enka/catalog.json",
+      "canonicalSnapshot": "src/game-data/data/tables/enka-catalog.json",
       "purpose": "Official character skill metadata for public UID showcase mapping. The independent SkillOrder and traveler Element extract in tools/data/sources/catalog/enka/pinned-skill-orders.json records the SHA-256 of the pinned characters.json."
     },
     {

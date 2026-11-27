@@ -14,6 +14,7 @@
 | `pnpm data:build` | 从正式资源生成 `.cache/public/assets`，复用相同字节并清理废弃副本 |
 | `pnpm data:check` | 只读比较来源数值、目录依赖、展示与导入映射和资源缓存 |
 | `node tools/scripts/data/capture-catalog.mjs` | 将固定 `.references/genshin-db` 的原始字节复制到新审阅目录 |
+| `node tools/scripts/data/capture-meropide.mjs` | 离线抓取 `https://meropide.cn/chs` 速查、全角色及 theorycraft 页面至 `.references/meropide/` |
 | `python tools/scripts/data/prepare-character-update.py --out artifacts/content-candidates/<新目录>` | 按当前来源和规则生成角色候选及差异 |
 | `node tools/scripts/data/audit-numeric-sources.mjs` | 核对数值并更新 `tools/data/audits/numeric-precision.json` |
 | `node tools/scripts/data/audit-calculation-coverage.mjs --json` | 报告当前正式目录的编译覆盖、命中绑定和效果。使用 `--require-complete` 检查目录是否全部闭合 |

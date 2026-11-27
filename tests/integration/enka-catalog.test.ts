@@ -4,7 +4,7 @@ import { catalogInventory, readCalculationData as read } from '../../tools/lib/c
 import { createAccount, parseAccount } from '../../src/web/src/domain/account';
 import { previewEnkaImport, confirmEnkaImport } from '../../src/web/src/domain/enka-import';
 
-const catalog = read('tools/data/sources/catalog/enka/catalog.json').mapping;
+const catalog = read('src/game-data/data/tables/enka-catalog.json');
 const supplements = read('tools/data/sources/catalog/enka/skill-supplements.json').characters;
 const pinned = read('tools/data/sources/catalog/enka/pinned-skill-orders.json');
 const pinnedOrders: Record<string, number[]> = pinned.skillOrder;

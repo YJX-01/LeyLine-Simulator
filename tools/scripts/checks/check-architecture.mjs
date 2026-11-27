@@ -103,6 +103,12 @@ for (const path of files) {
   const content = readFileSync(resolve(root, path), 'utf8');
   if(path.startsWith('src/') && /\.(test|spec)\./.test(path))fail(path,'all tests belong under tests/');
   if(path.startsWith('src/') && /\b(?:evaluateP3|P3Read|P3EffectInstance|simulateTeam|simulateCombat|workbench-p3|workbench-v1)\b/.test(content))fail(path,'retired API or phase name in active source');
+  const runtimeBoundary = (path.startsWith('src/') && !/\.(test|spec)\./.test(path) && path !== 'src/schema/src/content/metadata-fields.mjs')
+    || path === 'tools/lib/display-data.mjs'
+    || path.startsWith('tools/scripts/build/');
+  if (runtimeBoundary && /(?:(?<![.])\.references(?:[/\\'"`]|$)|tools[\\/]data[\\/]sources)/.test(content)) {
+    fail(path, 'production and build code must not reference .references or tools/data/sources');
+  }
   const source = path.endsWith('.vue')
     ? [...content.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(match => match[1]).join('\n')
     : content;

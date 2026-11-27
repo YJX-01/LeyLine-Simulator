@@ -21,15 +21,8 @@ export function displayData(name) {
     case 'effective-roll-basis': return { defaults: table(name).defaults };
     case 'character-effective-stats': return { characters: table(name).characters };
     case 'catalog-release-metadata': { const { characters, weapons, artifacts } = table(name); return { characters, weapons, artifacts }; }
-    case 'enka-catalog': return read('tools/data/sources/catalog/enka/catalog.json').mapping;
-    case 'mona-set-aliases': {
-      const aliases = {};
-      for (const item of read('tools/data/sources/catalog/mona-community/catalog.json').sets) for (const key of [item.monaKey, item.exportName]) {
-        if (Object.hasOwn(aliases, key) && aliases[key] !== item.canonicalId) throw new Error('Ambiguous Mona alias: ' + key);
-        aliases[key] = item.canonicalId;
-      }
-      return aliases;
-    }
+    case 'enka-catalog': return table('enka-catalog');
+    case 'mona-set-aliases': return table('mona-set-aliases').aliases;
     case 'character-talent-display': {
       const characters = {};
       const slots = { normal: ['A',1], skill: ['E',2], burst: ['Q',3] };
