@@ -3,8 +3,7 @@ import { auditBuild, auditHit, bool, novice, setAuditDefaults, setGateFacts } fr
 
 const catalog = '../data/sources/catalog/genshin-db/';
 const upstream = 'data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/';
-const mechanics = 'kqm-theorycrafting-library@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:';
-const mona = 'mona-community@589ac6919057709924c0c20d5a9d673fe9b0be1a:';
+const meropide = name => 'https://meropide.cn/chs/characters/' + encodeURIComponent(name) + '/theorycraft/';
 const read = path => readContentSource(new URL(path, import.meta.url));
 const growth = read(catalog + 'characters.json');
 const weaponGrowth = read(catalog + 'weapons.json');
@@ -131,17 +130,17 @@ function finding([entity, slot, needed, status]) {
 
 const hitCases = [
   ['bennett', 4, 'c4.passionate-followup', 'c4FollowupReady', 'skill', 'pyro', rates.bennett.combat2.param3[3] * 1.35,
-    mechanics + 'docs/characters/pyro/bennett.md:192-208', 'favoniussword'],
+    meropide('班尼特'), 'favoniussword'],
   ['chongyun', 1, 'c1.ice-unleashed', 'c1IceBladeReady', 'other', 'cryo', 0.5,
-    mechanics + 'docs/evidence/characters/cryo/chongyun.md:124-143', 'ferrousshadow'],
+    meropide('重云'), 'ferrousshadow'],
   ['venti', 1, 'c1.split-arrow-aimed', 'c1SplitArrowHit', 'charged', 'physical', rates.venti.combat1.param7[0] * 0.33,
-    mechanics + 'docs/characters/anemo/venti.md:181-195', 'favoniuswarbow'],
+    meropide('温迪'), 'favoniuswarbow'],
   ['venti', 1, 'c1.split-arrow-fully-charged', 'c1SplitArrowHit', 'charged', 'anemo', rates.venti.combat1.param8[0] * 0.33,
-    mechanics + 'docs/characters/anemo/venti.md:181-195', 'favoniuswarbow'],
+    meropide('温迪'), 'favoniuswarbow'],
   ['tighnari', 6, 'c6.clusterbloom-arrow', 'c6ClusterbloomReady', 'charged', 'dendro', 1.5,
-    mona + 'mona_core/src/character/characters/dendro/tighnari.rs:104-121', 'favoniuswarbow'],
+    meropide('提纳里'), 'favoniuswarbow'],
   ['kujousara', 2, 'c2.weaker-crowfeather', 'c2WeakerCrowfeatherHit', 'skill', 'electro', rates.kujousara.combat2.param1[0] * 0.3,
-    mechanics + 'docs/characters/electro/kujou-sara.md:190-205', 'favoniuswarbow'],
+    meropide('九条裟罗'), 'favoniuswarbow'],
 ];
 
 export const unregisteredCurrentClauseIds = [...new Set(hitCases.map(([id]) => id).concat([
@@ -235,7 +234,7 @@ export function auditUnregisteredCurrentClauses(entities, engine) {
   }
 
   if (characters.has('jean')) {
-    const id = 'jean', field = path(4), sources = [constellation(id, 4), mechanics + 'docs/characters/anemo/jean.md:182-188'];
+    const id = 'jean', field = path(4), sources = [constellation(id, 4), meropide('琴')];
     for (const [rank, inField, element, expected] of [[4, true, 'anemo', -0.3], [4, true, 'cryo', 0.1],
       [4, false, 'anemo', 0.1], [3, true, 'anemo', 0.1]]) {
       probe(id, field, 'skill.param1', sources, { rank, stat: 'target.resistance.' + element, facts: { 'jean.c4EnemyInsideDandelion': inField } }, expected);
@@ -251,7 +250,7 @@ export function auditUnregisteredCurrentClauses(entities, engine) {
   }
 
   if (characters.has('nicole') && characters.has('kaeya')) {
-    const id = 'nicole', field = path(6), sources = [constellation(id, 6), mechanics + 'src/data/characters/Nicole.json:340-342'];
+    const id = 'nicole', field = path(6), sources = [constellation(id, 6), meropide('尼可')];
     for (const [rank, peer, blessed, expected] of [[6, 'kaeya', true, 0.4], [6, 'kaeya', false, 0], [5, 'kaeya', true, 0],
       [6, undefined, true, 0.4], [6, undefined, false, 0]]) {
       const key = 'nicole.guidanceOfTheosis';
@@ -262,7 +261,7 @@ export function auditUnregisteredCurrentClauses(entities, engine) {
 
   if (characters.has('sucrose') && characters.has('kaeya') && weapons.has('sacrificialfragments')) {
     const id = 'sucrose', field = '/passives/1';
-    const sources = [source('talents', id, 'passive2'), mechanics + 'docs/characters/anemo/sucrose.md:158-167'];
+    const sources = [source('talents', id, 'passive2'), meropide('砂糖')];
     const bonus = Math.round(weaponGrowth.sacrificialfragments.stats.base.specialized) * 0.2;
     for (const [ascension, peer, event, time, expected] of [
       [4, 'kaeya', 'skill.param1', 1, bonus], [4, 'kaeya', 'burst.param2', 7999, bonus], [4, 'kaeya', 'burst.param1', 8001, 0],
@@ -270,7 +269,7 @@ export function auditUnregisteredCurrentClauses(entities, engine) {
       [4, undefined, 'skill.param1', 1, bonus / 0.2],
     ]) probe(id, field, 'normal.param1', sources, { rank: 0, ascension, weapon: 'sacrificialfragments', peer, event, time, stat: 'elementalMastery' }, expected);
     if (characters.has('albedo')) {
-      const recorded = [...sources, mechanics + 'docs/evidence/characters/anemo/sucrose.md:352-365'];
+      const recorded = [...sources, meropide('砂糖')];
       const settings = { rank: 0, ascension: 4, weapon: 'sacrificialfragments', peer: 'kaeya', event: 'skill.param1',
         eventTime: 9000, time: 11000, stat: 'elementalMastery' };
       probe(id, field, 'normal.param1', recorded, { ...settings, albedoCastAt: 0 }, bonus + 125 * 0.2);

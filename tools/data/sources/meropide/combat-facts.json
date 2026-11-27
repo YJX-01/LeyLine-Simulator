@@ -1,0 +1,295 @@
+{
+  "origin": "https://meropide.cn/chs/",
+  "snapshots": {
+    "reference/伤害公式.html": {
+      "url": "https://meropide.cn/chs/reference/%E4%BC%A4%E5%AE%B3%E5%85%AC%E5%BC%8F/",
+      "path": ".references/meropide/pages/reference/伤害公式.html",
+      "sha256": "1d21559b8c80ea89ff2d2747e8c286ca3c2f4cc8e85dc58806c8fe1b06ec5381"
+    },
+    "reference/星烁反应.html": {
+      "url": "https://meropide.cn/chs/reference/%E6%98%9F%E7%83%81%E5%8F%8D%E5%BA%94/",
+      "path": ".references/meropide/pages/reference/星烁反应.html",
+      "sha256": "2b6ab6fb6b4a79430d1c3225df8347607fb0ef8293637ce16da178796f82ecda"
+    },
+    "reference/队伍加成.html": {
+      "url": "https://meropide.cn/chs/reference/%E9%98%9F%E4%BC%8D%E5%8A%A0%E6%88%90/",
+      "path": ".references/meropide/pages/reference/队伍加成.html",
+      "sha256": "b6e7c5cab49dffdf62411862e61d958ad60427d3d134b88ce54d1d4a8b2bf26e"
+    },
+    "characters/米提亚.theorycraft.html": {
+      "url": "https://meropide.cn/chs/characters/%E7%B1%B3%E6%8F%90%E4%BA%9A/theorycraft/",
+      "path": ".references/meropide/pages/characters/米提亚.theorycraft.html",
+      "sha256": "547a46e9c1b1a16cde3aa5fa8ca4612bb5ca049b58cfda9f86656417dfbf5530"
+    },
+    "characters/哥伦比娅.theorycraft.html": {
+      "url": "https://meropide.cn/chs/characters/%E5%93%A5%E4%BC%A6%E6%AF%94%E5%A8%85/theorycraft/",
+      "path": ".references/meropide/pages/characters/哥伦比娅.theorycraft.html",
+      "sha256": "a1d3a3ac332d22d8299cb8ebc995c9c3f0ef5abecc9f2c7342cd2748a053b8fb"
+    },
+    "characters/菲林斯.theorycraft.html": {
+      "url": "https://meropide.cn/chs/characters/%E8%8F%B2%E6%9E%97%E6%96%AF/theorycraft/",
+      "path": ".references/meropide/pages/characters/菲林斯.theorycraft.html",
+      "sha256": "1a40684c5649e9caa0e89ce6317bc78405e7e467b58a740e1ebf7f709eff074d"
+    },
+    "characters/奈芙尔.theorycraft.html": {
+      "url": "https://meropide.cn/chs/characters/%E5%A5%88%E8%8A%99%E5%B0%94/theorycraft/",
+      "path": ".references/meropide/pages/characters/奈芙尔.theorycraft.html",
+      "sha256": "83eb5578db1ee5029bbc5fc937451f2a7b01573fd13947d3c96b903aac107747"
+    },
+    "characters/兹白.theorycraft.html": {
+      "url": "https://meropide.cn/chs/characters/%E5%85%B9%E7%99%BD/theorycraft/",
+      "path": ".references/meropide/pages/characters/兹白.theorycraft.html",
+      "sha256": "4e0ca02adfe1e1a3c0bba49cfc416b93b31511120e2596759fccaf63e359c7e7"
+    },
+    "characters/奥黛塔.theorycraft.html": {
+      "url": "https://meropide.cn/chs/characters/%E5%A5%A5%E9%BB%9B%E5%A1%94/theorycraft/",
+      "path": ".references/meropide/pages/characters/奥黛塔.theorycraft.html",
+      "sha256": "8f3f3c1747ce8e976a6c9bd0948c54a32e88c67b4eab4dafafd2553f0109d03d"
+    },
+    "characters/班尼特.theorycraft.html": {
+      "url": "https://meropide.cn/chs/characters/%E7%8F%AD%E5%B0%BC%E7%89%B9/theorycraft/",
+      "path": ".references/meropide/pages/characters/班尼特.theorycraft.html",
+      "sha256": "1bc5f7ae3e26bec925bb11b4def2d6722810728207d4a9dd49bf7dd43d231fb0"
+    },
+    "characters/坎蒂丝.theorycraft.html": {
+      "url": "https://meropide.cn/chs/characters/%E5%9D%8E%E8%92%82%E4%B8%9D/theorycraft/",
+      "path": ".references/meropide/pages/characters/坎蒂丝.theorycraft.html",
+      "sha256": "df6e5e6aed060719aad488c97c9a983022ee6513a89caccfb765def3594964c2"
+    },
+    "characters/重云.theorycraft.html": {
+      "url": "https://meropide.cn/chs/characters/%E9%87%8D%E4%BA%91/theorycraft/",
+      "path": ".references/meropide/pages/characters/重云.theorycraft.html",
+      "sha256": "504292c9768d4ff8916d48b647459e3cc6a9b6d188cf460e6db9613c67163d46"
+    },
+    "characters/诺艾尔.theorycraft.html": {
+      "url": "https://meropide.cn/chs/characters/%E8%AF%BA%E8%89%BE%E5%B0%94/theorycraft/",
+      "path": ".references/meropide/pages/characters/诺艾尔.theorycraft.html",
+      "sha256": "b02cc1c9355b5aefb3f60227dd10636a48fd2962909607a3992b7d904c055041"
+    },
+    "characters/阿罗夏.theorycraft.html": {
+      "url": "https://meropide.cn/chs/characters/%E9%98%BF%E7%BD%97%E5%A4%8F/theorycraft/",
+      "path": ".references/meropide/pages/characters/阿罗夏.theorycraft.html",
+      "sha256": "3fa1127f05b2add943ecda862b2e960402f09b8adfb3b533316fac95041d77e1"
+    },
+    "characters/阿蕾奇诺.theorycraft.html": {
+      "url": "https://meropide.cn/chs/characters/%E9%98%BF%E8%95%BE%E5%A5%87%E8%AF%BA/theorycraft/",
+      "path": ".references/meropide/pages/characters/阿蕾奇诺.theorycraft.html",
+      "sha256": "4254e24c4f8dbce5f2fc8ca52f7d887081e6795548f6483f186f97d77ec2a3cf"
+    }
+  },
+  "elevation": {
+    "sources": [
+      {
+        "id": "meropide.flins-c6",
+        "url": "https://meropide.cn/chs/characters/%E8%8F%B2%E6%9E%97%E6%96%AF/theorycraft/",
+        "snapshot": ".references/meropide/pages/characters/菲林斯.theorycraft.html",
+        "scope": "同一菲林斯六命中的个人擢升及满辉擢升。覆盖该角色的月感电天赋命中、二命附加命中及实际月感电贡献。",
+        "facts": {
+          "personal": 0.35,
+          "fullMoonsignTeam": 0.1,
+          "fullMoonsignPersonal": 0.45
+        }
+      },
+      {
+        "id": "meropide.zibai-c6",
+        "url": "https://meropide.cn/chs/characters/%E5%85%B9%E7%99%BD/theorycraft/",
+        "snapshot": ".references/meropide/pages/characters/兹白.theorycraft.html",
+        "scope": "战技和六命段落共同确认本次灵驹飞踏含普通岩伤与直接月结晶两段。此效果也作用于接下来三秒内兹白造成的月结晶，不叠加。",
+        "facts": {
+          "threshold": 70,
+          "maxConsumed": 100,
+          "elevationPerExcessPoint": 0.016,
+          "maxElevation": 0.48,
+          "followingWindowSeconds": 3
+        }
+      },
+      {
+        "id": "meropide.odette-c6",
+        "url": "https://meropide.cn/chs/characters/%E5%A5%A5%E9%BB%9B%E5%A1%94/theorycraft/",
+        "snapshot": ".references/meropide/pages/characters/奥黛塔.theorycraft.html",
+        "scope": "同一奥黛塔六命的本人效果与华彩效果相加；华彩条件适用于各实际受益者，限明确绑定为星超导或星扩散的伤害。",
+        "facts": {
+          "splendorRecipient": 0.25,
+          "personal": 0.2,
+          "personalWithSplendor": 0.45
+        }
+      }
+    ],
+    "crossOwner": {
+      "id": "meropide.columbina-elevation",
+      "url": "https://meropide.cn/chs/characters/%E5%93%A5%E4%BC%A6%E6%AF%94%E5%A8%85/theorycraft/",
+      "snapshot": ".references/meropide/pages/characters/哥伦比娅.theorycraft.html",
+      "scope": "All six Columbina constellation lunar elevation buffs add to one another and to explicitly named Flins C6 and Nefer C6 elevation. Other character combinations are not adopted by this proof.",
+      "facts": {
+        "columbina": [
+          0.015,
+          0.07,
+          0.015,
+          0.015,
+          0.015,
+          0.07
+        ],
+        "flins": {
+          "personal": 0.35,
+          "fullMoonsignPersonal": 0.45,
+          "fullMoonsignTeam": 0.1
+        },
+        "nefer": {
+          "fullMoonsignPersonal": 0.15
+        }
+      }
+    }
+  },
+  "mityaSteadyCore": {
+    "snapshot": ".references/meropide/pages/characters/米提亚.theorycraft.html",
+    "steadyCore": {
+      "11": "mitya.skill.param3",
+      "12": "mitya.skill.param4",
+      "13": "mitya.skill.param5",
+      "15": "mitya.c4.beacon-consumption"
+    },
+    "cast": {
+      "9": "mitya.skill.param1",
+      "10": "mitya.skill.param2"
+    },
+    "placement": "稳态六命将炉心命中的技能伤害基数乘以1.15。直接星超导的伤害基数仍受反应基础倍率、基础伤害加成和反应增伤影响。固定加值在这些乘区之后加入，反应擢升再作用于全段。过载下的四命命中保留其原技能基数。",
+    "scope": "依据梅洛彼得堡信息处理中心米提亚机制页与伤害公式页核对命中归属、乘区位置及命座数值。"
+  },
+  "partyInfusion": {
+    "snapshot": ".references/meropide/pages/reference/队伍加成.html",
+    "eligibleWeaponTypes": [
+      "WEAPON_SWORD_ONE_HAND",
+      "WEAPON_CLAYMORE",
+      "WEAPON_POLE"
+    ],
+    "eligibleAttacks": [
+      "normal",
+      "charged",
+      "plunge"
+    ],
+    "grants": [
+      {
+        "character": "bennett",
+        "talent": "bennett.burst",
+        "constellation": 6,
+        "element": "pyro",
+        "inGameText": "ChineseSimplified/constellations/bennett.json#c6",
+        "meropide": "characters/班尼特.theorycraft.html"
+      },
+      {
+        "character": "candace",
+        "talent": "candace.burst",
+        "element": "hydro",
+        "inGameText": "ChineseSimplified/talents/candace.json#combat3",
+        "meropide": "characters/坎蒂丝.theorycraft.html"
+      },
+      {
+        "character": "chongyun",
+        "talent": "chongyun.skill",
+        "element": "cryo",
+        "inGameText": "ChineseSimplified/talents/chongyun.json#combat2",
+        "meropide": "characters/重云.theorycraft.html"
+      }
+    ],
+    "protectedExample": {
+      "character": "noelle",
+      "talent": "noelle.burst",
+      "element": "geo",
+      "meropide": "characters/诺艾尔.theorycraft.html"
+    },
+    "overlapExamples": [
+      {
+        "characters": [
+          "bennett",
+          "candace"
+        ],
+        "element": "hydro",
+        "meropide": "characters/坎蒂丝.theorycraft.html"
+      },
+      {
+        "characters": [
+          "candace",
+          "chongyun"
+        ],
+        "element": "cryo",
+        "meropide": "characters/重云.theorycraft.html"
+      }
+    ],
+    "modelScope": "命中条件只录入已确认生效的武器附魔元素，与两个附魔重叠时观察到的当次伤害颜色一致。刷新、武器元素附着和冲突顺序由游戏过程决定。"
+  },
+  "equipmentHealing": {
+    "formula": {
+      "path": "reference/伤害公式.html",
+      "evidence": "https://meropide.cn/chs/reference/%E4%BC%A4%E5%AE%B3%E5%85%AC%E5%BC%8F/",
+      "bonuses": "additive",
+      "outgoing": "source",
+      "incoming": "recipient"
+    },
+    "testedSelfHealingWeapons": {
+      "path": "reference/伤害公式.html",
+      "weapons": [
+        "otherworldlystory",
+        "recurvebow",
+        "travelershandysword",
+        "whiteirongreatsword"
+      ],
+      "testedBonuses": [
+        {
+          "outgoing": 0,
+          "incoming": 0
+        },
+        {
+          "outgoing": 0.359,
+          "incoming": 0
+        },
+        {
+          "outgoing": 0.359,
+          "incoming": 0.3
+        }
+      ]
+    },
+    "prototypeAmber": {
+      "hpBasisPath": "reference/伤害公式.html",
+      "hpBasis": "recipient",
+      "healingBonusPath": "reference/伤害公式.html",
+      "energyPath": "reference/元素充能.html",
+      "energyRecipient": "owner",
+      "energyKind": "flat",
+      "overlapPath": "reference/伤害公式.html"
+    },
+    "symphonistOfScents": {
+      "recipients": {
+        "path": "characters/阿罗夏.theorycraft.html",
+        "includesOffField": true
+      },
+      "multipleHolders": {
+        "path": "characters/阿罗夏.theorycraft.html",
+        "stacks": false,
+        "priorityAndRefresh": null
+      },
+      "healAttempt": {
+        "path": "characters/阿蕾奇诺.theorycraft.html",
+        "inCombatArlecchinoQualifies": true
+      },
+      "arlecchino": {
+        "path": "characters/阿蕾奇诺.theorycraft.html",
+        "externalHealingReceivedInCombat": 0
+      }
+    },
+    "travelingDoctor": {
+      "path": "reference/伤害公式.html",
+      "twoPiecePath": "reference/伤害公式.html"
+    },
+    "adventurer": {
+      "path": "reference/伤害公式.html",
+      "testedInteractions": [
+        "chests",
+        "ley lines",
+        "wooden crates",
+        "rock piles",
+        "weekly and world bosses",
+        "investigation spots"
+      ]
+    }
+  }
+}

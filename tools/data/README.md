@@ -172,13 +172,13 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 独立剧变伤害在精通与反应加成后计入固定加值，再应用适用的暴击和目标抗性。绽放等反应的暴击率和暴击伤害来自对应角色的明确授予。
 
-尼可的战技按施放时可用于转化的攻击力封顶。米提亚六命对稳态炉心归属的技能基数施加 1.15 倍率，固定反应加值另行计算。久岐忍的安心之所按施救者精通加算治疗。一心传名刀的祟灵治疗按实际武器版本取持有者攻击力。[尼可战技取值](sources/catalog/nicole-kenosis.json) · [米提亚稳态炉心](sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/mitya-steady-core.json) · [条件治疗依据](sources/catalog/conditional-healing-sources.json)
+尼可的战技按施放时可用于转化的攻击力封顶。米提亚六命对稳态炉心归属的技能基数施加 1.15 倍率，固定反应加值另行计算。久岐忍的安心之所按施救者精通加算治疗。一心传名刀的祟灵治疗按实际武器版本取持有者攻击力。[尼可战技取值](sources/catalog/nicole-kenosis.json) · [米提亚稳态炉心](sources/meropide/combat-facts.json) · [条件治疗依据](sources/catalog/conditional-healing-sources.json)
 
 沃雅妮莎四命治疗严格低于 40% 生命的受益者时，固定值和生命倍率先乘 1.5，再应用常规治疗加成。芭芭拉六命的复苏治疗量含溢出并计入两项治疗加成，实际恢复至多回满。七七六命的复苏已核验施救者治疗加成，受益者自身常驻受治疗加成仍缺对照。塔利雅及哥伦比娅的复苏动作确认了生命上限比例，两项治疗加成交互仍需核验。[固定动作与复苏观测](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/character-healing-facts.json) · [月的守望复苏配置](sources/catalog/columbina-revival.json)
 
 法尔伽狂飙突进的常规重击中，右手使用 `param12`，左手使用 `param13`。左手始终造成风伤，右手按火、水、雷、冰的队伍优先级转化。队伍无对应元素且武器未获得外部元素时，右手为物理伤害。独立数值对照覆盖五种右手伤害、普攻左右手以及旧事件的出手侧输入。[固定配置](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/varka-charged-hands.json)
 
-数值审计核对 TS 固定算法和 JSON 参数。防御与抗性常数采用 KQM 公式事实，增幅与激化采用 reaction-facts，模板常数通过 `describeCalculationTemplate` 核对。[KQM 公式事实](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/calculation-formula-facts.json)
+数值审计核对 TS 固定算法和 JSON 参数。防御、抗性、增幅、激化、剧变及月/星公式常数统一采用 Meropide 机制与公式事实，模板常数通过 `describeCalculationTemplate` 核对；具体页面快照由 `node tools/scripts/data/capture-meropide.mjs` 保存至 `.references/meropide/`。[Meropide 公式事实](sources/meropide/formulas.json)
 
 `node tools/scripts/data/audit-calculation-coverage.mjs --json` 编译正式目录的依赖闭包，按输出列出证书命座范围、来源和缺口。完整命座、角色和装备分支分别判断，外部 `declared` 证据仍待本地采用，未闭合条目标记 `unavailable`。报告同时包含命中绑定和效果，`--require-complete` 用于全目录验收。[内容包说明](../../src/game-data/README.md)
 
@@ -208,7 +208,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 无元素旅行者的 [普通攻击单位核对](sources/character-text/traveler-normal-units.json)补齐固定 LunaGC 原表的7条描述键及9项ratio单位，参数数值保持。该记录只确认参数与文本，不扩大机制支持。
 
-月/星公式按 [KQM原图与符号记录](sources/kqm-web/2026-11-15/reaction-formulas.json)维护直接/反应分支、固定加值插入点及独立乘区，精通比例以小数存储。原图采集在忽略的审阅目录；纯公式组件的独立核算与实体绑定、事件及多人聚合的覆盖分别报告。系统验收按公式完整性、全目录覆盖度与软件检查执行，开发者后续手动进行实际游戏测试。
+月/星公式按 [Meropide 公式与符号记录](sources/meropide/formulas.json)维护直接/反应分支、固定加值插入点及独立乘区，精通比例以小数存储；纯公式组件的独立核算与实体绑定、事件及多人聚合的覆盖分别报告。系统验收按公式完整性、全目录覆盖度与软件检查执行，开发者后续手动进行实际游戏测试。
 
 同一展柜中瓦雷莎「大火山崩落」引用爆发的 param5，按下落攻击伤害匹配增益。类别依据为[瓦雷莎天赋 combat3 原文](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/varesa.json)。时间轴和独立计算器可用同一普通直伤求值器，保留所选输出相关的机制缺口。流浪乐章和追忆之注连四件套的效果范围按固定说明限定至装备者。薇斯纳与瓦雷莎、菲林斯、雷电将军组成的四人试配另核对三位非冰风队员提供的75点精通，数值对照见 `tests/helpers/recorded-vesna.ts`。
 
@@ -230,7 +230,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 #### 反应、状态与入口
 
-命中查询覆盖蒸发、融化、超激化、蔓激化及薇斯纳已审阅的直接星扩散输出。独立计算器和时间轴均可新建剧变反应事件。延迟或持续反应的自动生成、元素附着历史推演仍有缺口。反应公式与等级系数见[反应依据](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/reaction-facts.json)及[角色等级表](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/player.json)。
+命中查询覆盖蒸发、融化、超激化、蔓激化及薇斯纳已审阅的直接星扩散输出。独立计算器和时间轴均可新建剧变反应事件。延迟或持续反应的自动生成、元素附着历史推演仍有缺口。反应公式见[公式依据](sources/meropide/formulas.json)，1–100 级角色等级系数暂保留于[角色等级表](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/player.json)（待第 4 步切换至 `AnimeGameData`）。
 
 战斗记录可指定敌方生命比例、元素附着、站场、护盾、生命变化、受伤、施予治疗和接受治疗。治疗事件可包含溢出量。受伤记录使用实际扣除的伤害值，生命消耗使用单独的生命变化记录。
 
@@ -238,7 +238,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 在时间轴的“战斗事件记录”选择“创造护盾”，由当前选中队员在光标处记一次造盾。祭星者之望、尘光七谕和碧落之珑从这个时刻计算效果持续时间。碧落之珑也接受其持有者施放爆发的记录。[武器精炼原文](sources/catalog/genshin-db/weapons.json)
 
-逐技能验收列出治疗量和护盾吸收量的每个详情字段。治疗的数值对照从本地天赋原始精度、角色和武器白值独立计算，并在施救者和受益人之间交换少女与游医二件套。施放治疗另核对受益人数、已有记录去重和海染泡沫伤害。擢升验收分别计算本人和队友的增幅，逐命座核对哥伦比娅与六命菲林斯、奈芙尔的月曜擢升相加；其他来源组合仍按各自证据核验。逐项报告记录原文字段、相关输入、验过的分支及待补证据。[战斗条款](sources/catalog/combat-lifecycle.json) · [六命擢升依据](sources/kqm-web/2026-11-22/constellation-elevation-facts.json) · [跨角色月曜擢升依据](sources/kqm-web/2026-11-25/columbina-cross-owner-elevation.json)
+逐技能验收列出治疗量和护盾吸收量的每个详情字段。治疗的数值对照从本地天赋原始精度、角色和武器白值独立计算，并在施救者和受益人之间交换少女与游医二件套。施放治疗另核对受益人数、已有记录去重和海染泡沫伤害。擢升验收分别计算本人和队友的增幅，逐命座核对哥伦比娅与六命菲林斯、奈芙尔的月曜擢升相加；其他来源组合仍按各自证据核验。逐项报告记录原文字段、相关输入、验过的分支及待补证据。[战斗条款](sources/catalog/combat-lifecycle.json) · [机制与擢升依据](sources/meropide/combat-facts.json)
 
 菲林斯爆发中间段和最终段、哥伦比娅月露涤荡单段及兹白月转时隙第四段额外伤害已绑定相应月伤模板。单段倍率与伤害类别来自固定天赋表。时间轴接入明确贡献者的月感电、月结晶与星扩散聚合，以及薇斯纳明确动作和初始状态求值。配装比较保留覆盖诊断。记录完整性、自动次数与冷却、完整修订类型和全目录机制仍待接入。
 

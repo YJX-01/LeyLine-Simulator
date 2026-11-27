@@ -104,6 +104,8 @@
       "localPath": ".references/meropide/",
       "kind": "selected-web-snapshots",
       "manifest": ".references/meropide/manifest.json",
+      "captureScript": "tools/scripts/data/capture-meropide.mjs",
+      "purpose": "unified combat formula, reaction, and character/theorycraft mechanics source",
       "publicRepositoryIdentified": false
     }
   ]

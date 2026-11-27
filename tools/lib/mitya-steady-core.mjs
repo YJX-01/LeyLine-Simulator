@@ -10,9 +10,9 @@ const pointer = field + '/buffs/1';
 const sourceRoot = 'tools/data/sources/';
 const genshin = sourceRoot + 'genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/';
 const growthRoot = sourceRoot + 'catalog/genshin-db/';
-const mona = sourceRoot + 'mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/mitya-steady-core.json';
+const combatFacts = sourceRoot + 'meropide/combat-facts.json';
 const lifecycle = sourceRoot + 'catalog/combat-lifecycle.json';
-const formulaSource = sourceRoot + 'kqm-web/2026-11-15/reaction-formulas.json';
+const formulaSource = sourceRoot + 'meropide/formulas.json';
 const talentSource = genshin + 'stats/talents.json';
 const read = path => readContentSource(new URL('../../' + path, import.meta.url));
 const clause = (id, group, key) => genshin + 'ChineseSimplified/' + group + '/' + id + '.json#' + key;
@@ -36,7 +36,7 @@ export function auditMityaSteadyCore(entities, engine) {
   const weapons = new Map(entities.weapons.map(weapon => [weapon.id, weapon]));
   if (!characters.has(entity) || !weapons.has('magicguide')) return { rows, verified, resolved, gaps, summary };
 
-  const scope = read(mona);
+  const scope = read(combatFacts).mityaSteadyCore;
   const steadyHits = Object.values(scope.steadyCore);
   const [ordinaryCore, overflow, detonation, c4Hit] = steadyHits;
   const c6Source = clause(entity, 'constellations', 'c6');
@@ -141,7 +141,7 @@ export function auditMityaSteadyCore(entities, engine) {
         && issue.nodeId === 'attribute.reaction.stellar-conduct.elevation')
       : close(value, expected) && close(factor, multiplier) && close(observedBase, expectedBase)
         && (!reaction || close(stage('reaction-bonus'), reactionFactor) && close(stage('reaction-flat'), flat) && close(stage('elevation'), elevation));
-    const sources = [mona, c6Source, c2Source, blessingSource, lifecycle, formulaSource,
+    const sources = [combatFacts + '#/mityaSteadyCore', c6Source, c2Source, blessingSource, lifecycle, formulaSource,
       hitId === c4Hit ? c4Source : talentSource + '#' + character.id + '/' + skill + '/' + parameter,
       growthRoot + 'characters.json#' + character.id, growthRoot + 'weapons.json#' + dealer.weapon.id,
       ...extraSources];
@@ -204,7 +204,7 @@ export function auditMityaSteadyCore(entities, engine) {
     verified.add(entity + pointer + '/modifiers/0');
     const remaining = '过载消耗信标时34%概率返还，以及多个角色同次星超导擢升的叠加规则待独立证据。';
     resolved.push({ entity, field, resolved: '稳态炉心普通命中、消耗与引爆星超导及稳态四命追加伤害的技能基数乘以1.15。', remaining });
-    gaps.push({ entity, field, reason: remaining, sources: [c6Source, mona] });
+    gaps.push({ entity, field, reason: remaining, sources: [c6Source, combatFacts + '#/mityaSteadyCore'] });
   }
   summary.verifiedMityaSteadyCore = verified.size;
   return { rows, verified, resolved, gaps, summary };

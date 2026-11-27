@@ -9,21 +9,21 @@ export const confirmedReactionElevationWeaponIds = ['dullblade', 'beginnersprote
 
 const field = '/constellations/5';
 const genshin = 'tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/';
-const guides = 'tools/data/sources/kqm-web/2026-11-22/constellation-elevation-facts.json';
-const formulas = 'tools/data/sources/kqm-web/2026-11-15/reaction-formulas.json';
-const crossElevation = 'tools/data/sources/kqm-web/2026-11-25/columbina-cross-owner-elevation.json';
+const formulas = 'tools/data/sources/meropide/formulas.json';
+const combatFacts = 'tools/data/sources/meropide/combat-facts.json';
 const growthRoot = 'tools/data/sources/catalog/genshin-db/';
 const talents = genshin + 'stats/talents.json';
 const levelSource = 'tools/data/sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/player.json';
 const read = path => readContentSource(new URL('../../' + path, import.meta.url));
 const math = read(formulas);
+const meropideElevation = read(combatFacts).elevation;
 const growth = read(growthRoot + 'characters.json');
 const curves = read(growthRoot + 'character-curves.json');
 const weaponGrowth = read(growthRoot + 'weapons.json');
 const rates = read(talents);
 const levelMultiplier = read(levelSource);
 const reactionRules = assembleCalculationLibrary(read('src/game-data/data/calculation/common.json'), read('src/game-data/data/calculation/reactions.json'), []);
-const captured = new Map(read(guides).sources.map(source => [source.id, source.facts]));
+const captured = new Map(meropideElevation.sources.map(source => [source.id, source.facts]));
 const clause = (id, group, key) => genshin + 'ChineseSimplified/' + group + '/' + id + '.json#' + key;
 const description = pointer => {
   const [path, key] = pointer.split('#');
@@ -117,8 +117,8 @@ export function auditConfirmedReactionElevation(entities, engine) {
 
   function verify(entity, other, changes, remainder, check) {
     if (![entity, ...other].every(available)) return;
-    const start = rows.length, c6 = clause(entity, 'constellations', 'c6'), id = 'kqm.web.' + entity + '-c6';
-    const source = captured.get(id), sources = [c6, formulas, ...(source ? [guides + '#' + id] : [])];
+    const start = rows.length, c6 = clause(entity, 'constellations', 'c6'), id = 'meropide.' + entity + '-c6';
+    const source = captured.get(id), sources = [c6, formulas, ...(source ? [combatFacts + '#/elevation/sources/' + id] : [])];
     function probe(options, factor, rank = 6, independent) {
       const result = readHit(entity, rank, options), output = result.outputs[0];
       const value = numeric(result.totals.all), status = result.totals.all.state;
@@ -271,7 +271,8 @@ export function auditConfirmedReactionElevation(entities, engine) {
     });
 
   if (['columbina', 'flins', 'nefer'].every(available)) {
-    const source = read(crossElevation);
+    const source = meropideElevation.crossOwner;
+    const crossElevation = combatFacts + '#/elevation/crossOwner';
     for (const [dealer, hitId, dealerFacts, personal] of [
       ['flins', 'flins.burst.param2', {}, source.facts.flins.fullMoonsignPersonal],
       ['nefer', 'nefer.skill.phantasm-shadow-1', { 'nefer.phantasm': true }, source.facts.nefer.fullMoonsignPersonal],

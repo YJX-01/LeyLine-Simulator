@@ -107,42 +107,40 @@ export async function numericAudit(read = readAuditJson) {
     for (const slot of ['flower', 'plume', 'sands', 'goblet', 'circlet']) check('artifact-set-slots', Number(actual?.includes(slot)), Number(slots.includes(slot)), `${id}/slots/${slot}`);
   }
   const reactions = read('src/game-data/data/calculation/reactions.json').rules;
-  const reactionSource = 'tools/data/sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5';
-  const reactionLevels = read(`${reactionSource}/player.json`);
+  const reactionLevels = read('tools/data/sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/player.json');
   reactions.levelMultipliers.forEach((value,level)=>{
     if (level > 0) check('reaction-levels',value,reactionLevels[level],`reaction-level/${level}`);
   });
-  const reactionFacts = read(`${reactionSource}/reaction-facts.json`);
+  const meropideFormulas = read('tools/data/sources/meropide/formulas.json');
+  for (const [level, expected] of Object.entries(meropideFormulas.reactionLevelCheckpoints)) {
+    const actual = reactions.levelMultipliers[Number(level)];
+    check('reaction-level-checkpoints', Number(Math.abs(actual - expected) < 0.02), 1, `reaction-level-checkpoint/${level}`);
+  }
   const reactionNumbers = (actual,expected,path) => {
     for (const [key,value] of Object.entries(expected)) {
       if (typeof value==='number') check('reaction-formulas',actual?.[key],value,`${path}/${key}`);
       else if (value && typeof value==='object') reactionNumbers(actual?.[key],value,`${path}/${key}`);
     }
   };
-  for (const family of ['amplifying','additive']) reactionNumbers(standardReactionParameters[family],reactionFacts[family],family);
-  const formulaFacts = read(`${reactionSource}/calculation-formula-facts.json`);
-  for (const fact of formulaFacts.constants) {
+  for (const family of ['amplifying','additive']) reactionNumbers(standardReactionParameters[family],meropideFormulas[family],family);
+  for (const fact of meropideFormulas.constants) {
     const formula = formulaDefinition(fact.formula);
-    check('calculation-formulas', formula.constants[fact.node]?.value, fact.value, `${fact.formula}/${fact.node}`);
+    const bucket = ['defense', 'resistance', 'transformative'].includes(fact.formula) ? 'calculation-formulas' : 'lunar-stellar-formulas';
+    check(bucket, formula.constants[fact.node]?.value, fact.value, `${fact.formula}/${fact.node}`);
   }
   for (const family of ['amplifying', 'additive']) {
     const formula = formulaDefinition(family);
     for (const [node, field] of [['emNumerator', 'emNumerator'], ['emDenominator', 'emDenominator']]) {
-      check('calculation-formulas', formula.constants[node]?.value, reactionFacts[family][field], `${family}/${node}`);
+      check('calculation-formulas', formula.constants[node]?.value, meropideFormulas[family][field], `${family}/${node}`);
     }
   }
-  const lunarStellarFacts = read('tools/data/sources/kqm-web/2026-11-15/reaction-formulas.json');
-  reactionNumbers(read('src/game-data/data/tables/stellar-swirl.json'), lunarStellarFacts.eventFacts.stellarSwirlReactionCoefficients, 'stellar-swirl');
-  for (const fact of lunarStellarFacts.constants) {
-    const formula = formulaDefinition(fact.formula);
-    check('lunar-stellar-formulas', formula.constants[fact.node]?.value, fact.value, `${fact.formula}/${fact.node}`);
-  }
+  reactionNumbers(read('src/game-data/data/tables/stellar-swirl.json'), meropideFormulas.eventFacts.stellarSwirlReactionCoefficients, 'stellar-swirl');
   for (const id of ['lunar-charged', 'lunar-crystallize', 'stellar-swirl']) {
     const aggregate = definition('aggregates', id);
-    lunarStellarFacts.rankedAggregation.weights.forEach((weight, index) => check('lunar-stellar-aggregation', aggregate.weights[index], weight, `${id}/weights/${index}`));
+    meropideFormulas.rankedAggregation.weights.forEach((weight, index) => check('lunar-stellar-aggregation', aggregate.weights[index], weight, `${id}/weights/${index}`));
   }
-  for (const [element, coefficients] of [['pyro', [reactionFacts.amplifying.melt.pyro, reactionFacts.amplifying.vaporize.pyro]],
-    ['hydro', [reactionFacts.amplifying.vaporize.hydro]], ['cryo', [reactionFacts.amplifying.melt.cryo]], ['electro', [reactionFacts.additive.aggravate]], ['dendro', [reactionFacts.additive.spread]]]) {
+  for (const [element, coefficients] of [['pyro', [meropideFormulas.amplifying.melt.pyro, meropideFormulas.amplifying.vaporize.pyro]],
+    ['hydro', [meropideFormulas.amplifying.vaporize.hydro]], ['cryo', [meropideFormulas.amplifying.melt.cryo]], ['electro', [meropideFormulas.additive.aggravate]], ['dendro', [meropideFormulas.additive.spread]]]) {
     const formula = formulaDefinition(`${element}-ordinary-reaction`);
     coefficients.forEach((value, index) => check('bound-reaction-formulas', formula.constants['coefficient' + index].value, value, `${element}/coefficient${index}`));
   }

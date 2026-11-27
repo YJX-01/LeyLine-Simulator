@@ -224,7 +224,7 @@ export function auditTalentConditionGrants(entities, engine) {
 
   if (characters.has('nefer') && weapons.has('magicguide')) {
     const field = '/constellations/0', sources = [constellationSource('nefer') + '#c1', libraryRoot + 'src/data/characters/Nefer.json:161,289,386',
-      'tools/data/sources/kqm-web/2026-11-15/reaction-formulas.json#/constants/lunar-bloom-direct'];
+      'tools/data/sources/meropide/formulas.json#/constants/lunar-bloom-direct'];
     const start = rows.length;
     for (const [i, ratio] of [[1, 'param9'], [2, 'param10'], [3, 'param11']]) for (const stacks of [0, 3]) {
       const skill = 'skill.phantasm-shadow-' + i, values = {'nefer.phantasm': true, 'nefer.phantasmVeil': stacks};

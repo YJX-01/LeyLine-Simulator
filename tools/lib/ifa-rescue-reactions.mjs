@@ -6,7 +6,7 @@ export const ifaRescueReactionCharacterIds = ['ifa', 'sucrose', 'xingqiu', 'oror
 export const ifaRescueReactionWeaponIds = ['apprenticesnotes', 'magicguide', 'dullblade', 'huntersbow', 'beginnersprotector', 'wastergreatsword'];
 
 const evidence = 'tools/data/sources/catalog/ifa-rescue-reactions.json';
-const advancedFormulas = 'tools/data/sources/kqm-web/2026-11-15/reaction-formulas.json';
+const advancedFormulas = 'tools/data/sources/meropide/formulas.json';
 const levels = 'tools/data/sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/player.json';
 const characterGrowth = 'tools/data/sources/catalog/genshin-db/characters.json';
 const characterCurves = 'tools/data/sources/catalog/genshin-db/character-curves.json';

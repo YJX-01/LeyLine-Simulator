@@ -304,7 +304,7 @@ export function auditEquipmentContexts(entities,engine) {
   }
   for (let rank=1;rank<=5;rank++) {
     const flower = 'mailedflower', readFlower = probe(build('noelle',flower,rank),[build('jean')]);
-    // The two Mailed Flower observations in kqm-tcl/docs/evidence/equipment/weapons.md cover off-field refresh and the triggering hit.
+    // Mailed Flower observations cover off-field refresh and the triggering hit.
     const description = source[flower].metadata['r'+rank].description;
     const [,duration,attack,mastery] = description.match(/后的(\d+)秒内，攻击力提升([\d.]+)%，元素精通提升(\d+)点/);
     const end = Number(duration) * 1000;

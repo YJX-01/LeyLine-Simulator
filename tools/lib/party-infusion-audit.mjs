@@ -2,9 +2,9 @@ import { readContentSource } from './content-source.mjs';
 import { auditBuild, auditHit, bool, elements, fact, novice, number, projectQuery } from './roster-audit-settings.mjs';
 
 const sourceRoot = 'tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/';
-const libraryRoot = 'kqm-theorycrafting-library@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:';
+const combatFactsPath = 'tools/data/sources/meropide/combat-facts.json';
 const read = path => readContentSource(new URL('../../' + path, import.meta.url));
-const sourceFacts = read('tools/data/sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/party-infusion-facts.json');
+const sourceFacts = read(combatFactsPath).partyInfusion;
 const stats = read(sourceRoot + 'stats/talents.json');
 const characterGrowth = read('tools/data/sources/catalog/genshin-db/characters.json');
 const weaponGrowth = read('tools/data/sources/catalog/genshin-db/weapons.json');
@@ -70,10 +70,10 @@ export function auditPartyInfusion(entities, engine) {
   function verify(index, field, cases) {
     const grant = sourceFacts.grants[index], entity = grant.character;
     if (!characters.has(entity)) return;
-    const sources = [sourceRoot + grant.inGameText, libraryRoot + sourceFacts.source.mechanics];
+    const sources = [sourceRoot + grant.inGameText, combatFactsPath + '#/partyInfusion', '.references/meropide/pages/' + grant.meropide];
     for (const [label, settings, overlap] of cases) {
       const inputs = [...sources, sourceRoot + 'stats/talents.json#' + (settings.recipient ?? 'kaeya')];
-      if (overlap) inputs.push(libraryRoot + sourceFacts.source.overlapEvidence, overlap.video);
+      if (overlap) inputs.push(combatFactsPath + '#/partyInfusion/overlapExamples', '.references/meropide/pages/' + overlap.meropide);
       rows.push({ entity, field, probe: label, settings, sources: inputs, ...probe(settings) });
     }
     if (rows.filter(row => row.entity === entity && row.field === field).every(row => !row.issue)) verified.add(entity + field);

@@ -2,7 +2,8 @@ import { readContentSource } from './content-source.mjs';
 import { auditBuild, auditHit, bool, fact, novice, number } from './roster-audit-settings.mjs';
 
 const catalogRoot = 'tools/data/sources/catalog/genshin-db/';
-const kqmPath = 'tools/data/sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/equipment-healing-facts.json';
+const meropidePath = 'tools/data/sources/meropide/combat-facts.json';
+const healingPointer = meropidePath + '#/equipmentHealing';
 const adventurerTextPath = 'tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/English/artifacts/adventurer.json';
 const adventurerConfigPath = 'tools/data/sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/equipment-healing-facts.json';
 const read = path => readContentSource(new URL('../../' + path, import.meta.url));
@@ -10,8 +11,9 @@ const weaponSource = read(catalogRoot + 'weapons.json');
 const setSource = read(catalogRoot + 'sets.json');
 const characterSource = read(catalogRoot + 'characters.json');
 const curves = read(catalogRoot + 'character-curves.json');
-const kqm = read(kqmPath);
-const pinned = path => `https://github.com/${kqm.source.repository}/blob/${kqm.source.commit}/${path}`;
+const meropide = read(meropidePath);
+const kqm = meropide.equipmentHealing;
+const pinned = page => meropide.snapshots[page]?.url ?? `.references/meropide/pages/${page}`;
 const local = (file, pointer) => catalogRoot + file + '.json#/' + pointer;
 const rate = (description, pattern) => Number(pattern.exec(description)?.[1]) / 100;
 const ratio = (set, field, pattern) => rate(setSource[set][field], pattern);
@@ -100,7 +102,7 @@ export function auditEquipmentHealing(entities, engine) {
   const weapons = new Map(entities.weapons.map(entry => [entry.id, entry]));
   const sets = new Map(entities.sets.map(entry => [entry.id, entry]));
   const doctor = sets.get('travelingdoctor'), maiden = sets.get('maidenbeloved');
-  const formulaSources = [kqmPath + '#/formula', pinned(kqm.formula.path), pinned(kqm.formula.evidence)];
+  const formulaSources = [healingPointer + '/formula', pinned(kqm.formula.path), kqm.formula.evidence];
   if (sets.has('adventurer')) gaps.push({ entity: 'adventurer', pieces: 4, field: '/effects/1/support/mechanisms/2',
     sources: adventurerRecoverySources,
     reason: '已核对完整5秒和每隔1秒单次回复的基础量。探索事件自动触发、重复互动、治疗加成和实际到账量待处理。' });
@@ -164,7 +166,7 @@ export function auditEquipmentHealing(entities, engine) {
         const peer = member('barbara', gear === '队友装备加成' ? [[maiden, 2], [doctor, 2]] : []);
         if (!actor || !peer) continue;
         const sources = [local('weapons', `${entity}/metadata/${sourceKey}/description`), local('weapons', entity + '/stats'),
-          kqmPath + '#/testedSelfHealingWeapons', pinned(kqm.testedSelfHealingWeapons.path), ...formulaSources, ...growthSources(actor, actor)];
+          healingPointer + '/testedSelfHealingWeapons', pinned(kqm.testedSelfHealingWeapons.path), ...formulaSources, ...growthSources(actor, actor)];
         const base = { entity, field: healingField, attribute: 'equipmentHealing', effect, trigger, sources };
         exercise({ actor, peer }, check => {
           check({ ...base, probe: gear, expected: nominal(actor, actor, fraction) });
@@ -188,7 +190,7 @@ export function auditEquipmentHealing(entities, engine) {
     const sources = [local('weapons', `prototypeamber/metadata/${sourceKey}/description`), local('weapons', 'prototypeamber/stats')];
     const heal = { entity: amber.id, field: healingField, attribute: 'equipmentHealing', effect, trigger };
     const restore = { entity: amber.id, field: energyField, attribute: 'directEnergyRestored', effect, trigger,
-      sources: [...sources, kqmPath + '#/prototypeAmber', pinned(kqm.prototypeAmber.energyPath), local('sets', 'theexile/effect2Pc')] };
+      sources: [...sources, healingPointer + '/prototypeAmber', pinned(kqm.prototypeAmber.energyPath), local('sets', 'theexile/effect2Pc')] };
     for (const [gear, ownerSlots, peerSlots] of [
       ['空白', [], []], ['持有者施疗／队员受疗', [[maiden, 2], [sets.get('theexile'), 2]], [[doctor, 2]]],
       ['持有者受疗／队员施疗', [[doctor, 2]], [[maiden, 2]]],
@@ -200,7 +202,7 @@ export function auditEquipmentHealing(entities, engine) {
         if (gear === '持有者施疗／队员受疗') check({ ...restore, attribute: 'energyRecharge', probe: '持有者充能效率输入', expected: 1 + exileBonus });
         for (const [recipient, build] of Object.entries({ actor, peer, other })) {
           const evidence = [...sources, local('weapons', build.weapon.id + '/stats'), local('sets', 'adventurer/effect2Pc'),
-            kqmPath + '#/prototypeAmber', pinned(kqm.prototypeAmber.hpBasisPath), pinned(kqm.prototypeAmber.healingBonusPath),
+            healingPointer + '/prototypeAmber', pinned(kqm.prototypeAmber.hpBasisPath), pinned(kqm.prototypeAmber.healingBonusPath),
             ...formulaSources, ...growthSources(actor, build)];
           check({ ...heal, sources: evidence, probe: gear, recipient, expected: nominal(actor, build, Number(percent) / 100) });
           check({ ...restore, probe: gear, recipient, expected: recipient === 'actor' ? Number(energy) : 0 });

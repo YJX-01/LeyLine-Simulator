@@ -10,7 +10,7 @@ import { auditCurrentScene } from './scene-current-facts-audit.mjs';
 const read = path => readContentSource(new URL('../../src/game-data/data/' + path + '.json', import.meta.url));
 const commonTemplates = new Map(read('calculation/common').formulas.map(f => [f.identity.id, f.template]));
 
-const reactionConstants = readContentSource(new URL('../data/sources/kqm-web/2026-11-15/reaction-formulas.json', import.meta.url)).constants;
+const reactionConstants = readContentSource(new URL('../data/sources/meropide/formulas.json', import.meta.url)).constants;
 const lifecycle = readContentSource(new URL('../data/sources/catalog/combat-lifecycle.json', import.meta.url));
 const attachmentRates = lifecycle.stellarConduct.coefficients;
 const blessings = new Map(lifecycle.reactionBlessings.map(row => {
