@@ -166,44 +166,11 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 `currentClauseInventory` 按原文字段和修饰项记录证据，`currentSceneGaps` 列出仍影响当次数值的场景字段。`--require-current` 在计算器专项仍有缺项时返回非零退出码。惊蛰的范围增加 100%，匠理等场地满五层增加 0.3 抗打断参数。传播到哪些目标及最终是否中断仍需位置和受击记录。哥伦比娅的复苏以受益者生命上限为基数，每级好感取 10%。[场地条款](sources/catalog/battle-scenes.json) · [月的守望复苏配置](sources/catalog/columbina-revival.json)
 
-### Mona 单击双向核对
-
-**分支约束：Mona 审计功能仅在 `dev` 开发和提交，禁止进入 `main`。** 审计页面、探针、对照数据、报告脚本及其在共享配置中的改动都受此约束。生成报告留在已忽略的 `artifacts/`。向 `main` 交付计算器修复时，从基于 `main` 的分支单独提交产品改动，核对完整差异；禁止整批合并或拣选含审计内容的提交。
-
-在仓库根目录运行 `pnpm audit:mona`，读取固定版本的 Mona 和当前 LeyLine，生成双向清单与独立网页。随后运行 `pnpm audit:mona:serve`，打开 [Mona 双向审计页](http://127.0.0.1:5186/audit/mona/)。页面可按来源、伤害或 Buff、运行状态和差异筛选，每行都能展开输入、证据与双向关联。分享浏览器地址可定位同一条目。
-
-审计前端位于 `tools/mona-audit/`，使用独立的 Vite 配置和预览服务。运行 `pnpm --filter @leyline/mona-audit typecheck` 可单独检查页面类型。主站和桌面应用沿用各自的构建入口。
-
-生成物位于 `artifacts/mona-audit-site/`。已有完整报告时可运行 `pnpm audit:mona --report artifacts/mona-single-hit-final.json` 重建网页。新报告记录求值时的 Git 版本与工作区状态，旧报告缺失的信息在页面标为未知。首页分别统计原始记录、归并后的展示行、映射、独立探针输入和数值检查项；相邻两次生成的变化按相同口径计算。映射的机制差异和指定输入下的数值差异分别展示。
-
-核对进度时，保留两次 `--mona-report` 的结果，用 `node tools/scripts/data/report-mona-progress.mjs 上批.json 本批.json` 按稳定 ID 比较新增、已复核、归入参考及移除的条目。`batches` 保存各机制的输入、独立期望和实算，`packets` 按机制列出待处理 ID。同一映射在多个等级下核算时，映射计一次，算例分别计数。
-
-“行为缺口”视图按公式、命中、属性、触发、受益者、叠层、刷新与到期等来源声明拆分。点击某个期末缺口或本批变化的数字可查行为、缺少的证据与原始条目。菜单、配置与证据条款记录父项；纯治疗和护盾输出记录范围外理由。仍可能授予增益或伤害的条款留在待定范围。多个缺口可以属于同一行为，期末按唯一行为核算。运行场景数和映射数各自统计。
+### 专项机制与独立计算核验
 
 玛拉妮的技能可分别选择撕咬和单枚鲨鲨飞弹。目标数填 1、2 或 3，3 表示三名及以上。飞弹还需确认锁定了另一名有标记的敌人。目标数回归用例在三层浪势下核对零命和一命、三档目标数及飞弹的触发条件。[天赋与命座原文摘录](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/text-excerpts.json) · [多目标系数的独立实现](https://github.com/genshinsim/gcsim/blob/main/internal/characters/mualani/attack.go#L138-L160)
 
 在时间轴的“战斗事件记录”选择“创造护盾”，由当前选中队员在光标处记一次造盾。祭星者之望、尘光七谕和碧落之珑从这个时刻计算效果持续时间。碧落之珑也接受其持有者施放爆发的记录。[武器精炼原文](sources/catalog/genshin-db/weapons.json)
-
-首次建账可用 `pnpm audit:mona --previous-report artifacts/上批.json` 指定期初。以后默认对比上次发布的行为快照，重建同一报告保留其期初。需重放两份归档时运行 `pnpm audit:mona --report artifacts/本批.json --previous-report artifacts/上批.json`。两次报告须使用同一 Mona 基线。来源或绑定消失会重开；单侧发生变化后须取得该行为的相应读数。报告将本批有实算证据的正式绑定变化与补齐探针的进展分开。游戏观测按原有证据规范另行登记。
-
-在仓库根目录可先运行受影响的批次，再运行 `pnpm audit:mona` 生成全量报告。以下命令分别核查 Buff 条件、指定角色共同输入和已登记反应差异。局部报告记录实际使用的版本、场景及限制。
-
-```sh
-node tools/scripts/data/audit-mona-mechanism.mjs --group buff --buff-key DurinC2 --out artifacts/buff.partial.json
-node tools/scripts/data/audit-mona-mechanism.mjs --group damage --character Xingqiu --skill-index 0 --out artifacts/damage.partial.json
-node tools/scripts/data/audit-mona-mechanism.mjs --group differences --out artifacts/differences.partial.json
-pnpm exec playwright test --config tools/mona-audit/playwright.config.ts --workers=1
-```
-
-`--skill-index` 按 Mona 技能菜单序号筛选，省略时核查所选角色的全部菜单。局部目录只编译本批角色、所需装备及公共规则，报告的 `discovery.entities` 列出实际范围。同一角色其余菜单有重名时，局部倍率样本保留，唯一命中映射需连同重名菜单核查。
-
-伤害组可加 `--constellation 6` 比较六命默认分支的共同输入。此时先用零命确认命中身份，再单独复核六命分支。省略该参数时比较零命。
-
-为一个角色的一个菜单核对指定基础天赋等级时，加 `--talent-levels 1,6,10`。每级使用同一九十级突破六配装的两个真实攻击副词条档位，保存两侧命中、实测面板及独立来源的倍率。Mona 精度修正量在每个样本中单独列出。
-
-从仓库根目录运行 `node tools/scripts/data/audit-calculation-coverage.mjs --check --require-current --mona-report artifacts/mona-single-hit-final.json`。Mona 发布内核从 `.references/mona-community` 的 `589ac6919057709924c0c20d5a9d673fe9b0be1a` 读取，LeyLine 起始目录为 `829d19df0b96113c22016e5bde9ad5744817a260`。正式目录、双向差集和复核引用都闭合时，专项命令返回零。常规 `pnpm data:check` 可以离线运行。
-
-报告的 `mona`、`leyline` 和 `links` 按条目标识互相引用。候选根据目录身份、天赋组、名称、伤害族或修饰属性提出。复核记录绑定正式字段与实体修订，附上适用条件和独立数值。`ordinaryScaling` 保留逐级倍率对照，`buffProbes` 保留启用、锁定和参数变化，`equipment` 保留精炼和触发场景，`transformative` 使用实际独立反应入口复算。默认配置下的结果、未触发的零值、版本差异和待核条件均可从条目追溯。[代表机制与复核记录](sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/single-hit-pilot.json)
 
 19 条秘境冲击可按输入的 `ElementLevelCo` 复核减伤前数值。山脊守望 IV 的旧录像可辨 8419 白字，仍需改变目标抗性与防御的独立对照，以及关卡实际读取等级的证据。
 

@@ -8,8 +8,6 @@
     "dev": "pnpm data:build && pnpm --filter @leyline/web dev",
     "build": "pnpm data:build && pnpm --filter @leyline/web build",
     "preview": "node tools/scripts/dev/serve-dist.mjs",
-    "audit:mona": "node tools/scripts/data/build-audit-page.mjs",
-    "audit:mona:serve": "pnpm --filter @leyline/mona-audit serve",
     "desktop:build": "pnpm data:build && node tools/scripts/build/package-desktop.mjs",
     "typecheck": "tsc --noEmit && vue-tsc --noEmit -p src/web/tsconfig.json",
     "test": "vitest run",

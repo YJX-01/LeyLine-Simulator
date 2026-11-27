@@ -16,7 +16,7 @@
 
 | 用途 | 入口 |
 | --- | --- |
-| 开发网页、查看现有构建 | `pnpm dev` 先准备资源；`pnpm preview --port=5175` 服务已有网页构建和本地 Enka 通道。仅看现有 Mona 页面时用 `pnpm audit:mona:serve`。 |
+| 开发网页、查看现有构建 | `pnpm dev` 先准备资源；`pnpm preview --port=5175` 服务已有网页构建和本地 Enka 通道。 |
 | 排查图标或资源缓存 | `pnpm data:build` 离线生成资源，`node tools/scripts/assets/build.mjs --check` 对比缓存。前者会写缓存。正式角色数据直接从 JSON 装配。 |
 | 复现一个项目读数 | `node tools/scripts/data/evaluate-project.mjs <项目.json>` 接受已解包且符合当前契约的 Project，结果输出到标准输出。先检查输入是不是应用导出的文档外壳，以及是否有完整的队员、目标和事件条件。 |
 | 选择最小验证 | 领域逻辑查单个 Vitest 用例，内容或工具查单个 Node 用例。可从 `tests/unit/web/domain/mona-import.test.ts`、`tests/unit/web/domain/effective-rolls-real.test.ts` 找已有场景。浏览器与桌面用一个工作线程串行，实际范围和前置条件查 `tests/README.md`。即使传入单个文件也先看它是否枚举全目录。 |

@@ -1,6 +1,6 @@
 ---
 name: leyline-mechanics-port
-description: 用于 LeyLine-Simulator 的功能开发、故障定位和阶段复盘，覆盖伤害与 Buff 移植、Mona 双向审计、Enka 与 Mona 导入、圣遗物库存与配装、时间轴与 Worker、网页与桌面交付。主 agent 可排批，子 agent 可按同一技能完成指定任务。
+description: 用于 LeyLine-Simulator 的功能开发、故障定位和阶段复盘，覆盖伤害与 Buff 移植、Enka 与 Mona 导入、圣遗物库存与配装、时间轴与 Worker、网页与桌面交付。主 agent 可排批，子 agent 可按同一技能完成指定任务。
 ---
 
 # LeyLine 项目开发
@@ -11,7 +11,7 @@ description: 用于 LeyLine-Simulator 的功能开发、故障定位和阶段复
 
 | 用户遇到的问题 | 先看哪里 |
 | --- | --- |
-| 某一击算不了、装备条件无效、要移植角色、两侧结果不一致 | [机制移植与 Mona 审计](references/mechanics-audit.md) |
+| 某一击算不了、装备条件无效、要移植角色或独立验证 | [机制移植与计算核验](references/mechanics-audit.md) |
 | 展柜重复入库、组合应用后条数变了、保存或取消影响了其他配置 | [产品功能与数据归属](references/product-workflows.md)的账号、库存和配装部分 |
 | 计算器有数值而轴上显示未知，或编辑后又显示旧结果 | [产品功能与数据归属](references/product-workflows.md)的计算器、时间轴和 Worker 部分 |
 | 新增正式数据或图标、导入自定义角色、改页面、排查桌面与网页差异、准备交付 | [日常开发与交付](references/development.md) |

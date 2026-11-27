@@ -26,7 +26,7 @@ function option(name) {
   if (!path || path.startsWith('--')) throw new Error(key + ' 需要文件名。');
   return path;
 }
-const file = option('--report'), gapFile = option('--gaps'), monaFile = option('--mona-report');
+const file = option('--report'), gapFile = option('--gaps');
 const flags = new Set(args);
 for (const flag of flags) {
   if (!['--json', '--require-complete', '--require-current', '--check'].includes(flag)) {
@@ -213,46 +213,11 @@ Object.assign(summary, calculator.summary, {
 });
 auditFailures.push(...calculator.failures);
 
-const hitEvidence = {
-  rows: calculator.hits.map((row, index) => ({
-    kind: 'character',
-    entity: row.entity,
-    revision: row.revision,
-    field: row.field,
-    subject: 'hit',
-    name: row.name,
-    status: row.selected && Number.isFinite(row.comparison?.expected) && !row.comparison.issue ? 'available' : 'bound-unverified',
-    refs: row.comparison ? [`evaluatedHits#${index}`] : [],
-    inputs: row.inputs,
-    comparison: row.comparison,
-  })),
-};
-
 const requireCurrent = flags.has('--require-complete') || flags.has('--require-current');
-if (monaFile || requireCurrent) {
-  const { auditMonaSingleHit, auditWorktree } = await import('../../lib/mona-single-hit-comparison.mjs');
-  const { buildBehaviorLedger, reconcileBehaviors } = await import('../../lib/mona-behavior-ledger.mjs');
-  const comparison = await auditMonaSingleHit(entities, hitEvidence, engine);
-  const { revision, dirty, worktree } = auditWorktree('.');
-  comparison.provenance = {
-    generatedAt: new Date().toISOString(),
-    leyline: revision,
-    dirty,
-    worktree,
-    mona: comparison.mona.length ? comparison.baselines.mona : null,
-  };
-  const coverage = reconcileBehaviors(buildBehaviorLedger(comparison));
-  comparison.summary.behaviors = { totals: coverage.totals, owners: coverage.ownerCounts, complete: coverage.complete };
-  comparison.summary.complete = coverage.complete;
-  summary.monaSingleHit = comparison.summary;
-  if (monaFile) writeFileSync(monaFile, JSON.stringify(comparison) + '\n');
-  results.monaSingleHit = { summary: comparison.summary, gaps: comparison.gaps };
-}
 
 summary.currentCalculationComplete = !calculator.failures.length
   && !auditFailures.length
-  && !summary.unresolvedHitInterpretations
-  && (summary.monaSingleHit?.complete ?? true);
+  && !summary.unresolvedHitInterpretations;
 
 if (file) writeFileSync(file, JSON.stringify(results, null, 2) + '\n');
 if (gapFile) writeFileSync(gapFile, rosterGapReport(results, entities));
