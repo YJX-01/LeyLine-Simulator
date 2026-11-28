@@ -1425,14 +1425,10 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
-              "value": 1.35
+              "target": "attribute.reaction.lunar.elevation",
+              "value": 0.35
             }
-          ],
-          "stacking": {
-            "crossOwnerUnverified": true,
-            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
-          }
+          ]
         },
         {
           "id": "flins.c6-personal-gleam-elevation",
@@ -1446,14 +1442,10 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
-              "value": 1.45
+              "target": "attribute.reaction.lunar.elevation",
+              "value": 0.45
             }
-          ],
-          "stacking": {
-            "crossOwnerUnverified": true,
-            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
-          }
+          ]
         },
         {
           "id": "flins.c6-team-gleam-elevation",
@@ -1469,14 +1461,10 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
-              "value": 1.1
+              "target": "attribute.reaction.lunar.elevation",
+              "value": 0.1
             }
-          ],
-          "stacking": {
-            "crossOwnerUnverified": true,
-            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
-          }
+          ]
         }
       ]
     }

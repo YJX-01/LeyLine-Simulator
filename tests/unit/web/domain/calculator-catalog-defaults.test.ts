@@ -270,7 +270,7 @@ it('excludes non-damage modifiers while keeping damage-relevant modifiers in isC
     'attribute.reaction.swirl.damageBonus',
     'attribute.reaction.lunar.damageBonus',
     'attribute.reaction.lunar.flatBaseBonus',
-    'attribute.reaction.lunar-charged.elevationFactor',
+    'attribute.reaction.lunar.elevation',
     'attribute.reaction.stellar-swirl.baseMultiplier',
     'attribute.reaction.stellar-swirl.baseBonus',
     'attribute.reaction.stellar-swirl.damageBonus',

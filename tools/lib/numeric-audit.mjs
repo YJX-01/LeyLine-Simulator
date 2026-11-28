@@ -118,6 +118,13 @@ export async function numericAudit(read = readAuditJson) {
     }
   }
   reactionNumbers(read('src/game-data/data/tables/stellar-swirl.json'), meropideFormulas.eventFacts.stellarSwirlReactionCoefficients, 'stellar-swirl');
+  for (const [id, coeff] of Object.entries(meropideFormulas.eventFacts.transformativeCoefficients)) {
+    check('calculation-formulas', definition('attributes', `attribute.reaction.${id}.coefficient`).base.value.value, coeff, `transformative/${id}/coefficient`);
+  }
+  const attachTable = definition('tables', 'stellar.attach-count');
+  meropideFormulas.eventFacts.stellarConduct.attachmentCoefficients.forEach((value, index) => check('lunar-stellar-formulas', attachTable.values[index]?.value, value, `stellar.attach-count/${index}`));
+  const polarTable = definition('tables', 'stellar.polar-field-bonus');
+  meropideFormulas.eventFacts.stellarConduct.polarField.cryoElectroDamageBonus.forEach((value, index) => check('lunar-stellar-formulas', polarTable.values[index]?.value, value, `stellar.polar-field-bonus/${index}`));
   for (const id of ['lunar-charged', 'lunar-crystallize', 'stellar-swirl']) {
     const aggregate = definition('aggregates', id);
     meropideFormulas.rankedAggregation.weights.forEach((weight, index) => check('lunar-stellar-aggregation', aggregate.weights[index], weight, `${id}/weights/${index}`));
@@ -135,6 +142,11 @@ export async function numericAudit(read = readAuditJson) {
   const stripMarkup = text => text.replace(/\{LINK#[^}]+\}|\{\/LINK\}|<[^>]+>/g, '');
   const numbers = text => [...stripMarkup(text).matchAll(/\d+(?:\.\d+)?%?/g)].map(match => sourceNumber(match[0]));
   const effectDefinition = id => definition('effects', id);
+  const polarRes = effectDefinition('reaction.stellar-conduct.physical-resistance');
+  check('lunar-stellar-formulas', polarRes.value.value.value, meropideFormulas.eventFacts.stellarConduct.polarField.physicalResistanceDelta, 'polar-field/physical-resistance');
+  check('lunar-stellar-formulas', polarRes.lifetime.durationMs, meropideFormulas.eventFacts.stellarConduct.polarField.durationMs, 'polar-field/duration');
+  const polarBonus = effectDefinition('reaction.stellar-conduct.polar-field-bonus');
+  check('lunar-stellar-formulas', polarBonus.lifetime.durationMs, meropideFormulas.eventFacts.stellarConduct.polarField.durationMs, 'polar-field-bonus/duration');
   for (const record of read('tools/data/sources/calculation-effects/retained-rules.json').rules) {
     if (record.status !== 'retained-static') continue;
     const effect = effectDefinition(record.effect.id), stat = effect.target.attribute.id.replace('attribute.', '');
@@ -181,7 +193,7 @@ export async function numericAudit(read = readAuditJson) {
   check('stellar-character-formulas', linchpinFormula.cap, linchpin[2], 'vesna/linchpin-cap');
   for (const [id, rank, index] of [['c1-bonus', 1, 0], ['c2-attack', 2, 0], ['c6-elevation', 6, 3]]) check('stellar-character-effects', effectDefinition('vesna.' + id + '.effect').value.value.value, numbers(vesna.constellations[rank - 1].description)[index], 'vesna/' + id);
   const c6Ratios = numbers(vesna.constellations[5].description);
-  for (const [id, index] of [['slash', 1], ['spirit', 2]]) check('stellar-character-effects', vesna.talents.find(talent => talent.category === 'skill').hits.find(hit => hit.id === 'vesna.skill.c6.' + id).base.bindings.ratio.value.value, c6Ratios[index], 'vesna/c6-' + id);
+  for (const [id, index] of [['slash', 1], ['spirit', 2], ['spirit.stellar', 2]]) check('stellar-character-effects', vesna.talents.find(talent => talent.category === 'skill').hits.find(hit => hit.id === 'vesna.skill.c6.' + id).base.bindings.ratio.value.value, c6Ratios[index], 'vesna/c6-' + id);
   const stellarEquipment = read('tools/data/sources/calculation-effects/stellar-equipment.json');
   for (const [key, index] of [['loyalWind', 0], ['betrayalWind', 2]]) {
     const values = effectDefinition(`beyondthechrysalis.${key}`).value.values;

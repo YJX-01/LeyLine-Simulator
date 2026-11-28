@@ -1403,9 +1403,9 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
+              "target": "attribute.reaction.lunar.elevation",
               "value": {
-                "call": "zibai.stride-elevation-factor",
+                "call": "zibai.stride-elevation",
                 "inputs": {
                   "input": {
                     "fact": "zibai.strideRadianceConsumed"
@@ -1434,10 +1434,7 @@
                 ]
               }
             }
-          ],
-          "stacking": {
-            "crossOwnerUnverified": true
-          }
+          ]
         },
         {
           "id": "zibai.c6-following-hit-elevation",
@@ -1456,9 +1453,9 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
+              "target": "attribute.reaction.lunar.elevation",
               "value": {
-                "call": "zibai.stride-elevation-factor",
+                "call": "zibai.stride-elevation",
                 "inputs": {
                   "input": {
                     "fact": "zibai.strideRadianceConsumed"
@@ -1466,10 +1463,7 @@
                 }
               }
             }
-          ],
-          "stacking": {
-            "crossOwnerUnverified": true
-          }
+          ]
         },
         {
           "id": "zibai.c6-reaction-elevation",
@@ -1486,9 +1480,9 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
+              "target": "attribute.reaction.lunar.elevation",
               "value": {
-                "call": "zibai.stride-elevation-factor",
+                "call": "zibai.stride-elevation",
                 "inputs": {
                   "input": {
                     "fact": "zibai.strideRadianceConsumed"
@@ -1496,10 +1490,7 @@
                 }
               }
             }
-          ],
-          "stacking": {
-            "crossOwnerUnverified": true
-          }
+          ]
         }
       ]
     }
@@ -1679,6 +1670,21 @@
           }
         ],
         "output": "base"
+      }
+    },
+    {
+      "id": "zibai.stride-elevation",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 0.016,
+        "offset": 0,
+        "threshold": 70,
+        "maxInput": 100,
+        "output": "value"
       }
     },
     {

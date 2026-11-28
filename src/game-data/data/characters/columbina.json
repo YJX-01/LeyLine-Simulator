@@ -1096,13 +1096,10 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
-              "value": 1.015
+              "target": "attribute.reaction.lunar.elevation",
+              "value": 0.015
             }
-          ],
-          "stacking": {
-            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
-          }
+          ]
         },
         {
           "id": "columbina.directEnergy.c1",
@@ -1348,13 +1345,10 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
-              "value": 1.07
+              "target": "attribute.reaction.lunar.elevation",
+              "value": 0.07
             }
-          ],
-          "stacking": {
-            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
-          }
+          ]
         }
       ]
     },
@@ -1381,13 +1375,10 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
-              "value": 1.015
+              "target": "attribute.reaction.lunar.elevation",
+              "value": 0.015
             }
-          ],
-          "stacking": {
-            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
-          }
+          ]
         }
       ]
     },
@@ -1478,13 +1469,10 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
-              "value": 1.015
+              "target": "attribute.reaction.lunar.elevation",
+              "value": 0.015
             }
-          ],
-          "stacking": {
-            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
-          }
+          ]
         },
         {
           "id": "columbina.directEnergy.c4",
@@ -1527,13 +1515,10 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
-              "value": 1.015
+              "target": "attribute.reaction.lunar.elevation",
+              "value": 0.015
             }
-          ],
-          "stacking": {
-            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
-          }
+          ]
         }
       ]
     },
@@ -1555,13 +1540,10 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
-              "value": 1.07
+              "target": "attribute.reaction.lunar.elevation",
+              "value": 0.07
             }
-          ],
-          "stacking": {
-            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
-          }
+          ]
         },
         {
           "id": "columbina.c6-crit-hydro",

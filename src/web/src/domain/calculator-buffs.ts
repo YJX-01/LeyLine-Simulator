@@ -51,7 +51,7 @@ const effectLabels: Record<string, string> = {
   normalAttackSpeed: '普通攻击速度', flatAttack: '固定攻击力', flatDefense: '固定防御力', whiteAttack: '基础攻击力', whiteHp: '基础生命值',
   shieldStrength: '护盾强效', additiveReactionBonus: '激化反应伤害加成', amplifyingReactionBonus: '增幅反应伤害加成',
   'target.defenseReduction': '目标防御力降低', 'target.ordinaryDamageReduction': '目标所受直伤减免',
-  elevationFactor: '伤害擢升倍率', 'reaction.lunar.elevationFactor': '月反应伤害擢升倍率',
+  elevationFactor: '伤害擢升倍率', 'reaction.lunar.elevation': '月反应伤害擢升',
   incomingDamageReduction: '所受伤害减免', fallDamageReduction: '坠落伤害减免', elementalSkillCooldownReduction: '元素战技冷却缩减',
   particleEnergyRecharge: '微粒充能效率加成', 'target.attackReduction': '目标攻击力降低',
   shieldAbsorption: '护盾初始吸收量', shieldAbsorptionCap: '护盾吸收量上限',
@@ -363,7 +363,7 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
       hitTargets.add('attribute.critRate');
       hitTargets.add('attribute.critDamage');
       hitTargets.add('attribute.reaction.' + group + '.baseBonus');
-      hitTargets.add('attribute.reaction.' + group + (group === 'lunar' ? '.elevationFactor' : '.elevation'));
+      hitTargets.add('attribute.reaction.' + group + '.elevation');
     }
   }
   const disabled = new Set(project.effectRevisions?.filter(entry => entry.disabled).map(entry => entry.instanceId));

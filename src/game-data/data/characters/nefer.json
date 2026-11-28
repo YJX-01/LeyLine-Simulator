@@ -1618,13 +1618,10 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
-              "value": 1.15
+              "target": "attribute.reaction.lunar.elevation",
+              "value": 0.15
             }
-          ],
-          "stacking": {
-            "crossOwnerAdditiveGroup": "lunar-columbina-flins-nefer"
-          }
+          ]
         }
       ]
     }

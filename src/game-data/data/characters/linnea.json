@@ -1357,9 +1357,9 @@
           },
           "modifiers": [
             {
-              "target": "attribute.reaction.lunar.elevationFactor",
+              "target": "attribute.reaction.lunar.elevation",
               "value": {
-                "amount": 1.25,
+                "amount": 0.25,
                 "unit": "scalar"
               }
             }

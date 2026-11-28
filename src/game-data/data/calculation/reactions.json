@@ -205,6 +205,10 @@
       {
         "id": "kqm.superconduct.physical-resistance",
         "kind": "definition"
+      },
+      {
+        "id": "meropide.stellar-conduct",
+        "kind": "definition"
       }
     ],
     "formulas": [
@@ -674,6 +678,28 @@
         "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
+          "id": "lunar-elevation-factor",
+          "revision": "1"
+        },
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "input",
+          "inputUnit": "scalar",
+          "outputUnit": "scalar",
+          "rate": 1,
+          "offset": 1,
+          "threshold": 0,
+          "output": "value"
+        },
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "schemaVersion": "0.2.0",
+        "identity": {
+          "namespace": "builtin",
           "id": "stellar.attach-coefficient",
           "revision": "1"
         },
@@ -689,6 +715,49 @@
         },
         "sources": [
           "kqm.web.stellar-conduct-direct"
+        ]
+      },
+      {
+        "schemaVersion": "0.2.0",
+        "identity": {
+          "namespace": "builtin",
+          "id": "stellar.polar-field-coefficient",
+          "revision": "1"
+        },
+        "template": {
+          "id": "count-coefficient",
+          "table": {
+            "namespace": "builtin",
+            "id": "stellar.polar-field-bonus",
+            "revision": "1"
+          },
+          "max": 12,
+          "revision": "1"
+        },
+        "sources": [
+          "meropide.stellar-conduct"
+        ]
+      },
+      {
+        "schemaVersion": "0.2.0",
+        "identity": {
+          "namespace": "builtin",
+          "id": "stellar.radiance-conduct",
+          "revision": "1"
+        },
+        "template": {
+          "id": "enum-condition",
+          "input": "value",
+          "values": [
+            "none",
+            "stellar-conduct",
+            "stellar-swirl"
+          ],
+          "equals": "stellar-conduct",
+          "revision": "1"
+        },
+        "sources": [
+          "meropide.stellar-conduct"
         ]
       },
       {
@@ -928,6 +997,89 @@
         "sources": [
           "public.stellar-attachments"
         ]
+      },
+      {
+        "kind": "integer",
+        "identity": {
+          "namespace": "builtin",
+          "id": "stellar.polar-field-bonus",
+          "revision": "1"
+        },
+        "start": 0,
+        "valueType": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "values": [
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.2
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.29
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.3
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.31
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.32
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.33
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.34
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.35
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.36
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.37
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.38
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.39
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.4
+          }
+        ],
+        "sources": [
+          "meropide.stellar-conduct"
+        ]
       }
     ],
     "attributes": [
@@ -1150,7 +1302,7 @@
       {
         "identity": {
           "namespace": "builtin",
-          "id": "attribute.reaction.lunar.elevationFactor",
+          "id": "attribute.reaction.lunar.elevation",
           "revision": "1"
         },
         "type": {
@@ -1163,10 +1315,10 @@
           "value": {
             "kind": "quantity",
             "unit": "scalar",
-            "value": 1
+            "value": 0
           }
         },
-        "combine": "product",
+        "combine": "sum",
         "sources": [
           "kqm.web.lunar"
         ]
@@ -1666,9 +1818,171 @@
           "maxStacks": 1,
           "retain": "latest"
         }
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "reaction.stellar-conduct.physical-resistance",
+          "revision": "1"
+        },
+        "sources": [
+          "meropide.stellar-conduct"
+        ],
+        "activation": {},
+        "recipient": {
+          "role": "target"
+        },
+        "trigger": {
+          "kind": "event",
+          "selector": {
+            "kinds": [
+              "reaction"
+            ],
+            "actor": "any",
+            "target": "query",
+            "reactionIds": [
+              "stellar-conduct"
+            ]
+          }
+        },
+        "lifetime": {
+          "kind": "interval",
+          "durationMs": 7000,
+          "phase": "after"
+        },
+        "value": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": -0.4
+          }
+        },
+        "target": {
+          "kind": "attribute",
+          "attribute": {
+            "namespace": "builtin",
+            "id": "target.resistance.physical",
+            "revision": "1"
+          }
+        },
+        "appliesTo": {},
+        "application": "always",
+        "priority": 0,
+        "stacking": {
+          "group": "reaction.stellar-conduct.physical-resistance",
+          "scope": "team",
+          "policy": "replace",
+          "maxStacks": 1,
+          "retain": "latest"
+        }
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "reaction.stellar-conduct.polar-field-bonus",
+          "revision": "1"
+        },
+        "sources": [
+          "meropide.stellar-conduct"
+        ],
+        "activation": {},
+        "recipient": {
+          "role": "team",
+          "excludeOwner": false
+        },
+        "trigger": {
+          "kind": "event",
+          "selector": {
+            "kinds": [
+              "reaction"
+            ],
+            "actor": "any",
+            "target": "query",
+            "reactionIds": [
+              "stellar-conduct"
+            ]
+          }
+        },
+        "lifetime": {
+          "kind": "interval",
+          "durationMs": 7000,
+          "phase": "after"
+        },
+        "predicate": {
+          "kind": "formula",
+          "formula": {
+            "namespace": "builtin",
+            "id": "stellar.radiance-conduct",
+            "revision": "1"
+          },
+          "inputs": {
+            "value": {
+              "kind": "fact",
+              "scope": "recipient",
+              "key": "radiance",
+              "type": {
+                "kind": "enum",
+                "values": [
+                  "none",
+                  "stellar-conduct",
+                  "stellar-swirl"
+                ]
+              }
+            }
+          },
+          "output": "active"
+        },
+        "value": {
+          "kind": "formula",
+          "formula": {
+            "namespace": "builtin",
+            "id": "stellar.polar-field-coefficient",
+            "revision": "1"
+          },
+          "inputs": {
+            "count": {
+              "kind": "fact",
+              "scope": "query",
+              "key": "stellarAttachments",
+              "type": {
+                "kind": "quantity",
+                "unit": "count"
+              }
+            }
+          },
+          "output": "value"
+        },
+        "target": {
+          "kind": "attribute",
+          "attribute": {
+            "namespace": "builtin",
+            "id": "attribute.damageBonus",
+            "revision": "1"
+          }
+        },
+        "appliesTo": {
+          "families": [
+            "ordinary"
+          ],
+          "elements": [
+            "cryo",
+            "electro"
+          ]
+        },
+        "application": "always",
+        "priority": 0,
+        "stacking": {
+          "group": "reaction.stellar-conduct.polar-field-bonus",
+          "scope": "team",
+          "policy": "replace",
+          "maxStacks": 1,
+          "retain": "latest"
+        }
       }
     ],
     "damageFamilies": [
+      "ordinary",
       "transformative",
       "lunar-charged",
       "lunar-bloom",

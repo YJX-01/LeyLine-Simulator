@@ -116,10 +116,10 @@
       }
     ],
     "crossOwner": {
-      "id": "meropide.columbina-elevation",
-      "url": "https://meropide.cn/chs/characters/%E5%93%A5%E4%BC%A6%E6%AF%94%E5%A8%85/theorycraft/",
-      "snapshot": ".references/meropide/pages/characters/哥伦比娅.theorycraft.html",
-      "scope": "All six Columbina constellation lunar elevation buffs add to one another and to explicitly named Flins C6 and Nefer C6 elevation. Other character combinations are not adopted by this proof.",
+      "id": "meropide.elevation-additive",
+      "url": "https://meropide.cn/chs/reference/%E4%BC%A4%E5%AE%B3%E5%85%AC%E5%BC%8F/",
+      "snapshot": ".references/meropide/pages/reference/伤害公式.html",
+      "scope": "月曜擢升之间互相加算（attribute.reaction.lunar.elevation，factor = 1 + sum）；星烁擢升之间互相加算（attribute.reaction.stellar-*.elevation）。",
       "facts": {
         "columbina": [
           0.015,
@@ -133,6 +133,12 @@
           "personal": 0.35,
           "fullMoonsignPersonal": 0.45,
           "fullMoonsignTeam": 0.1
+        },
+        "lauma": {
+          "fullMoonsignTeam": 0.25
+        },
+        "linnea": {
+          "fullMoonsignTeam": 0.25
         },
         "nefer": {
           "fullMoonsignPersonal": 0.15

@@ -63,7 +63,8 @@ export function assembleHit(hit, skillId, branches, facts = {}) {
             count: { kind: 'fact', key: 'stellarAttachments', scope: 'query', type: { kind: 'quantity', unit: 'count' } } }) } : {}),
         elevationFactor: formula('stellar-elevation-factor', { input: special('elevation') }) });
     } else {
-      result = formula(output.family + '-direct', { ...inputs, baseDamageBonus: special('baseDamageBonus'), elevationFactor: special('elevationFactor') });
+      result = formula(output.family + '-direct', { ...inputs, baseDamageBonus: special('baseDamageBonus'),
+        elevationFactor: formula('lunar-elevation-factor', { input: special('elevation') }) });
     }
     return invocation(result, condition);
   }

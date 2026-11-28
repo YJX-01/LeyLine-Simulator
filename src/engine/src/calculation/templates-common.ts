@@ -56,10 +56,11 @@ export function defense(recipe: FormulaDefinition): FormulaGraph {
   b.input('characterLevel', q('count'), {'required':true,'min':1,'max':100});
   b.input('enemyLevel', q('count'), {'required':true,'min':1,'max':200});
   b.input('reduction', q('scalar'), {'required':true,'min':0});
-  b.input('ignore', q('scalar'), {'required':true,'min':0,'max':1});
+  b.input('ignore', q('scalar'), {'required':true,'min':0});
   b.quantity('hundred', 'count', 100);
   b.quantity('one', 'scalar', 1);
   b.quantity('maxDefenseReduction', 'scalar', 0.9);
+  b.quantity('maxDefenseIgnore', 'scalar', 1);
   b.quantity('oneCount', 'count', 1);
   b.add('ownOffset', 'characterLevel', 'hundred');
   b.add('enemyOffset', 'enemyLevel', 'hundred');
@@ -67,7 +68,8 @@ export function defense(recipe: FormulaDefinition): FormulaGraph {
   b.divide('enemy', 'enemyOffset', 'oneCount');
   b.min('cappedDefenseReduction', 'reduction', 'maxDefenseReduction');
   b.subtract('remainingDefense', 'one', 'cappedDefenseReduction');
-  b.subtract('remainingIgnore', 'one', 'ignore');
+  b.min('cappedDefenseIgnore', 'ignore', 'maxDefenseIgnore');
+  b.subtract('remainingIgnore', 'one', 'cappedDefenseIgnore');
   b.multiply('reducedEnemy', 'enemy', 'remainingDefense');
   b.multiply('ignoredEnemy', 'reducedEnemy', 'remainingIgnore');
   b.add('denominator', 'own', 'ignoredEnemy');

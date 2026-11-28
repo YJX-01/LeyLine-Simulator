@@ -373,4 +373,78 @@ describe('bound catalog components and adopted effect conditions', () => {
     expect(compileCalculation(derivative).ok).toBe(false);
     expect(invoked).toBe(false);
   });
+
+  it('caps additive defense reduction at 90% and additive defense ignore at 100%', () => {
+    const actor = component('kaeya', 'favoniussword');
+    const { context, frame } = request([actor], 'kaeya.skill', 'skill', 'cryo');
+    actor.inputs.level = fact(quantity('count', 90));
+    actor.inputs.defenseIgnore = fact(quantity('scalar', 1.1));
+    context.targets[0].inputs = { level: fact(quantity('count', 90)), defenseReduction: fact(quantity('scalar', 0.95)) };
+    const invocation: BoundFormula = { formula: ref('defense'), bindings: { characterLevel: attribute('level'), enemyLevel: { kind: 'enemy', key: ref('target.level'), at: { kind: 'current', phase: 'before' } },
+      reduction: { kind: 'enemy', key: ref('target.defenseReduction'), at: { kind: 'current', phase: 'before' } }, ignore: attribute('defenseIgnore') }, output: 'value', captures: [] };
+    expect(numeric(evaluateBoundFormula(program, context, invocation, frame))).toBeCloseTo(1, 12);
+    actor.inputs.defenseIgnore = fact(quantity('scalar', 0));
+    expect(numeric(evaluateBoundFormula(program, context, invocation, frame))).toBeCloseTo(190 / (190 + 190 * (1 - 0.9)), 12);
+    context.targets[0].inputs.defenseReduction = fact(quantity('scalar', 0));
+    actor.inputs.defenseIgnore = fact(quantity('scalar', 1.1));
+    expect(numeric(evaluateBoundFormula(program, context, invocation, frame))).toBeCloseTo(1, 12);
+  });
+
+  it('adds cross-owner lunar and stellar elevation buffs without unverified cross-owner errors', () => {
+    const columbina = component('columbina', 'magicguide', ['columbina.c6-elevation']);
+    columbina.constellation = 6; columbina.ascension = 6;
+    const lauma = component('lauma', 'magicguide', ['lauma.c6-skill-full-moon']);
+    lauma.constellation = 6; lauma.ascension = 6;
+    const flins = component('flins', 'favoniuslance', ['flins.c6-team-gleam-elevation']);
+    flins.constellation = 6; flins.ascension = 6;
+    const zibai = component('zibai', 'favoniussword');
+    const { context, frame } = request([zibai, columbina, lauma, flins], 'zibai.skill', 'skill', 'geo');
+    context.team.facts.fullMoonsign = fact({ kind: 'boolean', value: true });
+    frame.hit!.family = 'lunar-bloom';
+    const lunarElevation: BoundFormula = { formula: ref('lunar-elevation-factor'), bindings: { input: attribute('reaction.lunar.elevation') }, output: 'value', captures: [] };
+    expect(numeric(evaluateBoundFormula(program, context, lunarElevation, frame))).toBeCloseTo(1 + 0.07 + 0.25, 12);
+    frame.hit!.family = 'lunar-charged';
+    expect(numeric(evaluateBoundFormula(program, context, lunarElevation, frame))).toBeCloseTo(1 + 0.07 + 0.1, 12);
+
+    const mitya = component('mitya', 'favoniussword', ['mitya.c6-conduct-elevation']);
+    mitya.constellation = 6; mitya.ascension = 6;
+    const odette = component('odette', 'favoniussword', ['odette.c6-splendor-elevation']);
+    odette.constellation = 6; odette.ascension = 6;
+    const recipient = component('kaeya', 'favoniussword');
+    recipient.facts['odette.splendorStacks'] = fact(quantity('count', 1));
+    const stellarReq = request([recipient, mitya, odette], 'kaeya.skill', 'skill', 'cryo');
+    stellarReq.frame.hit!.family = 'stellar-conduct';
+    const stellarElevation: BoundFormula = { formula: ref('stellar-elevation-factor'), bindings: { input: attribute('reaction.stellar-conduct.elevation') }, output: 'value', captures: [] };
+    expect(numeric(evaluateBoundFormula(program, stellarReq.context, stellarElevation, stellarReq.frame))).toBeCloseTo(1 + 0.2 + 0.25, 12);
+  });
+
+  it('applies Polar Field physical shred and Cryo/Electro ordinary bonus from a stellar-conduct reaction event', () => {
+    const mitya = component('mitya', 'favoniussword', ['reaction.stellar-conduct.physical-resistance', 'reaction.stellar-conduct.polar-field-bonus']);
+    const elektro = component('fischl', 'thestringless');
+    mitya.facts.radiance = fact({ kind: 'enum', value: 'stellar-conduct' });
+    elektro.facts.radiance = fact({ kind: 'enum', value: 'stellar-conduct' });
+    const { context, frame } = request([mitya, elektro], 'mitya.skill', 'skill', 'cryo');
+    context.targets[0].inputs['resistance.physical'] = fact(quantity('scalar', 0.1));
+    context.events.unshift({ id: 'conduct', kind: 'reaction', reactionId: 'stellar-conduct', actorId: mitya.id, targetIds: ['target'], timeMs: 0, order: 0, sourceEventIds: [], facts: {} });
+    context.events[1].timeMs = 1000;
+    frame.facts.stellarAttachments = fact(quantity('count', 0));
+    const resRead: BoundFormula = { formula: ref('resistance'), bindings: { resistance: { kind: 'enemy', key: ref('target.resistance.physical'), at: { kind: 'current', phase: 'before' } } }, output: 'value', captures: [] };
+    // 0.1 - 0.4 = -0.3 -> 1 - (-0.3)/2 = 1.15
+    expect(numeric(evaluateBoundFormula(program, context, resRead, frame))).toBeCloseTo(1.15, 12);
+    const dmgBonus: BoundFormula = { formula: ref('ordinary-bonus'), bindings: { elementBonus: attribute('damageBonus'), hitBonus: constant('scalar', 0), targetReduction: constant('scalar', 0) }, output: 'value', captures: [] };
+    expect(numeric(evaluateBoundFormula(program, context, dmgBonus, frame))).toBeCloseTo(0.2, 12);
+    frame.facts.stellarAttachments = fact(quantity('count', 1));
+    expect(numeric(evaluateBoundFormula(program, context, dmgBonus, frame))).toBeCloseTo(0.29, 12);
+    frame.facts.stellarAttachments = fact(quantity('count', 12));
+    expect(numeric(evaluateBoundFormula(program, context, dmgBonus, frame))).toBeCloseTo(0.4, 12);
+    frame.hit!.element = 'pyro';
+    expect(numeric(evaluateBoundFormula(program, context, dmgBonus, frame))).toBeCloseTo(0, 12);
+    frame.hit!.element = 'electro';
+    mitya.facts.radiance = fact({ kind: 'enum', value: 'none' });
+    expect(numeric(evaluateBoundFormula(program, context, dmgBonus, frame))).toBeCloseTo(0, 12);
+    mitya.facts.radiance = fact({ kind: 'enum', value: 'stellar-conduct' });
+    context.events[1].timeMs = 7000;
+    expect(numeric(evaluateBoundFormula(program, context, resRead, frame))).toBeCloseTo(0.9, 12);
+    expect(numeric(evaluateBoundFormula(program, context, dmgBonus, frame))).toBeCloseTo(0, 12);
+  });
 });

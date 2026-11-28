@@ -1165,10 +1165,7 @@
               "target": "attribute.reaction.stellar-conduct.elevation",
               "value": 0.2
             }
-          ],
-          "stacking": {
-            "crossOwnerUnverified": true
-          }
+          ]
         },
         {
           "id": "mitya.c6-steady-core-damage",

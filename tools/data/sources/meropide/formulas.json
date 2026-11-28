@@ -44,6 +44,18 @@
       "meaning": "Equal character and enemy level offsets."
     },
     {
+      "formula": "defense",
+      "node": "maxDefenseReduction",
+      "value": 0.9,
+      "meaning": "Maximum additive target defense reduction."
+    },
+    {
+      "formula": "defense",
+      "node": "maxDefenseIgnore",
+      "value": 1,
+      "meaning": "Maximum additive actor defense ignore."
+    },
+    {
       "formula": "resistance",
       "node": "threshold",
       "value": 0.75,
@@ -137,6 +149,53 @@
   "eventFacts": {
     "lunarBloomTrigger": "Resource effect; no independent reaction damage output.",
     "stellarConductTrigger": "Field/state effect; damage comes from character abilities.",
+    "stellarConduct": {
+      "attachmentCoefficients": [
+        1,
+        1.45,
+        1.5,
+        1.55,
+        1.6,
+        1.65,
+        1.7,
+        1.75,
+        1.8,
+        1.85,
+        1.9,
+        1.95,
+        2
+      ],
+      "polarField": {
+        "durationMs": 7000,
+        "physicalResistanceDelta": -0.4,
+        "cryoElectroDamageBonus": [
+          0.2,
+          0.29,
+          0.3,
+          0.31,
+          0.32,
+          0.33,
+          0.34,
+          0.35,
+          0.36,
+          0.37,
+          0.38,
+          0.39,
+          0.4
+        ]
+      }
+    },
+    "transformativeCoefficients": {
+      "burning": 0.25,
+      "swirl": 0.6,
+      "superconduct": 1.5,
+      "electro-charged": 2,
+      "bloom": 2,
+      "overloaded": 2.75,
+      "shatter": 3,
+      "burgeon": 3,
+      "hyperbloom": 3
+    },
     "stellarSwirlReactionCoefficients": {
       "initialAnemo": 0.75,
       "cryoLevel1": 2,

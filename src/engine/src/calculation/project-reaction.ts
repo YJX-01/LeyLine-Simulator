@@ -43,7 +43,7 @@ export function reactionOccurrence(eventId: string, reaction: ProjectReaction, f
     return { id: actorId, qualified, invocation: { formula: ref(family + '-individual'), output: 'value', captures: [], bindings: {
       levelMultiplier: call('reaction-level-multiplier', { level: attr('level') }), em: attr('elementalMastery'), critFactor, resistanceFactor,
       reactionBaseBonus: special('baseBonus'), reactionBonus: special('damageBonus'), flatBaseBonus: special('flatBaseBonus'),
-      elevationFactor: stellar ? call('stellar-elevation-factor', { input: special('elevation') }) : special('elevationFactor'),
+      elevationFactor: call((stellar ? 'stellar' : 'lunar') + '-elevation-factor', { input: special('elevation') }),
       ...(stellar ? { reactionCoefficient: { kind: 'fact' as const, scope: 'query' as const, key: 'reactionCoefficient', type: { kind: 'quantity' as const, unit: 'scalar' as const } } } : {}),
     } }, frame: { ...frame, contributorId: actorId,
       factOverrides: [...frame.factOverrides.filter(entry => entry.subject.kind !== 'actor' || entry.subject.id !== actorId),
