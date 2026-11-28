@@ -2,7 +2,7 @@
   "name": "leyline-simulator",
   "private": true,
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "packageManager": "pnpm@11.3.0",
   "scripts": {
     "dev": "pnpm data:build && pnpm --filter @leyline/web dev",

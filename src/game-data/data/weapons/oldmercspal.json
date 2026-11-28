@@ -219,7 +219,7 @@
     35,
     46.7
   ],
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
   "revision": "1",

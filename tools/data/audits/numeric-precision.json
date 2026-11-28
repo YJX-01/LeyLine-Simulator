@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "sourceRepository": "https://github.com/DimbreathBot/AnimeGameData",
   "sourceCommit": "bd35e243fa436f141f015cf221a6e19d0c34b7ca",
   "method": "Exact numeric equality of maintained JSON parameters and fixed TS algorithm constants against adopted sources; no stored file hashes. Does not prove game float32 evaluation equivalence.",

@@ -42,7 +42,7 @@ test('shared real-character editor protects team drafts and keeps account indepe
   await page.getByLabel('游戏 UID',{exact:true}).fill('618285856');
   await page.getByRole('button',{name:'查询角色展柜',exact:true}).click();
   await page.getByRole('button',{name:'确认导入 4 位角色',exact:true}).click();await page.keyboard.press('Escape');
-  const account=await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'));
+  const account=await page.evaluate(()=>localStorage.getItem('leyline-account-0.3.0'));
   await expectReadableText(page);
   // Derive an axis format case from the imported public showcase.
   const project=await page.evaluate(async accountText=>{
@@ -87,7 +87,7 @@ test('shared real-character editor protects team drafts and keeps account indepe
   await dialog.getByRole('button',{name:'精炼3阶',exact:true}).click();
   await dialog.getByRole('button',{name:'保存',exact:true}).click();
   await expect(dialog.getByRole('button',{name:'保存',exact:true})).toBeDisabled();
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'))).toBe(account);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.3.0'))).toBe(account);
   await page.setViewportSize({width:390,height:844});
   expect(await dialog.evaluate(node=>node.scrollWidth>node.clientWidth)).toBe(false);
   await page.setViewportSize({width:1280,height:720});

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { projectSchema } from '../../../../src/schema/src/project/project';
-const base = { schemaVersion: '0.2.0', rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'contract', revision: '1', definitions: [], candidate: { id: 'candidate', actors: [] }, conditions: {}, timeline: [], objective: {} };
+const base = { schemaVersion: '0.3.0', rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'contract', revision: '1', definitions: [], candidate: { id: 'candidate', actors: [] }, conditions: {}, timeline: [], objective: {} };
 describe('Project effect contract', () => {
   it('validates effect revisions with or without the previous profile field', () => {
     expect(projectSchema.safeParse(base).success).toBe(true);

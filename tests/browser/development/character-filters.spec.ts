@@ -16,7 +16,7 @@ test('actual showcase: element shortcuts, combined selections and separate sorti
   await page.getByRole('button', { name: '仅保存展柜', exact: true }).click();
   await page.getByRole('button', { name: '确认导入 4 位角色', exact: true }).click();
   await page.keyboard.press('Escape');
-  const account = async () => readDocument<LocalAccount>(page, 'account', (await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0')))!);
+  const account = async () => readDocument<LocalAccount>(page, 'account', (await page.evaluate(() => localStorage.getItem('leyline-account-0.3.0')))!);
   const cards = page.locator('.character-card-header > strong');
   const shortcuts = page.getByRole('group', { name: '按元素筛选' });
   await expect(cards).toHaveText(['甘雨', '班尼特', '行秋', '安柏']);
@@ -109,7 +109,7 @@ test('actual showcase: element shortcuts, combined selections and separate sorti
   await expect(bennett.locator('[data-stat-value="hp"]')).toHaveText(expectedHp(100));
   expect((await account()).characters.find(entry => entry.name === '班尼特')!.build!.level).toBe(95);
   await bennett.getByRole('button',{name:'保存',exact:true}).click();
-  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document.characters.find((entry:{name:string})=>entry.name==='班尼特').build.level)).toBe(100);
+  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.3.0')!).document.characters.find((entry:{name:string})=>entry.name==='班尼特').build.level)).toBe(100);
   await page.setViewportSize({width:900,height:460});
   await bennett.evaluate(node => {
     const header=node.querySelector('header')!.getBoundingClientRect();

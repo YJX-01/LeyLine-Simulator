@@ -8,12 +8,12 @@ import { addActorFromBuild, addSkillAction, addSkillHit, defaultEnemy } from '..
 import { recordedProject } from '../../../helpers/recorded-project';
 
 async function build(): Promise<Build> {
-  return { schemaVersion: '0.2.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter('jean'), weapon: await getWeapon('favoniussword'),
+  return { schemaVersion: '0.3.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter('jean'), weapon: await getWeapon('favoniussword'),
     artifactMain: await getArtifactMain(), sets: [], level: 90, ascension: 6, constellation: 0, talents: { normal: 9, skill: 9, burst: 9 },
     weaponLevel: 90, weaponAscension: 6, refinement: 1, artifacts: [] };
 }
 function empty() {
-  return projectSchema.parse({ schemaVersion: '0.2.0', rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'real-edit-test', revision: '1', definitions: [], candidate: { id: 'candidate', actors: [] }, conditions: {}, timeline: [], objective: {} });
+  return projectSchema.parse({ schemaVersion: '0.3.0', rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'real-edit-test', revision: '1', definitions: [], candidate: { id: 'candidate', actors: [] }, conditions: {}, timeline: [], objective: {} });
 }
 describe('real axis editing and inventory identity', () => {
   it('creates a self-contained axis and detaches it from source data and candidate inputs', async () => {

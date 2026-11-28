@@ -9,7 +9,7 @@ test('actual Mona import: bounded preview, cancellation, recovery and duplicate 
   await page.setViewportSize({width:1280,height:900});await page.goto('/');
   await expect(page.locator('.nav-group[data-domain=account] .library-nav-icon')).toHaveCount(5);
   await page.getByTestId('workspace-nav-artifacts').click();
-  const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'));
+  const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.3.0'));
   await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
   const dialog=page.getByRole('dialog',{name:'导入莫娜圣遗物',exact:true});
   await expect(dialog.getByRole('heading',{name:'导入莫娜圣遗物',exact:true})).toHaveCount(1);
@@ -23,7 +23,7 @@ test('actual Mona import: bounded preview, cancellation, recovery and duplicate 
   await file.dispatchEvent('cancel', { bubbles: true });
   await expect(dialog).toBeVisible();
   await expect(preview).toContainText('新增 458 件');
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'))).toBe(baseline);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.3.0'))).toBe(baseline);
   await expect(dialog.locator('.preview-item')).toHaveCount(6);
   // Source item 8770563143816081: HP flower, with these four observed substats.
   const first=dialog.locator('.preview-item').first();
@@ -47,7 +47,7 @@ test('actual Mona import: bounded preview, cancellation, recovery and duplicate 
   await expect(dialog.locator('.preview-item-name').first()).toContainText('死之羽');
   await slots.getByRole('button',{name:'全部',exact:true}).click();
   await expect(first).toHaveAttribute('data-artifact-id',firstId!);
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'))).toBe(baseline);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.3.0'))).toBe(baseline);
   await dialog.getByLabel('搜索待导入圣遗物',{exact:true}).pressSequentially('琴');
   await expect(dialog.locator('.preview-item')).toHaveCount(5);
   await first.scrollIntoViewIfNeeded();
@@ -59,7 +59,7 @@ test('actual Mona import: bounded preview, cancellation, recovery and duplicate 
   await expect(confirm).toBeInViewport();
   await page.screenshot({path:'artifacts/mona-import-mobile.png',fullPage:false});
   await dialog.getByRole('button',{name:'取消',exact:true}).click();
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'))).toBe(baseline);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.3.0'))).toBe(baseline);
   await page.setViewportSize({width:1280,height:900});await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
   // An invalid-input boundary derived by truncating the recorded file, not invented player data.
   const bytes = original.buffer;
@@ -71,7 +71,7 @@ test('actual Mona import: bounded preview, cancellation, recovery and duplicate 
   await expect(dialog.getByLabel('莫娜导入预览',{exact:true})).toContainText('新增 458 件');
   await dialog.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();
   await expect(dialog).toHaveCount(0);
-  const imported=await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'));
+  const imported=await page.evaluate(()=>localStorage.getItem('leyline-account-0.3.0'));
   expect(JSON.parse(imported!).document.artifacts).toHaveLength(458);
   await page.getByTestId('workspace-nav-artifacts').click();
   await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
@@ -81,6 +81,6 @@ test('actual Mona import: bounded preview, cancellation, recovery and duplicate 
   await page.screenshot({path:'artifacts/mona-import-duplicates.png',fullPage:false});
   await page.keyboard.press('Escape');
   await expect(dialog).toHaveCount(0);
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'))).toBe(imported);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.3.0'))).toBe(imported);
   await page.screenshot({path:'artifacts/library-nav-icons.png',fullPage:false});
 });

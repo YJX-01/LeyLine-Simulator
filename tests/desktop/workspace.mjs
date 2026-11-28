@@ -19,7 +19,7 @@ const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
 const app=await electron.launch({executablePath:executable,args:['--smoke',`--user-data-dir=${userData}`],env,timeout:30000});
 try {
   const page=await app.firstWindow({ timeout: 30000 }),errors=[];
-  const readAccount = () => page.evaluate(() => JSON.parse(localStorage.getItem('leyline-account-0.2.0')).document);
+  const readAccount = () => page.evaluate(() => JSON.parse(localStorage.getItem('leyline-account-0.3.0')).document);
   page.setDefaultTimeout(15000);
   await app.evaluate(({ BrowserWindow }) => {
     for (const window of BrowserWindow.getAllWindows()) window.webContents.setBackgroundThrottling(false);

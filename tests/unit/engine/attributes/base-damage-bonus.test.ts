@@ -9,7 +9,7 @@ import { createEmptyProject } from '../../../../src/web/src/domain/workbench-pro
 // No player equipment, recorded sequence or game-observed damage is claimed.
 const enemy: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function setting(id = 'jean', weapon = 'cinnabarspindle'): Promise<Build> {
-  return { schemaVersion: '0.2.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
+  return { schemaVersion: '0.3.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
     artifactMain: await getArtifactMain(), sets: [], artifacts: [], level: 90, ascension: 6, constellation: 0,
     talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 90, weaponAscension: 6, refinement: 1 };
 }

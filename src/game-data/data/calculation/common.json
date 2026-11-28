@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "0.2.0",
-  "runtimeVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
+  "runtimeVersion": "0.3.0",
   "requiredFeatures": [
     "fixed-templates-v1",
     "formula-call-v1",
@@ -80,7 +80,7 @@
   ],
   "formulas": [
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "attack-counted-damage-base",
@@ -104,7 +104,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "attack-damage-base",
@@ -127,7 +127,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "attack-panel-base",
@@ -143,7 +143,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "crit-selected",
@@ -163,7 +163,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "crit",
@@ -178,7 +178,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-2",
@@ -194,7 +194,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-3",
@@ -210,7 +210,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-4",
@@ -226,7 +226,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-5",
@@ -242,7 +242,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-6",
@@ -258,7 +258,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-7",
@@ -274,7 +274,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-8",
@@ -290,7 +290,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-9",
@@ -306,7 +306,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "defense-counted-damage-base",
@@ -330,7 +330,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "defense-damage-base",
@@ -353,7 +353,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "defense-panel-base",
@@ -369,7 +369,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "defense",
@@ -384,7 +384,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "elementalMastery-counted-damage-base",
@@ -408,7 +408,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "elementalMastery-damage-base",
@@ -431,7 +431,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "hp-counted-damage-base",
@@ -455,7 +455,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "hp-damage-base",
@@ -478,7 +478,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "hp-panel-base",
@@ -494,7 +494,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "ordinary-bonus",
@@ -509,7 +509,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "ordinary-hit",
@@ -525,7 +525,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "resistance",
@@ -540,7 +540,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "stamina.discounted-cost",
@@ -555,7 +555,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "binding.milliseconds",
@@ -570,7 +570,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "condition.all",
@@ -588,7 +588,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "condition.any",
@@ -606,7 +606,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "product.hp",
@@ -622,7 +622,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "product.count",
@@ -638,7 +638,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "product.attack",
@@ -654,7 +654,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "product.scalar",
@@ -670,7 +670,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "hp.above50",
@@ -690,7 +690,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "hp.above70",
@@ -710,7 +710,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "bond.above-zero",
@@ -730,7 +730,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "bond.at-least-one",
@@ -750,7 +750,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "constellation.one",
@@ -770,7 +770,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "product.damage",
@@ -791,7 +791,7 @@
         "id": "element.unconverted",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "enum-condition",
         "input": "mode",
@@ -815,7 +815,7 @@
         "id": "condition.not",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "condition-group",
         "terms": 1,
@@ -833,7 +833,7 @@
         "id": "rank.at-least-1",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "quantity-condition",
         "revision": "1",
@@ -853,7 +853,7 @@
         "id": "rank.at-least-2",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "quantity-condition",
         "revision": "1",
@@ -873,7 +873,7 @@
         "id": "rank.at-least-3",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "quantity-condition",
         "revision": "1",
@@ -893,7 +893,7 @@
         "id": "rank.at-least-4",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "quantity-condition",
         "revision": "1",
@@ -913,7 +913,7 @@
         "id": "rank.at-least-5",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "quantity-condition",
         "revision": "1",
@@ -933,7 +933,7 @@
         "id": "rank.at-least-6",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "quantity-condition",
         "revision": "1",
@@ -948,7 +948,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "capped.attack",
@@ -966,7 +966,7 @@
       }
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "capped.energy-bonus",
@@ -984,7 +984,7 @@
       }
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "capped.hp-thousand",
@@ -1002,7 +1002,7 @@
       }
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "nearby.one",
@@ -1021,7 +1021,7 @@
       }
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "nearby.two",
@@ -1040,7 +1040,7 @@
       }
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "energy.zero",
@@ -1059,7 +1059,7 @@
       }
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "id": "hp.below50",
         "namespace": "builtin",
@@ -1079,7 +1079,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "id": "hp.below70",
         "namespace": "builtin",
@@ -1099,7 +1099,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "id": "hp.at-least50",
         "namespace": "builtin",
@@ -1119,7 +1119,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "energy.full",
@@ -1134,7 +1134,7 @@
       }
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "capped.party-bonus",
@@ -1152,7 +1152,7 @@
       }
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "capped.attack-hundred",
@@ -1170,7 +1170,7 @@
       }
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "capped.defense-hundred",
@@ -1188,7 +1188,7 @@
       }
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "capped.elementalMastery-hundred",
@@ -1206,7 +1206,7 @@
       }
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "hp.at-most50",
@@ -1231,7 +1231,7 @@
         "id": "scene.autumn-platform.pyro",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "enum-condition",
         "input": "mode",
@@ -1253,7 +1253,7 @@
         "id": "scene.autumn-platform.cryo",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "enum-condition",
         "input": "mode",
@@ -1275,7 +1275,7 @@
         "id": "shield.hp-base",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "shield-absorption",
         "revision": "1",
@@ -1291,7 +1291,7 @@
         "id": "shield.attack-base",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "shield-absorption",
         "revision": "1",
@@ -1307,7 +1307,7 @@
         "id": "shield.defense-base",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "shield-absorption",
         "revision": "1",
@@ -1323,7 +1323,7 @@
         "id": "shield.elemental-mastery-base",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "shield-absorption",
         "revision": "1",
@@ -1339,7 +1339,7 @@
         "id": "shield.hp-scale",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "stat-product",
         "revision": "1",
@@ -1350,7 +1350,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "healing.max-hp",
@@ -1365,7 +1365,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "healing.attack",
@@ -1386,7 +1386,7 @@
         "id": "movement.day-start",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "quantity-condition",
         "input": "minutes",
@@ -1406,7 +1406,7 @@
         "id": "movement.day-end",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "quantity-condition",
         "input": "minutes",
@@ -1426,7 +1426,7 @@
         "id": "movement.swift-stride-scene",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "enum-condition",
         "input": "scene",
@@ -1450,7 +1450,7 @@
         "id": "movement.gliding",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "enum-condition",
         "input": "mode",
@@ -1472,7 +1472,7 @@
         "id": "movement.underwater-sprint",
         "revision": "1"
       },
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "template": {
         "id": "enum-condition",
         "input": "mode",
@@ -1489,7 +1489,7 @@
       ]
     },
     {
-      "schemaVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
       "identity": {
         "namespace": "builtin",
         "id": "skill.cooldown-positive",

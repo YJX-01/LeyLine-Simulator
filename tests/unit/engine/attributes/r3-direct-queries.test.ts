@@ -22,7 +22,7 @@ const cases = [
     attribute: (base: number) => 13.356 * 8.349 + 47.78865 + base * 5.968 + 46.7 },
 ];
 async function setting(id: string, weapon: string, constellation: number): Promise<Build> {
-  return { schemaVersion: '0.2.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), artifactMain: await getArtifactMain(),
+  return { schemaVersion: '0.3.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), artifactMain: await getArtifactMain(),
     level: 90, ascension: 6, constellation, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 70, weaponAscension: 4, refinement: 1, artifacts: [], sets: [] };
 }
 
@@ -40,7 +40,7 @@ describe('R3 reviewed direct queries, without broad support flag changes', () =>
         const project = createEmptyProject(); project.enemy = defaultEnemy();
         const actorId = addActorFromBuild(project, build);
         const recordId = addSkillHit(project, actorId, `${entry.id}.${entry.skill}`, hitIndex, 0, { crit: damage.crit, reaction: damage.reaction });
-        const document = parseDamageCalculator(JSON.stringify(packDocument('damage-calculator', { schemaVersion: '0.2.0', kind: 'damage-calculator', project, actorId, recordId })));
+        const document = parseDamageCalculator(JSON.stringify(packDocument('damage-calculator', { schemaVersion: '0.3.0', kind: 'damage-calculator', project, actorId, recordId })));
         const original = JSON.stringify(document);
         expect(evaluateTimeline(document.project).status).toBe('complete');
         expect(evaluateTimeline(document.project).totalValue).toBeCloseTo(expected, 7);

@@ -16,7 +16,7 @@ test('actual inventory: isolated pickers, retained configurations, independent f
   await expect(page.locator('.library-result-count')).toHaveText('55 名角色');
   const columns=await page.locator('.character-cards').evaluate(node=>getComputedStyle(node).gridTemplateColumns.trim().split(/\s+/).length);
   await expect(page.locator('.character-card')).toHaveCount(columns*5);
-  const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'));
+  const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.3.0'));
   await page.getByLabel('搜索账号角色',{exact:true}).fill('甘雨');
   await page.getByTestId('workspace-nav-loadouts').click();
   const chooseRole=page.getByRole('button',{name:'选择角色',exact:true});
@@ -65,6 +65,6 @@ test('actual inventory: isolated pickers, retained configurations, independent f
   expect(tabs).toHaveLength(6);expect(new Set(tabs.map(tab=>tab.top)).size).toBe(2);expect(tabs.every(tab=>Math.abs(tab.height-40)<.5)).toBe(true);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
   await page.screenshot({path:'artifacts/library-artifacts-mobile-after.png',fullPage:true});
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'))).toBe(baseline);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.3.0'))).toBe(baseline);
   expect(errors).toEqual([]);
 });

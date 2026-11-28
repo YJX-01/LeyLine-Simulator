@@ -1,6 +1,6 @@
 {
   "rules": {
-    "schemaVersion": "0.2.0",
+    "schemaVersion": "0.3.0",
     "id": "standard-hit-reactions",
     "revision": "1",
     "levelMultipliers": [
@@ -109,8 +109,8 @@
     "algorithmRevision": "1"
   },
   "calculation": {
-    "schemaVersion": "0.2.0",
-    "runtimeVersion": "0.2.0",
+    "schemaVersion": "0.3.0",
+    "runtimeVersion": "0.3.0",
     "requiredFeatures": [
       "fixed-templates-v1",
       "formula-call-v1",
@@ -213,7 +213,7 @@
     ],
     "formulas": [
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "additive",
@@ -229,7 +229,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "amplifying",
@@ -245,7 +245,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "anemo-ordinary-reaction",
@@ -261,7 +261,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "cryo-ordinary-reaction",
@@ -282,7 +282,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "dendro-ordinary-reaction",
@@ -303,7 +303,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "electro-ordinary-reaction",
@@ -324,7 +324,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "geo-ordinary-reaction",
@@ -340,7 +340,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "hydro-ordinary-reaction",
@@ -361,7 +361,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-bloom-direct",
@@ -384,7 +384,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-charged-direct",
@@ -407,7 +407,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-charged-individual",
@@ -430,7 +430,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-crystallize-direct",
@@ -453,7 +453,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-crystallize-individual",
@@ -476,7 +476,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-em-bonus",
@@ -493,7 +493,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "physical-ordinary-reaction",
@@ -509,7 +509,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "pyro-ordinary-reaction",
@@ -530,7 +530,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "reaction-level-multiplier",
@@ -550,7 +550,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-conduct-direct",
@@ -574,7 +574,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-em-bonus",
@@ -591,7 +591,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-swirl-direct",
@@ -614,7 +614,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-swirl-individual",
@@ -637,7 +637,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "transformative",
@@ -653,7 +653,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-elevation-factor",
@@ -675,7 +675,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-elevation-factor",
@@ -697,7 +697,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar.attach-coefficient",
@@ -718,7 +718,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar.polar-field-coefficient",
@@ -739,7 +739,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar.radiance-conduct",
@@ -761,7 +761,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "blessing.attack",
@@ -784,7 +784,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "blessing.lowerAttack",
@@ -807,7 +807,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "blessing.defense",
@@ -830,7 +830,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "blessing.mastery",
@@ -853,7 +853,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "blessing.stellarMastery",
@@ -876,7 +876,7 @@
         ]
       },
       {
-        "schemaVersion": "0.2.0",
+        "schemaVersion": "0.3.0",
         "identity": {
           "namespace": "builtin",
           "id": "blessing.hp",

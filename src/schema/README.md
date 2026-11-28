@@ -12,7 +12,7 @@
 
 当前运行校验定义在src/exchange、src/account及src/project，应用操作遵循[文件与状态规范](../../docs/files-and-state.md)。
 
-根 package.json 的 version 同时用于软件版本、第一方文件的 schemaVersion、计算库的 runtimeVersion 和内置目录的 dataVersion。当前值为字符串 `"0.2.0"`。文件以 kind 区分。实体 revision 标识具体内容，rulesVersion、algorithmRevision 和模板 revision 标识具体求值协议。外部来源的版本沿用其原始记录。
+根 package.json 的 version 同时用于软件版本、第一方文件的 schemaVersion、计算库的 runtimeVersion 和内置目录的 dataVersion。当前值为字符串 `"0.3.0"`。文件以 kind 区分。实体 revision 标识具体内容，rulesVersion、algorithmRevision 和模板 revision 标识具体求值协议。外部来源的版本沿用其原始记录。
 
 | 文档 | 当前契约 |
 | --- | --- |
@@ -22,7 +22,7 @@
 | 轴项目规则 | rulesVersion=timeline-v1，统一依赖求值 |
 | 独立计算器 | kind=damage-calculator，document 内含 project、可选 baseline、actorId 和可选 recordId，最大 8 MiB |
 
-浏览器按用途分别存储账号、项目恢复、角色配置、队伍、定义库、收藏与偏好。键名由 storageKeyFor 生成，例如 `leyline-account-0.2.0`。
+浏览器按用途分别存储账号、项目恢复、角色配置、队伍、定义库、收藏与偏好。键名由 storageKeyFor 生成，例如 `leyline-account-0.3.0`。
 
 读取按当前严格schema校验，旧版本标签或退休字段返回拒绝，当前编辑保留。磁盘文件及旧存储字节由用户维护，显式替换前完成备份。角色培养中的退休hpRatio字段按严格契约拒绝，生命条件由项目上下文提供。
 

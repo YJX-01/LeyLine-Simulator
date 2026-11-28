@@ -16,7 +16,7 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   await page.getByRole('button', { name: '确认导入 1 位角色', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   // Confirmed import-and-merge already equips the selected character; no independent combination is created.
-  const account = await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0'));
+  const account = await page.evaluate(() => localStorage.getItem('leyline-account-0.3.0'));
   const imported = await readDocument<LocalAccount>(page, 'account', account!);
   const recorded = JSON.parse(readFileSync(source, 'utf8')).avatarInfoList.find((avatar: { avatarId: number }) => avatar.avatarId === 10000025);
   const importedCharacter = imported.characters.find(character => character.build?.character.id === 'xingqiu')!;
@@ -61,7 +61,7 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   await file.setInputFiles({ name: 'recorded-showcase-custom-axis.json', mimeType: 'application/json', buffer: Buffer.from(saved) });
   await expect(axisName).toHaveValue('行秋试配');
   const recovered = async () => {
-    const text = await page.evaluate(() => localStorage.getItem('leyline-axis-recovery-0.2.0'));
+    const text = await page.evaluate(() => localStorage.getItem('leyline-axis-recovery-0.3.0'));
     return text ? (await readDocument<{ project: Project }>(page, 'axis-recovery', text)).project : undefined;
   };
   const before = await readDocument<Project>(page, 'axis', saved);
@@ -79,7 +79,7 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   expect(after.candidate.actors[0].build!.character).toEqual(before.candidate.actors[0].build!.character);
   expect(after.candidate.actors[0].build!.refinement).toBe(refinement);
   expect(after.candidate.actors[0].build!.artifacts).toEqual(before.candidate.actors[0].build!.artifacts);
-  expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0'))).toBe(account);
+  expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.3.0'))).toBe(account);
 
   // Record a hit for the UI round-trip without supplying unrecorded combat conditions.
   await page.keyboard.press('Escape');

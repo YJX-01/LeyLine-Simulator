@@ -15,7 +15,7 @@ async function centered(picker:Locator){
   expect(offset).toBeLessThan(1);
 }
 const warning=(page:Page)=>page.getByRole('dialog',{name:'有未保存的修改',exact:true});
-const account=(page:Page)=>page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'));
+const account=(page:Page)=>page.evaluate(()=>localStorage.getItem('leyline-account-0.3.0'));
 
 test('empty and occupied pickers center titles; role exit continues, rejects failed saves, saves or discards',async({page})=>{
   await page.setViewportSize({width:1440,height:1000});await importShowcase(page);const original=await account(page);
@@ -52,7 +52,7 @@ test('manual Save on return records actual Amber and returns to the same charact
 test('showcase Save on exit still requires import confirmation; cancel retains draft and writes nothing',async({page})=>{
   await importShowcase(page,false);await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();const role=page.getByRole('dialog',{name:'安柏',exact:true});await role.getByRole('button',{name:'展柜',exact:true}).click();await role.getByRole('button',{name:'保存组合',exact:true}).click();const editor=page.getByRole('dialog',{name:'保存组合',exact:true});const before=await account(page);
   await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();const confirmation=page.getByRole('dialog',{name:'入库并保存组合？',exact:true});await expect(confirmation).toBeVisible();expect(await account(page)).toBe(before);await confirmation.getByRole('button',{name:'取消',exact:true}).click();await expect(editor).toBeVisible();expect(await account(page)).toBe(before);
-  await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await confirmation.getByRole('button',{name:'保存组合',exact:true}).click();await expect(editor).toHaveCount(0);expect((await readDocument<LocalAccount>(page, 'account', (await account(page))!)).artifacts).toHaveLength(5);expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-artifact-combinations-0.2.0')!))).toHaveLength(1);await expect(role).toBeVisible();
+  await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await confirmation.getByRole('button',{name:'保存组合',exact:true}).click();await expect(editor).toHaveCount(0);expect((await readDocument<LocalAccount>(page, 'account', (await account(page))!)).artifacts).toHaveLength(5);expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-artifact-combinations-0.3.0')!))).toHaveLength(1);await expect(role).toBeVisible();
 });
 
 test('team candidate Save on exit persists only the project and follows the requested close',async({page})=>{

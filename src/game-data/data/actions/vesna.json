@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "kind": "character-actions",
   "identity": {
     "namespace": "builtin",
@@ -398,8 +398,8 @@
   ],
   "calculation": {
     "bundle": {
-      "schemaVersion": "0.2.0",
-      "runtimeVersion": "0.2.0",
+      "schemaVersion": "0.3.0",
+      "runtimeVersion": "0.3.0",
       "requiredFeatures": [
         "fixed-templates-v1",
         "combat-binding-v1",
@@ -422,7 +422,7 @@
       "tables": [],
       "formulas": [
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.all.1.yes",
@@ -441,7 +441,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.all.1.not",
@@ -460,7 +460,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.any.1.yes",
@@ -479,7 +479,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.any.1.not",
@@ -498,7 +498,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.all.2.yes",
@@ -517,7 +517,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.all.2.not",
@@ -536,7 +536,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.any.2.yes",
@@ -555,7 +555,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.any.2.not",
@@ -574,7 +574,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.all.3.yes",
@@ -593,7 +593,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.all.3.not",
@@ -612,7 +612,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.any.3.yes",
@@ -631,7 +631,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.any.3.not",
@@ -650,7 +650,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.c0",
@@ -670,7 +670,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.c1",
@@ -690,7 +690,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.c6",
@@ -710,7 +710,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.first-highest",
@@ -730,7 +730,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.positive-cost",
@@ -750,7 +750,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.stage.1",
@@ -770,7 +770,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.stage.2",
@@ -790,7 +790,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.stage.3",
@@ -810,7 +810,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.third-highest",
@@ -830,7 +830,7 @@
           ]
         },
         {
-          "schemaVersion": "0.2.0",
+          "schemaVersion": "0.3.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.fourth-highest",

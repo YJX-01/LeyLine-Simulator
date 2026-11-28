@@ -28,7 +28,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
     for (const id of ['favoniussword', 'harbingerofdawn', 'primordialjadecutter']) weapons.set(id, await getWeapon(id));
   });
   function build(id: string, weaponId = 'favoniussword'): schemas.StructuredBuild {
-    return { schemaVersion: '0.2.0', kind: 'calculation-build', dataVersion: DATA_VERSION, character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
+    return { schemaVersion: '0.3.0', kind: 'calculation-build', dataVersion: DATA_VERSION, character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
       sets: [], artifacts: [], artifactMain: structuredClone(main), level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'DimbreathBot/AnimeGameData', commit: 'bd35e243fa436f141f015cf221a6e19d0c34b7ca', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
   }

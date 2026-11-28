@@ -11,7 +11,7 @@ import { createEmptyProject } from '../../../../src/web/src/domain/workbench-pro
 
 const hilichurl: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function setting(id: string, weapon: string): Promise<Build> {
-  return { schemaVersion: '0.2.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), sets: [], artifacts: [],
+  return { schemaVersion: '0.3.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), sets: [], artifacts: [],
     artifactMain: await getArtifactMain(), level: 90, ascension: 6, constellation: 0, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 90, weaponAscension: 6, refinement: 1 };
 }
 function query(build: Build, skillId = `${build.character.id}.skill`, hitIndex = 0, timeMs = 0) {

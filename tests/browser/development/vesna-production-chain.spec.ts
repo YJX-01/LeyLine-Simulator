@@ -21,7 +21,7 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await preview.getByRole('button', { name: '查询角色展柜', exact: true }).click();
   await preview.getByRole('button', { name: '清空选择', exact: true }).click();
   await preview.getByRole('button', { name: '导入薇斯纳', exact: true }).click();
-  const storage = () => page.evaluate(() => [localStorage.getItem('leyline-account-0.2.0'), localStorage.getItem('leyline-axis-recovery-0.2.0')]);
+  const storage = () => page.evaluate(() => [localStorage.getItem('leyline-account-0.3.0'), localStorage.getItem('leyline-axis-recovery-0.3.0')]);
   const pending = (await storage())[0];
   expect(pending ? JSON.parse(pending).document.characters : []).toHaveLength(0);
   await preview.getByRole('button', { name: '确认导入 1 位角色', exact: true }).click();

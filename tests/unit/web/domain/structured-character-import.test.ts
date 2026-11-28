@@ -55,7 +55,7 @@ describe('current self-contained character import transactions', () => {
     expect(() => applyCharacterImport(current, valid.prepared)).toThrow('变化');
     const legacy = { ...original, schemaVersion: 2 };
     expect(prepareCharacterImport(format(legacy), [original]).ok).toBe(false);
-    const duplicate = exportCharacterSnapshot(original).replace('"schemaVersion": "0.2.0"', '"schemaVersion": "0.2.0", "schemaVersion": "0.2.0"');
+    const duplicate = exportCharacterSnapshot(original).replace('"schemaVersion": "0.3.0"', '"schemaVersion": "0.3.0", "schemaVersion": "0.3.0"');
     expect(prepareCharacterImport(duplicate, [original]).ok).toBe(false);
     const missing = custom(); missing.calculation.bundle.formulas = missing.calculation.bundle.formulas.filter(formula => formula.identity.id !== 'ordinary-hit');
     expect(prepareResolvedCharacterImport(missing, [original]).ok).toBe(false);
@@ -99,7 +99,7 @@ describe('current self-contained character import transactions', () => {
     const imported = prepareCharacterImport(format(file.metadata), [original]); expect(imported.ok).toBe(true); if (!imported.ok) return;
     const next = applyCharacterImport([original], imported.prepared), reopened = JSON.parse(format(next[1]));
     const compiled = compileStructuredCharacter(reopened); expect(compiled.ok).toBe(true);
-    const build: schemas.StructuredBuild = { schemaVersion: '0.2.0', kind: 'calculation-build', dataVersion: original.dataVersion, character: reopened, weapon, sets: [], artifacts: [], artifactMain: main,
+    const build: schemas.StructuredBuild = { schemaVersion: '0.3.0', kind: 'calculation-build', dataVersion: original.dataVersion, character: reopened, weapon, sets: [], artifacts: [], artifactMain: main,
       level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'main', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['main'] };
     const prepared = prepareStructuredBuilds([{ id: 'kaeya-query', build }]); expect(prepared.ok).toBe(true); if (!prepared.ok) return;
@@ -123,7 +123,7 @@ describe('current self-contained character import transactions', () => {
     expect(exported.endsWith('\n')).toBe(true); expect(exported.includes('\r')).toBe(false); expect(exported.startsWith('{\n  "')).toBe(true);
     expect(value.formulas?.some((formula: { id: string }) => formula.id === unused.identity.id) ?? false).toBe(false);
     expect(value.attributes).not.toHaveProperty('outputs');
-    expect(value.schemaVersion).toBe('0.2.0');
+    expect(value.schemaVersion).toBe('0.3.0');
     expect(prepareCharacterImport(exported, [original]).ok).toBe(true);
     expect(format(file)).toBe(before);
   });

@@ -58,7 +58,7 @@ test('empty library pages align shared controls without reserving a shortcut row
 
 test('row settings persist independently, normalize input and restore defaults without touching account data', async ({ page }, info) => {
   await page.goto('/');
-  const before = await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0'));
+  const before = await page.evaluate(() => localStorage.getItem('leyline-account-0.3.0'));
   await page.getByRole('button', { name: '导航 设置', exact: true }).click();
   const values = [
     ['角色每页行数', '5', '2'], ['角色配置疏松每页行数', '5', '3'], ['角色配置紧凑每页行数', '5', '4'],
@@ -84,7 +84,7 @@ test('row settings persist independently, normalize input and restore defaults w
   await expect(characterRows).toHaveValue('50');
   await page.getByRole('button', { name: '恢复默认行数', exact: true }).click();
   for (const [label, initial] of values) await expect(page.getByRole('spinbutton', { name: label, exact: true })).toHaveValue(initial);
-  expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0'))).toBe(before);
+  expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.3.0'))).toBe(before);
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('library-settings-mobile.png'), fullPage: true });
@@ -105,14 +105,14 @@ test('an empty library does not apply its reserved header space inside a selecti
 
 test('invalid stored row preferences fall back without replacing the saved bytes', async ({ page }) => {
   const invalid = '{"characters":0,"configurationRelaxed":3.5,"artifactCompact":51,"teams":4}';
-  await page.addInitScript(value => localStorage.setItem('leyline-library-page-rows-0.2.0', value), invalid);
+  await page.addInitScript(value => localStorage.setItem('leyline-library-page-rows-0.3.0', value), invalid);
   await page.goto('/');
   await page.getByRole('button', { name: '导航 设置', exact: true }).click();
   await expect(page.getByRole('spinbutton', { name: '角色每页行数', exact: true })).toHaveValue('5');
   await expect(page.getByRole('spinbutton', { name: '角色配置疏松每页行数', exact: true })).toHaveValue('5');
   await expect(page.getByRole('spinbutton', { name: '圣遗物紧凑每页行数', exact: true })).toHaveValue('8');
   await expect(page.getByRole('spinbutton', { name: '队伍每页行数', exact: true })).toHaveValue('4');
-  expect(await page.evaluate(() => localStorage.getItem('leyline-library-page-rows-0.2.0'))).toBe(invalid);
+  expect(await page.evaluate(() => localStorage.getItem('leyline-library-page-rows-0.3.0'))).toBe(invalid);
 });
 
 test('recorded library respects each page and density setting while retaining pagination behavior', async ({ page }) => {
@@ -139,7 +139,7 @@ test('recorded library respects each page and density setting while retaining pa
   await bottom.getByRole('button', { name: '下一页', exact: true }).click();
   await expect(page.locator('.character-card')).toHaveCount(2);
   await expect(page.getByLabel('顶部页码', { exact: true })).toHaveValue('3');
-  const accountBeforeSettings = await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0'));
+  const accountBeforeSettings = await page.evaluate(() => localStorage.getItem('leyline-account-0.3.0'));
 
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.getByRole('button', { name: '导航 设置', exact: true }).click();
@@ -149,7 +149,7 @@ test('recorded library respects each page and density setting while retaining pa
   ]) {
     await page.getByRole('spinbutton', { name: label, exact: true }).fill(value);
   }
-  expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0'))).toBe(accountBeforeSettings);
+  expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.3.0'))).toBe(accountBeforeSettings);
   await navigate(page, 'characters');
   await expect(page.locator('.character-card')).toHaveCount(6);
   await top.getByRole('button', { name: '下一页', exact: true }).click();

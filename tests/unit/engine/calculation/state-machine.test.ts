@@ -20,7 +20,7 @@ describe('Vesna source actions and fixed event-state execution', () => {
     library = readCalculationLibrary();
     character = await getCharacter('vesna');
     actions = (await getCharacterActions({ namespace: character.namespace, id: character.id, revision: character.revision }))!;
-    build = { schemaVersion: '0.2.0', kind: 'calculation-build', dataVersion: character.dataVersion, character,
+    build = { schemaVersion: '0.3.0', kind: 'calculation-build', dataVersion: character.dataVersion, character,
       weapon: await getWeapon('favoniussword'), artifacts: [], sets: [], artifactMain: await getArtifactMain(),
       level: 90, ascension: 6, constellation: 0, talents: { normal: 10, skill: 10, burst: 10 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };

@@ -13,7 +13,7 @@ test('compact showcase keeps inventory status after deletion and supports single
   await page.getByLabel('游戏 UID',{exact:true}).fill('618285856');await page.getByRole('button',{name:'查询角色展柜',exact:true}).click();
   await page.getByRole('button',{name:'清空选择',exact:true}).click();await page.getByRole('button',{name:'导入安柏',exact:true}).click();
   await page.getByRole('button',{name:'确认导入 1 位角色',exact:true}).click();
-  const showcase=await page.evaluate(()=>JSON.stringify(JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document.characters[0].showcase));
+  const showcase=await page.evaluate(()=>JSON.stringify(JSON.parse(localStorage.getItem('leyline-account-0.3.0')!).document.characters[0].showcase));
   await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();
   const role=page.getByRole('dialog',{name:'安柏',exact:true}),grid=role.locator('.detail-artifacts .equipment-grid');
   await role.getByRole('button',{name:'展柜',exact:true}).click();
@@ -29,7 +29,7 @@ test('compact showcase keeps inventory status after deletion and supports single
     await page.getByRole('dialog',{name:'删除圣遗物？',exact:true}).getByRole('button',{name:'删除',exact:true}).click();
   }
   await expect(page.locator('.inventory-card')).toHaveCount(0);
-  const equipment=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document.characters[0].equipment);
+  const equipment=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.3.0')!).document.characters[0].equipment);
   expect(Object.values(equipment)).toHaveLength(5);
   await page.getByTestId('workspace-nav-characters').click();await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();
   await expect(grid.locator('.unstored-badge')).toHaveCount(5);
@@ -49,8 +49,8 @@ test('compact showcase keeps inventory status after deletion and supports single
   await role.getByRole('button',{name:'展柜',exact:true}).click();await page.screenshot({path:'artifacts/showcase-inventory-imported.png',fullPage:true});
   await role.getByRole('button',{name:'查看死之羽详情',exact:true}).click();const detail=page.locator('.artifact-detail-dialog');
   await expect(detail.locator('.unstored-badge')).toHaveText('未入库');await detail.getByRole('button',{name:/^关闭/}).click();
-  expect(await page.evaluate(()=>JSON.stringify(JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document.characters[0].showcase))).toBe(showcase);
-  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document.characters[0].equipment)).toEqual(equipment);
+  expect(await page.evaluate(()=>JSON.stringify(JSON.parse(localStorage.getItem('leyline-account-0.3.0')!).document.characters[0].showcase))).toBe(showcase);
+  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.3.0')!).document.characters[0].equipment)).toEqual(equipment);
   await role.getByRole('button',{name:'关闭安柏',exact:true}).click();await page.reload();
   await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();await role.getByRole('button',{name:'展柜',exact:true}).click();
   await expect(grid.locator('.unstored-badge')).toHaveCount(4);await expect(grid.locator('.artifact-item-card').first().locator('.unstored-badge')).toHaveCount(0);

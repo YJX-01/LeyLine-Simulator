@@ -12,7 +12,7 @@ import { addAttributeCapture, defaultEnemy } from '../../../../src/web/src/domai
 
 // Independent legal calculation settings from pinned genshin-db and KQM. No player build/observed axis.
 async function buildFor(id: string, weapon: string, constellation = 0): Promise<Build> {
-  return { schemaVersion: '0.2.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), artifactMain: await getArtifactMain(),
+  return { schemaVersion: '0.3.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), artifactMain: await getArtifactMain(),
     level: 90, ascension: 6, constellation, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 70, weaponAscension: 4, refinement: 1, artifacts: [], sets: [] };
 }
 const request = (build: Build): DamageRequest => ({ ...selectCatalogHit(build, `${build.character.id}.skill`, 0), crit: 'noncritical', reaction: 'none', ...(build.character.id === 'beidou' ? { facts: eventCounts({ counterCharge: 2 }) } : {}) });

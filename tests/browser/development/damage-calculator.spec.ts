@@ -370,7 +370,7 @@ test('calculator shares the team and character pickers and retains a four-member
     useSavedTeamsStore().save(name,project);
     return name;
   }, { raw: JSON.parse(readFileSync(vesnaRecording,'utf8')), members });
-  const storage = () => page.evaluate(() => ['leyline-account-0.2.0','leyline-saved-teams-0.2.0','leyline-axis-recovery-0.2.0'].map(key => localStorage.getItem(key)));
+  const storage = () => page.evaluate(() => ['leyline-account-0.3.0','leyline-saved-teams-0.3.0','leyline-axis-recovery-0.3.0'].map(key => localStorage.getItem(key)));
   const before = await storage();
   const sizes = (card: Locator) => card.locator('.team-row-members > .game-icon').evaluateAll(nodes =>
     nodes.map(node => [node.getBoundingClientRect().width, node.getBoundingClientRect().height]));
@@ -1024,7 +1024,7 @@ test('missing-build derivative of the original account stays selectable and carr
   expect(copied.artifacts.map(item => item.id)).toEqual(Object.values(before.equipment));
   expect(copied.artifacts).toHaveLength(5);
   expect(copied.weapon?.id).toBe('dullblade');
-  const storedAccount = await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0')!);
+  const storedAccount = await page.evaluate(() => localStorage.getItem('leyline-account-0.3.0')!);
   const linked = (await readDocument<LocalAccount>(page, 'account', storedAccount)).characters[0];
   expect(linked.id).toBe(before.characterId);
   expect(linked.equipment).toEqual(before.equipment);

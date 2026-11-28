@@ -53,14 +53,14 @@ test('timeline saves a pending hit and evaluates its selected character damage',
   });
   await expect(inspector.locator('.inspector-damage')).toContainText(/\d[\d,]*\.\d/);
 
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.2.0')!).document.project as Project);
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.3.0')!).document.project as Project);
   expect(saved.timeline).toHaveLength(1);
   expect(saved.timeline[0].damage).toMatchObject({ hit: { hitId: 'varesa.burst.param5' }, crit: 'critical', reaction: 'none' });
   await editor.getByText('战斗事件记录', { exact: true }).click();
   await editor.getByLabel('记录类型').selectOption('shieldCreated');
   await editor.getByRole('button', { name: '在光标处记录', exact: true }).click();
   await expect.poll(() => page.evaluate(() => {
-    const project: Project = JSON.parse(localStorage.getItem('leyline-axis-recovery-0.2.0')!).document.project;
+    const project: Project = JSON.parse(localStorage.getItem('leyline-axis-recovery-0.3.0')!).document.project;
     return project.timeline.some(row => row.kind === 'state-change' && row.facts?.shieldCreated?.value?.value === true);
   })).toBe(true);
 });
@@ -293,7 +293,7 @@ test('recorded Xingqiu format project keeps actions and individually selected hi
   await page.getByRole('button', { name: '在光标处记录伤害点', exact: true }).click();
   await expect(page.locator('.desk-record')).toHaveCount(2);
   await expect(page.locator('.desk-record.damage')).toHaveCount(1);
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.2.0')!).document.project as Project);
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.3.0')!).document.project as Project);
   expect(saved.timeline[0]).toMatchObject({ kind: 'action', skillId: 'xingqiu.skill' });
   expect(saved.timeline[1]).toMatchObject({ kind: 'damage', timeMs: 1234, damage: { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'xingqiu', revision: '3' }, hitId: 'xingqiu.skill.param2' }, crit: null, reaction: null } });
   // The new ordinary-attack binding is another explicit format edit, never an inferred combat sequence.
@@ -305,7 +305,7 @@ test('recorded Xingqiu format project keeps actions and individually selected hi
   await page.getByRole('button', { name: '在光标处记录伤害点', exact: true }).click();
   await expect(page.locator('.desk-record')).toHaveCount(3);
   await expect(page.locator('.desk-record.damage')).toHaveCount(2);
-  const withNormal = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.2.0')!).document.project as Project);
+  const withNormal = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.3.0')!).document.project as Project);
   expect(withNormal.timeline[2]).toMatchObject({ kind: 'damage', timeMs: 1235,
     damage: { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'xingqiu', revision: '3' }, hitId: 'xingqiu.normal.param3' }, crit: null, reaction: null } });
 });

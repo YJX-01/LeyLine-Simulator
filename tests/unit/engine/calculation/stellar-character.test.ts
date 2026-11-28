@@ -29,7 +29,7 @@ describe('Vesna owned single-hit definitions and fixed TS algorithms', () => {
     weapon = await getWeapon('favoniussword');
   });
   function build(id: string, rank = 0): schemas.StructuredBuild {
-    return { schemaVersion: '0.2.0', kind: 'calculation-build', dataVersion: DATA_VERSION,
+    return { schemaVersion: '0.3.0', kind: 'calculation-build', dataVersion: DATA_VERSION,
       character: characters.get(id)!, weapon, sets: [], artifacts: [], artifactMain: main, level: 90, ascension: 6, constellation: rank,
       talents: { normal: 10, skill: 10, burst: 10 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
