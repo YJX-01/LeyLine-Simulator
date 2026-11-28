@@ -37,7 +37,6 @@ export const calculationTemplateSchema = z.discriminatedUnion('id', [
     origin: z.enum(['direct', 'individual']), mastery: definitionRefSchema, baseMultiplier: z.boolean().optional() }).strict(),
   z.object({ ...template('level-multiplier'), table: definitionRefSchema }).strict(),
   z.object({ ...template('count-coefficient'), table: definitionRefSchema, max: z.number().int().positive() }).strict(),
-  z.object({ ...template('radiance-ratio') }).strict(),
   z.object({ ...template('conditional-bonus'), input: idSchema, relation, threshold: finiteSchema, value: finiteSchema, otherwise: finiteSchema, output: idSchema }).strict(),
   z.object({ ...template('threshold-condition'), input: idSchema, relation, threshold: finiteSchema }).strict(),
   z.object({ ...template('quantity-condition'), input: idSchema, unit: linearUnit.or(z.enum(['energy', 'damage', 'milliseconds'])), relation,

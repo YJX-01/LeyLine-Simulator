@@ -554,18 +554,24 @@ test('Varka binds each stance hit to its hand and C2 follows the triggering atta
 test('Odette keeps one finale per event and selects the stellar ratio and attachment coefficient', async () => {
   const b = auditBuild(await catalog.get('characters', 'odette'), await catalog.get('weapons', 'dullblade'));
   const t = b.character.talents[1], final = t.hits.find(h => h.id === t.id + '.param3');
+  const finalSwirl = t.hits.find(h => h.id === t.id + '.param4');
   const team = prepare([{ id: 'actor', build: b }]), atk = b.character.attributes.base.attack + b.weapon.baseAttack;
   const rate = n => t.parameters.find(p => p.id === 'param' + n).values[0];
-  for (const [mode,count,coefficient] of [['none',0,1],['stellar-conduct',1,1.45],['stellar-conduct',12,2]]) {
+  for (const [mode, count, coefficient] of [['none', 0, 1], ['stellar-conduct', 1, 1.45], ['stellar-conduct', 12, 2], ['stellar-swirl', 1, 1]]) {
     const { setup, request } = auditHit(b.character, t, final);
     request.frame.factOverrides[0].facts.radiance = f({ kind: 'enum', value: mode });
     request.frame.facts.stellarAttachments = number('count', count);
     const out = engine.evaluateStructuredHit(team, setup, request);
     assert.equal(out.outputs.length, 1);
-    near(out.totals.all.value?.value, atk * rate(3) * coefficient * .9 * (1 + Math.min(.14, atk * .00007)));
+    near(out.totals.all.value?.value, mode === 'stellar-swirl' ? 0 : atk * rate(3) * coefficient * .9 * (1 + Math.min(.14, atk * .00007)));
     const dance = t.hits.find(h => h.id === t.id + '.param6');
     request.hit.hitId = setup.events[0].hitId = dance.id;
-    near(engine.evaluateStructuredHit(team, setup, request).totals.all.value?.value, mode === 'none' ? 0 : atk * rate(6) * coefficient * .9 * (1 + Math.min(.14, atk * .00007)));
+    near(engine.evaluateStructuredHit(team, setup, request).totals.all.value?.value, mode === 'stellar-conduct' ? atk * rate(6) * coefficient * .9 * (1 + Math.min(.14, atk * .00007)) : 0);
+    request.hit.hitId = setup.events[0].hitId = finalSwirl.id;
+    near(engine.evaluateStructuredHit(team, setup, request).totals.all.value?.value, mode === 'stellar-swirl' ? atk * rate(4) * .9 * (1 + Math.min(.14, atk * .00007)) : 0);
+    const danceSwirl = t.hits.find(h => h.id === t.id + '.param7');
+    request.hit.hitId = setup.events[0].hitId = danceSwirl.id;
+    near(engine.evaluateStructuredHit(team, setup, request).totals.all.value?.value, mode === 'stellar-swirl' ? atk * rate(7) * .9 * (1 + Math.min(.14, atk * .00007)) : 0);
   }
 });
 
@@ -658,7 +664,7 @@ test('Ayato grants normal attack damage to recipients in his garden through the 
 test('Odette applies her burst to both stellar families once while active and excludes ordinary damage', async () => {
   const b = auditBuild(await catalog.get('characters', 'odette'), await catalog.get('weapons', 'dullblade'));
   const t = b.character.talents[1], team = prepare([{ id: 'actor', build: b }]);
-  for (const [index, mode] of [[1, 'none'], [3, 'stellar-conduct'], [3, 'stellar-swirl']]) {
+  for (const [index, mode] of [[1, 'none'], [3, 'stellar-conduct'], [4, 'stellar-swirl']]) {
     const { setup, request } = auditHit(b.character, t, t.hits.find(h => h.id === t.id + '.param' + index));
     request.frame.factOverrides[0].facts.radiance = f({ kind: 'enum', value: mode });
     request.frame.facts.stellarAttachments = number('count', 1);
@@ -670,7 +676,7 @@ test('Odette applies her burst to both stellar families once while active and ex
       setup.events[1].timeMs = time;
       const result = engine.evaluateStructuredHit(team, setup, request);
       assert.equal(result.outputs.length, 1);
-      near(result.totals.all.value?.value, base * (index === 3 && time < 20000 ? 1.14 : 1));
+      near(result.totals.all.value?.value, base * (index !== 1 && time < 20000 ? 1.14 : 1));
     }
   }
 });

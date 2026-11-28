@@ -275,7 +275,7 @@ function reconcileState(inputProject: Project, actorId: string, inputDamage: Dam
     }
   }
 
-  const branchPredicate = selectedHitBranchPredicate(selected, radiance ? readCalculatorRadiance(damage, actorId) : undefined);
+  const branchPredicate = selectedHitBranchPredicate(selected);
   for (const setting of hitPremiseFacts(branchPredicate, selected.entity.calculation.bundle, {
     constellation: build?.constellation ?? 0,
     ascension: build?.ascension ?? 6,

@@ -32,10 +32,6 @@ export function hitScalingReader(entity: Entity, character: CharacterDefinition,
   function ratioText(binding?: CalculationBinding): string | undefined {
     const value = coefficient(binding);
     if (value !== undefined) return percent.format(value);
-    if (binding?.kind === 'formula' && templates.get(definitionKey(binding.formula))?.id === 'radiance-ratio') {
-      return [['ordinary', '常态'], ['conduct', '星超导'], ['swirl', '星扩散']].map(([key, label]) =>
-        label + ' ' + (ratioText(binding.inputs[key]) ?? '待定')).join(' / ');
-    }
   }
   function describe(base: Base): string | undefined {
     const template = templates.get(definitionKey(base.formula)), inputs = base.bindings;

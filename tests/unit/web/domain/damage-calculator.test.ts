@@ -389,7 +389,7 @@ describe('multi-actor calculator evaluation and teammate conditional buffs', () 
       return doc;
     };
 
-    const hitIds = ['odette.skill.param6', 'odette.skill.param9', 'odette.c1.finale-conduct', 'odette.c1.finale-swirl'] as const;
+    const hitIds = ['odette.skill.param6', 'odette.skill.param7', 'odette.skill.param9', 'odette.skill.param10', 'odette.c1.finale-conduct', 'odette.c1.finale-swirl'] as const;
     const baselineResults = new Map<string, { doc: DamageCalculatorDocument; prepared: Project; critical: number; expected: number }>();
 
     for (const hitId of hitIds) {
@@ -430,7 +430,7 @@ describe('multi-actor calculator evaluation and teammate conditional buffs', () 
       expect(withBoth.critical, `${hitId}+TTDS+C2 critical`).toBeGreaterThan(withTtds.critical);
       expect(withBoth.expected, `${hitId}+TTDS+C2 expected`).toBeGreaterThan(withTtds.expected);
     }
-  });
+  }, 20000);
 
   it('respects excludeOwner on TTDS when the hit-owner holds it in a 4-member party including Vesna', async () => {
     const [lisa, vesna, bennett, fischl, reactionRules] = await Promise.all([

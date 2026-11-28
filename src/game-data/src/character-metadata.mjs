@@ -45,8 +45,7 @@ export function assembleCharacter(metadata, curves, dataVersion) {
       if (hit.elementBy === 'absorbedElement') conditions.push(expression({ call: 'condition.not', inputs: { term0: {
         call: 'element.unconverted', inputs: { mode: { fact: hit.elementBy } }, output: 'active' } }, output: 'active' }, facts));
       const predicate = all(conditions);
-      const families = typeof family === 'string' ? [family] : [...new Set(Object.values(family.cases))];
-      const branches = families.filter(family => family !== 'unresolved').map(family => ({ family, condition: predicate }));
+      const branches = family === 'unresolved' ? [] : [{ family, condition: predicate }];
       return assembleHit({ ...hit, origin, category: hit.category ?? talent.category, element: hit.element ?? talent.element,
         sources, coverageRefs }, talent.id, branches, facts);
     }) };

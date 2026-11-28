@@ -847,97 +847,24 @@
         },
         {
           "id": "odette.skill.param3",
-          "name": "破晓终奏终击",
-          "base": {
-            "template": "attack-damage-base",
-            "inputs": {
-              "attribute": {
-                "stat": "attack"
-              },
-              "ratio": {
-                "call": "stellar.radiance-ratio",
-                "inputs": {
-                  "mode": {
-                    "fact": "radiance"
-                  },
-                  "ordinary": {
-                    "parameter": "param3",
-                    "skill": "odette.skill"
-                  },
-                  "conduct": {
-                    "parameter": "param3",
-                    "skill": "odette.skill"
-                  },
-                  "swirl": {
-                    "parameter": "param4",
-                    "skill": "odette.skill"
-                  }
-                }
-              }
-            },
-            "output": "base"
-          },
+          "name": "破晓终奏终击·星超导",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param3"
+            }
+          ],
           "support": "hit-unavailable",
           "element": "cryo",
-          "family": {
-            "by": "radiance",
-            "cases": {
-              "none": "stellar-conduct",
-              "stellar-conduct": "stellar-conduct",
-              "stellar-swirl": "stellar-swirl"
-            }
-          }
-        },
-        {
-          "id": "odette.skill.param6",
-          "name": "拂羽舞步·星烁",
-          "base": {
-            "template": "attack-damage-base",
-            "inputs": {
-              "attribute": {
-                "stat": "attack"
-              },
-              "ratio": {
-                "call": "stellar.radiance-ratio",
-                "inputs": {
-                  "mode": {
-                    "fact": "radiance"
-                  },
-                  "ordinary": {
-                    "parameter": "param6",
-                    "skill": "odette.skill"
-                  },
-                  "conduct": {
-                    "parameter": "param6",
-                    "skill": "odette.skill"
-                  },
-                  "swirl": {
-                    "parameter": "param7",
-                    "skill": "odette.skill"
-                  }
-                }
-              }
-            },
-            "output": "base"
-          },
-          "support": "hit-unavailable",
-          "element": "cryo",
-          "family": {
-            "by": "radiance",
-            "cases": {
-              "none": "stellar-conduct",
-              "stellar-conduct": "stellar-conduct",
-              "stellar-swirl": "stellar-swirl"
-            }
-          },
+          "family": "stellar-conduct",
           "when": [
             {
               "call": "odette.radiant",
               "inputs": {
                 "term0": {
-                  "call": "odette.no-radiance",
+                  "call": "odette.swirl-radiance",
                   "inputs": {
-                    "mode": {
+                    "value": {
                       "fact": "radiance"
                     }
                   },
@@ -949,59 +876,119 @@
           ]
         },
         {
-          "id": "odette.skill.param9",
-          "name": "旋翼舞步·星烁",
-          "base": {
-            "template": "attack-damage-base",
-            "inputs": {
-              "attribute": {
-                "stat": "attack"
-              },
-              "ratio": {
-                "call": "stellar.radiance-ratio",
-                "inputs": {
-                  "mode": {
-                    "fact": "radiance"
-                  },
-                  "ordinary": {
-                    "parameter": "param9",
-                    "skill": "odette.skill"
-                  },
-                  "conduct": {
-                    "parameter": "param9",
-                    "skill": "odette.skill"
-                  },
-                  "swirl": {
-                    "parameter": "param10",
-                    "skill": "odette.skill"
-                  }
-                }
-              }
-            },
-            "output": "base"
-          },
+          "id": "odette.skill.param4",
+          "name": "破晓终奏终击·星扩散",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param4"
+            }
+          ],
           "support": "hit-unavailable",
           "element": "cryo",
-          "family": {
-            "by": "radiance",
-            "cases": {
-              "none": "stellar-conduct",
-              "stellar-conduct": "stellar-conduct",
-              "stellar-swirl": "stellar-swirl"
-            }
-          },
+          "family": "stellar-swirl",
           "when": [
             {
-              "call": "odette.radiant",
+              "call": "odette.swirl-radiance",
               "inputs": {
-                "term0": {
-                  "call": "odette.no-radiance",
-                  "inputs": {
-                    "mode": {
-                      "fact": "radiance"
-                    }
-                  },
-                  "output": "active"
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ]
+        },
+        {
+          "id": "odette.skill.param6",
+          "name": "拂羽舞步·星超导",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param6"
+            }
+          ],
+          "support": "hit-unavailable",
+          "element": "cryo",
+          "family": "stellar-conduct",
+          "when": [
+            {
+              "call": "odette.mirror-radiance-stellar-conduct",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ]
+        },
+        {
+          "id": "odette.skill.param7",
+          "name": "拂羽舞步·星扩散",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            }
+          ],
+          "support": "hit-unavailable",
+          "element": "cryo",
+          "family": "stellar-swirl",
+          "when": [
+            {
+              "call": "odette.swirl-radiance",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ]
+        },
+        {
+          "id": "odette.skill.param9",
+          "name": "旋翼舞步·星超导",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param9"
+            }
+          ],
+          "support": "hit-unavailable",
+          "element": "cryo",
+          "family": "stellar-conduct",
+          "when": [
+            {
+              "call": "odette.mirror-radiance-stellar-conduct",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ]
+        },
+        {
+          "id": "odette.skill.param10",
+          "name": "旋翼舞步·星扩散",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param10"
+            }
+          ],
+          "support": "hit-unavailable",
+          "element": "cryo",
+          "family": "stellar-swirl",
+          "when": [
+            {
+              "call": "odette.swirl-radiance",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
                 }
               },
               "output": "active"
@@ -1759,10 +1746,7 @@
                 ]
               }
             }
-          ],
-          "stacking": {
-            "crossOwnerUnverified": true
-          }
+          ]
         },
         {
           "id": "odette.c6-splendor-elevation",
@@ -1799,9 +1783,6 @@
           ],
           "activation": {
             "ascension": 1
-          },
-          "stacking": {
-            "crossOwnerUnverified": true
           }
         }
       ]
@@ -1835,20 +1816,6 @@
   },
   "contextSupport": "context-unavailable",
   "formulas": [
-    {
-      "id": "odette.no-radiance",
-      "template": {
-        "id": "enum-condition",
-        "revision": "1",
-        "input": "mode",
-        "values": [
-          "none",
-          "stellar-conduct",
-          "stellar-swirl"
-        ],
-        "equals": "none"
-      }
-    },
     {
       "id": "odette.radiant",
       "template": {

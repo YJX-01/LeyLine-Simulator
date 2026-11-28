@@ -57,10 +57,6 @@ function referenceDamage(build, talent, hit, setup, request, party, withBuffs = 
     if (name === 'product.scalar' || name === 'product.damage') return termValue(input.basis) * termValue(input.rate);
     // Nefer, talent and C1: each Veil stack increases the Phantasm terms by 8%.
     if (name === 'nefer.phantasm-veil-multiplier') return 1 + .08 * termValue(input.basis);
-    if (name === 'stellar.radiance-ratio') {
-      const mode = termValue(input.mode);
-      return termValue(input[mode === 'stellar-swirl' ? 'swirl' : mode === 'stellar-conduct' ? 'conduct' : 'ordinary']);
-    }
     if (name?.startsWith('damage-sum-')) return Object.values(input).reduce((sum, item) => sum + termValue(item), 0);
     // Zibai C4 scales the skill's fourth-hit DEF ratio by the declared 250%.
     if (name?.endsWith('-damage-base') || name === 'zibai.lunar-flourish-base') {
@@ -84,7 +80,7 @@ function referenceDamage(build, talent, hit, setup, request, party, withBuffs = 
     if (term.formula && term.formula !== 'raidenshogun.resolve-damage-base') return NaN;
     return sum + stats[term.stat] * (term.ratio ?? parameter(term.skill, term.parameter)) * (term.count ? valueOfFact(term.count) : 1);
   }, 0) : termValue(hit.base);
-  const family = typeof hit.family === 'object' ? hit.family.cases[valueOfFact(hit.family.by)] : hit.family ?? 'ordinary';
+  const family = hit.family ?? 'ordinary';
   const id = hit.id;
   const steadyCore = withBuffs && build.constellation >= 6 && valueOfFact('mitya.stable') === true
     && ['mitya.skill.param3', 'mitya.skill.param4', 'mitya.skill.param5', 'mitya.c4.beacon-consumption'].includes(id) ? 1.15 : 1;
@@ -329,8 +325,7 @@ export function rosterEvaluation(entities, engine, onQuery) {
         const family = declaration.family;
         if (hit.elementBy === 'absorbedElement') request.frame.facts[hit.elementBy] = fact({ kind: 'enum', value: party.find(e => convertedElements.includes(e)) ?? 'pyro' });
         if (hit.elementBy === 'strikingHand') request.frame.facts.strikingHand = fact({ kind: 'enum', value: 'right' });
-        if (typeof family === 'object') setGateFacts(character, request.frame, { [family.by]: enabled?.values[family.by] ?? Object.keys(family.cases)[0] });
-        if (family === 'stellar-conduct' || typeof family === 'object' && Object.values(family.cases).includes('stellar-conduct')) request.frame.facts.stellarAttachments = number('count', 1);
+        if (family === 'stellar-conduct') request.frame.facts.stellarAttachments = number('count', 1);
         setup.targets[0].inputs.level = number('count', gateBuild.level);
         const evaluated = engine.evaluateStructuredHit(activeTeam, setup, request);
         const expected = referenceDamage(gateBuild, talent, declaration, setup, request, party);
@@ -372,18 +367,6 @@ export function rosterEvaluation(entities, engine, onQuery) {
         if (gateBuild.ascension || gateBuild.constellation) row.activeRanks = { ascension: gateBuild.ascension, constellation: gateBuild.constellation };
         if (party.length) row.party = party;
         if (masteryOnly) row.weapon = gateBuild.weapon.id;
-        if (typeof family === 'object') row.branches = Object.entries(family.cases).map(([choice, expectedFamily]) => {
-          const probe = structuredClone(request);
-          setGateFacts(character, probe.frame, { [family.by]: choice });
-          const result = engine.evaluateStructuredHit(activeTeam, setup, probe);
-          const gate = cases.find(test => Object.hasOwn(test.values, family.by) && test.values[family.by] === choice && test.party === party
-            && Object.entries(test.ranks).every(([key, rank]) => gateBuild[key] === rank)
-            && Object.entries(test.values).every(([key, value]) => key === family.by || enabled?.values[key] === value));
-          const branch = { choice, family: expectedFamily, value: result.totals.all.value?.value ?? null,
-            expected: gate?.active === false ? 0 : referenceDamage(gateBuild, talent, declaration, setup, probe, party) };
-          if (!agrees(branch.value, branch.expected) || result.outputs.length !== 1 || result.outputs[0].family !== expectedFamily) row.issue = '条件分支缺失或重复';
-          return branch;
-        });
         if (hit.elementBy === 'absorbedElement') row.elementCases = ['none', ...convertedElements].map(element => {
           const probe = structuredClone(request);
           probe.frame.facts[hit.elementBy] = fact({ kind: 'enum', value: element });
@@ -447,7 +430,6 @@ export function rosterEvaluation(entities, engine, onQuery) {
             const counting = { request: structuredClone(request), setup: structuredClone(setup) };
             if (enabled) setGateFacts(character, counting.request.frame, enabled.values);
             if (family === 'stellar-conduct') counting.request.frame.facts.stellarAttachments = number('count', 1);
-            if (typeof family === 'object') setGateFacts(character, counting.request.frame, { [family.by]: enabled?.values[family.by] ?? Object.keys(family.cases)[0] });
             const gear = mastery ? entities.weapons.find(w => w.id === 'sacrificialfragments' && w.weaponType === character.identity.weaponType) : undefined;
             const countBuild = gear ? { ...gateBuild, weapon: gear } : gateBuild;
             const countTeam = prepare(countBuild, party);

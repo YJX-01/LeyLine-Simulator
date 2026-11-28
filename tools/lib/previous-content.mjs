@@ -29,7 +29,7 @@ export function convertPreviousCharacter(input, version) {
   for (const talent of character.talents) {
     const rows = talent.details.map(row => ({ ...row, keys: [...new Set([...row.template.matchAll(/\{([^}:]+)(?::[^}]*)?\}/g)].map(match => match[1]))] }));
     const firstParams = new Set(talent.hits.map(hit => hit.scaling[0].parameter));
-    talent.hits = talent.hits.map(({ id, parameter, scaling, element, category, outputs, ...rest }) => {
+    talent.hits = talent.hits.flatMap(({ id, parameter, scaling, element, category, outputs, ...rest }) => {
       const key = parameter ?? scaling[0].parameter;
       const row = rows.find(row => row.keys.includes(key));
       let name = row?.label.trim() || talent.name;
@@ -37,19 +37,22 @@ export function convertPreviousCharacter(input, version) {
         const index = row.keys.indexOf(key);
         name = name === '低空/高空坠地冲击伤害' ? ['低空坠地冲击伤害', '高空坠地冲击伤害'][index] : name + '（第' + (index + 1) + '击）';
       }
-      let family = outputs[0]?.family ?? 'unresolved';
-      let when = outputs[0]?.condition ? [outputs[0].condition] : undefined;
+      const base = { ...(element === talent.element ? {} : { element }), ...(category === talent.category ? {} : { category }), base: scaling };
       if (outputs.length > 1) {
         if (id !== 'vesna.skill.c6.spirit' || outputs.length !== 2 || outputs[0].family !== 'ordinary' || outputs[1].family !== 'stellar-swirl'
           || outputs[0].condition?.inputs?.term1?.inputs?.term0?.call !== 'vesna.radiance' || outputs[1].condition?.inputs?.term1?.call !== 'vesna.radiance'
           || JSON.stringify(outputs[0].condition.inputs.term0) !== JSON.stringify(outputs[1].condition.inputs.term0)) throw new Error('无法唯一转换旧版多输出：' + id);
-        family = { by: 'radiance', cases: { none: 'ordinary', 'stellar-conduct': 'ordinary', 'stellar-swirl': 'stellar-swirl' } };
-        when = [outputs[0].condition.inputs.term0];
+        return [
+          { id, name: '六命翔风剑灵剑', ...base, ...(outputs[0]?.origin ? { origin: outputs[0].origin } : {}), when: [outputs[0].condition], ...rest },
+          { id: id + '.stellar', name: '六命翔风剑灵剑·星扩散', ...base, family: 'stellar-swirl', ...(outputs[1]?.origin ? { origin: outputs[1].origin } : {}),
+            when: [outputs[1].condition], ...rest, ...(rest.coverageId ? { coverageId: rest.coverageId + '.stellar' } : {}) },
+        ];
       }
+      const family = outputs[0]?.family ?? 'unresolved';
+      const when = outputs[0]?.condition ? [outputs[0].condition] : undefined;
       if (id === 'vesna.skill.c6.slash') name = '六命翔风剑斩击';
       if (id === 'vesna.skill.c6.spirit') name = '六命翔风剑灵剑';
-      return { id, name, ...(element === talent.element ? {} : { element }), ...(category === talent.category ? {} : { category }), base: scaling,
-        ...(family === 'ordinary' ? {} : { family }), ...(outputs[0]?.origin ? { origin: outputs[0].origin } : {}), ...(when ? { when } : {}), ...rest };
+      return [{ id, name, ...base, ...(family === 'ordinary' ? {} : { family }), ...(outputs[0]?.origin ? { origin: outputs[0].origin } : {}), ...(when ? { when } : {}), ...rest }];
     });
   }
   return character;
@@ -186,7 +189,8 @@ export function convertPreviousDocument(input, version) {
     }
     const { skillId, hitId, outputId, conditions: oldConditions, facts, inputs, stateOverrides, ...rest } = damage;
     const { namespace, id, revision } = character;
-    record.damage = { ...rest, hit: { definition: { group: 'characters', namespace, id, revision }, hitId }, ...(rows.length ? { facts: rows } : {}) };
+    const targetHitId = branch && selected?.family === 'stellar-swirl' ? hitId + '.stellar' : hitId;
+    record.damage = { ...rest, hit: { definition: { group: 'characters', namespace, id, revision }, hitId: targetHitId }, ...(rows.length ? { facts: rows } : {}) };
   }
   const recordingIds = new Map();
   function recordedId(id) {

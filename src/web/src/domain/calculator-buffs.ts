@@ -296,11 +296,8 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
   const recipientId = dealer?.id ?? sourceId;
   const current = withCurrentConditions(damage, recipientId === sourceId ? intervals : calculatorIntervals(project, recipientId, timeMs, recordId), recipientId);
   const families = Object.keys(hit?.damage ?? {});
-  const owner = builds.get(sourceId)?.character;
-  const selector = authoredHit(owner?.metadata, skill?.id, hit?.id)?.family;
-  const branch = typeof selector === 'object' ? calculatorFactValue(current, selector.by, recipientId) : undefined;
   const family = reaction ? (isTransformative(reaction.family) ? 'transformative' : reaction.family)
-    : typeof selector === 'object' && typeof branch === 'string' ? selector.cases[branch] : families.length === 1 ? families[0] : undefined;
+    : families.length === 1 ? families[0] : undefined;
   const frame: CombatFrame['hit'] = reaction && family ? { skillId:null, hitId:null, category:null, element:reaction.element, family, origin:'reaction', reactionId:reaction.family }
     : selected && hit && family ? { skillId: skill?.id ?? null, hitId: hit.id, category: hit.category,
     element: dealer?.build?.character.identity.element ?? dealer?.element ?? calculatorHitElement(project, current, selected, sourceId, timeMs, recordId, family),
@@ -314,7 +311,7 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
     if (radiance && radianceValue !== undefined) {
       hitFactValues.set(JSON.stringify([{ kind: 'actor', id: sourceId }, 'radiance']), radianceValue);
     }
-    const branchPredicate = selectedHitBranchPredicate(selected, radianceValue);
+    const branchPredicate = selectedHitBranchPredicate(selected);
     const premise = branchPredicate ? hitPremiseFacts(branchPredicate, selected.entity.calculation.bundle, {
       constellation: ownerBuild?.constellation ?? 0,
       ascension: ownerBuild?.ascension ?? 6,

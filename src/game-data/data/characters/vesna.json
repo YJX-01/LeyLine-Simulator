@@ -1634,7 +1634,7 @@
               "vesna.skill.param9",
               "vesna.burst.param1",
               "vesna.burst.param2",
-              "vesna.skill.c6.spirit"
+              "vesna.skill.c6.spirit.stellar"
             ],
             "families": [
               "stellar-swirl"
@@ -2005,19 +2005,53 @@
               "ratio": 2
             }
           ],
-          "family": {
-            "by": "radiance",
-            "cases": {
-              "none": "ordinary",
-              "stellar-conduct": "ordinary",
-              "stellar-swirl": "stellar-swirl"
-            }
-          },
+          "family": "ordinary",
           "when": [
-            "vesna.c6Window"
+            "vesna.c6Window",
+            {
+              "call": "vesna.condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "vesna.radiance",
+                  "inputs": {
+                    "mode": {
+                      "fact": "radiance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
           ],
           "support": "hit-complete",
           "coverageId": "coverage.vesna.vesna.skill.c6.spirit",
+          "skill": "vesna.skill"
+        },
+        {
+          "id": "vesna.skill.c6.spirit.stellar",
+          "name": "六命翔风剑灵剑·星扩散",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 2
+            }
+          ],
+          "family": "stellar-swirl",
+          "when": [
+            "vesna.c6Window",
+            {
+              "call": "vesna.radiance",
+              "inputs": {
+                "mode": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-complete",
+          "coverageId": "coverage.vesna.vesna.skill.c6.spirit.stellar",
           "skill": "vesna.skill"
         }
       ]

@@ -183,6 +183,20 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
     expect(unsupported.execution).toBe('partial'); expect(unsupported.totals.all.state).toBe('unknown');
     expect(unsupported.requiredInputs.map(input => input.key)).toContain('radiance');
     expect(unsupported.trace.find(node => node.id === unsupported.totals.all.traceId)?.state).toBe('unknown');
+    for (const [hitId, radiance] of [['aether-cryo.burst.param1', 'none'], ['aether-cryo.burst.param8', 'stellar-conduct'], ['aether-cryo.burst.param10', 'stellar-swirl']] as const) {
+      const splitHit = schemas.characterHitRef(character, hitId);
+      const branch = schemas.findCharacterHit(character, splitHit)!;
+      const splitSetup = structuredClone(setup);
+      splitSetup.events[0].skillId = branch.talent.id; splitSetup.events[0].hitId = branch.hit.id; splitSetup.events[0].category = branch.hit.category;
+      const evaluated = evaluateStructuredHit(prepared.team, splitSetup, { ...request, actorId: 'teammate', hit: splitHit,
+        frame: { ...request.frame,
+          factOverrides: [{ subject: { kind: 'actor', id: 'teammate' }, facts: { radiance: fact({ kind: 'enum', value: radiance }) } }],
+          facts: { frostglow: fact(quantity('count', 0)), ...(radiance === 'stellar-conduct' ? { stellarAttachments: fact(quantity('count', 1)) } : {}) } } });
+      expect(evaluated.execution).not.toBe('invalid');
+      expect(evaluated.requiredInputs.map(input => input.key)).not.toContain('radiance');
+      expect(evaluated.outputs).toHaveLength(1);
+      expect(evaluated.outputs[0].family).toBe(radiance === 'none' ? 'ordinary' : radiance);
+    }
   });
 
   it('evaluates the actual Ayato ATK/HP base component with typed Namisen counts and skips an inactive HP term', async () => {

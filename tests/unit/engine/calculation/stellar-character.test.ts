@@ -65,8 +65,8 @@ describe('Vesna owned single-hit definitions and fixed TS algorithms', () => {
     const attack = whiteAttack() * (1 + (radiant ? 0.06 * 2 * (rank >= 4 ? 3 : 1) : 0) + (rank >= 2 && stacks === 6 ? 0.4 : 0));
     const mastery = radiant ? 25 * (rank >= 4 ? 3 : 1) : 0;
     const level = 10 + (skill === 'skill' && rank >= 3 || skill === 'burst' && rank >= 5 ? 3 : 0);
-    const ratio = id === 'c6.slash' ? 1.5 : id === 'c6.spirit' ? 2 : parameters['combat' + ({ normal: 1, skill: 2, burst: 3 }[skill])][id.replace('.anemo', '')][level - 1];
-    const spirit = skill === 'burst' || skill === 'skill' && ['param4', 'param5', 'param6', 'param7', 'param8', 'param9', 'c6.spirit'].includes(id);
+    const ratio = id === 'c6.slash' ? 1.5 : id.startsWith('c6.spirit') ? 2 : parameters['combat' + ({ normal: 1, skill: 2, burst: 3 }[skill])][id.replace('.anemo', '')][level - 1];
+    const spirit = skill === 'burst' || skill === 'skill' && ['param4', 'param5', 'param6', 'param7', 'param8', 'param9', 'c6.spirit', 'c6.spirit.stellar'].includes(id);
     const base = attack * ratio * (spirit ? 1 + 0.1 * stacks : 1);
     return stellar ? base * (1 + Math.min(attack * 0.00007, 0.14)) * (1 + 6 * mastery / (mastery + 2000) + (rank >= 1 && stance ? 0.2 : 0)) * 0.9 * (rank >= 6 ? 1.2 : 1)
       : base * 0.5 * 0.9;

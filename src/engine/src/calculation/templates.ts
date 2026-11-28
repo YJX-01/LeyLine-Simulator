@@ -172,12 +172,6 @@ export function instantiateCalculationTemplate(recipe: FormulaDefinition): Formu
       const b = new TemplateBuilder(recipe), count = b.input('count', q('count'), { min: 0, max: selected.max });
       b.output('value', b.lookup('$coefficient', selected.table, count), q('scalar')); return b.finish();
     }
-    case 'radiance-ratio': {
-      const b = new TemplateBuilder(recipe), mode = b.input('mode', { kind: 'enum', values: ['none', 'stellar-conduct', 'stellar-swirl'] });
-      const matches = (value: string) => b.compare('$is-' + value, 'eq', mode, b.constant('$' + value, { kind: 'enum', value }));
-      const radiant = b.select('$radiant', matches('stellar-conduct'), b.input('conduct', q('scalar')), b.input('swirl', q('scalar')));
-      b.output('value', b.select('$ratio', matches('none'), b.input('ordinary', q('scalar')), radiant), q('scalar')); return b.finish();
-    }
     case 'level-multiplier': {
       const b = new TemplateBuilder(recipe), level = b.input('level', q('count'), { min: 1, max: 100 });
       b.output('value', b.lookup('$value', selected.table, level), q('damage')); return b.finish();

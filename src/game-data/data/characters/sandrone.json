@@ -425,38 +425,16 @@
         {
           "id": "sandrone.normal.param5",
           "name": "重击冷凝射线",
-          "base": {
-            "template": "attack-damage-base",
-            "inputs": {
-              "attribute": {
-                "stat": "attack"
-              },
-              "ratio": {
-                "call": "stellar.radiance-ratio",
-                "inputs": {
-                  "mode": {
-                    "fact": "radiance"
-                  },
-                  "ordinary": {
-                    "parameter": "param5",
-                    "skill": "sandrone.normal"
-                  },
-                  "conduct": {
-                    "parameter": "param6",
-                    "skill": "sandrone.normal"
-                  },
-                  "swirl": {
-                    "parameter": "param11",
-                    "skill": "sandrone.normal"
-                  }
-                }
-              }
-            },
-            "output": "base"
-          },
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param5"
+            }
+          ],
           "support": "hit-unavailable",
           "element": "cryo",
           "category": "charged",
+          "family": "ordinary",
           "when": [
             {
               "call": "sandrone.not",
@@ -466,16 +444,85 @@
                 }
               },
               "output": "active"
+            },
+            {
+              "call": "sandrone.radiance-none",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ]
+        },
+        {
+          "id": "sandrone.normal.param6",
+          "name": "重击冷凝射线·星超导",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param6"
             }
           ],
-          "family": {
-            "by": "radiance",
-            "cases": {
-              "none": "ordinary",
-              "stellar-conduct": "stellar-conduct",
-              "stellar-swirl": "stellar-swirl"
+          "support": "hit-unavailable",
+          "element": "cryo",
+          "category": "charged",
+          "family": "stellar-conduct",
+          "when": [
+            {
+              "call": "sandrone.not",
+              "inputs": {
+                "term0": {
+                  "fact": "sandrone.overload"
+                }
+              },
+              "output": "active"
+            },
+            {
+              "call": "sandrone.radiance-stellar-conduct",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
             }
-          }
+          ]
+        },
+        {
+          "id": "sandrone.normal.param11",
+          "name": "重击冷凝射线·星扩散",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param11"
+            }
+          ],
+          "support": "hit-unavailable",
+          "element": "cryo",
+          "category": "charged",
+          "family": "stellar-swirl",
+          "when": [
+            {
+              "call": "sandrone.not",
+              "inputs": {
+                "term0": {
+                  "fact": "sandrone.overload"
+                }
+              },
+              "output": "active"
+            },
+            {
+              "call": "sandrone.radiance-stellar-swirl",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "sandrone.normal.param7",
@@ -656,44 +703,71 @@
         {
           "id": "sandrone.skill.second",
           "name": "棱晶弹（第二枚）",
-          "base": {
-            "template": "attack-damage-base",
-            "inputs": {
-              "attribute": {
-                "stat": "attack"
-              },
-              "ratio": {
-                "call": "stellar.radiance-ratio",
-                "inputs": {
-                  "mode": {
-                    "fact": "radiance"
-                  },
-                  "ordinary": {
-                    "parameter": "param1",
-                    "skill": "sandrone.skill"
-                  },
-                  "conduct": {
-                    "parameter": "param2",
-                    "skill": "sandrone.skill"
-                  },
-                  "swirl": {
-                    "parameter": "param4",
-                    "skill": "sandrone.skill"
-                  }
-                }
-              }
-            },
-            "output": "base"
-          },
-          "support": "hit-unavailable",
-          "family": {
-            "by": "radiance",
-            "cases": {
-              "none": "ordinary",
-              "stellar-conduct": "stellar-conduct",
-              "stellar-swirl": "stellar-swirl"
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
             }
-          }
+          ],
+          "support": "hit-unavailable",
+          "family": "ordinary",
+          "when": [
+            {
+              "call": "sandrone.radiance-none",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ]
+        },
+        {
+          "id": "sandrone.skill.param2",
+          "name": "棱晶弹（第二枚）·星超导",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-conduct",
+          "when": [
+            {
+              "call": "sandrone.radiance-stellar-conduct",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ]
+        },
+        {
+          "id": "sandrone.skill.param4",
+          "name": "棱晶弹（第二枚）·星扩散",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param4"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-swirl",
+          "when": [
+            {
+              "call": "sandrone.radiance-stellar-swirl",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ]
         }
       ],
       "cooldownParameter": "param3"
@@ -876,43 +950,70 @@
         {
           "id": "sandrone.burst.param2",
           "name": "聚能光束伤害",
-          "base": {
-            "template": "attack-damage-base",
-            "inputs": {
-              "attribute": {
-                "stat": "attack"
-              },
-              "ratio": {
-                "call": "stellar.radiance-ratio",
-                "inputs": {
-                  "mode": {
-                    "fact": "radiance"
-                  },
-                  "ordinary": {
-                    "parameter": "param2",
-                    "skill": "sandrone.burst"
-                  },
-                  "conduct": {
-                    "parameter": "param3",
-                    "skill": "sandrone.burst"
-                  },
-                  "swirl": {
-                    "parameter": "param6",
-                    "skill": "sandrone.burst"
-                  }
-                }
-              }
-            },
-            "output": "base"
-          },
-          "family": {
-            "by": "radiance",
-            "cases": {
-              "none": "ordinary",
-              "stellar-conduct": "stellar-conduct",
-              "stellar-swirl": "stellar-swirl"
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
             }
-          },
+          ],
+          "family": "ordinary",
+          "when": [
+            {
+              "call": "sandrone.radiance-none",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "sandrone.burst.param3",
+          "name": "聚能光束星超导伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param3"
+            }
+          ],
+          "family": "stellar-conduct",
+          "when": [
+            {
+              "call": "sandrone.radiance-stellar-conduct",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "sandrone.burst.param6",
+          "name": "聚能光束星扩散伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param6"
+            }
+          ],
+          "family": "stellar-swirl",
+          "when": [
+            {
+              "call": "sandrone.radiance-stellar-swirl",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
           "support": "hit-unavailable"
         }
       ],
@@ -945,7 +1046,8 @@
           "id": "sandrone.second-ray",
           "appliesTo": {
             "hitIds": [
-              "sandrone.skill.second"
+              "sandrone.skill.param2",
+              "sandrone.skill.param4"
             ],
             "families": [
               "stellar-conduct",
@@ -970,7 +1072,8 @@
           "id": "sandrone.beam-tactics",
           "appliesTo": {
             "hitIds": [
-              "sandrone.burst.param2"
+              "sandrone.burst.param3",
+              "sandrone.burst.param6"
             ],
             "families": [
               "stellar-conduct",
@@ -1146,6 +1249,8 @@
             "hitIds": [
               "sandrone.normal.param4",
               "sandrone.normal.param5",
+              "sandrone.normal.param6",
+              "sandrone.normal.param11",
               "sandrone.normal.param7",
               "sandrone.c6.cluster-laser-stellar-conduct",
               "sandrone.c6.cluster-laser-stellar-swirl"

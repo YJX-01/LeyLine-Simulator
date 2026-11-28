@@ -26,7 +26,7 @@ const hit = z.object({
   selection: structuredHitSchema.shape.selection,
   snapshot: structuredHitSchema.shape.snapshot.unwrap().omit({ source: true }).optional(),
   base: z.union([z.array(scaling).min(1).max(128), namedHitBaseSchema]),
-  family: z.union([damageFamily, z.literal('unresolved'), z.object({ by: idSchema, cases: z.record(idSchema, damageFamily) }).strict()]).optional(),
+  family: z.union([damageFamily, z.literal('unresolved')]).optional(),
   origin: z.enum(['talent', 'triggered']).optional(), when: z.array(z.union([idSchema, expression])).min(1).max(32).optional(),
   support: idSchema, coverageId: idSchema.optional(),
 }).strict();
@@ -197,12 +197,6 @@ export const characterMetadataSchema = characterFieldsSchema.pick({ kind: true, 
       }
     }
     if (hit.elementBy && hit.family && hit.family !== 'ordinary') validation.addIssue({ code: 'custom', path: ['hits', hit.id, 'elementBy'], message: '元素转化段须使用普通伤害乘区。' });
-    if (typeof hit.family === 'object') {
-      const type = combatFactDeclaration(character.facts, hit.family.by)?.type;
-      if (type?.kind !== 'enum' || Object.keys(hit.family.cases).length !== type.values.length || type.values.some(key => !Object.hasOwn((hit.family as { cases: object }).cases, key))) {
-        validation.addIssue({ code: 'custom', path: ['hits', hit.id, 'family'], message: '命中分支须覆盖事实的全部枚举值。' });
-      }
-    }
   }
 });
 export type CharacterMetadata = z.infer<typeof characterMetadataSchema>;

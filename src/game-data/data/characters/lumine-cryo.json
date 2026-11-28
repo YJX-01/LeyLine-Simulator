@@ -531,16 +531,78 @@
               "ratio": 1.4
             }
           ],
-          "family": {
-            "by": "radiance",
-            "cases": {
-              "none": "ordinary",
-              "stellar-conduct": "stellar-conduct",
-              "stellar-swirl": "stellar-swirl"
-            }
-          },
+          "family": "ordinary",
           "when": [
-            "lumine-cryo.iceCondensationCharged"
+            "lumine-cryo.iceCondensationCharged",
+            {
+              "call": "lumine-cryo.radiance-none",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "lumine-cryo.normal.ice-condensation-1-stellar-conduct",
+          "name": "重击·冰凝-1·星超导",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param6"
+            },
+            {
+              "stat": "attack",
+              "ratio": 1.4
+            }
+          ],
+          "family": "stellar-conduct",
+          "when": [
+            "lumine-cryo.iceCondensationCharged",
+            {
+              "call": "lumine-cryo.radiance-stellar-conduct",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "lumine-cryo.normal.ice-condensation-1-stellar-swirl",
+          "name": "重击·冰凝-1·星扩散",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param6"
+            },
+            {
+              "stat": "attack",
+              "ratio": 1.4
+            }
+          ],
+          "family": "stellar-swirl",
+          "when": [
+            "lumine-cryo.iceCondensationCharged",
+            {
+              "call": "lumine-cryo.radiance-stellar-swirl",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
           ],
           "support": "hit-unavailable"
         },
@@ -559,16 +621,78 @@
               "ratio": 1.4
             }
           ],
-          "family": {
-            "by": "radiance",
-            "cases": {
-              "none": "ordinary",
-              "stellar-conduct": "stellar-conduct",
-              "stellar-swirl": "stellar-swirl"
-            }
-          },
+          "family": "ordinary",
           "when": [
-            "lumine-cryo.iceCondensationCharged"
+            "lumine-cryo.iceCondensationCharged",
+            {
+              "call": "lumine-cryo.radiance-none",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "lumine-cryo.normal.ice-condensation-2-stellar-conduct",
+          "name": "重击·冰凝-2·星超导",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            },
+            {
+              "stat": "attack",
+              "ratio": 1.4
+            }
+          ],
+          "family": "stellar-conduct",
+          "when": [
+            "lumine-cryo.iceCondensationCharged",
+            {
+              "call": "lumine-cryo.radiance-stellar-conduct",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "lumine-cryo.normal.ice-condensation-2-stellar-swirl",
+          "name": "重击·冰凝-2·星扩散",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            },
+            {
+              "stat": "attack",
+              "ratio": 1.4
+            }
+          ],
+          "family": "stellar-swirl",
+          "when": [
+            "lumine-cryo.iceCondensationCharged",
+            {
+              "call": "lumine-cryo.radiance-stellar-swirl",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
           ],
           "support": "hit-unavailable"
         }
@@ -997,81 +1121,85 @@
         {
           "id": "lumine-cryo.burst.param1",
           "name": "投矛单段伤害",
-          "base": {
-            "template": "damage-sum-2",
-            "inputs": {
-              "term0": {
-                "call": "attack-damage-base",
-                "inputs": {
-                  "attribute": {
-                    "stat": "attack"
-                  },
-                  "ratio": {
-                    "call": "stellar.radiance-ratio",
-                    "inputs": {
-                      "mode": {
-                        "fact": "radiance"
-                      },
-                      "ordinary": {
-                        "parameter": "param1",
-                        "skill": "lumine-cryo.burst"
-                      },
-                      "conduct": {
-                        "parameter": "param8",
-                        "skill": "lumine-cryo.burst"
-                      },
-                      "swirl": {
-                        "parameter": "param10",
-                        "skill": "lumine-cryo.burst"
-                      }
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "call": "attack-counted-damage-base",
-                "inputs": {
-                  "attribute": {
-                    "stat": "attack"
-                  },
-                  "ratio": {
-                    "call": "stellar.radiance-ratio",
-                    "inputs": {
-                      "mode": {
-                        "fact": "radiance"
-                      },
-                      "ordinary": {
-                        "parameter": "param2",
-                        "skill": "lumine-cryo.burst"
-                      },
-                      "conduct": {
-                        "parameter": "param9",
-                        "skill": "lumine-cryo.burst"
-                      },
-                      "swirl": {
-                        "parameter": "param11",
-                        "skill": "lumine-cryo.burst"
-                      }
-                    }
-                  },
-                  "count": {
-                    "fact": "frostglow"
-                  }
-                },
-                "output": "base"
-              }
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
             },
-            "output": "base"
-          },
-          "family": {
-            "by": "radiance",
-            "cases": {
-              "none": "ordinary",
-              "stellar-conduct": "stellar-conduct",
-              "stellar-swirl": "stellar-swirl"
+            {
+              "stat": "attack",
+              "parameter": "param2",
+              "count": "frostglow"
             }
-          },
+          ],
+          "family": "ordinary",
+          "when": [
+            {
+              "call": "lumine-cryo.radiance-none",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "lumine-cryo.burst.param8",
+          "name": "投矛单段星超导伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param8"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param9",
+              "count": "frostglow"
+            }
+          ],
+          "family": "stellar-conduct",
+          "when": [
+            {
+              "call": "lumine-cryo.radiance-stellar-conduct",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "lumine-cryo.burst.param10",
+          "name": "投矛单段星扩散伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param10"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param11",
+              "count": "frostglow"
+            }
+          ],
+          "family": "stellar-swirl",
+          "when": [
+            {
+              "call": "lumine-cryo.radiance-stellar-swirl",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
           "support": "hit-unavailable"
         }
       ],
@@ -1686,6 +1814,48 @@
         "threshold": 0,
         "output": "value",
         "maxInput": 8,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "lumine-cryo.radiance-none",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "none",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "lumine-cryo.radiance-stellar-conduct",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-conduct",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "lumine-cryo.radiance-stellar-swirl",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-swirl",
         "revision": "1"
       }
     }

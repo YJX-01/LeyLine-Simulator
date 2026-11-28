@@ -160,12 +160,7 @@ function frameFor(runtime: Runtime, actorId: string, record: RecordEntry, condit
   if (hit) {
     const owner = runtime.builds.get(record.actor)?.character;
     const selector = authoredHit(owner?.metadata, skill?.id, hit.id)?.family;
-    let family = typeof selector === 'string' ? selector : Object.keys(hit.damage)[0] ?? 'ordinary';
-    if (typeof selector === 'object') {
-      const declaration = combatFactDeclaration(owner?.metadata.facts, selector.by)!;
-      const value = evaluateCombatBindings(runtime.team.program, runtime.context, { family: { kind: 'fact', key: selector.by, ...declaration } }, frame).outputs.family;
-      if (value?.state === 'known' && value.value.kind === 'enum') family = selector.cases[value.value.value];
-    }
+    const family = typeof selector === 'string' ? selector : Object.keys(hit.damage)[0] ?? 'ordinary';
     frame.hit = { skillId: skill?.id ?? null, hitId: hit.id, category: hit.category,
       element: dealerElement ?? resolveCombatHitElement(runtime.team.program, runtime.context, frame, hit, family, skill?.category === 'normal', build, runtime.builds.values()).element,
       family, origin: hit.origin, reactionId: query?.reaction && query.reaction !== 'none' && query.reaction.trigger ? query.reaction.type : null };

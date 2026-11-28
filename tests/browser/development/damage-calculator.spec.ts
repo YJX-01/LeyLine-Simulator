@@ -62,18 +62,17 @@ for (const id of ['odette', 'sandrone']) test(id + ' shows the active radiance h
     constellation: 0, weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
   const { calc } = await openSingleBuild(page, build);
   if (odette) await selectHit(calc, 'odette.skill', 2);
-  await selectHit(calc, odette ? 'odette.skill' : 'sandrone.burst', odette ? 5 : 1);
-  if (odette) {
-    await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：星超导');
-    await expect(calc.getByTestId('calculator-critical')).toHaveText(/[1-9]/);
-  } else {
+  if (!odette) {
+    await selectHit(calc, 'sandrone.burst', 1);
     const ordinary = calc.locator('.factor-card').filter({ has: page.locator('summary', { hasText: '属性 × 倍率区' }) });
     await ordinary.locator('summary').click();
     await expect(ordinary.locator('.rate-box')).toContainText('330.8%');
   }
-  for (const mode of ['stellar-conduct', 'stellar-swirl']) {
-    if (!odette || mode !== 'stellar-conduct') {
-      await calc.getByRole('combobox', { name: '星辉状态', exact: true }).selectOption(mode);
+  for (const [mode, hitIndex] of [['stellar-conduct', odette ? 6 : 2], ['stellar-swirl', odette ? 7 : 3]] as const) {
+    await selectHit(calc, odette ? 'odette.skill' : 'sandrone.burst', hitIndex);
+    if (odette) {
+      await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：' + (mode === 'stellar-swirl' ? '星扩散' : '星超导'));
+      await expect(calc.getByTestId('calculator-critical')).toHaveText(/[1-9]/);
     }
     const card = calc.locator('.factor-card').filter({ has: page.locator('summary', { hasText: '反应基础伤害' }) });
     await expect(card).toBeVisible();
@@ -94,28 +93,26 @@ for (const id of ['odette', 'sandrone']) test(id + ' shows the active radiance h
       expect(number(await factor.locator('summary strong').innerText())).toBeCloseTo(1 + Math.min(attack * 0.00007, 0.14), 5);
     }
     await expect(calc.getByText('需要辉映·星超导或辉映·星扩散')).toHaveCount(0);
-    if (odette) await expect(calc.getByTestId('calculator-radiance')).toContainText(mode === 'stellar-swirl' ? '星扩散' : '星超导');
   }
   if (odette) {
-    await selectHit(calc, 'odette.skill', 6);
+    await selectHit(calc, 'odette.skill', 8);
+    await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：星超导');
+    await selectHit(calc, 'odette.skill', 9);
     await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：星扩散');
-    await selectHit(calc, 'odette.skill', 5);
-    await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：星扩散');
-    await calc.getByRole('combobox', { name: '星辉状态', exact: true }).selectOption('none');
-    await expect(calc.getByText('需要辉映·星超导或辉映·星扩散')).toBeVisible();
-    await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：无');
-    await expect(calc.getByTestId('calculator-critical')).toHaveText('0');
+    await selectHit(calc, 'odette.skill', 4);
+    await expect(calc.getByRole('combobox', { name: '星辉状态', exact: true })).toHaveValue('none');
+    await expect(calc.getByTestId('calculator-radiance')).toHaveCount(0);
+    await expect(calc.getByTestId('calculator-critical')).toHaveText(/[1-9]/);
+    await calc.getByRole('combobox', { name: '星辉状态', exact: true }).selectOption('stellar-conduct');
+    await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：星超导');
     const downloadPromise = page.waitForEvent('download');
     await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
     const content = readFileSync((await (await downloadPromise).path())!, 'utf8');
     const saved = await readDocument<DamageCalculatorDocument>(page, 'damage-calculator', content);
     expect(saved.project.timeline.find(entry => entry.id === saved.recordId)?.damage?.facts).toBeDefined();
     await calc.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles({ name: 'radiance.json', mimeType: 'application/json', buffer: Buffer.from(content) });
-    await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：无');
+    await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：星超导');
     await calc.getByRole('button', { name: '计算伤害', exact: true }).click();
-    await expect(calc.getByText('需要辉映·星超导或辉映·星扩散')).toBeVisible();
-    await expect(calc.getByTestId('calculator-critical')).toHaveText('0');
-    await selectHit(calc, 'odette.skill', 2);
     await expect(calc.getByTestId('calculator-critical')).toHaveText(/[1-9]/);
     await expect(calc.getByText('需要辉映·星超导或辉映·星扩散')).toHaveCount(0);
   }
@@ -125,7 +122,7 @@ test('radiance selection does not inherit a prior hit fact', async ({ page }) =>
   const build: Build = { ...await catalogSnapshotFields('odette', 'dullblade'), level: 80, ascension: 5,
     constellation: 0, weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
   const { calc } = await openSingleBuild(page, build, undefined, true);
-  await selectHit(calc, 'odette.skill', 5);
+  await selectHit(calc, 'odette.skill', 6);
   await expect(calc.getByTestId('calculator-radiance')).toHaveText('星辉状态：星超导');
   await expect(calc.getByRole('combobox', { name: '星辉状态', exact: true })).toHaveValue('stellar-conduct');
   await expect(calc.getByText('需要辉映·星超导或辉映·星扩散')).toHaveCount(0);

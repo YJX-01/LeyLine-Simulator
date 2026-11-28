@@ -764,21 +764,6 @@
         "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
-          "id": "stellar.radiance-ratio",
-          "revision": "1"
-        },
-        "template": {
-          "id": "radiance-ratio",
-          "revision": "1"
-        },
-        "sources": [
-          "kqm.web.stellar-conduct-direct"
-        ]
-      },
-      {
-        "schemaVersion": "0.2.0",
-        "identity": {
-          "namespace": "builtin",
           "id": "blessing.attack",
           "revision": "1"
         },

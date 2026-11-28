@@ -283,21 +283,6 @@ export function evaluateStructuredHit(team: PreparedStructuredTeam, setup: unkno
     const ready = (query.frame.facts[hit.coordinated.readyFact] ?? context.events.find(event => event.id === query.frame.eventId)?.facts[hit.coordinated.readyFact])?.value;
     if (!(ready?.kind === 'boolean' && !ready.value)) missingBranch = 'onField';
   }
-  if (typeof family === 'object' && build) {
-    const field = combatFactDeclaration(build.character.metadata.facts, family.by)!;
-    const read = evaluateCombatBindings(team.program, context, { family: { kind: 'fact', key: family.by, ...field } },
-      { ...query.frame, ownerId: query.actorId, recipientId: query.actorId, contributorId: null, hit: null });
-    const value = read.outputs.family;
-    if (value?.state === 'known' && value.value.kind === 'enum') selectedFamily = family.cases[value.value.value];
-    else {
-      const first = Object.entries(hit?.damage ?? {})[0];
-      const predicate = first?.[1].predicate;
-      const gate = predicate && evaluateCombatBindings(team.program, context, { gate: predicate },
-        { ...query.frame, ownerId: query.actorId, recipientId: query.actorId, contributorId: null, hit: null }).outputs.gate;
-      if (first && gate?.state === 'known' && gate.value.kind === 'boolean' && !gate.value.value) selectedFamily = first[0];
-      else missingBranch = family.by;
-    }
-  }
   const selection = hit && resolveCombatHitElement(team.program, context, observedFrame, hit, selectedFamily, talent?.category === 'normal', build, data.builds.values());
   missingBranch ??= selection?.missingInfusion;
   if (hit && selection?.missing) {

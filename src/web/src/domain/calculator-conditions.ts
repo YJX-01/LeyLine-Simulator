@@ -105,11 +105,10 @@ export function healingBonusFactFields(members: Project['candidate']['actors'], 
 
 export function calculatorHitFactFields(selected: ReturnType<typeof findBuildHit>, owner: string, dealer = owner, constellation = 6): CalculatorFactField[] {
   if (!selected) return [];
-  const { entity, hit, talent } = selected;
-  const family = entity.kind === 'character-definition' ? authoredHit(entity.metadata, talent?.id, hit.id)?.family : undefined;
+  const { entity, hit } = selected;
   const bindings = [...Object.values(hit.base.bindings), ...Object.values(hit.damage).flatMap(branch => [...Object.values(branch.bindings), branch.predicate])];
   const infusion = hit.infusion && constellation >= (hit.infusion.minConstellation ?? 0) ? hit.infusion.fact : undefined;
-  for (const key of [typeof family === 'object' ? family.by : undefined, infusion, hit.elementBy]) {
+  for (const key of [infusion, hit.elementBy]) {
     const field = key && combatFactDeclaration(entity.metadata.facts, key);
     if (field && key) bindings.push({ kind: 'fact', key, ...field });
   }
@@ -407,35 +406,25 @@ export interface CalculatorRadianceSpec {
 
 export function calculatorHitRadiance(selected: ReturnType<typeof findBuildHit>): CalculatorRadianceSpec | undefined {
   if (!selected) return undefined;
-  const { entity, hit, talent } = selected;
-  const family = entity.kind === 'character-definition' ? authoredHit(entity.metadata, talent?.id, hit.id)?.family : undefined;
-  const branchesOnRadiance = (typeof family === 'object' && family.by === 'radiance')
-    || Object.values(hit.damage).some(branch => bindingUsesFact(branch.predicate, 'radiance'));
+  const { entity, hit } = selected;
+  const branchesOnRadiance = Object.values(hit.damage).some(branch => bindingUsesFact(branch.predicate, 'radiance'));
   if (!branchesOnRadiance) return undefined;
   const declaration = combatFactDeclaration(entity.metadata.facts, 'radiance')?.type;
   const options = declaration?.kind === 'enum' ? [...declaration.values] : [...defaultRadianceOptions];
-  const validOptions = options.filter(option => {
-    const mapped = typeof family === 'object' && family.by === 'radiance' ? hit.damage[family.cases[option]] : undefined;
-    const branches = mapped ? [mapped] : Object.values(hit.damage);
-    return branches.some(branch => !branch.predicate || radianceBranchMatches(branch.predicate, entity.calculation.bundle, option) !== false);
-  });
+  const branches = Object.values(hit.damage);
+  const validOptions = options.filter(option =>
+    branches.some(branch => !branch.predicate || radianceBranchMatches(branch.predicate, entity.calculation.bundle, option) !== false),
+  );
   const candidates = validOptions.length ? validOptions : options;
   const defaultValue = candidates.includes('none') ? 'none'
     : candidates.includes('stellar-conduct') ? 'stellar-conduct' : candidates[0];
   return { key: 'radiance', options, validOptions: candidates, defaultValue };
 }
 
-export function selectedHitBranchPredicate(selected: ReturnType<typeof findBuildHit>, radianceValue?: string): CalculationBinding | undefined {
+export function selectedHitBranchPredicate(selected: ReturnType<typeof findBuildHit>): CalculationBinding | undefined {
   if (!selected) return undefined;
-  const { entity, talent, hit } = selected;
-  const entries = Object.entries(hit.damage);
-  if (!entries.length) return undefined;
-  if (entries.length === 1) return entries[0][1].predicate;
-  const family = entity.kind === 'character-definition' ? authoredHit(entity.metadata, talent?.id, hit.id)?.family : undefined;
-  const spec = calculatorHitRadiance(selected);
-  const mode = radianceValue ?? spec?.defaultValue;
-  const key = typeof family === 'object' && mode ? family.cases[mode] : undefined;
-  return (key ? hit.damage[key]?.predicate : undefined) ?? entries[0][1].predicate;
+  const entries = Object.entries(selected.hit.damage);
+  return entries.length === 1 ? entries[0][1].predicate : entries[0]?.[1].predicate;
 }
 
 export function readCalculatorRadiance(damage: DamageRequest, actorId: string): string | undefined {

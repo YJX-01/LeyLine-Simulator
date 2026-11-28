@@ -213,12 +213,12 @@ const expectedDelta = computed(() => expectedPoint.value?.value != null && basel
   ? expectedPoint.value.value - baselineExpectedPoint.value.value : undefined);
 const radianceLabels: Record<string, string> = { none: '无', 'stellar-conduct': '星超导', 'stellar-swirl': '星扩散' };
 const radianceStatus = computed(() => {
-  if (!result.value || !selectedBinding.value || !hitOwner.value || !document.value) return;
-  const excluded = selectionFacts(selectedOutput.value?.predicate, selectedBinding.value.entity.calculation.bundle, false);
-  if (excluded.length !== 1 || excluded[0].key !== 'radiance' || excluded[0].value.value !== 'none') return;
+  if (!result.value || !radianceSpec.value) return;
   const fact = point.value?.real?.structured?.trace.find(node => node.nodeId === 'radiance'
     && node.state === 'known' && node.value?.kind === 'enum');
-  return fact?.value?.kind === 'enum' ? radianceLabels[fact.value.value] : undefined;
+  if (fact?.value?.kind !== 'enum') return undefined;
+  if (fact.value.value === 'none' && radianceSpec.value.validOptions.includes('none')) return undefined;
+  return radianceLabels[fact.value.value];
 });
 const candidateBuild = computed(() => actor.value?.build);
 const equipmentPanel = computed(() => candidateBuild.value && resolveEquipmentPanel(candidateBuild.value));
