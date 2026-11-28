@@ -1,7 +1,7 @@
 import { bool, number } from './roster-audit-settings.mjs';
 import { readContentSource } from './content-source.mjs';
 
-// Independent level-one expectations from tools/data/sources/catalog/genshin-db/sets.json.
+// Independent level-one expectations from tools/data/sources/anime-game-data/sets.json.
 const elementalSets = {
   physical: 'paleflame', anemo: 'viridescentvenerer', geo: 'archaicpetra', electro: 'thunderingfury',
   hydro: 'heartofdepth', pyro: 'crimsonwitchofflames', cryo: 'blizzardstrayer', dendro: 'deepwoodmemories',
@@ -29,7 +29,7 @@ const profiles = [
   ...elements.map(s => [s]), ...categorySets.map(s => [s]),
   [attack, pyro], [pyro, burst], [attack, hp], [attack, defense], [crit, skill],
 ];
-const setSources = readContentSource(new URL('../data/sources/catalog/genshin-db/sets.json', import.meta.url));
+const setSources = readContentSource(new URL('../data/sources/anime-game-data/sets.json', import.meta.url));
 // The full catalog crosses each distinct clause. Identically worded 2-piece sources share
 // one representative of each (category, element, scaling) combination for their wiring checks.
 const aliases = [];

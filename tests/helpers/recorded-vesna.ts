@@ -5,14 +5,14 @@ const read = (name: string) => JSON.parse(readFileSync('tools/data/sources/' + n
 
 function recordedArtifactStats(avatarId: number): Record<string, number> {
   const raw = JSON.parse(readFileSync(vesnaRecording, 'utf8'));
-  const main = read('lunagc/b0501c5d89767ead5f647869a2412521447f7682/ReliquaryLevelExcelConfigData.json');
+  const main = read('anime-game-data/reliquary.json').mainLevels;
   const gear = raw.avatarInfoList.find((entry: { avatarId: number }) => entry.avatarId === avatarId).equipList;
   const stats: Record<string, number> = {};
   const add = (key: string, value: number) => { stats[key] = (stats[key] ?? 0) + value; };
   for (const item of gear) {
     if (!item.reliquary) continue;
     const property = item.flat.reliquaryMainstat.mainPropId;
-    const row = main.find((row: { rank: number; level: number }) => row.rank === item.flat.rankLevel && row.level === item.reliquary.level);
+    const row = main[`${item.flat.rankLevel}/${item.reliquary.level}`];
     add(property, row.addProps.find((entry: { propType: string }) => entry.propType === property).value);
     for (const sub of item.flat.reliquarySubstats) {
       const key = sub.appendPropId ?? sub.appendPropID;
@@ -26,10 +26,10 @@ function recordedArtifactStats(avatarId: number): Record<string, number> {
 /** Ordinary direct plunge trial for the level-80 C0 Varesa in the same showcase. */
 export function recordedVaresaPlunge(mode: 'critical' | 'expected'): number {
   const stats = recordedArtifactStats(10000111);
-  const character = read('catalog/genshin-db/characters.json').varesa.stats;
-  const weapon = read('catalog/genshin-db/weapons.json').thewidsith.stats;
-  const curves = read('catalog/genshin-db/character-curves.json'), weaponCurves = read('catalog/genshin-db/weapon-curves.json');
-  const params = read('genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json').varesa.combat3.param5;
+  const character = read('anime-game-data/characters.json').varesa.stats;
+  const weapon = read('anime-game-data/weapons.json').thewidsith.stats;
+  const curves = read('anime-game-data/character-curves.json'), weaponCurves = read('anime-game-data/weapon-curves.json');
+  const params = read('anime-game-data/talent-params.json').varesa.combat3.param5;
   const white = character.base.attack * curves[80][character.curve.attack] + character.promotion[5].attack
     + weapon.base.attack * weaponCurves[90][weapon.curve.attack] + weapon.promotion[6].attack;
   const attack = white * (1 + (stats.FIGHT_PROP_ATTACK_PERCENT ?? 0) + 0.18) + (stats.FIGHT_PROP_ATTACK ?? 0);
@@ -42,10 +42,10 @@ export function recordedVaresaPlunge(mode: 'critical' | 'expected'): number {
 /** Independent arithmetic for the recorded gear. Each non-Cryo/Anemo teammate adds 25 mastery at C2. */
 export function recordedVesnaDamage(refinement: 1 | 2, talentMultiplier = 1, loyalWind = true, mode: 'critical' | 'expected' = 'expected', otherElementMembers = 0): number {
   const stats = recordedArtifactStats(10000143);
-  const character = read('catalog/genshin-db/characters.json').vesna.stats;
-  const weapon = read('catalog/genshin-db/weapons.json').beyondthechrysalis.stats;
-  const curves = read('catalog/genshin-db/character-curves.json'), weaponCurves = read('catalog/genshin-db/weapon-curves.json');
-  const params = read('genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json').vesna.combat2.param5;
+  const character = read('anime-game-data/characters.json').vesna.stats;
+  const weapon = read('anime-game-data/weapons.json').beyondthechrysalis.stats;
+  const curves = read('anime-game-data/character-curves.json'), weaponCurves = read('anime-game-data/weapon-curves.json');
+  const params = read('anime-game-data/talent-params.json').vesna.combat2.param5;
   const white = character.base.attack * curves[90][character.curve.attack] + character.promotion[6].attack
     + weapon.base.attack * weaponCurves[90][weapon.curve.attack] + weapon.promotion[6].attack;
   const attack = white * (1 + (stats.FIGHT_PROP_ATTACK_PERCENT ?? 0) + 0.18 + 0.06 + 0.4) + (stats.FIGHT_PROP_ATTACK ?? 0);

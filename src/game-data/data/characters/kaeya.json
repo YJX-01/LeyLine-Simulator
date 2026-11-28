@@ -86,7 +86,7 @@
     {
       "id": "kaeya.normal",
       "name": "仪典剑术",
-      "description": "普通攻击\n进行至多五段的连续剑击。\n\n重击\n消耗一定体力，瞬间向前方挥出两剑。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+      "description": "<color=#FFD780FF>普通攻击</color>\n进行至多五段的连续剑击。\n\n<color=#FFD780FF>重击</color>\n消耗一定体力，瞬间向前方挥出两剑。\n\n<color=#FFD780FF>下落攻击</color>\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
       "details": [
@@ -481,7 +481,7 @@
     {
       "id": "kaeya.skill",
       "name": "霜袭",
-      "description": "瞬间放出急冻的寒气，对前方的敌人造成冰元素伤害。",
+      "description": "瞬间放出急冻的寒气，对前方的敌人造成<color=#99FFFFFF>冰元素伤害</color>。",
       "flavorText": "看上去如此亲切的凯亚，是谁也无法融化的坚冰。",
       "category": "skill",
       "element": "cryo",
@@ -572,7 +572,7 @@
     {
       "id": "kaeya.burst",
       "name": "凛冽轮舞",
-      "description": "凝聚空气中的寒霜，召唤3枚围绕自身旋转的寒冰之棱。\n存在期间内，寒冰之棱会跟随角色运动，对路径上的敌人造成冰元素伤害。",
+      "description": "凝聚空气中的寒霜，召唤3枚围绕自身旋转的寒冰之棱。\n存在期间内，寒冰之棱会跟随角色运动，对路径上的敌人造成<color=#99FFFFFF>冰元素伤害</color>。",
       "flavorText": "亲切的笑容、和善的话语，和潜藏在这两者之下的毫不留情的冰霜，都是凯亚的武器。",
       "category": "burst",
       "element": "cryo",
@@ -712,13 +712,13 @@
     {
       "id": "kaeya.passive1",
       "name": "冷血之剑",
-      "description": "霜袭每击中一个单位，便为凯亚恢复等同于攻击力15%的生命值。",
+      "description": "<color=#FFD780FF>霜袭</color>每击中一个单位，便为凯亚恢复等同于攻击力15%的生命值。",
       "unlockAscension": 1
     },
     {
       "id": "kaeya.passive2",
       "name": "冰渊之心",
-      "description": "霜袭使敌人冻结时，被冻结的敌人会掉落额外的元素微粒。\n一次霜袭至多因此产生2个额外元素微粒。",
+      "description": "<color=#FFD780FF>霜袭</color>使敌人<color=#99FFFFFF>冻结</color>时，被冻结的敌人会掉落额外的元素微粒。\n一次霜袭至多因此产生2个额外元素微粒。",
       "unlockAscension": 4
     },
     {
@@ -750,7 +750,7 @@
     {
       "rank": 1,
       "name": "卓越的血脉",
-      "description": "对受到冰元素影响的敌人，凯亚的普通攻击与重击暴击率提升15%。",
+      "description": "对受到<color=#99FFFFFF>冰元素</color>影响的敌人，凯亚的普通攻击与重击暴击率提升15%。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -785,13 +785,13 @@
     {
       "rank": 2,
       "name": "无尽的霜舞",
-      "description": "在凛冽轮舞的持续时间内击败敌人时，持续时间延长2.5秒，最多不会超过15秒。",
+      "description": "在<color=#FFD780FF>凛冽轮舞</color>的持续时间内击败敌人时，持续时间延长2.5秒，最多不会超过15秒。",
       "talentBonuses": []
     },
     {
       "rank": 3,
       "name": "凛冽的冰戏",
-      "description": "霜袭的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>霜袭</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "skill",
@@ -802,7 +802,7 @@
     {
       "rank": 4,
       "name": "极寒的轻吻",
-      "description": "凯亚的生命值低于20%时自动触发：\n生成一个伤害吸收量等于生命值上限30%的护盾，持续20秒。\n该护盾对冰元素伤害有250%的吸收效果。\n该效果每60秒只能触发一次。",
+      "description": "凯亚的生命值低于20%时自动触发：\n生成一个伤害吸收量等于生命值上限30%的护盾，持续20秒。\n该护盾对<color=#99FFFFFF>冰元素伤害</color>有250%的吸收效果。\n该效果每60秒只能触发一次。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -920,7 +920,7 @@
     {
       "rank": 5,
       "name": "至冷的拥抱",
-      "description": "凛冽轮舞的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>凛冽轮舞</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "burst",
@@ -931,7 +931,7 @@
     {
       "rank": 6,
       "name": "轮旋的冰凌",
-      "description": "凛冽轮舞会产生一个额外的寒冰之棱，并在施放时返还15点元素能量。",
+      "description": "<color=#FFD780FF>凛冽轮舞</color>会产生一个额外的寒冰之棱，并在施放时返还15点元素能量。",
       "talentBonuses": [],
       "hits": [
         {

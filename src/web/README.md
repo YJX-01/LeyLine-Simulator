@@ -190,7 +190,7 @@ Line凯尔特三角用于圣遗物库，组合版叠交织内圆与完整外圆�
 
 ### Enka公开展柜
 
-协议依据为 https://github.com/EnkaNetwork/API-docs/blob/master/api.md 及其docs/gi/api.md。固定元数据采用 `b94bc40528941126590e0eefb0f03278e7a44ec8`，运行时映射表在 `src/game-data/data/tables/enka-catalog.json`，离线技能补充顺序在 `tools/data/sources/catalog/enka`。网络契约公开入口为 `@leyline/schema/enka`。
+协议依据为 https://github.com/EnkaNetwork/API-docs/blob/master/api.md 及其docs/gi/api.md。固定元数据与技能顺序采用 `AnimeGameData` 提取表 [enka-ids.json](../../tools/data/sources/anime-game-data/enka-ids.json)，运行时映射表在 `src/game-data/data/tables/enka-catalog.json`。网络契约公开入口为 `@leyline/schema/enka`。
 
 UID为9至10位数字。桌面通过固定主机IPC查询，网页开发和本地预览提供同源/api/enka/:uid，子路径按应用base处理；静态托管需配置同源通道。查询使用自定义User-Agent，按服务TTL缓存，合并同UID进行中请求，上限16个UID；响应上限2MiB，超时15秒。取消中止网页请求或丢弃桌面迟到结果，400/404/424/429及服务异常就近反馈。
 
@@ -206,7 +206,7 @@ UID为9至10位数字。桌面通过固定主机IPC查询，网页开发和本�
 
 角色等级按当前Build接受1至90、95、100，武器及装备按正式目录与合法性校验，圣遗物实物接受四星和五星，按各自强化上限、主词条表及套装星级/部位校验。男女旅行者、男女奇偶的七种元素形态按展柜的角色和形态编号共同识别。四个无元素基础形态均只有普通攻击，当前培养格式要求普攻、战技、爆发三项等级，预览会说明限制并继续导入其他角色。遇到未知形态时，预览显示收到的形态编号。
 
-普通角色与元素旅行者的天赋编号采用固定版 Enka 目录或 GachaBase 正式发布页。发布页编号逐项匹配固定版 genshin-db 的英文普攻、战技、爆发名称，来源记录于 [skill-supplements.json](../../tools/data/sources/catalog/enka/skill-supplements.json)。奇偶各形态和无元素旅行者的技能顺序取自[技能组原表](../../tools/data/sources/character-text/base-and-manekin.json)。全目录导入测试逐个检查角色身份、形态和天赋顺序，真实展柜回归另行核对原始培养及装备。
+普通角色与元素旅行者的天赋编号与技能顺序由 `AnimeGameData` 统一提取，记录于 [enka-ids.json](../../tools/data/sources/anime-game-data/enka-ids.json)。奇偶各形态和无元素旅行者的技能顺序取自[技能组原表](../../tools/data/sources/anime-game-data/base-and-manekin.json)。全目录导入测试逐个检查角色身份、形态和天赋顺序，真实展柜回归另行核对原始培养及装备。
 
 ### Mona库存
 

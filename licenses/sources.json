@@ -20,12 +20,20 @@
       "usage": "静态提取FIGHT_PROP_ATTACK_PERCENT、FIGHT_PROP_HP_PERCENT、FIGHT_PROP_DEFENSE_PERCENT三份原始SVG路径，统一到128px画布并保留透明区域；模块标识及来源版本见assets/manifest.json。"
     },
     {
+      "id": "anime-game-data",
+      "name": "DimbreathBot/AnimeGameData 镜像与贡献者",
+      "url": "https://github.com/DimbreathBot/AnimeGameData",
+      "version": "bd35e243fa436f141f015cf221a6e19d0c34b7ca",
+      "license": "独立仓库许可缺失；游戏数据与文本权利归 miHoYo / HoYoverse",
+      "usage": "主数据源原始数值与文本快照：角色、武器、套装、成长曲线、突破、天赋参数、圣遗物主副词条档位、Enka 技能顺序、等级系数及能力机制摘录。"
+    },
+    {
       "id": "genshin-db",
       "name": "genshin-db / theBowja 与贡献者",
       "url": "https://github.com/theBowja/genshin-db",
       "version": "8e5badd60b5d894284ccc927a56c9683529d2592",
       "license": "MIT；游戏内容权利另计",
-      "usage": "实际提取角色、天赋、武器、套装、成长曲线、中文名称与图片文件名；保留转换、哈希与版本记录。",
+      "usage": "历史交叉核对与早先保留图标映射记录（主数据源已切换至 DimbreathBot/AnimeGameData）。",
       "licenseFile": "licenses/sources/genshin-db/LICENSE",
       "licenseSha256": "9b4edf56612dd31a97ade0d2d408154eb2e3dcf620f5b832fefec036ba9b50e1"
     },
@@ -35,7 +43,7 @@
       "url": "https://github.com/TwiceDrop/genshin_artifact",
       "version": "589ac6919057709924c0c20d5a9d673fe9b0be1a；早期图片与格式另见逐图清单",
       "license": "MIT（代码/元数据）；游戏图像权利另计",
-      "usage": "参考莫娜 JSON 格式与交互，使用目录身份元数据及部分头像、圣遗物、元素图来源。",
+      "usage": "参考莫娜导出 JSON 格式、套装别名表与交互语义，并保留早先采样的头像、圣遗物与元素图标来源。",
       "licenseFile": "licenses/sources/mona/LICENSE",
       "licenseSha256": "ef3096c349dde56611cd40bf1cf8afd0b01d7c847c3df672baf6be1e514f0fd6"
     },
@@ -61,23 +69,7 @@
       "url": "https://github.com/EnkaNetwork/API-docs",
       "version": "b94bc40528941126590e0eefb0f03278e7a44ec8",
       "license": "独立资料许可待补核；接口按上游规则使用",
-      "usage": "实际使用公开展柜服务、字段文档、角色/技能身份映射和少量图片地址；遵守其缓存 TTL 和请求约束。"
-    },
-    {
-      "id": "gachabase",
-      "name": "GachaBase",
-      "url": "https://gi.gachabase.net/",
-      "version": "逐角色页面 URL 与 SHA-256 见 tools/data/sources/catalog/enka/skill-supplements.json",
-      "license": "页面数据条款待核实",
-      "usage": "提取并核对五个角色的公开技能数字 ID 与名称。"
-    },
-    {
-      "id": "artifact-affixes",
-      "name": "Rafs-kk/LunaGC-6.6-res 与 Enka 元数据贡献者",
-      "url": "https://github.com/Rafs-kk/LunaGC-6.6-res",
-      "version": "b0501c5d89767ead5f647869a2412521447f7682",
-      "license": "独立游戏数据许可待核实",
-      "usage": "使用圣遗物词条档位数值与 ID，制作强化次数显示。"
+      "usage": "实际使用公开展柜服务、接口协议文档、角色/技能兼容身份映射及部分图片地址；遵守其缓存 TTL 和请求约束。"
     },
     {
       "id": "kqm",
@@ -85,7 +77,7 @@
       "url": "https://github.com/KQM-git/TCL",
       "version": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
       "license": "机制研究引用",
-      "usage": "机制依据与证据交叉核对；具体引用见tools/data/README.md#计算支持与验证资料。"
+      "usage": "历史机制依据与证据交叉核对参考（当前战斗公式与机制已统一至 Meropide，等级系数已由 AnimeGameData 接替）；具体引用见 tools/data/README.md#计算支持与验证资料。"
     },
     {
       "id": "meropide",
@@ -93,7 +85,7 @@
       "url": "https://meropide.cn/chs/",
       "version": "原文快照与 URL 见 tools/data/references.json",
       "license": "机制研究引用",
-      "usage": "中文机制说明与数值交叉核对。"
+      "usage": "统一战斗公式、反应机制与全角色 theorycraft 资料来源。"
     },
     {
       "id": "hoyoverse",

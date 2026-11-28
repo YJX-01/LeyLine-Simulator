@@ -1,8 +1,8 @@
 {
   "artifact-rolls": {
     "source": {
-      "repository": "Rafs-kk/LunaGC-6.6-res",
-      "commit": "b0501c5d89767ead5f647869a2412521447f7682",
+      "repository": "DimbreathBot/AnimeGameData",
+      "commit": "bd35e243fa436f141f015cf221a6e19d0c34b7ca",
       "path": "ExcelBinOutput/ReliquaryAffixExcelConfigData.json"
     }
   },
@@ -24,8 +24,8 @@
   },
   "catalog-release-metadata": {
     "source": {
-      "repository": "theBowja/genshin-db",
-      "commit": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "repository": "DimbreathBot/AnimeGameData",
+      "commit": "bd35e243fa436f141f015cf221a6e19d0c34b7ca"
     }
   },
   "effective-roll-basis": {
@@ -54,19 +54,17 @@
   },
   "reaction-rules": {
     "levels": {
-      "repository": "KQM-git/TCL",
-      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-      "path": "src/data/elemental_curves/player.json"
+      "repository": "DimbreathBot/AnimeGameData",
+      "commit": "bd35e243fa436f141f015cf221a6e19d0c34b7ca",
+      "path": "ExcelBinOutput/ElementCoeffExcelConfigData.json"
     },
     "amplifying": {
-      "repository": "KQM-git/TCL",
-      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-      "path": "docs/combat-mechanics/_formulas/amplifying.md"
+      "url": "https://meropide.cn/chs/reference/伤害公式/",
+      "snapshot": ".references/meropide/pages/reference/伤害公式.html"
     },
     "additive": {
-      "repository": "KQM-git/TCL",
-      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-      "path": "docs/combat-mechanics/_formulas/additive.md"
+      "url": "https://meropide.cn/chs/reference/伤害公式/",
+      "snapshot": ".references/meropide/pages/reference/伤害公式.html"
     }
   }
 }

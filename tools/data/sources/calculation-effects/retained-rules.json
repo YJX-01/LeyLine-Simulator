@@ -862,7 +862,7 @@
       "mechanism": "passive1-proviso",
       "sources": [
         {
-          "path": "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/yanfei.json#/passive1",
+          "path": "src/game-data/data/characters/yanfei.json#/passives/0",
           "claim": "Each seal consumed by a charged attack grants 5% Pyro damage bonus for 6 seconds; another charged attack first removes the prior effect."
         },
         {

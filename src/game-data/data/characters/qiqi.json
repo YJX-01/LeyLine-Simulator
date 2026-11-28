@@ -86,7 +86,7 @@
     {
       "id": "qiqi.normal",
       "name": "云来古剑法",
-      "description": "普通攻击\n进行至多五段的连续剑击。\n\n重击\n消耗一定体力，瞬间向前方挥出两剑。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+      "description": "<color=#FFD780FF>普通攻击</color>\n进行至多五段的连续剑击。\n\n<color=#FFD780FF>重击</color>\n消耗一定体力，瞬间向前方挥出两剑。\n\n<color=#FFD780FF>下落攻击</color>\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
       "details": [
@@ -457,7 +457,7 @@
     {
       "id": "qiqi.skill",
       "name": "仙法·寒病鬼差",
-      "description": "冰血化符，召唤寒病鬼差，并对周围的敌人造成冰元素伤害。\n\n寒病鬼差\n·七七的普通攻击与重击命中时，为队伍中自己的角色，以及附近的友方角色恢复生命值，回复量受益于七七的攻击力；\n·每隔一段时间，为当前场上自己的角色恢复生命值；\n·跟随角色行动，对路径上的敌人造成冰元素伤害。",
+      "description": "冰血化符，召唤寒病鬼差，并对周围的敌人造成<color=#99FFFFFF>冰元素伤害</color>。\n\n<color=#FFD780FF>寒病鬼差</color>\n·七七的普通攻击与重击命中时，为队伍中自己的角色，以及附近的友方角色恢复生命值，回复量受益于七七的攻击力；\n·每隔一段时间，为当前场上自己的角色恢复生命值；\n·跟随角色行动，对路径上的敌人造成<color=#99FFFFFF>冰元素伤害</color>。",
       "flavorText": "「这家伙主要是用来防止升温腐烂的…嗯，我说的是白先生那些精贵药材。」",
       "category": "skill",
       "element": "cryo",
@@ -789,7 +789,7 @@
     {
       "id": "qiqi.burst",
       "name": "仙法·救苦度厄",
-      "description": "七七释放体内封印的仙力，以度厄真符标记附近的敌人，并造成冰元素伤害。\n\n度厄真符\n处于度厄真符影响下的敌人受到伤害时，为造成伤害的角色恢复生命值。",
+      "description": "七七释放体内封印的仙力，以度厄真符标记附近的敌人，并造成<color=#99FFFFFF>冰元素伤害</color>。\n\n<color=#FFD780FF>度厄真符</color>\n处于度厄真符影响下的敌人受到伤害时，为造成伤害的角色恢复生命值。",
       "flavorText": "「真名，救苦度厄真君，起死回骸童子。」\n——七七并不能记起这句话。",
       "category": "burst",
       "element": "cryo",
@@ -1060,7 +1060,7 @@
     {
       "id": "qiqi.passive1",
       "name": "延命妙法",
-      "description": "处于仙法·寒病鬼差状态下的角色触发元素反应时，受治疗加成提升20%，持续8秒。",
+      "description": "处于<color=#FFD780FF>仙法·寒病鬼差</color>状态下的角色触发元素反应时，受治疗加成提升20%，持续8秒。",
       "unlockAscension": 1,
       "buffs": [
         {
@@ -1233,7 +1233,7 @@
     {
       "id": "qiqi.passive3",
       "name": "前尘旧忆",
-      "description": "在小地图上显示周围的璃月区域特产的位置。",
+      "description": "在小地图上显示周围的<color=#FFD780FF>璃月区域特产</color>的位置。",
       "unlockAscension": null
     }
   ],
@@ -1265,7 +1265,7 @@
     {
       "rank": 2,
       "name": "冰寒蚀骨",
-      "description": "对受到冰元素影响的敌人，七七的普通攻击与重击造成的伤害提升15%。",
+      "description": "对受到<color=#99FFFFFF>冰元素</color>影响的敌人，七七的普通攻击与重击造成的伤害提升15%。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -1294,7 +1294,7 @@
     {
       "rank": 3,
       "name": "升天宝诰",
-      "description": "仙法·救苦度厄的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>仙法·救苦度厄</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "burst",
@@ -1326,7 +1326,7 @@
     {
       "rank": 5,
       "name": "红莲开绽",
-      "description": "仙法·寒病鬼差的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>仙法·寒病鬼差</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "skill",
@@ -1337,7 +1337,7 @@
     {
       "rank": 6,
       "name": "起死回骸",
-      "description": "施放仙法·救苦度厄时，复苏附近队伍中所有倒下的角色，并将其生命值恢复至50%。\n该效果每15分钟只能触发一次。",
+      "description": "施放<color=#FFD780FF>仙法·救苦度厄</color>时，复苏附近队伍中所有倒下的角色，并将其生命值恢复至50%。\n该效果每15分钟只能触发一次。",
       "talentBonuses": [],
       "buffs": [
         {

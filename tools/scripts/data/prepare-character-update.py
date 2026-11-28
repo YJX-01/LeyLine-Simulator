@@ -10,9 +10,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / 'tools/lib'))
 from content_source import read_content as read, write_content
-COMMIT = '8e5badd60b5d894284ccc927a56c9683529d2592'
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--source', type=Path, default=ROOT / 'tools/data/sources/genshin-db' / COMMIT)
+parser.add_argument('--source', type=Path, default=ROOT / 'tools/data/sources/anime-game-data')
+parser.add_argument('--text-cache', type=Path, default=None)
 parser.add_argument('--out', type=Path, required=True)
 args = parser.parse_args()
 output = args.out.resolve()
@@ -25,14 +25,20 @@ candidates = {}
 def write(path, value):
     candidates[path] = value
 
-stats = read(args.source / 'stats/talents.json')
-supplement = read(ROOT / 'tools/data/sources/character-text/base-and-manekin.json')
-proud = read(ROOT / supplement['proudSkillsFile'])
+characters = read(args.source / 'characters.json')
+stats = read(args.source / 'talent-params.json')
+manifest = read(args.source / 'manifest.json')
+text_cache = args.text_cache or (ROOT / '.references/anime-game-data' / manifest['revision'] / '.normalized/text')
+supplement = read(args.source / 'base-and-manekin.json')
 element_names = {'pyro': '火', 'hydro': '水', 'electro': '雷', 'cryo': '冰', 'anemo': '风', 'geo': '岩', 'dendro': '草'}
 
 
 def clean_text(value):
     return re.sub(r'<[^>]+>', '', re.sub(r'\\+n', '\n', value)).strip()
+
+
+def normalize_raw(value):
+    return re.sub(r'\\+n', '\n', value).strip()
 
 
 def supplement_character(candidate, binding):
@@ -46,30 +52,29 @@ def supplement_character(candidate, binding):
     candidate['identity']['element'] = binding['element']
     if binding['element'] != 'physical':
         candidate['identity']['name'] += f'（{element_names[binding["element"]]}）'
-    skills = [(skill_id, 'normal' if index == 0 else 'skill') for index, skill_id in enumerate(depot['skills']) if skill_id]
+    skills = [(skill_id, 'normal' if index == 0 else 'skill', f'combat{index + 1}') for index, skill_id in enumerate(depot['skills']) if skill_id]
     if depot['energySkill']:
-        skills.append((depot['energySkill'], 'burst'))
+        skills.append((depot['energySkill'], 'burst', 'combat3'))
     talents = []
-    for skill_id, category in skills:
+    entity_stats = stats.get(candidate['id'], {})
+    for skill_id, category, slot_key in skills:
         source = supplement['skills'][str(skill_id)]
-        rows = sorted((row for row in proud if row['proudSkillGroupId'] == source['proudSkillGroupId']), key=lambda row: row['level'])
-        if [row['level'] for row in rows] != list(range(1, len(rows) + 1)):
-            raise ValueError(f'Non-contiguous talent levels: {skill_id}')
+        slot_params = entity_stats.get(slot_key, {})
         description = text(source['descTextMapHash'])
         flavor = re.search(r'<i>(.*?)</i>', description, re.S)
-        details = [clean_text(texts[str(key)]).split('|', 1) for key in rows[0]['paramDescList'] if texts.get(str(key))]
+        details = [clean_text(texts[str(key)]).split('|', 1) for key in source.get('paramDescList', []) if texts.get(str(key))]
         details = [{'label': pair[0], 'template': pair[1] if len(pair) > 1 else ''} for pair in details]
         parameters = []
-        for index in range(len(rows[0]['paramList'])):
-            param_id = f'param{index + 1}'
+        for param_id, values in slot_params.items():
             matching = [detail for detail in details if re.search(r'\{' + param_id + r'(?::|\})', detail['template'])]
             unit = 'ratio' if any(re.search(r'\{' + param_id + r':[^}]*P', detail['template']) for detail in matching) else 'unknown'
             if unit == 'unknown' and matching:
                 labels = ' '.join(detail['label'] + detail['template'] for detail in matching)
                 unit = 'seconds' if '秒' in labels else 'stamina' if '体力' in labels else 'energy' if '能量' in labels else 'scalar'
-            parameters.append({'id': param_id, 'unit': unit, 'values': [row['paramList'][index] for row in rows]})
+            parameters.append({'id': param_id, 'unit': unit, 'values': values})
         talent = {'id': f'{candidate["id"]}.{category}', 'name': clean_text(text(source['nameTextMapHash'])),
-                  'description': clean_text(re.sub(r'<i>.*?</i>', '', description, flags=re.S)), 'category': category,
+                  'description': re.sub(r'\n{3,}', '\n\n', normalize_raw(re.sub(r'\n*<i>.*?</i>\n*', '\n', description, flags=re.S | re.I))).strip(),
+                  'category': category,
                   'element': 'physical' if category == 'normal' else binding['element'], 'parameters': parameters,
                   'details': details}
         if flavor:
@@ -77,19 +82,22 @@ def supplement_character(candidate, binding):
         talents.append(talent)
     candidate['talents'] = talents
     candidate['passives'] = []
-    for item in depot['inherentProudSkillOpens']:
-        if not item['proudSkillGroupId']:
-            continue
-        row = next(row for row in proud if row['proudSkillGroupId'] == item['proudSkillGroupId'])
-        candidate['passives'].append({'id': f'{candidate["id"]}.passive{len(candidate["passives"]) + 1}',
-                                      'name': clean_text(text(row['nameTextMapHash'])), 'description': clean_text(text(row['descTextMapHash'])),
-                                      'unlockAscension': item['needAvatarPromoteLevel']})
+    for item in depot.get('passives', []):
+        entry = {'id': f'{candidate["id"]}.passive{len(candidate["passives"]) + 1}',
+                 'name': clean_text(text(item['nameTextMapHash'])), 'description': normalize_raw(text(item['descTextMapHash']))}
+        if 'needAvatarPromoteLevel' in item:
+            entry['unlockAscension'] = item['needAvatarPromoteLevel']
+        candidate['passives'].append(entry)
     if any(depot['talents']):
         raise ValueError('Supplement constellation bindings require review')
     candidate['constellations'] = []
 def merge_parameters(talent, incoming):
     existing = {param['id']: param for param in talent['parameters']}
     received = {param['id']: param for param in incoming}
+    extra = set(received) - set(existing)
+    if extra and all(all(value == 0 for value in received[key]['values']) for key in extra):
+        for key in extra:
+            received.pop(key)
     if existing.keys() != received.keys():
         raise ValueError(f'{talent["id"]}: parameter identities changed; review the bindings before refreshing')
     changed = any(param['values'] != received[key]['values'] for key, param in existing.items())
@@ -143,10 +151,9 @@ for identifier, path in sorted(paths.items()):
     traveler = identifier.split('-', 1) if identifier.startswith(('aether-', 'lumine-')) else None
     base = traveler[0] if traveler else identifier
     key = 'traveler' + traveler[1] if traveler else identifier
-    identity_path = args.source / f'ChineseSimplified/characters/{base}.json'
-    text_path = args.source / f'ChineseSimplified/talents/{key}.json'
-    constellation_path = args.source / f'ChineseSimplified/constellations/{key}.json'
-    identity = read(identity_path) if identity_path.exists() else {}
+    identity = characters.get(base, {}).get('metadata', {})
+    text_path = text_cache / f'talents/{key}.json'
+    constellation_path = text_cache / f'constellations/{key}.json'
     text = read(text_path) if text_path.exists() else {}
     constellations = read(constellation_path) if constellation_path.exists() else {}
     for field in ['title', 'description', 'rarity', 'region']:
@@ -162,7 +169,7 @@ for identifier, path in sorted(paths.items()):
             talent.pop('flavorText', None)
         talent['details'] = [{'label': label.split('|', 1)[0], 'template': label.split('|', 1)[1] if '|' in label else ''} for label in source.get('attributes', {}).get('labels', [])]
         parameters = []
-        for param, values in stats.get(key, stats.get(base, {})).get(f'combat{index}', {}).items():
+        for param, values in stats.get(identifier, stats.get(key, stats.get(base, {}))).get(f'combat{index}', {}).items():
             if not isinstance(values, list) or not values:
                 continue
             formats = [match[1] for detail in talent['details'] for match in re.finditer(r'\{' + re.escape(param) + r':([^}]+)\}', detail['template'])]
@@ -171,10 +178,14 @@ for identifier, path in sorted(paths.items()):
             flag_changed_parameters(candidate, talent['id'])
     for passive in candidate['passives']:
         source = text.get(passive['id'].rsplit('.', 1)[-1], {})
+        if not source:
+            continue
         passive['name'] = source.get('name', passive['name'])
         passive['description'] = source.get('description', '')
     for constellation in candidate['constellations']:
         source = constellations.get(f'c{constellation["rank"]}', {})
+        if not source:
+            continue
         constellation['name'] = source.get('name', constellation['name'])
         constellation['description'] = source.get('description', '')
     if candidate != original:

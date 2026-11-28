@@ -6,10 +6,10 @@
     "revision": "4"
   },
   "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "talents": "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/vesna.json",
-    "constellations": "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/constellations/vesna.json"
+    "repository": "DimbreathBot/AnimeGameData",
+    "commit": "bd35e243fa436f141f015cf221a6e19d0c34b7ca",
+    "talents": "src/game-data/data/characters/vesna.json",
+    "constellations": "src/game-data/data/characters/vesna.json"
   },
   "scope": "Source-derived state transitions for explicitly supplied events. No invented rotation, automatic timing, player recording or observed damage is provided.",
   "states": {

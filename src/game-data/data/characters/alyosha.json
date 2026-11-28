@@ -86,7 +86,7 @@
     {
       "id": "alyosha.normal",
       "name": "角枪驰弋",
-      "description": "普通攻击\n进行至多四段的连续枪击，并对最后一击命中的敌人施加**弋猎印记**效果。\n\n重击\n消耗一定体力，向前方突进，对路径上的敌人造成伤害。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+      "description": "<color=#FFD780FF>普通攻击</color>\n进行至多四段的连续枪击，并对最后一击命中的敌人施加{LINK#N11480001}<color=#FFD780FF>弋猎印记</color>{/LINK}效果。\n\n<color=#FFD780FF>重击</color>\n消耗一定体力，向前方突进，对路径上的敌人造成伤害。\n\n<color=#FFD780FF>下落攻击</color>\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
       "details": [
@@ -444,7 +444,7 @@
     {
       "id": "alyosha.skill",
       "name": "伏袭霆击",
-      "description": "循借猎人的本能，依据点按、长按，以不同的方式产生效果，并对命中的敌人施加**弋猎印记**效果。\n\n点按\n向前方射击，造成雷元素范围伤害。\n\n长按\n进入瞄准状态，并选定前方一定范围内的敌人，在该状态下提高阿罗夏的抗打断能力。\n长按结束时，对选定的敌人造成雷元素伤害。",
+      "description": "循借猎人的本能，依据点按、长按，以不同的方式产生效果，并对命中的敌人施加{LINK#N11480001}<color=#FFD780FF>弋猎印记</color>{/LINK}效果。\n\n<color=#FFD780FF>点按</color>\n向前方射击，造成<color=#FFACFFFF>雷元素范围伤害</color>。\n\n<color=#FFD780FF>长按</color>\n进入瞄准状态，并选定前方一定范围内的敌人，在该状态下提高阿罗夏的抗打断能力。\n长按结束时，对选定的敌人造成<color=#FFACFFFF>雷元素伤害</color>。",
       "flavorText": "莽撞的猎手曾向枪尖攀爬，随后，有幸熬过血的教训，领悟雪原的生存至理。",
       "category": "skill",
       "element": "electro",
@@ -676,7 +676,7 @@
     {
       "id": "alyosha.burst",
       "name": "守猎进踞",
-      "description": "召唤信赖的好伙伴图加林一同战斗，并将前方区域短暂变换为轰霆猎场。\n\n轰霆猎场\n·持续嘲讽周围的敌人，吸引敌人攻击；\n·每隔2秒，对踏入其中的敌人造成一次雷元素范围伤害。\n\n图加林\n·若周围存在敌人，每隔2秒，图加林将快速移动至一名敌人附近，对其进行撕咬攻击，造成雷元素伤害。\n·若命中的敌人处于弋猎印记效果影响下，还会激活弋猎印记。\n·图加林会优先攻击处于弋猎印记效果影响下的敌人。",
+      "description": "召唤信赖的好伙伴<color=#FFD780FF>图加林</color>一同战斗，并将前方区域短暂变换为<color=#FFD780FF>轰霆猎场</color>。\n\n<color=#FFD780FF>轰霆猎场</color>\n·持续嘲讽周围的敌人，吸引敌人攻击；\n·每隔2秒，对踏入其中的敌人造成一次<color=#FFACFFFF>雷元素范围伤害</color>。\n\n<color=#FFD780FF>图加林</color>\n·若周围存在敌人，每隔2秒，图加林将快速移动至一名敌人附近，对其进行撕咬攻击，造成<color=#FFACFFFF>雷元素伤害</color>。\n·若命中的敌人处于<color=#FFD780FF>弋猎印记</color>效果影响下，还会激活<color=#FFD780FF>弋猎印记</color>。\n·图加林会优先攻击处于<color=#FFD780FF>弋猎印记</color>效果影响下的敌人。",
       "flavorText": "等待，等待到不再心焦，便有赤腹兰鸻飞越白桦林，迎接他的射击。",
       "category": "burst",
       "element": "electro",
@@ -889,7 +889,7 @@
     {
       "id": "alyosha.passive1",
       "name": "惊醒沉睡的林线",
-      "description": "**图加林**进行攻击时，还会为队伍中附近的当前场上角色恢复生命值，回复量相当于阿罗夏攻击力的120%。",
+      "description": "{LINK#N11480002}<color=#FFD780FF>图加林</color>{/LINK}进行攻击时，还会为队伍中附近的当前场上角色恢复生命值，回复量相当于阿罗夏攻击力的120%。",
       "unlockAscension": 1
     },
     {
@@ -925,7 +925,7 @@
     {
       "id": "alyosha.passive3",
       "name": "星赴险域",
-      "description": "处于**极星辉域**中时，阿罗夏将会进入辉映·星超导状态。\n辉映·星超导：激活**弋猎印记**时获得的猎者之准效果还会使角色处于场上时造成的星超导反应伤害提升20%。",
+      "description": "处于{LINK#N11330003}<color=#FFD780FF>极星辉域</color>{/LINK}中时，阿罗夏将会进入<color=#FFD780FF>辉映·星超导</color>状态。\n<color=#FFD780FF>辉映·星超导</color>：激活{LINK#N11480001}<color=#FFD780FF>弋猎印记</color>{/LINK}时获得的<color=#FFD780FF>猎者之准</color>效果还会使角色处于场上时造成的星超导反应伤害提升20%。",
       "unlockAscension": null,
       "buffs": [
         {
@@ -996,7 +996,7 @@
     {
       "id": "alyosha.passive4",
       "name": "树梢察伺",
-      "description": "在小地图上显示周围的至冬区域特产的位置，在影域中亦能提供相同的佑助。",
+      "description": "在小地图上显示周围的<color=#FFD780FF>至冬区域特产</color>的位置，在影域中亦能提供相同的佑助。",
       "unlockAscension": null
     }
   ],
@@ -1004,7 +1004,7 @@
     {
       "rank": 1,
       "name": "寒谷轰雷",
-      "description": "队伍中附近的角色对敌人触发雷元素相关反应后，将为阿罗夏恢复15点元素能量，该效果每18秒至多触发一次。",
+      "description": "队伍中附近的角色对敌人触发<color=#FFACFFFF>雷元素相关反应</color>后，将为阿罗夏恢复15点元素能量，该效果每18秒至多触发一次。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -1028,13 +1028,13 @@
     {
       "rank": 2,
       "name": "长嗥远讯",
-      "description": "元素爆发守猎进踞的持续时间延长6秒。\n此外，**图加林**每次攻击敌人前，还会为一名目标施加**弋猎印记**；该效果不会激活已有的弋猎印记。",
+      "description": "元素爆发<color=#FFD780FF>守猎进踞</color>的持续时间延长6秒。\n此外，{LINK#N11480002}<color=#FFD780FF>图加林</color>{/LINK}每次攻击敌人前，还会为一名目标施加{LINK#N11480001}<color=#FFD780FF>弋猎印记</color>{/LINK}；该效果不会激活已有的<color=#FFD780FF>弋猎印记</color>。",
       "talentBonuses": []
     },
     {
       "rank": 3,
       "name": "僚朋相唤",
-      "description": "元素战技伏袭霆击的技能等级提高3级。\n至多提升至15级。",
+      "description": "元素战技<color=#FFD780FF>伏袭霆击</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "skill",
@@ -1045,13 +1045,13 @@
     {
       "rank": 4,
       "name": "衔取猎品",
-      "description": "**图加林**进行攻击时，还会为队伍中附近的生命值百分比最低的角色恢复生命值，回复量相当于阿罗夏攻击力的60%。",
+      "description": "{LINK#N11480002}<color=#FFD780FF>图加林</color>{/LINK}进行攻击时，还会为队伍中附近的生命值百分比最低的角色恢复生命值，回复量相当于阿罗夏攻击力的60%。",
       "talentBonuses": []
     },
     {
       "rank": 5,
       "name": "莺啼止时",
-      "description": "元素爆发守猎进踞的技能等级提高3级。\n至多提升至15级。",
+      "description": "元素爆发<color=#FFD780FF>守猎进踞</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "burst",
@@ -1062,7 +1062,7 @@
     {
       "rank": 6,
       "name": "复夺旌幡",
-      "description": "激活**弋猎印记**时获得的猎者之准效果可以叠加。该效果至多叠加2层，叠加至2层时，还会使处于该效果影响下的当前场上角色的元素精通提升100点。",
+      "description": "激活{LINK#N11480001}<color=#FFD780FF>弋猎印记</color>{/LINK}时获得的<color=#FFD780FF>猎者之准</color>效果可以叠加。该效果至多叠加2层，叠加至2层时，还会使处于该效果影响下的当前场上角色的元素精通提升100点。",
       "talentBonuses": [],
       "buffs": [
         {

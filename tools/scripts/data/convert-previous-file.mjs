@@ -14,7 +14,7 @@ if (value.kind === 'character-definition') schema.characterMetadataSchema.parse(
 else if (value.kind === 'definition-library') schema.definitionLibrarySchema.parse(value);
 else {
   // Version 0.1 stored standard curves by identifier. Only use its frozen common table.
-  const prior = readContentSource(new URL('../../data/sources/catalog/genshin-db/character-curves.json', import.meta.url));
+  const prior = readContentSource(new URL('../../data/sources/anime-game-data/character-curves.json', import.meta.url));
   for (const character of Object.values(value.content.characters)) for (const key of Object.values(character.progression.curveIds)) {
     if (character.curves?.[key] || value.content.curves[key]) continue;
     const levels = Object.keys(prior).map(Number).filter(Number.isInteger).sort((a, b) => a - b);

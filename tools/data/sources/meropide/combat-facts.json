@@ -173,21 +173,21 @@
         "talent": "bennett.burst",
         "constellation": 6,
         "element": "pyro",
-        "inGameText": "ChineseSimplified/constellations/bennett.json#c6",
+        "inGameText": "src/game-data/data/characters/bennett.json#/constellations/5",
         "meropide": "characters/班尼特.theorycraft.html"
       },
       {
         "character": "candace",
         "talent": "candace.burst",
         "element": "hydro",
-        "inGameText": "ChineseSimplified/talents/candace.json#combat3",
+        "inGameText": "src/game-data/data/characters/candace.json#/talents/2",
         "meropide": "characters/坎蒂丝.theorycraft.html"
       },
       {
         "character": "chongyun",
         "talent": "chongyun.skill",
         "element": "cryo",
-        "inGameText": "ChineseSimplified/talents/chongyun.json#combat2",
+        "inGameText": "src/game-data/data/characters/chongyun.json#/talents/1",
         "meropide": "characters/重云.theorycraft.html"
       }
     ],

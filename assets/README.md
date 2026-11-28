@@ -16,6 +16,11 @@ game保存游戏图标及唯一正式矢量，ui保存装饰。[manifest.json](m
 
 `python tools/scripts/assets/sync-game-icons.py --out artifacts/content-candidates/<新目录>`按正式资源表与采集输入准备待审资源。capture-stat-vectors.py从固定上游几何和manifest派生规则制备矢量候选，正式SVG位于game/stats与game/artifact-slots。capture-ui-icon-sources.py只刷新.references中的上游树缓存；采集输入保留固定来源、已采用地址和采集策略。图片检查包含内容透明度与占位识别：已知服务器占位源SHA-256为ae5d4d9be2e3ee89c0fc94a326aaefd8412c55d916bef6f7d28c88ebf771af7b，最大透明度37/255。HTTP成功和解码分别核对实际图像内容。
 
+### 两层图标维护流程
+
+1. **元数据层（AnimeGameData）**：运行 `node tools/scripts/data/capture-anime-game-data.mjs`，同步更新 `tools/data/sources/anime-game-data/` 下的 `characters.json`、`weapons.json`、`sets.json`、`skill-icons.json` 与 `base-and-manekin.json`（涵盖角色 `iconName`、技能与命座 `skillIcon`/`icon` 及奇偶双形态被动图标）。
+2. **图像与压缩层（本地缓存与镜像降级）**：运行 `python tools/scripts/assets/sync-game-icons.py --out artifacts/content-candidates/<新目录>`，按“已采用本地产物/固定 sprite 树缓存 → `https://enka.network/ui/<icon>.png` → `https://gi.yatta.moe/assets/UI/<icon>.png`”三级优先级解析原图，经占位哈希与 Alpha 检查后压制为 128×128 WebP（单图 ≤ 32 KiB、总库 ≤ 16 MiB）；支持 `--offline` 零网络一致性复核。审核候选产物采用后，运行 `node tools/scripts/checks/check-ui-assets.mjs` 完成最终验收。
+
 ## 权属与装饰
 
 游戏原画及图标权属归 miHoYo/HoYoverse 及相关权利人。普通属性和部位矢量采用 Genshin Optimizer 的 MIT 资源，许可原文在 licenses/sources/genshin-optimizer。三份百分比图标来自 Yatta，许可状态为 upstream-unspecified。

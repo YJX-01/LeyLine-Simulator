@@ -1,0 +1,1748 @@
+{
+  "bindings": {
+    "aether": {
+      "baseId": "aether",
+      "element": "physical",
+      "skillDepotId": 501
+    },
+    "lumine": {
+      "baseId": "lumine",
+      "element": "physical",
+      "skillDepotId": 701
+    },
+    "manekin": {
+      "baseId": "manekin",
+      "element": "physical",
+      "skillDepotId": 11701
+    },
+    "manekina": {
+      "baseId": "manekina",
+      "element": "physical",
+      "skillDepotId": 11801
+    },
+    "manekin-pyro": {
+      "baseId": "manekin",
+      "element": "pyro",
+      "skillDepotId": 11702
+    },
+    "manekin-hydro": {
+      "baseId": "manekin",
+      "element": "hydro",
+      "skillDepotId": 11703
+    },
+    "manekin-electro": {
+      "baseId": "manekin",
+      "element": "electro",
+      "skillDepotId": 11704
+    },
+    "manekin-cryo": {
+      "baseId": "manekin",
+      "element": "cryo",
+      "skillDepotId": 11705
+    },
+    "manekin-anemo": {
+      "baseId": "manekin",
+      "element": "anemo",
+      "skillDepotId": 11706
+    },
+    "manekin-geo": {
+      "baseId": "manekin",
+      "element": "geo",
+      "skillDepotId": 11707
+    },
+    "manekin-dendro": {
+      "baseId": "manekin",
+      "element": "dendro",
+      "skillDepotId": 11708
+    },
+    "manekina-pyro": {
+      "baseId": "manekina",
+      "element": "pyro",
+      "skillDepotId": 11802
+    },
+    "manekina-hydro": {
+      "baseId": "manekina",
+      "element": "hydro",
+      "skillDepotId": 11803
+    },
+    "manekina-electro": {
+      "baseId": "manekina",
+      "element": "electro",
+      "skillDepotId": 11804
+    },
+    "manekina-cryo": {
+      "baseId": "manekina",
+      "element": "cryo",
+      "skillDepotId": 11805
+    },
+    "manekina-anemo": {
+      "baseId": "manekina",
+      "element": "anemo",
+      "skillDepotId": 11806
+    },
+    "manekina-geo": {
+      "baseId": "manekina",
+      "element": "geo",
+      "skillDepotId": 11807
+    },
+    "manekina-dendro": {
+      "baseId": "manekina",
+      "element": "dendro",
+      "skillDepotId": 11808
+    }
+  },
+  "skillDepots": {
+    "501": {
+      "id": 501,
+      "energySkill": 0,
+      "skills": [
+        100540,
+        0,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ],
+      "passives": [],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "504": {
+      "id": 504,
+      "energySkill": 10068,
+      "skills": [
+        100543,
+        10067,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 722
+        },
+        {},
+        {},
+        {}
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 290187581,
+          "descTextMapHash": 3531150587,
+          "icon": "UI_Talent_S_PlayerWind_05"
+        },
+        {
+          "proudSkillGroupId": 722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 1816631405,
+          "descTextMapHash": 626310419,
+          "icon": "UI_Talent_S_PlayerWind_06"
+        }
+      ],
+      "talents": [
+        71,
+        72,
+        73,
+        74,
+        75,
+        76
+      ]
+    },
+    "701": {
+      "id": 701,
+      "energySkill": 0,
+      "skills": [
+        100550,
+        0,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ],
+      "passives": [],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "704": {
+      "id": 704,
+      "energySkill": 10068,
+      "skills": [
+        100553,
+        10067,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 722
+        },
+        {},
+        {},
+        {}
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 290187581,
+          "descTextMapHash": 3531150587,
+          "icon": "UI_Talent_S_PlayerWind_05"
+        },
+        {
+          "proudSkillGroupId": 722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 1816631405,
+          "descTextMapHash": 626310419,
+          "icon": "UI_Talent_S_PlayerWind_06"
+        }
+      ],
+      "talents": [
+        71,
+        72,
+        73,
+        74,
+        75,
+        76
+      ]
+    },
+    "11701": {
+      "id": 11701,
+      "energySkill": 0,
+      "skills": [
+        11171,
+        0,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11702": {
+      "id": 11702,
+      "energySkill": 111751,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11703": {
+      "id": 11703,
+      "energySkill": 111752,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11704": {
+      "id": 11704,
+      "energySkill": 111753,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11705": {
+      "id": 11705,
+      "energySkill": 111754,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11706": {
+      "id": 11706,
+      "energySkill": 111755,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11707": {
+      "id": 11707,
+      "energySkill": 111756,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11708": {
+      "id": 11708,
+      "energySkill": 111757,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11801": {
+      "id": 11801,
+      "energySkill": 0,
+      "skills": [
+        11171,
+        0,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11802": {
+      "id": 11802,
+      "energySkill": 111751,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11803": {
+      "id": 11803,
+      "energySkill": 111752,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11804": {
+      "id": 11804,
+      "energySkill": 111753,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11805": {
+      "id": 11805,
+      "energySkill": 111754,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11806": {
+      "id": 11806,
+      "energySkill": 111755,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11807": {
+      "id": 11807,
+      "energySkill": 111756,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "11808": {
+      "id": 11808,
+      "energySkill": 111757,
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {},
+        {},
+        {
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "passives": [
+        {
+          "proudSkillGroupId": 11721,
+          "needAvatarPromoteLevel": 1,
+          "nameTextMapHash": 666712229,
+          "descTextMapHash": 1291123867,
+          "icon": "UI_Talent_S_LittleIdol_05"
+        },
+        {
+          "proudSkillGroupId": 11722,
+          "needAvatarPromoteLevel": 4,
+          "nameTextMapHash": 206217621,
+          "descTextMapHash": 1090239707,
+          "icon": "UI_Talent_S_LittleIdol_06"
+        },
+        {
+          "proudSkillGroupId": 11725,
+          "nameTextMapHash": 565052845,
+          "descTextMapHash": 789988659,
+          "icon": "UI_Talent_S_LittleIdol_07"
+        }
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "skills": {
+    "10067": {
+      "id": 10067,
+      "nameTextMapHash": 2639383717,
+      "descTextMapHash": 3074217384,
+      "proudSkillGroupId": 732,
+      "skillIcon": "Skill_S_PlayerWind_01",
+      "paramDescList": [
+        721204662,
+        3892051150,
+        2884699183,
+        2428343319,
+        4119041174,
+        1650485658,
+        308742159,
+        2026095093,
+        40960124,
+        1117033807,
+        2455254156,
+        2254441963,
+        4270802303,
+        2014084251,
+        3202434366,
+        2378166333,
+        1595414993,
+        2706596067,
+        2169048575,
+        3235713029
+      ]
+    },
+    "10068": {
+      "id": 10068,
+      "nameTextMapHash": 565740677,
+      "descTextMapHash": 68132912,
+      "proudSkillGroupId": 739,
+      "skillIcon": "Skill_E_PlayerWind_01",
+      "paramDescList": [
+        2279916006,
+        3435842966,
+        3745286575,
+        3999477887,
+        2786978854,
+        2006196442,
+        3503012927,
+        1851593037,
+        2309441804,
+        3802335703,
+        149855740,
+        3448274011,
+        181169591,
+        651289827,
+        929449278,
+        1215125693,
+        646363233,
+        2360080651,
+        1654257063,
+        2873474293
+      ]
+    },
+    "11171": {
+      "id": 11171,
+      "nameTextMapHash": 3368284549,
+      "descTextMapHash": 3512850744,
+      "proudSkillGroupId": 11731,
+      "skillIcon": "Skill_A_01",
+      "paramDescList": [
+        2179008534,
+        3915256278,
+        4162847063,
+        1545713783,
+        4164885894,
+        4103354570,
+        288014375,
+        1973246437,
+        3991406620,
+        2403020287,
+        549857324,
+        2716725331,
+        2334018047,
+        806189323,
+        604442918,
+        284598605,
+        3744277601,
+        3950140579,
+        3176524951,
+        1172463829
+      ]
+    },
+    "11172": {
+      "id": 11172,
+      "nameTextMapHash": 1295754653,
+      "descTextMapHash": 2956446032,
+      "proudSkillGroupId": 11732,
+      "skillIcon": "Skill_S_LittleIdol_01",
+      "paramDescList": [
+        1449185470,
+        1596679182,
+        2859363799,
+        4212324463,
+        148934134,
+        522049018,
+        52250023,
+        408901037,
+        18903316,
+        747716711,
+        369341740,
+        366263435,
+        707755119,
+        2387684387,
+        2135906558,
+        2590739685,
+        1549839857,
+        3473255515,
+        3666354319,
+        3298735221
+      ]
+    },
+    "100540": {
+      "id": 100540,
+      "nameTextMapHash": 1952055533,
+      "descTextMapHash": 1517379584,
+      "proudSkillGroupId": 730,
+      "skillIcon": "Skill_A_01",
+      "paramDescList": [
+        103666918,
+        2729824750,
+        1423911055,
+        846646711,
+        3445419230,
+        607873034,
+        3017237783,
+        746903661,
+        67803476,
+        2907503775,
+        4061425732,
+        1376457859,
+        2296093727,
+        1854658811,
+        1971662054,
+        1981462701,
+        3156438217,
+        421960923,
+        2068905007,
+        45028821
+      ]
+    },
+    "100543": {
+      "id": 100543,
+      "nameTextMapHash": 3283213725,
+      "descTextMapHash": 3988962768,
+      "proudSkillGroupId": 730,
+      "skillIcon": "Skill_A_01",
+      "paramDescList": [
+        103666918,
+        2729824750,
+        1423911055,
+        846646711,
+        3445419230,
+        607873034,
+        3017237783,
+        746903661,
+        67803476,
+        2907503775,
+        4061425732,
+        1376457859,
+        2296093727,
+        1854658811,
+        1971662054,
+        1981462701,
+        3156438217,
+        421960923,
+        2068905007,
+        45028821
+      ]
+    },
+    "100550": {
+      "id": 100550,
+      "nameTextMapHash": 3538369725,
+      "descTextMapHash": 1437911408,
+      "proudSkillGroupId": 731,
+      "skillIcon": "Skill_A_01",
+      "paramDescList": [
+        1614344566,
+        778044798,
+        3947522063,
+        3843758287,
+        1828987358,
+        3672756434,
+        648807519,
+        2651732029,
+        1610843220,
+        1926252023,
+        3901691140,
+        1659254155,
+        823360663,
+        608918851,
+        580895102,
+        3555624397,
+        1546476873,
+        916185307,
+        3250830703,
+        4051495157
+      ]
+    },
+    "100553": {
+      "id": 100553,
+      "nameTextMapHash": 2182891949,
+      "descTextMapHash": 3290781720,
+      "proudSkillGroupId": 731,
+      "skillIcon": "Skill_A_01",
+      "paramDescList": [
+        1614344566,
+        778044798,
+        3947522063,
+        3843758287,
+        1828987358,
+        3672756434,
+        648807519,
+        2651732029,
+        1610843220,
+        1926252023,
+        3901691140,
+        1659254155,
+        823360663,
+        608918851,
+        580895102,
+        3555624397,
+        1546476873,
+        916185307,
+        3250830703,
+        4051495157
+      ]
+    },
+    "111751": {
+      "id": 111751,
+      "nameTextMapHash": 2655999205,
+      "descTextMapHash": 1994483736,
+      "proudSkillGroupId": 11739,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "paramDescList": [
+        455601374,
+        735787102,
+        4119896415,
+        2259325039,
+        29244494,
+        3136036034,
+        3297917175,
+        498317813,
+        1344558108,
+        153040015,
+        2877327844,
+        3515611323,
+        3081506199,
+        3355766787,
+        3766213014,
+        2656030773,
+        2142640385,
+        3120556203,
+        2715069695,
+        2732244173
+      ]
+    },
+    "111752": {
+      "id": 111752,
+      "nameTextMapHash": 5469597,
+      "descTextMapHash": 3138347120,
+      "proudSkillGroupId": 11739,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "paramDescList": [
+        455601374,
+        735787102,
+        4119896415,
+        2259325039,
+        29244494,
+        3136036034,
+        3297917175,
+        498317813,
+        1344558108,
+        153040015,
+        2877327844,
+        3515611323,
+        3081506199,
+        3355766787,
+        3766213014,
+        2656030773,
+        2142640385,
+        3120556203,
+        2715069695,
+        2732244173
+      ]
+    },
+    "111753": {
+      "id": 111753,
+      "nameTextMapHash": 742353141,
+      "descTextMapHash": 3506027984,
+      "proudSkillGroupId": 11739,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "paramDescList": [
+        455601374,
+        735787102,
+        4119896415,
+        2259325039,
+        29244494,
+        3136036034,
+        3297917175,
+        498317813,
+        1344558108,
+        153040015,
+        2877327844,
+        3515611323,
+        3081506199,
+        3355766787,
+        3766213014,
+        2656030773,
+        2142640385,
+        3120556203,
+        2715069695,
+        2732244173
+      ]
+    },
+    "111754": {
+      "id": 111754,
+      "nameTextMapHash": 1239943437,
+      "descTextMapHash": 1555903536,
+      "proudSkillGroupId": 11739,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "paramDescList": [
+        455601374,
+        735787102,
+        4119896415,
+        2259325039,
+        29244494,
+        3136036034,
+        3297917175,
+        498317813,
+        1344558108,
+        153040015,
+        2877327844,
+        3515611323,
+        3081506199,
+        3355766787,
+        3766213014,
+        2656030773,
+        2142640385,
+        3120556203,
+        2715069695,
+        2732244173
+      ]
+    },
+    "111755": {
+      "id": 111755,
+      "nameTextMapHash": 2227608621,
+      "descTextMapHash": 2099216448,
+      "proudSkillGroupId": 11739,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "paramDescList": [
+        455601374,
+        735787102,
+        4119896415,
+        2259325039,
+        29244494,
+        3136036034,
+        3297917175,
+        498317813,
+        1344558108,
+        153040015,
+        2877327844,
+        3515611323,
+        3081506199,
+        3355766787,
+        3766213014,
+        2656030773,
+        2142640385,
+        3120556203,
+        2715069695,
+        2732244173
+      ]
+    },
+    "111756": {
+      "id": 111756,
+      "nameTextMapHash": 212785517,
+      "descTextMapHash": 158679408,
+      "proudSkillGroupId": 11739,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "paramDescList": [
+        455601374,
+        735787102,
+        4119896415,
+        2259325039,
+        29244494,
+        3136036034,
+        3297917175,
+        498317813,
+        1344558108,
+        153040015,
+        2877327844,
+        3515611323,
+        3081506199,
+        3355766787,
+        3766213014,
+        2656030773,
+        2142640385,
+        3120556203,
+        2715069695,
+        2732244173
+      ]
+    },
+    "111757": {
+      "id": 111757,
+      "nameTextMapHash": 3986638933,
+      "descTextMapHash": 4189851840,
+      "proudSkillGroupId": 11739,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "paramDescList": [
+        455601374,
+        735787102,
+        4119896415,
+        2259325039,
+        29244494,
+        3136036034,
+        3297917175,
+        498317813,
+        1344558108,
+        153040015,
+        2877327844,
+        3515611323,
+        3081506199,
+        3355766787,
+        3766213014,
+        2656030773,
+        2142640385,
+        3120556203,
+        2715069695,
+        2732244173
+      ]
+    }
+  },
+  "textMap": {
+    "5469597": "禁入限区",
+    "29244494": "元素能量|{param5:I}",
+    "67803476": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "68132912": "导引风行进的路途，唤出持续前进的龙卷风，将沿途的物体与敌人卷入，持续造成<color=#80FFD7FF>风元素伤害</color>。\\n\\n<color=#FFD780FF>元素转化</color>\\n若龙卷风在技能持续期间接触了<color=#80C0FFFF>水元素</color>/<color=#FF9999FF>火元素</color>/<color=#99FFFFFF>冰元素</color>/<color=#FFACFFFF>雷元素</color>，则会获得对应元素属性，额外造成该元素附加伤害。\\n这种转化在技能持续期间仅会发生一次。\\n\\n<i>和派蒙一起研究过蝴蝶的振翅。</i>",
+    "103666918": "一段伤害|{param1:F1P}",
+    "158679408": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "206217621": "交战持备",
+    "212785517": "禁入限区",
+    "288014375": "下坠期间伤害|{param8:F1P}",
+    "290187581": "裂空之风",
+    "455601374": "禁限区域生成伤害|{param1:F1P}",
+    "565052845": "灵巧战姿",
+    "565740677": "风息激荡",
+    "607873034": "重击伤害|{param6:F1P}+{param7:F1P}",
+    "626310419": "用<color=#FFD780FF>风涡剑</color>打败敌人后的5秒内，每秒恢复2%生命值。\\n该效果每5秒只能触发一次。",
+    "648807519": "重击体力消耗|{param8:F1}点",
+    "666712229": "战域重划",
+    "721204662": "初始切割伤害|{param1:F1P}",
+    "735787102": "禁限区域踏入伤害|{param2:F1P}",
+    "742353141": "禁入限区",
+    "746903661": "下坠期间伤害|{param9:F1P}",
+    "778044798": "二段伤害|{param2:F1P}",
+    "789988659": "奇偶施放元素战技与元素爆发时，会从已有的装扮搭配方案中，随机选择一套进行切换。",
+    "846646711": "四段伤害|{param4:F1P}",
+    "1090239707": "奇偶处于队伍后台时，若元素能量低于30%，每秒为自己恢复2点元素能量。",
+    "1239943437": "禁入限区",
+    "1291123867": "奇偶离场时，如果场上存在奇偶自己创造的「禁限区域」，则「禁限区域」会发生爆炸，造成相当于奇偶攻击力200%的自身元素范围伤害。",
+    "1295754653": "戒惩轰击",
+    "1423911055": "三段伤害|{param3:F1P}",
+    "1437911408": "<color=#FFD780FF>普通攻击</color>\\n进行至多五段的连续剑击。\\n\\n<color=#FFD780FF>重击</color>\\n消耗一定体力，瞬间向前方挥出两剑。\\n\\n<color=#FFD780FF>下落攻击</color>\\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+    "1449185470": "技能伤害|{param1:F1P}",
+    "1517379584": "<color=#FFD780FF>普通攻击</color>\\n进行至多五段的连续剑击。\\n\\n<color=#FFD780FF>重击</color>\\n消耗一定体力，瞬间向前方挥出两剑。\\n\\n<color=#FFD780FF>下落攻击</color>\\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+    "1545713783": "四段伤害|{param4:F1P}",
+    "1555903536": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "1596679182": "元素属性转化持续时间|{param2:F1}秒",
+    "1610843220": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "1614344566": "一段伤害|{param1:F1P}",
+    "1650485658": "最大蓄力冷却时间|{param6:F1}秒",
+    "1816631405": "复苏之风",
+    "1828987358": "五段伤害|{param5:F1P}",
+    "1952055533": "故去的追忆",
+    "1973246437": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "1994483736": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "2099216448": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "2179008534": "一段伤害|{param1:F1P}",
+    "2182891949": "异邦铁风",
+    "2227608621": "禁入限区",
+    "2259325039": "冷却时间|{param4:F1}秒",
+    "2279916006": "龙卷风伤害|{param1:F1P}",
+    "2428343319": "最大爆风伤害|{param4:P}",
+    "2639383717": "风涡剑",
+    "2651732029": "下坠期间伤害|{param9:F1P}",
+    "2655999205": "禁入限区",
+    "2729824750": "二段伤害|{param2:F1P}",
+    "2786978854": "元素能量|{param5:I}",
+    "2859363799": "冷却时间|{param3:F1}秒",
+    "2884699183": "初始爆风伤害|{param3:P}",
+    "2956446032": "奇偶对附近的敌人进行一次攻击，造成自身元素属性的范围伤害，并迅速后退。施放元素战技后的一段时间内，奇偶的普通攻击、重击与下落攻击将转为造成无法被附魔覆盖的自身元素属性的伤害，该效果将在奇偶离场时消失。\\n\\n拥有2次可使用次数。\\n\\n<i>「恰到好处的打击，是必要的警告。」</i>",
+    "3017237783": "重击体力消耗|{param8:F1}点",
+    "3074217384": "紧握风的力量，在掌中汇聚真空涡流，对前方的敌人持续造成<color=#80FFD7FF>风元素伤害</color>。\\n技能结束时真空涡流会炸裂，造成范围更大、威力更强的风元素伤害。\\n\\n<color=#FFD780FF>长按</color>\\n伤害与影响范围会逐渐提升。\\n\\n<color=#FFD780FF>元素转化</color>\\n若真空涡流在技能持续期间接触了<color=#80C0FFFF>水元素</color>/<color=#FF9999FF>火元素</color>/<color=#99FFFFFF>冰元素</color>/<color=#FFACFFFF>雷元素</color>，则会获得对应元素属性，额外造成该元素的附加伤害。\\n元素转化在技能持续期间仅会发生一次。\\n\\n<i>和派蒙讨论过如何握住无形的风。</i>",
+    "3138347120": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "3283213725": "异邦铁风",
+    "3290781720": "<color=#FFD780FF>普通攻击</color>\\n进行至多五段的连续剑击。\\n\\n<color=#FFD780FF>重击</color>\\n消耗一定体力，瞬间向前方挥出两剑。\\n\\n<color=#FFD780FF>下落攻击</color>\\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+    "3368284549": "外域剑术·安谨守望",
+    "3435842966": "附加元素伤害|{param2:F1P}",
+    "3445419230": "五段伤害|{param5:F1P}",
+    "3506027984": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "3512850744": "<color=#FFD780FF>普通攻击</color>\\n进行至多四段的连续剑击。\\n\\n<color=#FFD780FF>重击</color>\\n消耗一定体力，瞬间向前方挥出两剑。\\n\\n<color=#FFD780FF>下落攻击</color>\\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+    "3531150587": "普通攻击的最后一击会打出一道风刃，对沿途敌人造成60%攻击力的<color=#80FFD7FF>风元素伤害</color>。",
+    "3538369725": "故去的追忆",
+    "3672756434": "重击伤害|{param6:F1P}+{param7:F1P}",
+    "3745286575": "持续时间|{param3:F1}秒",
+    "3843758287": "四段伤害|{param4:F1P}",
+    "3892051150": "最大切割伤害|{param2:F1P}",
+    "3915256278": "二段伤害|{param2:F1P}",
+    "3947522063": "三段伤害|{param3:F1P}",
+    "3986638933": "禁入限区",
+    "3988962768": "<color=#FFD780FF>普通攻击</color>\\n进行至多五段的连续剑击。\\n\\n<color=#FFD780FF>重击</color>\\n消耗一定体力，瞬间向前方挥出两剑。\\n\\n<color=#FFD780FF>下落攻击</color>\\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+    "3999477887": "冷却时间|{param4:F1}秒",
+    "4103354570": "重击体力消耗|{param7:F1}点",
+    "4119041174": "基础冷却时间|{param5:F1}秒",
+    "4119896415": "禁限区域持续时间|{param3:F1}秒",
+    "4162847063": "三段伤害|{param3:F1P}*2",
+    "4164885894": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "4189851840": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>"
+  },
+  "travelerNormalUnits": {
+    "textEntries": [
+      {
+        "characterId": "aether",
+        "sourceTextKey": "103666918",
+        "text": "一段伤害|{param1:F1P}",
+        "sourceDescriptionIndex": 0
+      },
+      {
+        "characterId": "aether",
+        "sourceTextKey": "846646711",
+        "text": "四段伤害|{param4:F1P}",
+        "sourceDescriptionIndex": 3
+      },
+      {
+        "characterId": "aether",
+        "sourceTextKey": "607873034",
+        "text": "重击伤害|{param6:F1P}+{param7:F1P}",
+        "sourceDescriptionIndex": 5
+      },
+      {
+        "characterId": "aether",
+        "sourceTextKey": "746903661",
+        "text": "下坠期间伤害|{param9:F1P}",
+        "sourceDescriptionIndex": 7
+      },
+      {
+        "characterId": "lumine",
+        "sourceTextKey": "1614344566",
+        "text": "一段伤害|{param1:F1P}",
+        "sourceDescriptionIndex": 0
+      },
+      {
+        "characterId": "lumine",
+        "sourceTextKey": "3672756434",
+        "text": "重击伤害|{param6:F1P}+{param7:F1P}",
+        "sourceDescriptionIndex": 5
+      },
+      {
+        "characterId": "lumine",
+        "sourceTextKey": "2651732029",
+        "text": "下坠期间伤害|{param9:F1P}",
+        "sourceDescriptionIndex": 7
+      }
+    ],
+    "bindings": [
+      {
+        "file": "src/game-data/data/characters/aether.json",
+        "parameter": "param1",
+        "unit": "ratio",
+        "sourceTextKey": "103666918"
+      },
+      {
+        "file": "src/game-data/data/characters/aether.json",
+        "parameter": "param4",
+        "unit": "ratio",
+        "sourceTextKey": "846646711"
+      },
+      {
+        "file": "src/game-data/data/characters/aether.json",
+        "parameter": "param6",
+        "unit": "ratio",
+        "sourceTextKey": "607873034"
+      },
+      {
+        "file": "src/game-data/data/characters/aether.json",
+        "parameter": "param7",
+        "unit": "ratio",
+        "sourceTextKey": "607873034"
+      },
+      {
+        "file": "src/game-data/data/characters/aether.json",
+        "parameter": "param9",
+        "unit": "ratio",
+        "sourceTextKey": "746903661"
+      },
+      {
+        "file": "src/game-data/data/characters/lumine.json",
+        "parameter": "param1",
+        "unit": "ratio",
+        "sourceTextKey": "1614344566"
+      },
+      {
+        "file": "src/game-data/data/characters/lumine.json",
+        "parameter": "param6",
+        "unit": "ratio",
+        "sourceTextKey": "3672756434"
+      },
+      {
+        "file": "src/game-data/data/characters/lumine.json",
+        "parameter": "param7",
+        "unit": "ratio",
+        "sourceTextKey": "3672756434"
+      },
+      {
+        "file": "src/game-data/data/characters/lumine.json",
+        "parameter": "param9",
+        "unit": "ratio",
+        "sourceTextKey": "2651732029"
+      }
+    ]
+  }
+}

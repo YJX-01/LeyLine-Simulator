@@ -20,10 +20,8 @@ const numeric = (result: schemas.StructuredDamageEvaluation): number => {
 describe('current snapshot assembly and parameter-bound catalog outputs', () => {
   let main: schemas.StructuredBuild['artifactMain'];
   const characters = new Map<string, schemas.StructuredCharacterDefinition>(), weapons = new Map<string, schemas.StructuredWeaponDefinition>();
-  const text = read('tools/data/sources/character-text/base-and-manekin.json');
-  const upstream = read('tools/data/sources/catalog/genshin-db/characters.json'), curves = read('tools/data/sources/catalog/genshin-db/character-curves.json');
-  const talents = read('tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json');
-  const proud = new Map(read(text.proudSkillsFile).map((row: { proudSkillGroupId: number; level: number; paramList: number[] }) => [`${row.proudSkillGroupId}/${row.level}`, row]));
+  const upstream = read('tools/data/sources/anime-game-data/characters.json'), curves = read('tools/data/sources/anime-game-data/character-curves.json');
+  const talents = read('tools/data/sources/anime-game-data/talent-params.json');
   beforeAll(async () => {
     main = await getArtifactMain();
     for (const id of new Set(reviews.map(review => review.characterId))) characters.set(id, await getCharacter(id));
@@ -32,15 +30,10 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
   function build(id: string, weaponId = 'favoniussword'): schemas.StructuredBuild {
     return { schemaVersion: '0.2.0', kind: 'calculation-build', dataVersion: DATA_VERSION, character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
       sets: [], artifacts: [], artifactMain: structuredClone(main), level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
-      sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
+      sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'DimbreathBot/AnimeGameData', commit: 'bd35e243fa436f141f015cf221a6e19d0c34b7ca', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
   }
   function rate(id: string, skillId: string, hitId: string, level = 1): number {
     const original = read('src/game-data/data/characters/' + id + '.json'), index = original.talents.findIndex((talent: { id: string }) => talent.id === skillId), parameter = hitId.slice(skillId.length + 1);
-    const binding = text.bindings[id];
-    if (binding) {
-      const group = text.skills[text.skillDepots[binding.skillDepotId].skills[0]].proudSkillGroupId;
-      return (proud.get(`${group}/${level}`) as { paramList: number[] }).paramList[Number(parameter.replace('param', '')) - 1];
-    }
     return talents[id]['combat' + (index + 1)][parameter][level - 1];
   }
   function attack(id: string, weaponId = 'favoniussword'): number {
@@ -76,7 +69,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
     const set = await getArtifactSet(original.setId);
     const flower = account.artifacts.find(item => item.real?.slot === 'flower' && item.real.setId !== original.setId)!.real!;
     const flowerSet = await getArtifactSet(flower.setId);
-    const levels = read('tools/data/sources/lunagc/b0501c5d89767ead5f647869a2412521447f7682/ReliquaryLevelExcelConfigData.json');
+    const levels = read('tools/data/sources/anime-game-data/reliquary.json').mainLevels;
     for (const rarity of [4, 5] as const) {
       const piece = structuredClone(original);
       piece.rarity = rarity; piece.level = rarity === 4 ? 16 : 20;
@@ -87,7 +80,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
       input.artifacts = [{ ...piece, inventory: null, sourceRefs: [] }, { ...structuredClone(flower), inventory: null, sourceRefs: [] }];
       const prepared = prepareStructuredBuilds([{ id: 'actor', build: input }]);
       expect(prepared.ok, JSON.stringify(prepared.diagnostics)).toBe(true); if (!prepared.ok) continue;
-      const expectedMain = levels.find((row: { rank: number; level: number }) => row.rank === rarity && row.level === piece.level + 1)
+      const expectedMain = levels[`${rarity}/${piece.level + 1}`]
         .addProps.find((prop: { propType: string }) => prop.propType === 'FIGHT_PROP_ATTACK').value;
       const subs = [...piece.substats, ...flower.substats];
       const expectedAttack = attack('kaeya') * (1 + subs.filter(sub => sub.stat === 'attackPercent').reduce((sum, sub) => sum + sub.value, 0))

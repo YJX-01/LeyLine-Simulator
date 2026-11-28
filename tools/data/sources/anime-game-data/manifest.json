@@ -1,0 +1,118 @@
+{
+  "formatVersion": 1,
+  "repository": "https://github.com/DimbreathBot/AnimeGameData",
+  "revision": "bd35e243fa436f141f015cf221a6e19d0c34b7ca",
+  "capturedAt": "2026-11-28T03:23:16.462Z",
+  "rawFiles": [
+    {
+      "path": "ExcelBinOutput/AvatarExcelConfigData.json",
+      "bytes": 357668,
+      "sha256": "dbed6b4f540fe24f8d96dc46b545ac2f8c0d0197f38e4b9a4cac0762a569a897"
+    },
+    {
+      "path": "ExcelBinOutput/AvatarCurveExcelConfigData.json",
+      "bytes": 49053,
+      "sha256": "81948749567e8f0d62875e4bb7242643c052dffd68a6e4f12c31021b154d8c29"
+    },
+    {
+      "path": "ExcelBinOutput/AvatarPromoteExcelConfigData.json",
+      "bytes": 625025,
+      "sha256": "689fd5beade86158015222892aa860f45c377028c6b5d31566d5e22dd76c2a7b"
+    },
+    {
+      "path": "ExcelBinOutput/AvatarSkillDepotExcelConfigData.json",
+      "bytes": 126837,
+      "sha256": "c149f12cce4df46aa9af15701a107b42a45feb7716c7f13448ccb6d7b90258b8"
+    },
+    {
+      "path": "ExcelBinOutput/AvatarSkillExcelConfigData.json",
+      "bytes": 541497,
+      "sha256": "d799dcba02f383dae99fe32b3393408773f67001fe9622801366a524732102d7"
+    },
+    {
+      "path": "ExcelBinOutput/AvatarTalentExcelConfigData.json",
+      "bytes": 360463,
+      "sha256": "f573e89101fc47a8a395def6b840f075dd7dfb52d6df69488b9fefbe2b6ab0d4"
+    },
+    {
+      "path": "ExcelBinOutput/FetterInfoExcelConfigData.json",
+      "bytes": 105075,
+      "sha256": "8e51aba6143d211e5cb4807764f87b9eb8e16816da77b30979f98bfd09ed7c9f"
+    },
+    {
+      "path": "ExcelBinOutput/ProudSkillExcelConfigData.json",
+      "bytes": 9164062,
+      "sha256": "f2cc961874ed0e76b768eb59287979a722a531c334b131f263aa75601a8e0b55"
+    },
+    {
+      "path": "ExcelBinOutput/WeaponExcelConfigData.json",
+      "bytes": 370713,
+      "sha256": "a6e2fec1b1f6ba842c016fcde9a3f54b28a3c9b098d5e6271574720687f92f4e"
+    },
+    {
+      "path": "ExcelBinOutput/WeaponCurveExcelConfigData.json",
+      "bytes": 208929,
+      "sha256": "0d9567926a5c82a36ffb3cace4a10741c8e9f54f27fa6fd9c28ac481034b9ff2"
+    },
+    {
+      "path": "ExcelBinOutput/WeaponPromoteExcelConfigData.json",
+      "bytes": 1218434,
+      "sha256": "df0b58bebfdc3607f737b05a6cec9a2755062cfc049f6843ea8a7d4964a733f1"
+    },
+    {
+      "path": "ExcelBinOutput/EquipAffixExcelConfigData.json",
+      "bytes": 514999,
+      "sha256": "969e342b012607a40bcbe54131c36b850ede0cae3ec9b42db55fbec32d599965"
+    },
+    {
+      "path": "ExcelBinOutput/ReliquarySetExcelConfigData.json",
+      "bytes": 24188,
+      "sha256": "941370d9382ed0ab0acf08877b0ce336f2810440b4cfeaf1bede73200284f7a0"
+    },
+    {
+      "path": "ExcelBinOutput/ReliquaryCodexExcelConfigData.json",
+      "bytes": 24345,
+      "sha256": "853535ef811589fac48cc6ce6917cd43b4920701ad60f6958b39195e6b019eb9"
+    },
+    {
+      "path": "ExcelBinOutput/ReliquaryExcelConfigData.json",
+      "bytes": 2837490,
+      "sha256": "921f2da8d78bccc3f167c3d00adcef6ab8759acc69b5acefd1fbb9413e68d05b"
+    },
+    {
+      "path": "ExcelBinOutput/ReliquaryAffixExcelConfigData.json",
+      "bytes": 45939,
+      "sha256": "665ca4c3d93da29c8bb359c7c2d33b9c2b45c35ee56277bc72c55797c31f9c71"
+    },
+    {
+      "path": "ExcelBinOutput/ReliquaryLevelExcelConfigData.json",
+      "bytes": 183263,
+      "sha256": "46857d6f1f48a39737e9216b997dc9cfdc82b74bc049b58da78eb9dd9b4d1637"
+    },
+    {
+      "path": "ExcelBinOutput/ElementCoeffExcelConfigData.json",
+      "bytes": 31301,
+      "sha256": "b8951a2ea564ef84f1f44e51977bf355dbd4fe81cedb9cb8251b4159d86ffc53"
+    },
+    {
+      "path": "TextMap/TextMapCHS.json",
+      "bytes": 51627416,
+      "sha256": "ce9f71ec9654432014e11b2dc009932290af29a1abc4f8b8ec07f37149c92418"
+    },
+    {
+      "path": "TextMap/TextMap_MediumCHS.json",
+      "bytes": 19104964,
+      "sha256": "619f5d5ff5d042e6df55d819287f51fa3199c20d2009baa1ecd8727d09d4c301"
+    },
+    {
+      "path": "TextMap/TextMapEN.json",
+      "bytes": 57676996,
+      "sha256": "07aa43eaab2090144a82533b1e830454976650aca165d0229d997bb896e4a13d"
+    },
+    {
+      "path": "TextMap/TextMap_MediumEN.json",
+      "bytes": 21026945,
+      "sha256": "b1fd520413309fa0c2e2e95fa12299f662af0b393b0e2b7326f5c1b130bc7f01"
+    }
+  ]
+}

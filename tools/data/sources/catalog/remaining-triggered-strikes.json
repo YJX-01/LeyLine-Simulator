@@ -36,7 +36,7 @@
       "entity": "manekin",
       "field": "/passives/0",
       "sources": [
-        "tools/data/sources/character-text/base-and-manekin.json#bindings",
+        "tools/data/sources/anime-game-data/base-and-manekin.json#bindings",
         "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_LittleIdol.json#SkillObj_LittleIdol_EnergyField,SkillObj_LittleIdol_EnergyField_BoomOnOut"
       ],
       "basis": "男女奇偶的无元素形态只有普通攻击，无法创建禁限区域。七个元素形态的爆炸均按各自元素及200%攻击力，使用独立的 LittleIdol_PermanentSkill_1 标签。"
@@ -45,7 +45,7 @@
       "entity": "manekina",
       "field": "/passives/0",
       "sources": [
-        "tools/data/sources/character-text/base-and-manekin.json#bindings",
+        "tools/data/sources/anime-game-data/base-and-manekin.json#bindings",
         "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_LittleIdol.json#SkillObj_LittleIdol_EnergyField,SkillObj_LittleIdol_EnergyField_BoomOnOut"
       ],
       "basis": "男女奇偶的无元素形态只有普通攻击，无法创建禁限区域。七个元素形态的爆炸均按各自元素及200%攻击力，使用独立的 LittleIdol_PermanentSkill_1 标签。"
@@ -65,7 +65,7 @@
       "entity": "swordofnarzissenkreuz",
       "field": "/buffs",
       "sources": [
-        "tools/data/sources/catalog/genshin-db/weapons.json#swordofnarzissenkreuz.metadata",
+        "tools/data/sources/anime-game-data/weapons.json#swordofnarzissenkreuz.metadata",
         "genshin-db@8e5badd60b5d894284ccc927a56c9683529d2592:src/data/ChineseSimplified/weapons/swordofnarzissenkreuz.json#r1,r2,r3,r4,r5",
         "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/EquipAbilities/ConfigAbility_Weapon_Sword.json#Weapon_Sword_Purewill",
         "genshin-optimizer@f24bcb82f650ff755af9ed47956a91809f142772:libs/gi/formula/src/data/weapon/SwordOfNarzissenkreuz.ts"

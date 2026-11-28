@@ -86,7 +86,7 @@
     {
       "id": "bennett.normal",
       "name": "好运剑",
-      "description": "普通攻击\n进行至多五段的连续剑击。\n\n重击\n消耗一定体力，瞬间向前方挥出两剑。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+      "description": "<color=#FFD780FF>普通攻击</color>\n进行至多五段的连续剑击。\n\n<color=#FFD780FF>重击</color>\n消耗一定体力，瞬间向前方挥出两剑。\n\n<color=#FFD780FF>下落攻击</color>\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
       "details": [
@@ -481,7 +481,7 @@
     {
       "id": "bennett.skill",
       "name": "热情过载",
-      "description": "班尼特将火元素与冒险的热情凝聚在剑上。根据热情凝聚的程度，可能会发生不同的事情…\n\n点按\n快速向前挥出火焰一击，造成火元素伤害。\n\n长按\n根据长按时间进行蓄力，释放时依照蓄力段数造成不同的效果。\n·一段蓄力：发动二段攻击，造成火元素伤害并将敌人击飞；\n·二段蓄力：发动三段连续攻击，造成可观的火元素伤害。最后一击会发生爆炸，将班尼特与敌人同时击飞。被击飞时，班尼特不会受到伤害。",
+      "description": "班尼特将火元素与冒险的热情凝聚在剑上。根据热情凝聚的程度，可能会发生不同的事情…\n\n<color=#FFD780FF>点按</color>\n快速向前挥出火焰一击，造成<color=#FF9999FF>火元素伤害</color>。\n\n<color=#FFD780FF>长按</color>\n根据长按时间进行蓄力，释放时依照蓄力段数造成不同的效果。\n·一段蓄力：发动二段攻击，造成<color=#FF9999FF>火元素伤害</color>并将敌人击飞；\n·二段蓄力：发动三段连续攻击，造成可观的<color=#FF9999FF>火元素伤害</color>。最后一击会发生爆炸，将班尼特与敌人同时击飞。被击飞时，班尼特不会受到伤害。",
       "flavorText": "聚集热情与梦想与火元素的一击。但热情有时会过头，而火元素有时会爆炸。",
       "category": "skill",
       "element": "pyro",
@@ -770,7 +770,7 @@
     {
       "id": "bennett.burst",
       "name": "美妙旅程",
-      "description": "班尼特进行腾跃轰击，造成火元素伤害，并生成鼓舞领域。\n\n鼓舞领域\n·领域内的角色如果生命值低于或等于70%，会持续恢复生命值，回复量受益于班尼特的最大生命值；\n·领域内的角色如果生命值高于70%，会基于班尼特的基础攻击力，以一定比例获得攻击力加成；\n·为其中的角色施加火元素附着。",
+      "description": "班尼特进行腾跃轰击，造成<color=#FF9999FF>火元素伤害</color>，并生成鼓舞领域。\n\n<color=#FFD780FF>鼓舞领域</color>\n·领域内的角色如果生命值低于或等于70%，会持续恢复生命值，回复量受益于班尼特的最大生命值；\n·领域内的角色如果生命值高于70%，会基于班尼特的基础攻击力，以一定比例获得攻击力加成；\n·为其中的角色施加<color=#FF9999FF>火元素附着</color>。",
       "flavorText": "班尼冒险团每一次探险之旅都充满意外风险。尽管唯一的成员班尼特更倾向于说这是「精彩、刺激又美妙的旅程」。",
       "category": "burst",
       "element": "pyro",
@@ -1099,7 +1099,7 @@
     {
       "id": "bennett.passive1",
       "name": "热情复燃",
-      "description": "热情过载的冷却时间减少20%。",
+      "description": "<color=#FFD780FF>热情过载</color>的冷却时间减少20%。",
       "unlockAscension": 1,
       "buffs": [
         {
@@ -1116,7 +1116,7 @@
     {
       "id": "bennett.passive2",
       "name": "无畏的热血",
-      "description": "在美妙旅程领域内，热情过载具有如下效果：\n·冷却时间减少50%；\n·二段蓄力不会将班尼特自身击飞。",
+      "description": "在<color=#FFD780FF>美妙旅程</color>领域内，<color=#FFD780FF>热情过载</color>具有如下效果：\n·冷却时间减少50%；\n·二段蓄力不会将班尼特自身击飞。",
       "unlockAscension": 4,
       "buffs": [
         {
@@ -1195,7 +1195,7 @@
     {
       "rank": 1,
       "name": "冒险憧憬",
-      "description": "美妙旅程的攻击力提升效果不再有生命值限制，数值上追加班尼特基础攻击力的20%。",
+      "description": "<color=#FFD780FF>美妙旅程</color>的攻击力提升效果不再有生命值限制，数值上追加班尼特基础攻击力的20%。",
       "talentBonuses": []
     },
     {
@@ -1227,7 +1227,7 @@
     {
       "rank": 3,
       "name": "火热激情",
-      "description": "热情过载的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>热情过载</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "skill",
@@ -1238,7 +1238,7 @@
     {
       "rank": 4,
       "name": "热情不灭",
-      "description": "施放一段蓄力的热情过载时，在技能第二段攻击中进行普通攻击，可以施放额外的追击。\n追击的伤害等同于第二段攻击的135%。",
+      "description": "施放一段蓄力的<color=#FFD780FF>热情过载</color>时，在技能第二段攻击中进行普通攻击，可以施放额外的追击。\n追击的伤害等同于第二段攻击的135%。",
       "talentBonuses": [],
       "hits": [
         {
@@ -1276,7 +1276,7 @@
     {
       "rank": 5,
       "name": "开拓的心魂",
-      "description": "美妙旅程的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>美妙旅程</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "burst",
@@ -1287,7 +1287,7 @@
     {
       "rank": 6,
       "name": "烈火与勇气",
-      "description": "处在美妙旅程领域内的队伍中当前场上单手剑、双手剑、长柄武器角色获得15%火元素伤害加成，并获得火元素附魔。",
+      "description": "处在<color=#FFD780FF>美妙旅程</color>领域内的队伍中当前场上单手剑、双手剑、长柄武器角色获得15%<color=#FF9999FF>火元素伤害加成</color>，并获得<color=#FF9999FF>火元素附魔</color>。",
       "partyInfusion": "pyro",
       "talentBonuses": [],
       "buffs": [

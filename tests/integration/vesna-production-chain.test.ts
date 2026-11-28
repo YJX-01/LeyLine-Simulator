@@ -81,7 +81,7 @@ describe.skipIf(!existsSync(path))('recorded Vesna through the production calcul
     // Flins's first ascension passive adds 20% to his own Lunar-Charged damage at full Moonsign.
     const lunarBonus = (em: number, index: number) => 1 + 6 * em / (em + 2000) + (index === 0 ? .2 : 0);
     const blessing = 1 + Math.min(.14, panels[0].attack! * .00007) + Math.min(.07, panels[1].hp! * .000002);
-    const upstream = JSON.parse(readFileSync('tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json', 'utf8'));
+    const upstream = JSON.parse(readFileSync('tools/data/sources/anime-game-data/talent-params.json', 'utf8'));
     const multiplier = upstream.flins.combat3.param3[flins.talents.burst - 1];
     expect(points.get(direct)?.value).toBeCloseTo(panels[0].attack! * multiplier * 3 * blessing * lunarBonus(panels[0].elementalMastery!, 0) * 0.9, 8);
     const levels = JSON.parse(readFileSync('src/game-data/data/calculation/reactions.json', 'utf8')).rules.levelMultipliers;
@@ -138,9 +138,9 @@ describe.skipIf(!existsSync(path))('recorded Vesna through the production calcul
     // Independent arithmetic from the pinned original growth/talent records and
     // actual artifact values. This explicit query has one actor, not twelve showcase members.
     const read = (name: string) => JSON.parse(readFileSync('tools/data/sources/' + name, 'utf8'));
-    const character = read('catalog/genshin-db/characters.json').vesna.stats, weapon = read('catalog/genshin-db/weapons.json').beyondthechrysalis.stats;
-    const curves = read('catalog/genshin-db/character-curves.json'), weaponCurves = read('catalog/genshin-db/weapon-curves.json');
-    const params = read('genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json').vesna.combat2.param5;
+    const character = read('anime-game-data/characters.json').vesna.stats, weapon = read('anime-game-data/weapons.json').beyondthechrysalis.stats;
+    const curves = read('anime-game-data/character-curves.json'), weaponCurves = read('anime-game-data/weapon-curves.json');
+    const params = read('anime-game-data/talent-params.json').vesna.combat2.param5;
     const stats: Record<string, number> = {};
     for (const artifact of build.artifacts) {
       stats[artifact.mainStat] = (stats[artifact.mainStat] ?? 0) + build.artifactMain[artifact.rarity][artifact.mainStat][artifact.level];

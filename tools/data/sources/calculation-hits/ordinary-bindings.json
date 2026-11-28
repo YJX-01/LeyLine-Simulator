@@ -495,5 +495,5 @@
     "commit": "b0501c5d89767ead5f647869a2412521447f7682",
     "path": "ExcelBinOutput/ProudSkillExcelConfigData.json"
   },
-  "sourceScope": "Normal base-traveler parameters use the pinned ProudSkill groups in character-text/base-and-manekin.json; other reviewed parameters use src/data/stats/talents.json and the matching ChineseSimplified talent/constellation records. Certificates cover C0 explicit outputs only, with fixed-source independent arithmetic checks."
+  "sourceScope": "Normal base-traveler parameters use the pinned ProudSkill groups in anime-game-data/base-and-manekin.json; other reviewed parameters use anime-game-data/talent-params.json and the matching character records in src/game-data/data/characters/. Certificates cover C0 explicit outputs only, with fixed-source independent arithmetic checks."
 }

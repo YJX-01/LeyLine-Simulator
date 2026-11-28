@@ -18,9 +18,9 @@ export async function checkCatalog() {
   for (const [group, folder] of Object.entries({ characters: 'characters', weapons: 'weapons', sets: 'artifact-sets', actions: 'actions' })) {
     const ids = catalog.inventory[group];
     if (group !== 'actions') {
-      const expected = new Set(Object.keys(read(`tools/data/sources/catalog/genshin-db/${group}.json`)));
+      const expected = new Set(Object.keys(read(`tools/data/sources/anime-game-data/${group}.json`)));
       if (group === 'characters') {
-        const forms = read('tools/data/sources/character-text/base-and-manekin.json').bindings;
+        const forms = read('tools/data/sources/anime-game-data/base-and-manekin.json').bindings;
         for (const id of Object.keys(forms)) expected.add(id);
         for (const owner of ['aether', 'lumine']) {
           for (const element of ['anemo', 'geo', 'electro', 'dendro', 'hydro', 'pyro', 'cryo']) expected.add(owner + '-' + element);

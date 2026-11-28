@@ -68,11 +68,11 @@ Mona 的 average 使用显示舍入后的四档值；本项目平均条数采用
 
 | 数值族 | 固定来源与采用位置 |
 | --- | --- |
-| 角色基础、成长、突破及天赋参数 | genshin-db `8e5badd60b5d894284ccc927a56c9683529d2592`；sources/catalog/genshin-db 及 sources/genshin-db 原件 |
-| 武器基础、副属性、曲线与突破 | 同一 genshin-db 固定版本 |
-| 主词条与副词条档位 | LunaGC `b0501c5d89767ead5f647869a2412521447f7682` 的 ReliquaryLevel、ReliquaryAffix 原表 |
-| 角色原始技能配置及参数补充 | 同一 LunaGC 的 AvatarExcel、ProudSkill；文本采用摘录另存 |
-| 命中反应公式及等级曲线 | KQM TCL `7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5` 的公式与 player.json |
+| 角色基础、成长、突破及天赋参数 | `DimbreathBot/AnimeGameData`（`bd35e243fa436f141f015cf221a6e19d0c34b7ca`）；`sources/anime-game-data/`（`characters.json`、`character-curves.json`、`talent-params.json`）及正式角色目录 |
+| 武器基础、副属性、曲线与突破 | 同一 `AnimeGameData` 固定版本（`weapons.json`、`weapon-curves.json`） |
+| 主词条与副词条档位 | 同一 `AnimeGameData` 的 `ReliquaryLevel`、`ReliquaryAffix` 原表；规范化输出在 `sources/anime-game-data/reliquary.json` |
+| 角色原始技能配置、Enka ID 及文本补充 | 同一 `AnimeGameData` 的 `AvatarSkillDepot`、`ProudSkill` 与双语 `TextMap`；[基础与奇偶摘录](sources/anime-game-data/base-and-manekin.json)、`sources/anime-game-data/enka-ids.json` |
+| 反应公式与等级系数 | Meropide 机制/公式摘录（`sources/meropide/formulas.json`）与 `AnimeGameData` 的 `ElementCoeffExcelConfigData`（[element-coeff.json](sources/anime-game-data/element-coeff.json)） |
 
 [数值审计](audits/numeric-precision.json)记录基线逐字段差异与来源限度，日常 `pnpm data:check` 直接读取当前输入比较。新增机制的系数、阈值、绑定与规则另做来源和独立公式核对。
 
@@ -84,7 +84,7 @@ KQM 反应等级曲线收录1至100级，0级为 null。与固定 Mona 社区1�
 
 #### 基础形态与文本
 
-[采用摘录](sources/character-text/base-and-manekin.json)保留18份绑定、原技能库与技能行，以及411条引用文本；完整下载位于忽略目录 `.references/metadata/text-completion`。
+[采用摘录](sources/anime-game-data/base-and-manekin.json)保留18份绑定、原技能库与技能行，以及411条引用文本；完整文本与原始下载位于忽略目录 `.references/anime-game-data/bd35e243fa436f141f015cf221a6e19d0c34b7ca`，正式技能/被动/命座文本及 `<color>` 原文已直接并入各角色元数据。
 
 | 定义 | 配置内容 |
 | --- | --- |
@@ -92,7 +92,7 @@ KQM 反应等级曲线收录1至100级，0级为 null。与固定 Mona 社区1�
 | 男女奇偶基础形态 | 普通攻击“外域剑术·安谨守望”及三个固有天赋；战技和爆发为空 |
 | 男女奇偶各七元素形态 | 普通攻击、战技“戒惩轰击”、对应元素爆发“禁入限区”和三个固有天赋；命座为空 |
 
-配置和数值采用固定 LunaGC 技能库、技能及 ProudSkill；文本补充来自 Dimbreath `433284d22ef1a704e9d49ae22fb96cf7a245828e` 的 TextMapCHS 与 TextMap_MediumCHS，逐字段按原文本哈希关联。技能文本哈希在两份固定 AvatarSkill 来源中一致。游戏版本取自对应来源记录。
+配置、数值和文本统一采用 `DimbreathBot/AnimeGameData`（`bd35e243fa436f141f015cf221a6e19d0c34b7ca`）的技能库、技能、ProudSkill 及 `TextMapCHS`、`TextMap_MediumCHS`，逐字段按原文本哈希关联。游戏版本取自对应来源记录。
 
 受控颜色和斜体标记转为安全文本，换行和风味说明保留语义。文本、参数与结构化命座加级由同一定义提供，列表投影确定性生成；角色与培养页的展示遵循已确认交互。
 
@@ -100,7 +100,7 @@ KQM 反应等级曲线收录1至100级，0级为 null。与固定 Mona 社区1�
 
 角色合法等级为1至90、95、100；95和100沿用第六次突破及其属性加值，天赋基础培养上限10，命座加级另计。武器依自身稀有度和突破范围选择，最高90级。成长曲线按0至100索引保存。
 
-版本依据为[更新说明](https://bbs.4399.cn/thread-view-tid-50524833)的“砺行修远”条目，成长系数来自固定 genshin-db 的 src/data/curve/characters.json。班尼特原展柜90级的明确培养变体用于浏览器与独立面板核对，95/100级原始玩家展柜及观测材料状态为待补。
+版本依据为[更新说明](https://bbs.4399.cn/thread-view-tid-50524833)的“砺行修远”条目，成长系数来自 `AnimeGameData` 规范化曲线 `sources/anime-game-data/character-curves.json`。班尼特原展柜90级的明确培养变体用于浏览器与独立面板核对，95/100级原始玩家展柜及观测材料状态为待补。
 
 #### 资源核对
 
@@ -108,11 +108,11 @@ KQM 反应等级曲线收录1至100级，0级为 null。与固定 Mona 社区1�
 
 ### 圣遗物稀有度调查
 
-当前实物接受四星与五星，三星以下实物暂缓。schema、两条求值路径、Mona/Enka、展示、保存快照和手动表单均按实物星级取表；四星0–16、五星0–20。套装合法部位见[固定来源字段](sources/artifact-rarity/set-slots.json)。
+当前实物接受四星与五星，三星以下实物暂缓。schema、两条求值路径、Mona/Enka、展示、保存快照和手动表单均按实物星级取表；四星0–16、五星0–20。套装合法部位与星级范围见[sets.json](sources/anime-game-data/sets.json)。
 
 #### 原始关联
 
-固定 LunaGC 提交为 `b0501c5d89767ead5f647869a2412521447f7682`。采用原件位于 sources/lunagc 同版本目录，候选关联原表位于 `.references/metadata/artifact-rarity/<提交>`。
+主数据源 `DimbreathBot/AnimeGameData` 固定提交为 `bd35e243fa436f141f015cf221a6e19d0c34b7ca`，规范化提取位于 `sources/anime-game-data/`，原始表缓存位于 `.references/anime-game-data/<提交>`。
 
 | 来源 | 已取得内容 |
 | --- | --- |
@@ -156,7 +156,7 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 ## 计算支持与验证资料
 
-全目录报告的 `singleHitModifiers` 遍历普攻、重击、下落、战技与爆发的各个直伤段。每段都按相同的配装表核对攻击、生命、防御、暴击、元素和伤害类型加成，并对照同区相加和跨区相乘。相同两件套原文的其他套装，在每种实际存在的伤害类型、元素与倍率属性组合上各取样核验。武器按可用类型加入，班尼特领域与持有者套装分别开关。期望取自本地倍率和效果原文。[套装效果](sources/catalog/genshin-db/sets.json) · [武器精炼效果](sources/catalog/genshin-db/weapons.json)
+全目录报告的 `singleHitModifiers` 遍历普攻、重击、下落、战技与爆发的各个直伤段。每段都按相同的配装表核对攻击、生命、防御、暴击、元素和伤害类型加成，并对照同区相加和跨区相乘。相同两件套原文的其他套装，在每种实际存在的伤害类型、元素与倍率属性组合上各取样核验。武器按可用类型加入，班尼特领域与持有者套装分别开关。期望取自本地倍率和效果原文。[套装效果](sources/anime-game-data/sets.json) · [武器精炼效果](sources/anime-game-data/weapons.json)
 
 通用矩阵使用一级零命、无反应和明确的当次条件。水主的生命阈值、消耗层数、满层项和玛薇卡战意有逐档输入。未纳入的命中会在 `unsampled` 逐项给出原因，包括锁面板、可变元素及历史事件依赖。角斗士另保留全形态普攻首段，以及两件和四件在其他伤害段的差分对照。数值不符或缺必要输入会使验收失败。
 
@@ -164,29 +164,29 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 `node tools/scripts/data/audit-calculation-coverage.mjs --report artifacts/round-after.json --gaps artifacts/round-after.md` 遍历正式角色、武器、套装的伤害菜单、解锁门槛、受益对象和条件控件。JSON 的 `calculator` 保存逐项入口，`evaluatedHits` 保存实际值、独立期望、关闭增益后的基础对照和排除情形。各专项的 `rows` 保存具体设定与结果，`verified` 按实体和字段记录已经核验的条款。武器、套装、场景与共鸣使用各自的来源表。运行 `--check --require-complete` 另外检查完整机制与证据缺口。
 
-`currentClauseInventory` 按原文字段和修饰项记录证据，`currentSceneGaps` 列出仍影响当次数值的场景字段。`--require-current` 在计算器专项仍有缺项时返回非零退出码。惊蛰的范围增加 100%，匠理等场地满五层增加 0.3 抗打断参数。传播到哪些目标及最终是否中断仍需位置和受击记录。哥伦比娅的复苏以受益者生命上限为基数，每级好感取 10%。[场地条款](sources/catalog/battle-scenes.json) · [月的守望复苏配置](sources/catalog/columbina-revival.json)
+`--check` 核验当前已实现的计算、单次命中矩阵、装备窗口、治疗与计算器入口无回归；`--require-current` 在计算器专项或当前求值仍有失败或未决命中时返回非零退出码；`--require-complete` 在全目录与证据尚未全部闭合时返回非零退出码。惊蛰的范围增加 100%，匠理等场地满五层增加 0.3 抗打断参数。传播到哪些目标及最终是否中断仍需位置和受击记录。哥伦比娅的复苏以受益者生命上限为基数，每级好感取 10%。[场地条款](sources/catalog/battle-scenes.json) · [月的守望复苏配置](sources/catalog/columbina-revival.json)
 
-19 条秘境冲击可按输入的 `ElementLevelCo` 复核减伤前数值。固定系数表分别保留环境与角色两列。山脊守望 IV 的旧录像可辨 8419 白字，仍需改变目标抗性与防御的独立对照，以及关卡实际读取等级的证据。[秘境冲击系数与结算证据](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/scene-hit-settlement-evidence.json)
+19 条秘境冲击可按输入的 `ElementLevelCo` 复核减伤前数值。固定系数表分别保留环境与角色两列。山脊守望 IV 的旧录像可辨 8419 白字，仍需改变目标抗性与防御的独立对照，以及关卡实际读取等级的证据。
 
-芬德尼尔之顶的严寒和平台、太山府的阴燃之火、菫色之庭的稚雷珠共 32 条说明指向空的关卡能力入口。已固定各阶的秘境与场景 ID。通用严寒、暖源与持续火伤配置仅作排查参考，当前场景仍需对应的区域或机关绑定。太山府 1.5 版测得开战后 3 秒首次附着、此后每 30 秒再次附着，当前版本的每跳伤害和间隔仍待证。菫色之庭 IV 的两份公开画面分别显示 50 级凯亚和 80 级班尼特触发后出现 74208 雷伤。凯亚画面发表于 2.0 期间，班尼特画面发表于 2022 年 7 月且游戏版本不明。两图可辨难度 IV 与 88 级敌人，日程和各伤害数字对应的敌方身份未能核定。[固定配置与实战来源](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/scene-environment-amount-facts.json)
+芬德尼尔之顶的严寒和平台、太山府的阴燃之火、菫色之庭的稚雷珠共 32 条说明指向空的关卡能力入口。已固定各阶的秘境与场景 ID。通用严寒、暖源与持续火伤配置仅作排查参考，当前场景仍需对应的区域或机关绑定。太山府 1.5 版测得开战后 3 秒首次附着、此后每 30 秒再次附着，当前版本的每跳伤害和间隔仍待证。菫色之庭 IV 的两份公开画面分别显示 50 级凯亚和 80 级班尼特触发后出现 74208 雷伤。凯亚画面发表于 2.0 期间，班尼特画面发表于 2022 年 7 月且游戏版本不明。两图可辨难度 IV 与 88 级敌人，日程和各伤害数字对应的敌方身份未能核定。
 
 独立剧变伤害在精通与反应加成后计入固定加值，再应用适用的暴击和目标抗性。绽放等反应的暴击率和暴击伤害来自对应角色的明确授予。
 
 尼可的战技按施放时可用于转化的攻击力封顶。米提亚六命对稳态炉心归属的技能基数施加 1.15 倍率，固定反应加值另行计算。久岐忍的安心之所按施救者精通加算治疗。一心传名刀的祟灵治疗按实际武器版本取持有者攻击力。[尼可战技取值](sources/catalog/nicole-kenosis.json) · [米提亚稳态炉心](sources/meropide/combat-facts.json) · [条件治疗依据](sources/catalog/conditional-healing-sources.json)
 
-沃雅妮莎四命治疗严格低于 40% 生命的受益者时，固定值和生命倍率先乘 1.5，再应用常规治疗加成。芭芭拉六命的复苏治疗量含溢出并计入两项治疗加成，实际恢复至多回满。七七六命的复苏已核验施救者治疗加成，受益者自身常驻受治疗加成仍缺对照。塔利雅及哥伦比娅的复苏动作确认了生命上限比例，两项治疗加成交互仍需核验。[固定动作与复苏观测](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/character-healing-facts.json) · [月的守望复苏配置](sources/catalog/columbina-revival.json)
+沃雅妮莎四命治疗严格低于 40% 生命的受益者时，固定值和生命倍率先乘 1.5，再应用常规治疗加成。芭芭拉六命的复苏治疗量含溢出并计入两项治疗加成，实际恢复至多回满。七七六命的复苏已核验施救者治疗加成，受益者自身常驻受治疗加成仍缺对照。塔利雅及哥伦比娅的复苏动作确认了生命上限比例，两项治疗加成交互仍需核验。[月的守望复苏配置](sources/catalog/columbina-revival.json)
 
-法尔伽狂飙突进的常规重击中，右手使用 `param12`，左手使用 `param13`。左手始终造成风伤，右手按火、水、雷、冰的队伍优先级转化。队伍无对应元素且武器未获得外部元素时，右手为物理伤害。独立数值对照覆盖五种右手伤害、普攻左右手以及旧事件的出手侧输入。[固定配置](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/varka-charged-hands.json)
+法尔伽狂飙突进的常规重击中，右手使用 `param12`，左手使用 `param13`。左手始终造成风伤，右手按火、水、雷、冰的队伍优先级转化。队伍无对应元素且武器未获得外部元素时，右手为物理伤害。
 
 数值审计核对 TS 固定算法和 JSON 参数。防御、抗性、增幅、激化、剧变及月/星公式常数统一采用 Meropide 机制与公式事实，模板常数通过 `describeCalculationTemplate` 核对；具体页面快照由 `node tools/scripts/data/capture-meropide.mjs` 保存至 `.references/meropide/`。[Meropide 公式事实](sources/meropide/formulas.json)
 
 `node tools/scripts/data/audit-calculation-coverage.mjs --json` 编译正式目录的依赖闭包，按输出列出证书命座范围、来源和缺口。完整命座、角色和装备分支分别判断，外部 `declared` 证据仍待本地采用，未闭合条目标记 `unavailable`。报告同时包含命中绑定和效果，`--require-complete` 用于全目录验收。[内容包说明](../../src/game-data/README.md)
 
-逐项报告可用 `node tools/scripts/data/audit-calculation-coverage.mjs --report artifacts/roster-calculation-acceptance.json --gaps artifacts/roster-calculation-gaps.md --check --require-complete` 生成。每个命中保留本地倍率的独立算式期望和引擎结果。有非零增益的命中另存关闭增益后的对照。祝赐覆盖持有者属性、受益队员、伤害族以及封顶前后，共鸣覆盖队伍人数、触发对象和到期。场景与装备分别记录持续时间和合法精炼或件数门槛的结果。角斗士与乐团按五类武器测试，冰风按命中前的附冰或冻结判定，深林按命中的敌人和八秒有效期判定。千岩四件核对战技命中护盾时的零伤害、后台触发及两名持有者刷新同一增益。花海四件按持有者实际受伤逐层计时。守护之心按队伍元素去重并区分四元素共鸣自身的抗性。[战斗条款](sources/catalog/combat-lifecycle.json)
+逐项报告可用 `node tools/scripts/data/audit-calculation-coverage.mjs --report artifacts/roster-calculation-acceptance.json --gaps artifacts/roster-calculation-gaps.md --check --require-complete` 生成。全目录功能审计聚焦正式命中矩阵、装备/套装窗口与条件、技能治疗、公共场景/共鸣/祝赐与计算器入口。[战斗条款](sources/catalog/combat-lifecycle.json)
 
 菲林斯在 90 级零命、十级爆发、一级精一新手长枪、无圣遗物和敌方 10% 雷抗的条件下，攻击力为 374.8372196，固有天赋按攻击力的 8% 提供 29.986977568 元素精通。满辉且附近有雷暴云时，计入满辉的 20% 月感电增伤后，两段非暴击对照值约为 1677.438474、2439.910509。再计入月兆祝赐每 100 攻击力增加的 0.7% 月感电基础伤害，两段分别约为 1721.452121、2503.930358。关闭附近雷暴云条件仅排除额外一击。
 
-伊法的每点救援要义对扩散和感电提供 1.5% 增伤，对月感电提供 0.2%，对星扩散提供 0.24%。冒险家四件套的固定配置给出 1 秒间隔和每次 6% 生命上限，五秒全程的基础总量为 30%。这两项按实际受益人核验。装备回复与治疗加成的交互仍缺独立记录。[救援要义](sources/catalog/ifa-rescue-reactions.json) · [冒险家回复配置](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/equipment-healing-facts.json)
+伊法的每点救援要义对扩散和感电提供 1.5% 增伤，对月感电提供 0.2%，对星扩散提供 0.24%。冒险家四件套的固定配置给出 1 秒间隔和每次 6% 生命上限，五秒全程的基础总量为 30%。这两项按实际受益人核验。[救援要义](sources/catalog/ifa-rescue-reactions.json)
 
 共同效果的[采用对应](sources/calculation-effects/retained-rules.json)关联现有内容规则、静态修饰与新的直接JSON定义。[固定来源字段](sources/calculation-effects/catalog-facts.json)保留原精炼字符串和套装效果文本；数值审计直接比较所有精炼档、静态数值、被动阈值/上限和持续时间。百分比按十进制指数解析为比例，避免转换时增加一次二进制除法舍入。绑定、属性、状态及捕获组件的独立计算检查见tests/unit/engine/calculation/context.test.ts；这些明确计算设定不声称为玩家配装或实录战斗。
 
@@ -206,11 +206,11 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 动作时长、取消和命中偏移没有录制依据，保持null。剑气以六分之一层为整数单位；每次明确风翎产生可恢复一单位，无须伤害命中，但自动产生时刻仍未接入。资源容量只知来源可证明的下界，非免费消耗必须明确提供；C6是否增加整肃及重复使用规则保持缺口。辉映优先级、能量/冷却可执行性及自动派生事件仍待实现。这些数学和协议检查没有产生玩家轴或录制；实际游戏观测继续单独登记。
 
-无元素旅行者的 [普通攻击单位核对](sources/character-text/traveler-normal-units.json)补齐固定 LunaGC 原表的7条描述键及9项ratio单位，参数数值保持。该记录只确认参数与文本，不扩大机制支持。
+无元素旅行者的 [普通攻击单位核对](sources/anime-game-data/base-and-manekin.json)补齐 `AnimeGameData` 原表的7条描述键及9项ratio单位，参数数值保持。该记录只确认参数与文本，不扩大机制支持。
 
 月/星公式按 [Meropide 公式与符号记录](sources/meropide/formulas.json)维护直接/反应分支、固定加值插入点及独立乘区，精通比例以小数存储；纯公式组件的独立核算与实体绑定、事件及多人聚合的覆盖分别报告。系统验收按公式完整性、全目录覆盖度与软件检查执行，开发者后续手动进行实际游戏测试。
 
-同一展柜中瓦雷莎「大火山崩落」引用爆发的 param5，按下落攻击伤害匹配增益。类别依据为[瓦雷莎天赋 combat3 原文](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/varesa.json)。时间轴和独立计算器可用同一普通直伤求值器，保留所选输出相关的机制缺口。流浪乐章和追忆之注连四件套的效果范围按固定说明限定至装备者。薇斯纳与瓦雷莎、菲林斯、雷电将军组成的四人试配另核对三位非冰风队员提供的75点精通，数值对照见 `tests/helpers/recorded-vesna.ts`。
+同一展柜中瓦雷莎「大火山崩落」引用爆发的 param5，按下落攻击伤害匹配增益。类别依据为[瓦雷莎正式定义](../../src/game-data/data/characters/varesa.json)。时间轴和独立计算器可用同一普通直伤求值器，保留所选输出相关的机制缺口。流浪乐章和追忆之注连四件套的效果范围按固定说明限定至装备者。薇斯纳与瓦雷莎、菲林斯、雷电将军组成的四人试配另核对三位非冰风队员提供的75点精通，数值对照见 `tests/helpers/recorded-vesna.ts`。
 
 #### 分项输入
 
@@ -230,13 +230,13 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 #### 反应、状态与入口
 
-命中查询覆盖蒸发、融化、超激化、蔓激化及薇斯纳已审阅的直接星扩散输出。独立计算器和时间轴均可新建剧变反应事件。延迟或持续反应的自动生成、元素附着历史推演仍有缺口。反应公式见[公式依据](sources/meropide/formulas.json)，1–100 级角色等级系数暂保留于[角色等级表](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/player.json)（待第 4 步切换至 `AnimeGameData`）。
+命中查询覆盖蒸发、融化、超激化、蔓激化及薇斯纳已审阅的直接星扩散输出。独立计算器和时间轴均可新建剧变反应事件。延迟或持续反应的自动生成、元素附着历史推演仍有缺口。反应公式见[公式依据](sources/meropide/formulas.json)，1–100 级角色等级系数来自 `AnimeGameData` 规范表[element-coeff.json](sources/anime-game-data/element-coeff.json)。
 
 战斗记录可指定敌方生命比例、元素附着、站场、护盾、生命变化、受伤、施予治疗和接受治疗。治疗事件可包含溢出量。受伤记录使用实际扣除的伤害值，生命消耗使用单独的生命变化记录。
 
-玛拉妮的技能可分别选择撕咬和单枚鲨鲨飞弹。目标数填 1、2 或 3，3 表示三名及以上。飞弹还需确认锁定了另一名有标记的敌人。目标数回归用例在三层浪势下核对零命和一命、三档目标数及飞弹的触发条件。[天赋原文](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/mualani.json) · [多目标系数的独立实现](https://github.com/genshinsim/gcsim/blob/main/internal/characters/mualani/attack.go#L138-L160)
+玛拉妮的技能可分别选择撕咬和单枚鲨鲨飞弹。目标数填 1、2 或 3，3 表示三名及以上。飞弹还需确认锁定了另一名有标记的敌人。目标数回归用例在三层浪势下核对零命和一命、三档目标数及飞弹的触发条件。[正式定义](../../src/game-data/data/characters/mualani.json) · [多目标系数的独立实现](https://github.com/genshinsim/gcsim/blob/main/internal/characters/mualani/attack.go#L138-L160)
 
-在时间轴的“战斗事件记录”选择“创造护盾”，由当前选中队员在光标处记一次造盾。祭星者之望、尘光七谕和碧落之珑从这个时刻计算效果持续时间。碧落之珑也接受其持有者施放爆发的记录。[武器精炼原文](sources/catalog/genshin-db/weapons.json)
+在时间轴的“战斗事件记录”选择“创造护盾”，由当前选中队员在光标处记一次造盾。祭星者之望、尘光七谕和碧落之珑从这个时刻计算效果持续时间。碧落之珑也接受其持有者施放爆发的记录。[武器精炼原文](sources/anime-game-data/weapons.json)
 
 逐技能验收列出治疗量和护盾吸收量的每个详情字段。治疗的数值对照从本地天赋原始精度、角色和武器白值独立计算，并在施救者和受益人之间交换少女与游医二件套。施放治疗另核对受益人数、已有记录去重和海染泡沫伤害。擢升验收分别计算本人和队友的增幅，逐命座核对哥伦比娅与六命菲林斯、奈芙尔的月曜擢升相加；其他来源组合仍按各自证据核验。逐项报告记录原文字段、相关输入、验过的分支及待补证据。[战斗条款](sources/catalog/combat-lifecycle.json) · [机制与擢升依据](sources/meropide/combat-facts.json)
 

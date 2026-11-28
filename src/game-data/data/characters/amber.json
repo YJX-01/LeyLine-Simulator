@@ -86,7 +86,7 @@
     {
       "id": "amber.normal",
       "name": "神射手",
-      "description": "普通攻击\n进行至多五段的连续弓箭射击。\n\n重击\n进行伤害更高、更为精准的瞄准射击。\n瞄准时，烈焰会在箭矢上持续积聚。聚满了烈焰的箭矢会造成火元素伤害。\n\n下落攻击\n从空中射出箭雨，并迅速下坠冲击地面，在落地时造成范围伤害。",
+      "description": "<color=#FFD780FF>普通攻击</color>\n进行至多五段的连续弓箭射击。\n\n<color=#FFD780FF>重击</color>\n进行伤害更高、更为精准的<color=#FFD780FF>瞄准射击</color>。\n瞄准时，烈焰会在箭矢上持续积聚。聚满了烈焰的箭矢会造成<color=#FF9999FF>火元素伤害</color>。\n\n<color=#FFD780FF>下落攻击</color>\n从空中射出箭雨，并迅速下坠冲击地面，在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
       "details": [
@@ -461,7 +461,7 @@
     {
       "id": "amber.skill",
       "name": "爆弹玩偶",
-      "description": "请可靠的兔兔伯爵上阵。\n\n兔兔伯爵\n·持续嘲讽周围的敌人，吸引火力；\n·耐久度按比例继承安柏的生命值上限；\n·被摧毁或持续时间结束时，会发生剧烈的爆炸，造成火元素范围伤害。\n\n长按\n调整投掷方向。\n投掷距离随长按时间增加。",
+      "description": "请可靠的兔兔伯爵上阵。\n\n<color=#FFD780FF>兔兔伯爵</color>\n·持续嘲讽周围的敌人，吸引火力；\n·耐久度按比例继承安柏的生命值上限；\n·被摧毁或持续时间结束时，会发生剧烈的爆炸，造成<color=#FF9999FF>火元素范围伤害</color>。\n\n<color=#FFD780FF>长按</color>\n调整投掷方向。\n投掷距离随长按时间增加。",
       "flavorText": "兔兔伯爵有着悠久的家系。但从兔兔八百九十三世开始，安柏就停止计数了。",
       "category": "skill",
       "element": "pyro",
@@ -618,7 +618,7 @@
     {
       "id": "amber.burst",
       "name": "箭雨",
-      "description": "射出火焰箭雨，持续造成火元素范围伤害。",
+      "description": "射出火焰箭雨，持续造成<color=#FF9999FF>火元素范围伤害</color>。",
       "flavorText": "满心热诚的安柏真的很热。",
       "category": "burst",
       "element": "pyro",
@@ -774,7 +774,7 @@
     {
       "id": "amber.passive1",
       "name": "百发百中！",
-      "description": "箭雨的暴击率提高10%，影响范围扩大30%。",
+      "description": "<color=#FFD780FF>箭雨</color>的暴击率提高10%，影响范围扩大30%。",
       "unlockAscension": 1,
       "buffs": [
         {
@@ -846,7 +846,7 @@
     {
       "rank": 1,
       "name": "一箭双丘丘！",
-      "description": "瞄准射击时，会连续射出2支箭。第二支箭能造成原本20%的伤害。",
+      "description": "<color=#FFD780FF>瞄准射击</color>时，会连续射出2支箭。第二支箭能造成原本20%的伤害。",
       "talentBonuses": [],
       "hits": [
         {
@@ -924,7 +924,7 @@
     {
       "rank": 3,
       "name": "烧起来啦！",
-      "description": "箭雨的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>箭雨</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "burst",
@@ -935,7 +935,7 @@
     {
       "rank": 4,
       "name": "才不是普通的布偶",
-      "description": "爆弹玩偶的冷却时间减少20%，并增加1次可使用次数。",
+      "description": "<color=#FFD780FF>爆弹玩偶</color>的冷却时间减少20%，并增加1次可使用次数。",
       "talentBonuses": [],
       "extraSkillCharge": 1,
       "buffs": [
@@ -953,7 +953,7 @@
     {
       "rank": 5,
       "name": "是兔兔伯爵！",
-      "description": "爆弹玩偶的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>爆弹玩偶</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "skill",
@@ -964,7 +964,7 @@
     {
       "rank": 6,
       "name": "疾如野火",
-      "description": "使用箭雨后的10秒内，队伍中所有角色的移动速度提升15%，攻击力提升15%。",
+      "description": "使用<color=#FFD780FF>箭雨</color>后的10秒内，队伍中所有角色的移动速度提升15%，攻击力提升15%。",
       "talentBonuses": [],
       "buffs": [
         {

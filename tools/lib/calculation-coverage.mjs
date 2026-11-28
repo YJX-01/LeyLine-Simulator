@@ -3,7 +3,7 @@ import { APP_VERSION } from '../../src/schema/src/version.mjs';
 import { combatRuleAudit, damagePathAudit } from './damage-path-audit.mjs';
 import { readContentSource } from './content-source.mjs';
 
-const depotArchive = readContentSource(new URL('../data/sources/character-text/base-and-manekin.json', import.meta.url));
+const depotArchive = readContentSource(new URL('../data/sources/anime-game-data/base-and-manekin.json', import.meta.url));
 const { equipmentLifecycleGaps, characterLifecycleGaps } = readContentSource(new URL('../data/sources/catalog/combat-lifecycle.json', import.meta.url));
 const unranked = new Set(Object.entries(depotArchive.bindings).filter(([, binding]) => {
   const slots = depotArchive.skillDepots[binding.skillDepotId]?.talents;

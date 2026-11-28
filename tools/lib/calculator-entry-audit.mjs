@@ -12,7 +12,7 @@ export async function auditCalculatorEntries(entities, results) {
   const { findBuildHit, isCalculatorDamageModifier } = await loadContentSchema();
   const hits = [], equipmentHits = [], buffs = [], clauses = [], failures = [];
   const readings = new Map(results.evaluatedHits.map(row => [row.entity + '/' + row.hit, row]));
-  const equipmentChecks = [...results.currentEquipment.rows, ...results.additionalEquipment.rows, ...results.remainingEquipment.rows, ...results.triggeredStrikes.rows];
+  const equipmentChecks = results.equipment?.rows ?? [];
   const noviceIds = ['dullblade', 'wastergreatsword', 'huntersbow', 'apprenticesnotes', 'beginnersprotector'];
   const weapons = new Map(entities.weapons.filter(weapon => noviceIds.includes(weapon.id)).map(weapon => [weapon.weaponType, weapon]));
   for (const character of entities.characters) {

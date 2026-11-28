@@ -1,5 +1,5 @@
 {
-  "capture": "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/",
+  "capture": "src/game-data/data/characters/",
   "scope": "固定天赋和命座文本明确写出的相对范围或距离增量。攻击范围是召唤物的攻击覆盖语义，影响范围是指定技能命中的覆盖语义，喷火距离是锅巴喷火的向前距离。原文未给出几何形状、基础长度或面积口径，百分比按原文显示。",
   "entries": [
     {

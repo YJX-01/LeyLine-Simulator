@@ -86,7 +86,7 @@
     {
       "id": "kamisatoayaka.normal",
       "name": "神里流·倾",
-      "description": "普通攻击\n进行至多五段的连续剑击。\n\n重击\n消耗一定体力，在居合中放出连续的剑风。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+      "description": "<color=#FFD780FF>普通攻击</color>\n进行至多五段的连续剑击。\n\n<color=#FFD780FF>重击</color>\n消耗一定体力，在居合中放出连续的剑风。\n\n<color=#FFD780FF>下落攻击</color>\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
       "details": [
@@ -454,7 +454,7 @@
     {
       "id": "kamisatoayaka.skill",
       "name": "神里流·冰华",
-      "description": "唤起盛开的冰之华，击飞身边的敌人并造成冰元素范围伤害。",
+      "description": "唤起盛开的冰之华，击飞身边的敌人并造成<color=#99FFFFFF>冰元素范围伤害</color>。",
       "flavorText": "「晴云胧月夜，妄执如雾，心野凄迷恋羁旅。」",
       "category": "skill",
       "element": "cryo",
@@ -530,7 +530,7 @@
     {
       "id": "kamisatoayaka.burst",
       "name": "神里流·霜灭",
-      "description": "以倾奇之姿汇聚寒霜，放出持续行进的霜见雪关扉。\n\n霜见雪关扉\n·以刀锋般尖锐的霜风持续切割触及的敌人，造成冰元素伤害；\n·持续时间结束时绽放，造成冰元素范围伤害。",
+      "description": "以倾奇之姿汇聚寒霜，放出持续行进的霜见雪关扉。\n\n<color=#FFD780FF>霜见雪关扉</color>\n·以刀锋般尖锐的霜风持续切割触及的敌人，造成<color=#99FFFFFF>冰元素伤害</color>；\n·持续时间结束时绽放，造成<color=#99FFFFFF>冰元素范围伤害</color>。",
       "flavorText": "「吹雪濡鹭时，积思若霜，胸底思重焉哀怜。」",
       "category": "burst",
       "element": "cryo",
@@ -697,7 +697,7 @@
     {
       "id": "kamisatoayaka.passive1",
       "name": "天罪国罪镇词",
-      "description": "施放神里流·冰华后的6秒内，神里绫华的普通攻击与重击造成的伤害提升30%。",
+      "description": "施放<color=#FFD780FF>神里流·冰华</color>后的6秒内，神里绫华的普通攻击与重击造成的伤害提升30%。",
       "unlockAscension": 1,
       "buffs": [
         {
@@ -739,7 +739,7 @@
     {
       "id": "kamisatoayaka.passive2",
       "name": "寒天宣命祝词",
-      "description": "神里流·霰步结束时释放的寒冰命中了敌人时，神里绫华将获得如下效果：\n·恢复10点体力；\n·获得18%冰元素伤害加成，持续10秒。",
+      "description": "<color=#FFD780FF>神里流·霰步</color>结束时释放的寒冰命中了敌人时，神里绫华将获得如下效果：\n·恢复10点体力；\n·获得18%<color=#99FFFFFF>冰元素伤害加成</color>，持续10秒。",
       "unlockAscension": 4,
       "buffs": [
         {
@@ -770,13 +770,13 @@
     {
       "rank": 1,
       "name": "霜杀墨染樱",
-      "description": "神里绫华的普通攻击或重击对敌人造成冰元素伤害时，有50%的几率使神里流·冰华的冷却时间缩减0.3秒。该效果每0.1秒只能触发一次。",
+      "description": "神里绫华的普通攻击或重击对敌人造成<color=#99FFFFFF>冰元素伤害</color>时，有50%的几率使<color=#FFD780FF>神里流·冰华</color>的冷却时间缩减0.3秒。该效果每0.1秒只能触发一次。",
       "talentBonuses": []
     },
     {
       "rank": 2,
       "name": "三重雪关扉",
-      "description": "施放神里流·霜灭时，会额外释放两股规模较小的霜见雪关扉，各自能造成原本20%的伤害。",
+      "description": "施放<color=#FFD780FF>神里流·霜灭</color>时，会额外释放两股规模较小的霜见雪关扉，各自能造成原本20%的伤害。",
       "talentBonuses": [],
       "hits": [
         {
@@ -848,7 +848,7 @@
     {
       "rank": 3,
       "name": "花白锦画纸吹雪",
-      "description": "神里流·霜灭的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>神里流·霜灭</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "burst",
@@ -859,7 +859,7 @@
     {
       "rank": 4,
       "name": "盈缺流返",
-      "description": "敌人受到神里流·霜灭的霜见雪关扉造成的伤害后，防御力降低30%，持续6秒。",
+      "description": "敌人受到<color=#FFD780FF>神里流·霜灭</color>的霜见雪关扉造成的伤害后，防御力降低30%，持续6秒。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -901,7 +901,7 @@
     {
       "rank": 5,
       "name": "花云钟入月",
-      "description": "神里流·冰华的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>神里流·冰华</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "skill",

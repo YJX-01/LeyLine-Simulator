@@ -2,7 +2,7 @@ import { readContentSource } from './content-source.mjs';
 import { loadContentSchema } from './load-content-schema.mjs';
 import { auditBuild } from './roster-evaluation.mjs';
 
-const read = name => readContentSource(new URL('../data/sources/catalog/genshin-db/' + name + '.json', import.meta.url));
+const read = name => readContentSource(new URL('../data/sources/anime-game-data/' + name + '.json', import.meta.url));
 const characters = read('characters');
 const weapons = read('weapons');
 const curves = read('character-curves');
@@ -90,18 +90,17 @@ function recoverySamples(id, healId, owner, recipient, active, hydro, constellat
     ], selfCollected ? 2 : 1));
 }
 
-function recoveryAmount(id, slot, detail, healId, weaponId, outgoing, incoming, coefficient, level, ascension, source) {
-  const sourceLabel = source['combat' + (slot + 1)].attributes.labels[detail].split('|')[1];
+function recoveryAmount(id, slot, detailTemplate, healId, weaponId, outgoing, incoming, coefficient, level, ascension) {
   const values = characters[id].talents['combat' + (slot + 1)];
-  if (id === 'arlecchino' && sourceLabel === '{param3:F1P}生命之契+{param4:F1P}攻击力') {
+  if (id === 'arlecchino' && detailTemplate === '{param3:F1P}生命之契+{param4:F1P}攻击力') {
     const hp = whiteStat(id, 'hp', weaponId, level, ascension), attack = whiteStat(id, 'attack', weaponId, level, ascension);
     return (hp * coefficient * values.param3[0] + attack * values.param4[0]) * (1 + outgoing + incoming);
   }
-  if (id === 'clorinde' && sourceLabel === '0%/{param6:F1P}/{param8:F1P}生命之契') {
+  if (id === 'clorinde' && detailTemplate === '0%/{param6:F1P}/{param8:F1P}生命之契') {
     const rate = healId.endsWith('.high-bond') ? values.param8[0] : values.param6[0];
     return whiteStat(id, 'hp', weaponId, level, ascension) * coefficient * rate * (1 + outgoing + incoming);
   }
-  return amount(id, slot, { template: sourceLabel }, weaponId, outgoing, incoming, level, ascension) * coefficient;
+  return amount(id, slot, { template: detailTemplate }, weaponId, outgoing, incoming, level, ascension) * coefficient;
 }
 
 export async function auditTalentHealing(catalog, engine, onCase, entities = catalog.inventory.characters) {
@@ -116,8 +115,6 @@ export async function auditTalentHealing(catalog, engine, onCase, entities = cat
   for (const id of entities) {
     const character = await catalog.get('characters', id);
     if (!character.talents.some(t => t.heals?.length)) continue;
-    const localSource = [...remainingDetails].some(key => key.startsWith(id + '.'))
-      ? readContentSource(new URL('../data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/' + id + '.json', import.meta.url)) : undefined;
     const castDetail = { barbara: 0, jean: 2, gaming: 1 }[id];
     const gearVariants = ['base','bonuses','swapped', ...(id === 'barbara' ? ['clam'] : []), ...(castDetail !== undefined ? ['cast','recorded-cast'] : []),
       ...(id === 'jahoda' ? ['hydro'] : []), ...(id === 'sayu' ? ['c1'] : [])];
@@ -161,8 +158,8 @@ export async function auditTalentHealing(catalog, engine, onCase, entities = cat
             const same = recipient === owner, active = time === 2000 ? null : same ? time === 0 : time === 1000;
             for (const { status, facts, coefficient } of recoverySamples(id, heal.id, owner, recipient, active, gear === 'hydro', constellation)) {
               const source = addTalentHeal(project, owner, recipient, heal.id, time, facts);
-              const healing = status === 'applied' ? recoveryAmount(id, slot, heal.detail, heal.id, weaponId, ownerSet === maiden ? .15 : 0,
-                (same ? ownerSet : peerSet) === doctor ? .2 : 0, coefficient, level, ascension, localSource) : status === 'excluded' ? 0 : null;
+              const healing = status === 'applied' ? recoveryAmount(id, slot, talent.details[heal.detail].template, heal.id, weaponId, ownerSet === maiden ? .15 : 0,
+                (same ? ownerSet : peerSet) === doctor ? .2 : 0, coefficient, level, ascension) : status === 'excluded' ? 0 : null;
               queries.push({ source, entity: id, field, gear, same, active, recipient, status, healing, facts, healId: heal.id });
             }
           }

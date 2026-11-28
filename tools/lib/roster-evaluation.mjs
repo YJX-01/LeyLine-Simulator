@@ -759,8 +759,10 @@ const noncombatPassiveSentences = [
   /^此外，对受到月矩力影响的部分小动物，菈乌玛似乎有着特殊的亲和力…$/,
 ];
 
+const stripMarkup = text => text.replace(/\{LINK#[^}]+\}|\{\/LINK\}|<[^>]+>/g, '');
+
 function hasOnlyNoncombatEffects(text) {
-  const sentences = text.split(/[。！\n]+/).map(sentence => sentence.trim()).filter(Boolean);
+  const sentences = stripMarkup(text).split(/[。！\n]+/).map(sentence => sentence.trim()).filter(Boolean);
   return sentences.length > 0 && sentences.every(sentence => noncombatPassiveSentences.some(pattern => pattern.test(sentence)));
 }
 
@@ -790,9 +792,9 @@ export function auditCharacterClauses(entities, engine, verifiedForms = new Set(
       return cache.get(rank);
     }
     for (const group of ['passives', 'constellations']) for (const [i, branch] of character[group].entries()) {
-      const row = { entity: character.id, field: '/' + group + '/' + i, name: branch.name, text: branch.description, grantIds: branch.ruleIds.map(r => r.id) };
+      const row = { entity: character.id, field: '/' + group + '/' + i, name: branch.name, text: stripMarkup(branch.description), grantIds: branch.ruleIds.map(r => r.id) };
       if (group === 'constellations' && branch.talentBonuses.length) {
-        const text = branch.description.replaceAll('*', '');
+        const text = stripMarkup(branch.description).replaceAll('*', '');
         const named = character.talents.filter(t => text.includes(t.name) || t.category === 'normal' && text.includes('普通攻击'));
         const prior = levels(branch.rank - 1), current = levels(branch.rank);
         row.levelChanges = character.talents.map(t => ({ id: t.id, value: current.get(t.id) - prior.get(t.id), expected: named.includes(t) ? 3 : 0 }));

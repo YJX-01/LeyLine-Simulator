@@ -86,7 +86,7 @@
     {
       "id": "venti.normal",
       "name": "神代射术",
-      "description": "普通攻击\n进行至多六段的连续弓箭射击。\n\n重击\n进行伤害更高、更为精准的瞄准射击。\n瞄准时，眷顾天地的风会在箭矢上持续积聚。聚满了风之力的箭矢会造成风元素伤害。\n\n下落攻击\n从空中射出箭雨，并迅速下坠冲击地面，在落地时造成范围伤害。",
+      "description": "<color=#FFD780FF>普通攻击</color>\n进行至多六段的连续弓箭射击。\n\n<color=#FFD780FF>重击</color>\n进行伤害更高、更为精准的<color=#FFD780FF>瞄准射击</color>。\n瞄准时，眷顾天地的风会在箭矢上持续积聚。聚满了风之力的箭矢会造成<color=#80FFD7FF>风元素伤害</color>。\n\n<color=#FFD780FF>下落攻击</color>\n从空中射出箭雨，并迅速下坠冲击地面，在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
       "details": [
@@ -804,7 +804,7 @@
     {
       "id": "venti.skill",
       "name": "高天之歌",
-      "description": "呼唤与诗和乐协鸣的风，将在尘泥中行走的事物送上高空吧。\n\n点按\n在敌人所在的位置唤出风域，造成风元素范围伤害，并击飞其中的敌人。\n\n长按\n以自身为中心，唤出更大的风域，造成风元素范围伤害，并击飞其中的敌人。\n长按施放后，温迪会乘风飞到空中。\n\n被高天之歌击飞的敌人，在短时间内会缓慢坠落。",
+      "description": "呼唤与诗和乐协鸣的风，将在尘泥中行走的事物送上高空吧。\n\n<color=#FFD780FF>点按</color>\n在敌人所在的位置唤出风域，造成<color=#80FFD7FF>风元素范围伤害</color>，并击飞其中的敌人。\n\n<color=#FFD780FF>长按</color>\n以自身为中心，唤出更大的风域，造成<color=#80FFD7FF>风元素范围伤害</color>，并击飞其中的敌人。\n长按施放后，温迪会乘风飞到空中。\n\n被高天之歌击飞的敌人，在短时间内会缓慢坠落。",
       "flavorText": "在人与神还同行于大地的时代，无数的歌曲传遍四方的天空。这是早已被遗忘的曲调。",
       "category": "skill",
       "element": "anemo",
@@ -940,7 +940,7 @@
     {
       "id": "venti.burst",
       "name": "风神之诗",
-      "description": "射出千风汇聚而成的箭矢，在前方造出巨大的暴风之眼，将敌人卷入，持续造成风元素伤害。\n\n元素转化\n若暴风之眼在技能持续期间接触了水元素/火元素/冰元素/雷元素，则会获得对应元素属性，额外造成该元素的附加伤害。\n元素转化在技能持续期间仅会发生一次。",
+      "description": "射出千风汇聚而成的箭矢，在前方造出巨大的暴风之眼，将敌人卷入，持续造成<color=#80FFD7FF>风元素伤害</color>。\n\n<color=#FFD780FF>元素转化</color>\n若暴风之眼在技能持续期间接触了<color=#80C0FFFF>水元素</color>/<color=#FF9999FF>火元素</color>/<color=#99FFFFFF>冰元素</color>/<color=#FFACFFFF>雷元素</color>，则会获得对应元素属性，额外造成该元素的附加伤害。\n元素转化在技能持续期间仅会发生一次。",
       "flavorText": "称颂风之神的诗篇有许多已经佚失。其中这一首描述的是他与风的力量。",
       "category": "burst",
       "element": "anemo",
@@ -1132,13 +1132,13 @@
     {
       "id": "venti.passive1",
       "name": "绪风之拥",
-      "description": "长按高天之歌后，会产生上升气流，持续20秒。",
+      "description": "长按<color=#FFD780FF>高天之歌</color>后，会产生上升气流，持续20秒。",
       "unlockAscension": 1
     },
     {
       "id": "venti.passive2",
       "name": "暴风之眼",
-      "description": "风神之诗效果结束后，会为温迪恢复15点元素能量；\n若产生了元素转化，则同样为队伍中所有对应元素的角色恢复15点元素能量。",
+      "description": "<color=#FFD780FF>风神之诗</color>效果结束后，会为温迪恢复15点元素能量；\n若产生了元素转化，则同样为队伍中所有对应元素的角色恢复15点元素能量。",
       "unlockAscension": 4
     },
     {
@@ -1223,7 +1223,7 @@
     {
       "rank": 1,
       "name": "弦发的苍风",
-      "description": "瞄准射击会额外发射两枚分裂箭，分别造成原本33%的伤害。",
+      "description": "<color=#FFD780FF>瞄准射击</color>会额外发射两枚分裂箭，分别造成原本33%的伤害。",
       "talentBonuses": [],
       "hits": [
         {
@@ -1291,7 +1291,7 @@
     {
       "rank": 2,
       "name": "眷恋的泠风",
-      "description": "高天之歌会使敌人的风元素抗性与物理抗性降低12%，持续10秒。\n被高天之歌击飞的敌人在落地前，风元素抗性与物理抗性额外降低12%。",
+      "description": "<color=#FFD780FF>高天之歌</color>会使敌人的<color=#80FFD7FF>风元素抗性</color>与物理抗性降低12%，持续10秒。\n被<color=#FFD780FF>高天之歌</color>击飞的敌人在落地前，<color=#80FFD7FF>风元素抗性</color>与物理抗性额外降低12%。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -1361,7 +1361,7 @@
     {
       "rank": 3,
       "name": "千风的诗篇",
-      "description": "风神之诗的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>风神之诗</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "burst",
@@ -1372,7 +1372,7 @@
     {
       "rank": 4,
       "name": "自由的凛风",
-      "description": "温迪获取元素晶球或元素微粒后，获得25%风元素伤害加成，持续10秒。",
+      "description": "温迪获取元素晶球或元素微粒后，获得25%<color=#80FFD7FF>风元素伤害加成</color>，持续10秒。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -1395,7 +1395,7 @@
     {
       "rank": 5,
       "name": "高天的协奏",
-      "description": "高天之歌的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>高天之歌</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "skill",
@@ -1406,7 +1406,7 @@
     {
       "rank": 6,
       "name": "抗争的暴风",
-      "description": "受风神之诗伤害的敌人，风元素抗性降低20%；\n若产生了元素转化，则使转换的元素抗性也降低20%。",
+      "description": "受<color=#FFD780FF>风神之诗</color>伤害的敌人，<color=#80FFD7FF>风元素抗性</color>降低20%；\n若产生了元素转化，则使转换的元素抗性也降低20%。",
       "talentBonuses": [],
       "buffs": [
         {

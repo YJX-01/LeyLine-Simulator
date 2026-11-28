@@ -32,13 +32,14 @@ test('numeric derivatives of actual character, artifact and reaction tables fail
     if(path==='src/game-data/data/artifact-sets/noblesseoblige.json') value.calculation.bundle.formulas.find(item=>item.identity.id==='noblesseoblige.burst-bonus').template.value.value=0.19;
     return value;
   });
-  assert.equal(report.differences.length,9);
+  assert.equal(report.differences.length, 10);
   for (const family of ['character-promotion', 'talent-parameters', 'weapon-base']) {
     assert.ok(report.differences.some(row => row.family === family), family);
   }
   assert.ok(report.differences.some(row=>row.field==='jean/base/attack' && row.source===18.62));
   assert.ok(report.differences.some(row=>row.field==='5/elementalMastery/20' && row.source===186.5));
   assert.ok(report.differences.some(row=>row.field==='reaction-level/90' && row.source===1446.8535));
+  assert.ok(report.differences.some(row => row.family === 'reaction-level-checkpoints' && row.field === 'reaction-level-checkpoint/90'));
   assert.ok(report.differences.some(row=>row.field==='noblesse/2pc' && row.source===0.2));
   assert.ok(report.differences.some(row=>row.field==='vesna/discipline/rate' && row.source===0.1));
   assert.ok(report.differences.some(row=>row.field==='vesna/actions/discipline-duration' && row.source===20000));

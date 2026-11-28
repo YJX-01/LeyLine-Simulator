@@ -23,10 +23,10 @@ const fact = (value: schema.Value): schema.CalculationFact => ({ value, provenan
 const read = (file: string) => readCalculationData('src/game-data/data/' + file + '.json');
 const main = read('tables/artifact-main');
 const reactions = read('calculation/reactions');
-const growth = readCalculationData('tools/data/sources/catalog/genshin-db/characters.json');
-const growthCurves = readCalculationData('tools/data/sources/catalog/genshin-db/character-curves.json');
+const growth = readCalculationData('tools/data/sources/anime-game-data/characters.json');
+const growthCurves = readCalculationData('tools/data/sources/anime-game-data/character-curves.json');
 const innateBaseStats = readCalculationData('tools/data/sources/catalog/innate-base-stats.json');
-const multipliers = readCalculationData('tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json');
+const multipliers = readCalculationData('tools/data/sources/anime-game-data/talent-params.json');
 
 describe('source-defined hit conditions and grants', () => {
   const characters = new Map<CharacterId, schema.StructuredCharacterDefinition>();

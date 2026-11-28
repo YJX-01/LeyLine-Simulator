@@ -86,7 +86,7 @@
     {
       "id": "razor.normal",
       "name": "钢脊",
-      "description": "普通攻击\n进行至多四段的连续挥砍。\n\n重击\n持续消耗体力，旋转大剑攻击周围的敌人。\n停止旋转时，会进行一次格外有力的挥砍。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+      "description": "<color=#FFD780FF>普通攻击</color>\n进行至多四段的连续挥砍。\n\n<color=#FFD780FF>重击</color>\n持续消耗体力，旋转大剑攻击周围的敌人。\n停止旋转时，会进行一次格外有力的挥砍。\n\n<color=#FFD780FF>下落攻击</color>\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
       "details": [
@@ -474,7 +474,7 @@
     {
       "id": "razor.skill",
       "name": "利爪与苍雷",
-      "description": "用师父与他的「家人」教他的方法，来解决猎物。\n\n点按\n向前挥动雷狼之爪，对前方的敌人造成雷元素伤害。\n若命中敌人，则会为雷泽积攒一个雷之印，提高雷泽的元素充能效率。\n最多同时存在3个雷之印，叠加刷新持续时间。\n\n长按\n积聚雷电力量引发小范围的雷爆，造成大量雷元素伤害，并清除已有的雷之印。\n每个因此被清除的雷之印，都会转为雷泽的元素能量。",
+      "description": "用师父与他的「家人」教他的方法，来解决猎物。\n\n<color=#FFD780FF>点按</color>\n向前挥动雷狼之爪，对前方的敌人造成<color=#FFACFFFF>雷元素伤害</color>。\n若命中敌人，则会为雷泽积攒一个雷之印，提高雷泽的元素充能效率。\n最多同时存在3个雷之印，叠加刷新持续时间。\n\n<color=#FFD780FF>长按</color>\n积聚雷电力量引发小范围的雷爆，造成大量<color=#FFACFFFF>雷元素伤害</color>，并清除已有的雷之印。\n每个因此被清除的雷之印，都会转为雷泽的元素能量。",
       "flavorText": "雷击落下的一瞬，偶尔能瞥见雷泽灵魂深处那头狼打量猎物的眼神。",
       "category": "skill",
       "element": "electro",
@@ -748,7 +748,7 @@
     {
       "id": "razor.burst",
       "name": "雷牙",
-      "description": "唤醒无形的雷狼守护自己，对周围的敌人造成雷元素伤害，并消耗所有雷之印，为雷泽恢复元素能量。\n雷狼存在期间，会与雷泽共同战斗。\n\n雷狼\n·会随雷泽的普通攻击协同攻击，造成雷元素伤害；\n·提高雷泽的攻击速度、雷元素抗性；\n·使雷泽免疫感电反应的伤害；\n·无法施放重击；\n·提高雷泽的抗打断能力。\n\n效果将在雷泽退场时解除。\n退场时，会依据剩余的持续时间，返还至多10点元素能量。",
+      "description": "唤醒无形的雷狼守护自己，对周围的敌人造成<color=#FFACFFFF>雷元素伤害</color>，并消耗所有雷之印，为雷泽恢复元素能量。\n雷狼存在期间，会与雷泽共同战斗。\n\n<color=#FFD780FF>雷狼</color>\n·会随雷泽的普通攻击协同攻击，造成<color=#FFACFFFF>雷元素伤害</color>；\n·提高雷泽的攻击速度、<color=#FFACFFFF>雷元素抗性</color>；\n·使雷泽免疫<color=#FFACFFFF>感电</color>反应的伤害；\n·无法施放重击；\n·提高雷泽的抗打断能力。\n\n效果将在雷泽退场时解除。\n退场时，会依据剩余的持续时间，返还至多10点元素能量。",
       "flavorText": "狼苏醒了。狩猎的时候到了。",
       "category": "burst",
       "element": "electro",
@@ -1177,7 +1177,7 @@
     {
       "id": "razor.passive1",
       "name": "觉醒",
-      "description": "利爪与苍雷的冷却时间减少18%。\n施放雷牙时，重置利爪与苍雷的冷却时间。",
+      "description": "<color=#FFD780FF>利爪与苍雷</color>的冷却时间减少18%。\n施放<color=#FFD780FF>雷牙</color>时，重置<color=#FFD780FF>利爪与苍雷</color>的冷却时间。",
       "unlockAscension": 1,
       "buffs": [
         {
@@ -1330,7 +1330,7 @@
     {
       "rank": 3,
       "name": "兽魂",
-      "description": "雷牙的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>雷牙</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "burst",
@@ -1341,7 +1341,7 @@
     {
       "rank": 4,
       "name": "撕咬",
-      "description": "利爪与苍雷点按时，会使命中的敌人防御力降低15%，持续7秒。",
+      "description": "<color=#FFD780FF>利爪与苍雷</color>点按时，会使命中的敌人防御力降低15%，持续7秒。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -1380,7 +1380,7 @@
     {
       "rank": 5,
       "name": "利爪",
-      "description": "利爪与苍雷的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>利爪与苍雷</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "skill",
@@ -1391,7 +1391,7 @@
     {
       "rank": 6,
       "name": "天狼",
-      "description": "每10秒，雷泽的大剑将自动充能，使下一次普通攻击引发落雷，造成100%攻击力的雷元素伤害。\n不处于雷牙状态下时，若落雷击中敌人，会为雷泽积攒一个利爪与苍雷的雷之印。",
+      "description": "每10秒，雷泽的大剑将自动充能，使下一次普通攻击引发落雷，造成100%攻击力的<color=#FFACFFFF>雷元素伤害</color>。\n不处于<color=#FFD780FF>雷牙</color>状态下时，若落雷击中敌人，会为雷泽积攒一个<color=#FFD780FF>利爪与苍雷</color>的雷之印。",
       "talentBonuses": [],
       "hits": [
         {

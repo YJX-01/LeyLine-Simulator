@@ -14,9 +14,9 @@ type Hit = schemas.StructuredCharacterDefinition['talents'][number]['hits'][numb
 type Output = { family: string; origin: Hit['origin']; invocation: Hit['base'] };
 const routes = (hit: Hit): Output[] => Object.entries(hit.damage).map(([family, invocation]) => ({ family, invocation, origin: hit.origin }));
 type Conditions = { radiant: boolean; stance: boolean; stacks: number };
-const parameters = read('tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json').vesna;
-const upstream = read('tools/data/sources/catalog/genshin-db/characters.json').vesna.stats;
-const curves = read('tools/data/sources/catalog/genshin-db/character-curves.json');
+const parameters = read('tools/data/sources/anime-game-data/talent-params.json').vesna;
+const upstream = read('tools/data/sources/anime-game-data/characters.json').vesna.stats;
+const curves = read('tools/data/sources/anime-game-data/character-curves.json');
 
 // Independent catalog mathematics with explicit conditions and compatible weapons, without player inventory.
 // Automatic actions, resource feasibility and actual damage observations are outside these checks.

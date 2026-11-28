@@ -86,7 +86,7 @@
     {
       "id": "xingqiu.normal",
       "name": "古华剑法",
-      "description": "普通攻击\n进行至多五段的连续剑击。\n\n重击\n消耗一定体力，瞬间向前方挥出两剑。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+      "description": "<color=#FFD780FF>普通攻击</color>\n进行至多五段的连续剑击。\n\n<color=#FFD780FF>重击</color>\n消耗一定体力，瞬间向前方挥出两剑。\n\n<color=#FFD780FF>下落攻击</color>\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
       "details": [
@@ -545,7 +545,7 @@
     {
       "id": "xingqiu.skill",
       "name": "古华剑·画雨笼山",
-      "description": "使出连续两段的剑技，对前方的敌人造成水元素伤害。同时，生成最大数量的雨帘剑围绕在当前场上自己的角色身边。\n具有如下特性：\n·角色受到伤害时会破碎，降低受到的伤害；\n·提高角色的抗打断能力。\n行秋水元素伤害加成的20%将转换为雨帘剑的额外伤害减免。\n\n最多通过这种方式获得24%额外伤害减免。\n初始雨帘剑的最大数量为3柄。\n施放的瞬间，为角色施加潮湿状态。",
+      "description": "使出连续两段的剑技，对前方的敌人造成<color=#80C0FFFF>水元素伤害</color>。同时，生成最大数量的雨帘剑围绕在当前场上自己的角色身边。\n具有如下特性：\n·角色受到伤害时会破碎，降低受到的伤害；\n·提高角色的抗打断能力。\n行秋<color=#80C0FFFF>水元素伤害加成</color>的20%将转换为雨帘剑的额外伤害减免。\n\n最多通过这种方式获得24%额外伤害减免。\n初始雨帘剑的最大数量为3柄。\n施放的瞬间，为角色施加<color=#80C0FFFF>潮湿</color>状态。",
       "flavorText": "「蛟龙易斩，雨线难画」。",
       "category": "skill",
       "element": "hydro",
@@ -770,7 +770,7 @@
     {
       "id": "xingqiu.burst",
       "name": "古华剑·裁雨留虹",
-      "description": "展开虹剑势，驾御幻影剑雨战斗，并生成最大数量的雨帘剑。\n\n虹剑势\n·当前场上自己的角色进行普通攻击时，会产生剑雨连携攻击，造成水元素伤害；\n·雨帘剑的数量将始终维持在最大数量。",
+      "description": "展开虹剑势，驾御幻影剑雨战斗，并生成最大数量的雨帘剑。\n\n<color=#FFD780FF>虹剑势</color>\n·当前场上自己的角色进行普通攻击时，会产生剑雨连携攻击，造成<color=#80C0FFFF>水元素伤害</color>；\n·雨帘剑的数量将始终维持在最大数量。",
       "flavorText": "「裁雨法」不传绝学，古华镇派秘诀之一。",
       "category": "burst",
       "element": "hydro",
@@ -907,7 +907,7 @@
     {
       "id": "xingqiu.passive2",
       "name": "虚实工笔",
-      "description": "行秋获得20%水元素伤害加成。",
+      "description": "行秋获得20%<color=#80C0FFFF>水元素伤害加成</color>。",
       "unlockAscension": 4,
       "buffs": [
         {
@@ -938,7 +938,7 @@
     {
       "rank": 2,
       "name": "天青现虹",
-      "description": "古华剑·裁雨留虹的持续时间延长3秒；\n此外，受到剑雨攻击的敌人，水元素抗性降低15%，持续4秒。",
+      "description": "<color=#FFD780FF>古华剑·裁雨留虹</color>的持续时间延长3秒；\n此外，受到剑雨攻击的敌人，<color=#80C0FFFF>水元素抗性</color>降低15%，持续4秒。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -977,7 +977,7 @@
     {
       "rank": 3,
       "name": "织诗成锦",
-      "description": "古华剑·裁雨留虹的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>古华剑·裁雨留虹</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "burst",
@@ -988,7 +988,7 @@
     {
       "rank": 4,
       "name": "孤舟斩蛟",
-      "description": "在古华剑·裁雨留虹效果持续期间，古华剑·画雨笼山造成的伤害提升50%。",
+      "description": "在<color=#FFD780FF>古华剑·裁雨留虹</color>效果持续期间，<color=#FFD780FF>古华剑·画雨笼山</color>造成的伤害提升50%。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -1016,7 +1016,7 @@
     {
       "rank": 5,
       "name": "雨深闭门",
-      "description": "古华剑·画雨笼山的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>古华剑·画雨笼山</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "skill",
@@ -1027,7 +1027,7 @@
     {
       "rank": 6,
       "name": "万文集此",
-      "description": "古华剑·裁雨留虹每发动2次剑雨攻击，就大幅增强下一次剑雨攻击，并在命中敌人时为行秋恢复3点元素能量。",
+      "description": "<color=#FFD780FF>古华剑·裁雨留虹</color>每发动2次剑雨攻击，就大幅增强下一次剑雨攻击，并在命中敌人时为行秋恢复3点元素能量。",
       "talentBonuses": [],
       "buffs": [
         {

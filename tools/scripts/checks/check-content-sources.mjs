@@ -26,7 +26,7 @@ for (const directory of ['src/game-data/data', 'assets', 'tools/data']) {
   }
 }
 
-const sets = read('tools/data/sources/catalog/genshin-db/sets.json');
+const sets = read('tools/data/sources/anime-game-data/sets.json');
 for (const [id, entry] of Object.entries(read('src/game-data/data/tables/artifact-set-short-names.json').sets)) {
   if (sets[id]?.name !== entry.name || !entry.shortName) throw new Error(`Invalid set abbreviation: ${id}`);
 }
@@ -40,8 +40,9 @@ for (const value of Object.values(displayData('effective-roll-basis').defaults))
   if (!Number.isFinite(value) || value <= 0) throw new Error('Invalid effective roll fallback.');
 }
 const enka = displayData('enka-catalog');
-const characters = read('tools/data/sources/catalog/genshin-db/characters.json');
-const formSource = read('tools/data/sources/character-text/base-and-manekin.json');
+const characters = read('tools/data/sources/anime-game-data/characters.json');
+const formSource = read('tools/data/sources/anime-game-data/base-and-manekin.json');
+const enkaIds = read('tools/data/sources/anime-game-data/enka-ids.json').characters;
 for (const [id, binding] of Object.entries(formSource.bindings)) {
   const avatarId = characters[binding.baseId].metadata.id;
   const depot = formSource.skillDepots[binding.skillDepotId];
@@ -51,10 +52,11 @@ for (const [id, binding] of Object.entries(formSource.bindings)) {
     throw new Error(`Enka form differs from the adopted skill depot: ${id}/${binding.skillDepotId}`);
   }
 }
-for (const [avatarId, item] of Object.entries(read('tools/data/sources/catalog/enka/skill-supplements.json').characters)) {
-  const entry = enka.characters[avatarId];
-  if (entry?.id !== item.id || JSON.stringify(entry.skills) !== JSON.stringify(item.skills) || entry.skillDepotId !== item.skillDepotId) {
-    throw new Error(`Enka catalog entry differs from the adopted skill supplement: ${avatarId}`);
+for (const [key, expected] of Object.entries(enkaIds)) {
+  if (!key.includes('-') && ['aether', 'lumine', 'manekin', 'manekina'].includes(expected.id)) continue;
+  const entry = enka.characters[key];
+  if (entry?.id !== expected.id || JSON.stringify(entry.skills) !== JSON.stringify(expected.skills) || entry.skillDepotId !== expected.skillDepotId) {
+    throw new Error(`Enka catalog entry differs from the adopted AnimeGameData skills: ${key}`);
   }
 }
 for (const [alias, setId] of Object.entries(displayData('mona-set-aliases'))) {

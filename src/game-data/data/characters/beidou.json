@@ -86,7 +86,7 @@
     {
       "id": "beidou.normal",
       "name": "征涛",
-      "description": "普通攻击\n进行至多五段的连续挥砍。\n\n重击\n持续消耗体力，快速进行连续的斩击。\n重击结束时，会进行一次格外有力的挥砍。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+      "description": "<color=#FFD780FF>普通攻击</color>\n进行至多五段的连续挥砍。\n\n<color=#FFD780FF>重击</color>\n持续消耗体力，快速进行连续的斩击。\n重击结束时，会进行一次格外有力的挥砍。\n\n<color=#FFD780FF>下落攻击</color>\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
       "details": [
@@ -510,7 +510,7 @@
     {
       "id": "beidou.skill",
       "name": "捉浪",
-      "description": "没有什么好担心的。如果有人敢对她或她的人出手，那就以雷电与大剑十倍奉还。\n\n点按\n积聚雷之力，猛烈向前挥舞大剑，造成雷元素伤害。\n\n长按\n举起武器形成护盾，伤害吸收量受益于北斗的生命值上限。\n松开技能或持续时间结束时，会挥舞大剑释放积攒的力量进行攻击，造成雷元素伤害。依据技能期间受到攻击的次数，提高释放时造成的伤害。触发2次达到最高伤害加成。\n护盾具有如下效果：\n·对雷元素伤害有250%的吸收效果；\n·施放的瞬间，为北斗施加雷元素附着。",
+      "description": "没有什么好担心的。如果有人敢对她或她的人出手，那就以雷电与大剑十倍奉还。\n\n<color=#FFD780FF>点按</color>\n积聚雷之力，猛烈向前挥舞大剑，造成<color=#FFACFFFF>雷元素伤害</color>。\n\n<color=#FFD780FF>长按</color>\n举起武器形成护盾，伤害吸收量受益于北斗的生命值上限。\n松开技能或持续时间结束时，会挥舞大剑释放积攒的力量进行攻击，造成<color=#FFACFFFF>雷元素伤害</color>。依据技能期间受到攻击的次数，提高释放时造成的伤害。触发2次达到最高伤害加成。\n护盾具有如下效果：\n·对<color=#FFACFFFF>雷元素伤害</color>有250%的吸收效果；\n·施放的瞬间，为北斗施加<color=#FFACFFFF>雷元素附着</color>。",
       "flavorText": "渺渺征船，追电捉浪。",
       "category": "skill",
       "element": "electro",
@@ -714,7 +714,7 @@
     {
       "id": "beidou.burst",
       "name": "斫雷",
-      "description": "重忆斩灭海山巨兽之战，唤起巨兽与雷电的力量，创造环绕自身的雷兽之盾，并对周围的敌人造成雷元素伤害。\n\n雷兽之盾\n·普通攻击与重击命中时，释放雷电之力，引来1道能在敌人之间跃动的闪雷，造成雷元素伤害；\n·提高角色的抗打断能力，并降低受到的伤害。\n\n每秒至多触发1道闪雷。",
+      "description": "重忆斩灭海山巨兽之战，唤起巨兽与雷电的力量，创造环绕自身的雷兽之盾，并对周围的敌人造成<color=#FFACFFFF>雷元素伤害</color>。\n\n<color=#FFD780FF>雷兽之盾</color>\n·普通攻击与重击命中时，释放雷电之力，引来1道能在敌人之间跃动的闪雷，造成<color=#FFACFFFF>雷元素伤害</color>；\n·提高角色的抗打断能力，并降低受到的伤害。\n\n每秒至多触发1道闪雷。",
       "flavorText": "赫赫雷来，斫灭海山。",
       "category": "burst",
       "element": "electro",
@@ -930,7 +930,7 @@
     {
       "id": "beidou.passive1",
       "name": "遍宇灵光",
-      "description": "在被攻击瞬间施放的捉浪反击，拥有最高伤害加成。",
+      "description": "在被攻击瞬间施放的<color=#FFD780FF>捉浪</color>反击，拥有最高伤害加成。",
       "unlockAscension": 1,
       "hits": [
         {
@@ -963,7 +963,7 @@
     {
       "id": "beidou.passive2",
       "name": "霹雳连霄",
-      "description": "施放拥有最高伤害加成的捉浪后的10秒内，获得如下效果：\n·普通攻击与重击造成的伤害提高15%，攻击速度提高15%；\n·大幅减少重击需要的准备时间。",
+      "description": "施放拥有最高伤害加成的<color=#FFD780FF>捉浪</color>后的10秒内，获得如下效果：\n·普通攻击与重击造成的伤害提高15%，攻击速度提高15%；\n·大幅减少重击需要的准备时间。",
       "unlockAscension": 4,
       "buffs": [
         {
@@ -1019,7 +1019,7 @@
     {
       "rank": 1,
       "name": "鱼龙沉四方",
-      "description": "施放斫雷时：\n生成一个伤害吸收量等于生命值上限16%的护盾，持续15秒。\n该护盾对雷元素伤害有250%的吸收效果。",
+      "description": "施放<color=#FFD780FF>斫雷</color>时：\n生成一个伤害吸收量等于生命值上限16%的护盾，持续15秒。\n该护盾对<color=#FFACFFFF>雷元素伤害</color>有250%的吸收效果。",
       "talentBonuses": [],
       "buffs": [
         {
@@ -1124,13 +1124,13 @@
     {
       "rank": 2,
       "name": "赫赫雷涌起",
-      "description": "斫雷的闪雷能额外弹跳2个敌人。",
+      "description": "<color=#FFD780FF>斫雷</color>的闪雷能额外弹跳2个敌人。",
       "talentBonuses": []
     },
     {
       "rank": 3,
       "name": "潮奔蓦引电",
-      "description": "捉浪的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>捉浪</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "skill",
@@ -1141,7 +1141,7 @@
     {
       "rank": 4,
       "name": "牵星觅乡岸",
-      "description": "受到攻击后的10秒内，北斗的普通攻击附带20%额外雷元素伤害。",
+      "description": "受到攻击后的10秒内，北斗的普通攻击附带20%额外<color=#FFACFFFF>雷元素伤害</color>。",
       "talentBonuses": [],
       "hits": [
         {
@@ -1166,7 +1166,7 @@
     {
       "rank": 5,
       "name": "踏浪霞连阶",
-      "description": "斫雷的技能等级提高3级。\n至多提升至15级。",
+      "description": "<color=#FFD780FF>斫雷</color>的技能等级提高3级。\n至多提升至15级。",
       "talentBonuses": [
         {
           "category": "burst",
@@ -1177,7 +1177,7 @@
     {
       "rank": 6,
       "name": "北斗祓幽孽",
-      "description": "斫雷持续期间，周围敌人的雷元素抗性降低15%。\n辉映·星超导：斫雷持续期间，附近敌人的冰元素抗性还会降低15%，且当前场上角色元素精通提升200点。",
+      "description": "<color=#FFD780FF>斫雷</color>持续期间，周围敌人的<color=#FFACFFFF>雷元素抗性</color>降低15%。\n辉映·星超导：斫雷持续期间，附近敌人的冰元素抗性还会降低15%，且当前场上角色元素精通提升200点。",
       "talentBonuses": [],
       "buffs": [
         {

@@ -1,0 +1,6806 @@
+{
+  "talents": {
+    "aino": {
+      "combat1": {
+        "name": "敲打修理法",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "妙思捕手",
+        "icon": "Skill_S_Aino_01"
+      },
+      "combat3": {
+        "name": "精密水冷仪",
+        "icon": "Skill_E_Aino_01"
+      },
+      "passive1": {
+        "name": "模块式高效运作",
+        "icon": "UI_Talent_S_Aino_05"
+      },
+      "passive2": {
+        "name": "结构化功率提升",
+        "icon": "UI_Talent_S_Aino_06"
+      },
+      "passive3": {
+        "name": "月兆祝赐·力极演算",
+        "icon": "UI_Talent_S_Aino_07"
+      },
+      "passive4": {
+        "name": "小型识别侦测器",
+        "icon": "UI_Talent_S_Aino_08"
+      }
+    },
+    "albedo": {
+      "combat1": {
+        "name": "西风剑术·白",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "创生法·拟造阳华",
+        "icon": "Skill_S_Albedo_01"
+      },
+      "combat3": {
+        "name": "诞生式·大地之潮",
+        "icon": "Skill_E_Albedo_01"
+      },
+      "passive1": {
+        "name": "白垩色的威压",
+        "icon": "UI_Talent_S_Albedo_05"
+      },
+      "passive2": {
+        "name": "瓶中人的天慧",
+        "icon": "UI_Talent_S_Albedo_06"
+      },
+      "passive3": {
+        "name": "天才的发现",
+        "icon": "UI_Talent_Combine_Weapon_Double"
+      }
+    },
+    "alhaitham": {
+      "combat1": {
+        "name": "溯因反绎法",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "共相·理式摹写",
+        "icon": "Skill_S_Alhatham_01"
+      },
+      "combat3": {
+        "name": "殊境·显象缚结",
+        "icon": "Skill_E_Alhatham_01"
+      },
+      "passive1": {
+        "name": "四因订顽",
+        "icon": "UI_Talent_S_Alhatham_05"
+      },
+      "passive2": {
+        "name": "谜林道破",
+        "icon": "UI_Talent_S_Alhatham_06"
+      },
+      "passive3": {
+        "name": "超定归约律",
+        "icon": "UI_Talent_S_Alhatham_07"
+      }
+    },
+    "aloy": {
+      "combat1": {
+        "name": "快速射击",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "冰尘雪野",
+        "icon": "Skill_S_Aloy_01"
+      },
+      "combat3": {
+        "name": "曙光预言",
+        "icon": "Skill_E_Aloy_01"
+      },
+      "passive1": {
+        "name": "战斗覆盖",
+        "icon": "UI_Talent_S_Aloy_05"
+      },
+      "passive2": {
+        "name": "强力攻击",
+        "icon": "UI_Talent_S_Aloy_06"
+      },
+      "passive3": {
+        "name": "荒野猎手",
+        "icon": "UI_Talent_S_Aloy_07"
+      }
+    },
+    "alyosha": {
+      "combat1": {
+        "name": "角枪驰弋",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "伏袭霆击",
+        "icon": "Skill_S_Alyosha_01"
+      },
+      "combat3": {
+        "name": "守猎进踞",
+        "icon": "Skill_E_Alyosha_01"
+      },
+      "passive1": {
+        "name": "惊醒沉睡的林线",
+        "icon": "UI_Talent_S_Alyosha_05"
+      },
+      "passive2": {
+        "name": "告别冬麦与残叶",
+        "icon": "UI_Talent_S_Alyosha_06"
+      },
+      "passive3": {
+        "name": "星赴险域",
+        "icon": "UI_Talent_S_Alyosha_07"
+      },
+      "passive4": {
+        "name": "树梢察伺",
+        "icon": "UI_Talent_S_Alyosha_08"
+      }
+    },
+    "amber": {
+      "combat1": {
+        "name": "神射手",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "爆弹玩偶",
+        "icon": "Skill_S_Ambor_01"
+      },
+      "combat3": {
+        "name": "箭雨",
+        "icon": "Skill_E_Ambor"
+      },
+      "passive1": {
+        "name": "百发百中！",
+        "icon": "UI_Talent_S_Ambor_05"
+      },
+      "passive2": {
+        "name": "压制射击",
+        "icon": "UI_Talent_S_Ambor_06"
+      },
+      "passive3": {
+        "name": "飞行冠军",
+        "icon": "UI_Talent_Explosion_Glide"
+      }
+    },
+    "aratakiitto": {
+      "combat1": {
+        "name": "喧哗屋传说",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "魔杀绝技·赤牛发破！",
+        "icon": "Skill_S_Itto_01"
+      },
+      "combat3": {
+        "name": "最恶鬼王·一斗轰临！！",
+        "icon": "Skill_E_Itto_01"
+      },
+      "passive1": {
+        "name": "荒泷第一",
+        "icon": "UI_Talent_S_Itto_05"
+      },
+      "passive2": {
+        "name": "赤鬼之血",
+        "icon": "UI_Talent_S_Itto_06"
+      },
+      "passive3": {
+        "name": "干裂枝碎",
+        "icon": "UI_Talent_S_Itto_07"
+      }
+    },
+    "arlecchino": {
+      "combat1": {
+        "name": "斩首之邀",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "万相化灰",
+        "icon": "Skill_S_Arlecchino_01"
+      },
+      "combat3": {
+        "name": "厄月将升",
+        "icon": "Skill_E_Arlecchino_01"
+      },
+      "passive1": {
+        "name": "唯苦痛可偿还",
+        "icon": "UI_Talent_S_Arlecchino_05"
+      },
+      "passive2": {
+        "name": "唯力量可守护",
+        "icon": "UI_Talent_S_Arlecchino_06"
+      },
+      "passive3": {
+        "name": "唯厄月可知晓",
+        "icon": "UI_Talent_S_Arlecchino_07"
+      }
+    },
+    "baizhu": {
+      "combat1": {
+        "name": "金匮针解",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "太素诊要",
+        "icon": "Skill_S_Baizhuer_01"
+      },
+      "combat3": {
+        "name": "愈气全形论",
+        "icon": "Skill_E_Baizhuer_01"
+      },
+      "passive1": {
+        "name": "五运终天",
+        "icon": "UI_Talent_S_Baizhuer_05"
+      },
+      "passive2": {
+        "name": "在地为化",
+        "icon": "UI_Talent_S_Baizhuer_06"
+      },
+      "passive3": {
+        "name": "味草之滋",
+        "icon": "UI_Talent_S_Baizhuer_07"
+      }
+    },
+    "barbara": {
+      "combat1": {
+        "name": "水之浅唱",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "演唱，开始♪",
+        "icon": "Skill_S_Barbara_01"
+      },
+      "combat3": {
+        "name": "闪耀奇迹♪",
+        "icon": "Skill_E_Barbara_01"
+      },
+      "passive1": {
+        "name": "光辉的季节",
+        "icon": "UI_Talent_S_Barbara_05"
+      },
+      "passive2": {
+        "name": "安可",
+        "icon": "UI_Talent_S_Barbara_06"
+      },
+      "passive3": {
+        "name": "心意♪注入",
+        "icon": "UI_Talent_Cook_Heal"
+      }
+    },
+    "beidou": {
+      "combat1": {
+        "name": "征涛",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "捉浪",
+        "icon": "Skill_S_Beidou_01"
+      },
+      "combat3": {
+        "name": "斫雷",
+        "icon": "Skill_E_Beidou_01"
+      },
+      "passive1": {
+        "name": "遍宇灵光",
+        "icon": "UI_Talent_S_Beidou_05"
+      },
+      "passive2": {
+        "name": "霹雳连霄",
+        "icon": "UI_Talent_S_Beidou_06"
+      },
+      "passive3": {
+        "name": "拥涛踏潮",
+        "icon": "UI_Talent_Explosion_Swim"
+      }
+    },
+    "bennett": {
+      "combat1": {
+        "name": "好运剑",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "热情过载",
+        "icon": "Skill_S_Bennett_01"
+      },
+      "combat3": {
+        "name": "美妙旅程",
+        "icon": "Skill_E_Bennett_01"
+      },
+      "passive1": {
+        "name": "热情复燃",
+        "icon": "UI_Talent_S_Bennett_05"
+      },
+      "passive2": {
+        "name": "无畏的热血",
+        "icon": "UI_Talent_S_Bennett_06"
+      },
+      "passive3": {
+        "name": "应该安全",
+        "icon": "UI_Talent_Expedition_Mengde"
+      }
+    },
+    "candace": {
+      "combat1": {
+        "name": "流耀枪术·守势",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "圣仪·苍鹭庇卫",
+        "icon": "Skill_S_Candace_01"
+      },
+      "combat3": {
+        "name": "圣仪·灰鸰衒潮",
+        "icon": "Skill_E_Candace_01"
+      },
+      "passive1": {
+        "name": "流羽交护",
+        "icon": "UI_Talent_S_Candace_05"
+      },
+      "passive2": {
+        "name": "漫沙陨穹",
+        "icon": "UI_Talent_S_Candace_06"
+      },
+      "passive3": {
+        "name": "向拂晓的初光",
+        "icon": "UI_Talent_Explosion_Climb"
+      }
+    },
+    "charlotte": {
+      "combat1": {
+        "name": "冷色摄影律",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "取景·冰点构图法",
+        "icon": "Skill_S_Charlotte_01"
+      },
+      "combat3": {
+        "name": "定格·全方位确证",
+        "icon": "Skill_E_Charlotte_01"
+      },
+      "passive1": {
+        "name": "冲击力瞬间",
+        "icon": "UI_Talent_S_Charlotte_05"
+      },
+      "passive2": {
+        "name": "多样性调查",
+        "icon": "UI_Talent_S_Charlotte_06"
+      },
+      "passive3": {
+        "name": "第一人称快门",
+        "icon": "UI_Talent_S_Charlotte_07"
+      }
+    },
+    "chasca": {
+      "combat1": {
+        "name": "迷羽流击",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "灵缰追影",
+        "icon": "Skill_S_Chasca_01"
+      },
+      "combat3": {
+        "name": "索魂命袭",
+        "icon": "Skill_E_Chasca_01"
+      },
+      "passive1": {
+        "name": "子弹的戏法",
+        "icon": "UI_Talent_S_Chasca_05"
+      },
+      "passive2": {
+        "name": "掩护的心意",
+        "icon": "UI_Talent_S_Chasca_06"
+      },
+      "passive3": {
+        "name": "夜域赐礼·不熄炽心",
+        "icon": "UI_Talent_S_Chasca_07"
+      },
+      "passive4": {
+        "name": "调停的真意",
+        "icon": "UI_Talent_S_Chasca_08"
+      }
+    },
+    "chevreuse": {
+      "combat1": {
+        "name": "线列枪刺·改",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "近迫式急促拦射",
+        "icon": "Skill_S_Chevreuse_01"
+      },
+      "combat3": {
+        "name": "圆阵掷弹爆轰术",
+        "icon": "Skill_E_Chevreuse_01"
+      },
+      "passive1": {
+        "name": "尖兵协同战法",
+        "icon": "UI_Talent_S_Chevreuse_05"
+      },
+      "passive2": {
+        "name": "纵阵武力统筹",
+        "icon": "UI_Talent_S_Chevreuse_06"
+      },
+      "passive3": {
+        "name": "迅捷行军策略",
+        "icon": "UI_Talent_Explosion_Sprint"
+      }
+    },
+    "chiori": {
+      "combat1": {
+        "name": "心织刀流",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "羽袖一触",
+        "icon": "Skill_S_Chiori_01"
+      },
+      "combat3": {
+        "name": "二刀之形·比翼",
+        "icon": "Skill_E_Chiori_01"
+      },
+      "passive1": {
+        "name": "量体裁衣",
+        "icon": "UI_Talent_S_Chiori_05"
+      },
+      "passive2": {
+        "name": "锦上添花",
+        "icon": "UI_Talent_S_Chiori_06"
+      },
+      "passive3": {
+        "name": "衣香襟影",
+        "icon": "UI_Talent_S_Chiori_07"
+      }
+    },
+    "chongyun": {
+      "combat1": {
+        "name": "灭邪四式",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "灵刃·重华叠霜",
+        "icon": "Skill_S_Chongyun_01"
+      },
+      "combat3": {
+        "name": "灵刃·云开星落",
+        "icon": "Skill_E_Chongyun_01"
+      },
+      "passive1": {
+        "name": "吐纳真定",
+        "icon": "UI_Talent_S_Chongyun_05"
+      },
+      "passive2": {
+        "name": "追冰剑诀",
+        "icon": "UI_Talent_S_Chongyun_06"
+      },
+      "passive3": {
+        "name": "云游山海",
+        "icon": "UI_Talent_Expedition_Liyue"
+      }
+    },
+    "citlali": {
+      "combat1": {
+        "name": "宿灵捕影",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "霜昼黑星",
+        "icon": "Skill_S_Citlali_01"
+      },
+      "combat3": {
+        "name": "诸曜饬令",
+        "icon": "Skill_E_Citlali_01"
+      },
+      "passive1": {
+        "name": "五重天的寒雨",
+        "icon": "UI_Talent_S_Citlali_05"
+      },
+      "passive2": {
+        "name": "白燧蝶的星衣",
+        "icon": "UI_Talent_S_Citlali_06"
+      },
+      "passive3": {
+        "name": "夜域赐礼·镜烟翾风",
+        "icon": "UI_Talent_S_Citlali_08"
+      },
+      "passive4": {
+        "name": "奥秘传唱",
+        "icon": "UI_Talent_S_Mavuika_08"
+      }
+    },
+    "clorinde": {
+      "combat1": {
+        "name": "逐影之誓",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "狩夜之巡",
+        "icon": "Skill_S_Clorinde_01"
+      },
+      "combat3": {
+        "name": "残光将终",
+        "icon": "Skill_E_Clorinde_01"
+      },
+      "passive1": {
+        "name": "破夜的明焰",
+        "icon": "UI_Talent_S_Clorinde_05"
+      },
+      "passive2": {
+        "name": "契令的酬偿",
+        "icon": "UI_Talent_S_Clorinde_06"
+      },
+      "passive3": {
+        "name": "夜巡之获",
+        "icon": "UI_Talent_S_Liney_07"
+      }
+    },
+    "collei": {
+      "combat1": {
+        "name": "祈颂射艺",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "拂花偈叶",
+        "icon": "Skill_S_Collei_01"
+      },
+      "combat3": {
+        "name": "猫猫秘宝",
+        "icon": "Skill_E_Collei_01"
+      },
+      "passive1": {
+        "name": "飞叶迴斜",
+        "icon": "UI_Talent_S_Collei_05"
+      },
+      "passive2": {
+        "name": "徐如旷林",
+        "icon": "UI_Talent_S_Collei_06"
+      },
+      "passive3": {
+        "name": "「须弥飞行冠军」",
+        "icon": "UI_Talent_Explosion_Glide"
+      }
+    },
+    "columbina": {
+      "combat1": {
+        "name": "月露泼降",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "万古潮汐",
+        "icon": "Skill_S_Columbina_01"
+      },
+      "combat3": {
+        "name": "她的乡愁",
+        "icon": "Skill_E_Columbina_01"
+      },
+      "passive1": {
+        "name": "月亮诱发的疯狂",
+        "icon": "UI_Talent_S_Columbina_05"
+      },
+      "passive2": {
+        "name": "新月自己的法则",
+        "icon": "UI_Talent_S_Columbina_06"
+      },
+      "passive3": {
+        "name": "月兆祝赐·借汝月光",
+        "icon": "UI_Talent_S_Columbina_07"
+      },
+      "passive4": {
+        "name": "月的守望",
+        "icon": "UI_Talent_S_Columbina_08"
+      }
+    },
+    "cyno": {
+      "combat1": {
+        "name": "七圣枪术",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "秘仪·律渊渡魂",
+        "icon": "Skill_S_Cyno_01"
+      },
+      "combat3": {
+        "name": "圣仪·煟煌随狼行",
+        "icon": "Skill_E_Cyno_01"
+      },
+      "passive1": {
+        "name": "落羽的裁择",
+        "icon": "UI_Talent_S_Cyno_05"
+      },
+      "passive2": {
+        "name": "九弓的执命",
+        "icon": "UI_Talent_S_Cyno_06"
+      },
+      "passive3": {
+        "name": "缄默的惠赐",
+        "icon": "UI_Talent_S_Cyno_07"
+      }
+    },
+    "dahlia": {
+      "combat1": {
+        "name": "西风剑术·祭仪",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "圣浸的礼典",
+        "icon": "Skill_S_Dahlia_01"
+      },
+      "combat3": {
+        "name": "纯耀的祷咏",
+        "icon": "Skill_E_Dahlia_01"
+      },
+      "passive1": {
+        "name": "风色柔愿的眷宠",
+        "icon": "UI_Talent_S_Dahlia_05"
+      },
+      "passive2": {
+        "name": "黠巧欢愉的祈颂",
+        "icon": "UI_Talent_S_Dahlia_06"
+      },
+      "passive3": {
+        "name": "归风相随的巡礼",
+        "icon": "UI_Talent_S_Dehya_07"
+      }
+    },
+    "dehya": {
+      "combat1": {
+        "name": "拂金剑斗术",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "熔铁流狱",
+        "icon": "Skill_S_Dehya_01"
+      },
+      "combat3": {
+        "name": "炎啸狮子咬",
+        "icon": "Skill_E_Dehya_01"
+      },
+      "passive1": {
+        "name": "不吝佑助",
+        "icon": "UI_Talent_S_Dehya_05"
+      },
+      "passive2": {
+        "name": "崇诚之真",
+        "icon": "UI_Talent_S_Dehya_06"
+      },
+      "passive3": {
+        "name": "日照的正途",
+        "icon": "UI_Talent_S_Dehya_07"
+      }
+    },
+    "diluc": {
+      "combat1": {
+        "name": "淬炼之剑",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "逆焰之刃",
+        "icon": "Skill_S_Diluc_01_01"
+      },
+      "combat3": {
+        "name": "黎明",
+        "icon": "Skill_E_Diluc_01"
+      },
+      "passive1": {
+        "name": "永不休止",
+        "icon": "UI_Talent_S_Diluc_05"
+      },
+      "passive2": {
+        "name": "熔毁之翼",
+        "icon": "UI_Talent_S_Diluc_06"
+      },
+      "passive3": {
+        "name": "晨曦的传统",
+        "icon": "UI_Talent_Forge_Claymore"
+      }
+    },
+    "diona": {
+      "combat1": {
+        "name": "猎人射术",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "猫爪冻冻",
+        "icon": "Skill_S_Diona_01"
+      },
+      "combat3": {
+        "name": "最烈特调",
+        "icon": "Skill_E_Diona_01"
+      },
+      "passive1": {
+        "name": "猫尾隐藏菜单",
+        "icon": "UI_Talent_S_Diona_05"
+      },
+      "passive2": {
+        "name": "滑稽百出的醉相",
+        "icon": "UI_Talent_S_Diona_06"
+      },
+      "passive3": {
+        "name": "附赠的下酒菜",
+        "icon": "UI_Talent_Cook_Heal"
+      }
+    },
+    "dori": {
+      "combat1": {
+        "name": "妙显剑舞·改",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "镇灵之灯·烦恼解决炮",
+        "icon": "Skill_S_Dori_01"
+      },
+      "combat3": {
+        "name": "卡萨扎莱宫的无微不至",
+        "icon": "Skill_E_Dori_01"
+      },
+      "passive1": {
+        "name": "披沙沥金",
+        "icon": "UI_Talent_S_Dori_05"
+      },
+      "passive2": {
+        "name": "利上加利",
+        "icon": "UI_Talent_S_Dori_06"
+      },
+      "passive3": {
+        "name": "意外订单",
+        "icon": "UI_Talent_S_Dori_07"
+      }
+    },
+    "durin": {
+      "combat1": {
+        "name": "芒焰之翼斩",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "二元式·聚分熔炼",
+        "icon": "Skill_S_Durin_01"
+      },
+      "combat3": {
+        "name": "白化法·如光流变",
+        "icon": "Skill_E_Durin_01"
+      },
+      "passive1": {
+        "name": "光灵遵神数显现",
+        "icon": "UI_Talent_S_Durin_01"
+      },
+      "passive2": {
+        "name": "混沌如黑夜构成",
+        "icon": "UI_Talent_S_Durin_02"
+      },
+      "passive3": {
+        "name": "地涌的回音",
+        "icon": "UI_Talent_S_Durin_07"
+      }
+    },
+    "emilie": {
+      "combat1": {
+        "name": "逐影枪术·改",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "撷萃调香",
+        "icon": "Skill_S_Emilie_01"
+      },
+      "combat3": {
+        "name": "香氛演绎",
+        "icon": "Skill_E_Emilie_01"
+      },
+      "passive1": {
+        "name": "余薰",
+        "icon": "UI_Talent_S_Emilie_05"
+      },
+      "passive2": {
+        "name": "精馏",
+        "icon": "UI_Talent_S_Emilie_06"
+      },
+      "passive3": {
+        "name": "顶空集香",
+        "icon": "UI_Talent_S_Emilie_07"
+      }
+    },
+    "escoffier": {
+      "combat1": {
+        "name": "后厨手艺",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "低温烹饪",
+        "icon": "Skill_S_Escoffier_01"
+      },
+      "combat3": {
+        "name": "花刀技法",
+        "icon": "Skill_E_Escoffier_01"
+      },
+      "passive1": {
+        "name": "美食胜过良药",
+        "icon": "UI_Talent_S_Escoffier_05"
+      },
+      "passive2": {
+        "name": "灵感浸入调味",
+        "icon": "UI_Talent_S_Escoffier_06"
+      },
+      "passive3": {
+        "name": "时时刻刻的即兴料理",
+        "icon": "UI_Talent_S_Escoffier_08"
+      }
+    },
+    "eula": {
+      "combat1": {
+        "name": "西风剑术·宗室",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "冰潮的涡旋",
+        "icon": "Skill_S_Eula_01"
+      },
+      "combat3": {
+        "name": "凝浪之光剑",
+        "icon": "Skill_E_Eula_01"
+      },
+      "passive1": {
+        "name": "潮卷冰削",
+        "icon": "UI_Talent_S_Eula_05"
+      },
+      "passive2": {
+        "name": "战欲涌现",
+        "icon": "UI_Talent_S_Eula_06"
+      },
+      "passive3": {
+        "name": "贵族的自省",
+        "icon": "UI_Talent_Eula_Combine"
+      }
+    },
+    "faruzan": {
+      "combat1": {
+        "name": "迴身箭术",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "非想风天",
+        "icon": "Skill_S_Faruzan_01"
+      },
+      "combat3": {
+        "name": "抟风秘道",
+        "icon": "Skill_E_Faruzan_01"
+      },
+      "passive1": {
+        "name": "迅捷流风",
+        "icon": "UI_Talent_S_Faruzan_05"
+      },
+      "passive2": {
+        "name": "七窟遗智",
+        "icon": "UI_Talent_S_Faruzan_06"
+      },
+      "passive3": {
+        "name": "千书曜迹",
+        "icon": "UI_Talent_S_Cyno_07"
+      }
+    },
+    "fischl": {
+      "combat1": {
+        "name": "罪灭之矢",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "夜巡影翼",
+        "icon": "Skill_S_Fischl_01"
+      },
+      "combat3": {
+        "name": "至夜幻现",
+        "icon": "Skill_E_Fischl_01"
+      },
+      "passive1": {
+        "name": "噬星魔鸦",
+        "icon": "UI_Talent_S_Fischl_05"
+      },
+      "passive2": {
+        "name": "断罪雷影",
+        "icon": "UI_Talent_S_Fischl_06"
+      },
+      "passive3": {
+        "name": "吾之后花园",
+        "icon": "UI_Talent_Expedition_Mengde"
+      }
+    },
+    "flins": {
+      "combat1": {
+        "name": "扈圣魔枪",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "古律·孤灯遗秘",
+        "icon": "Skill_S_Flins_01"
+      },
+      "combat3": {
+        "name": "旧仪·夜客致访",
+        "icon": "Skill_E_Flins_01"
+      },
+      "passive1": {
+        "name": "寒冬的交响",
+        "icon": "UI_Talent_S_Flins_05"
+      },
+      "passive2": {
+        "name": "幽焰的呢喃",
+        "icon": "UI_Talent_S_Flins_06"
+      },
+      "passive3": {
+        "name": "月兆祝赐·旧世潜藏",
+        "icon": "UI_Talent_S_Flins_07"
+      },
+      "passive4": {
+        "name": "掌灯暗行",
+        "icon": "UI_Talent_S_Flins_08"
+      }
+    },
+    "freminet": {
+      "combat1": {
+        "name": "洑流剑",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "浮冰增压",
+        "icon": "Skill_S_Freminet_01"
+      },
+      "combat3": {
+        "name": "猎影潜袭",
+        "icon": "Skill_E_Freminet_01"
+      },
+      "passive1": {
+        "name": "饱和深潜",
+        "icon": "UI_Talent_S_Freminet_05"
+      },
+      "passive2": {
+        "name": "并流式冷凝机关",
+        "icon": "UI_Talent_S_Freminet_06"
+      },
+      "passive3": {
+        "name": "深水引航",
+        "icon": "UI_Talent_S_Freminet_07"
+      }
+    },
+    "furina": {
+      "combat1": {
+        "name": "独舞之邀",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "孤心沙龙",
+        "icon": "Skill_S_Furina_01"
+      },
+      "combat3": {
+        "name": "万众狂欢",
+        "icon": "Skill_E_Furina_01"
+      },
+      "passive1": {
+        "name": "停不了的圆舞",
+        "icon": "UI_Talent_S_Furina_05"
+      },
+      "passive2": {
+        "name": "无人听的自白",
+        "icon": "UI_Talent_S_Furina_06"
+      },
+      "passive3": {
+        "name": "瀚海亦舞台",
+        "icon": "UI_Talent_S_Furina_07"
+      }
+    },
+    "gaming": {
+      "combat1": {
+        "name": "刃爪悬星",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "瑞兽登高楼",
+        "icon": "Skill_S_Gaming_01"
+      },
+      "combat3": {
+        "name": "璨焰金猊舞",
+        "icon": "Skill_E_Gaming_01"
+      },
+      "passive1": {
+        "name": "舞起升平",
+        "icon": "UI_Talent_S_Gaming_05"
+      },
+      "passive2": {
+        "name": "祥烟瑞气",
+        "icon": "UI_Talent_S_Gaming_06"
+      },
+      "passive3": {
+        "name": "醒兽锐行",
+        "icon": "UI_Talent_S_Dehya_07"
+      }
+    },
+    "ganyu": {
+      "combat1": {
+        "name": "流天射术",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "山泽麟迹",
+        "icon": "Skill_S_Ganyu_01"
+      },
+      "combat3": {
+        "name": "降众天华",
+        "icon": "Skill_E_Ganyu_01"
+      },
+      "passive1": {
+        "name": "唯此一心",
+        "icon": "UI_Talent_S_Ganyu_05"
+      },
+      "passive2": {
+        "name": "天地交泰",
+        "icon": "UI_Talent_S_Ganyu_06"
+      },
+      "passive3": {
+        "name": "藏弓待用",
+        "icon": "UI_Talent_Forge_Bow"
+      }
+    },
+    "gorou": {
+      "combat1": {
+        "name": "呲牙裂扇箭",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "犬坂吠吠方圆阵",
+        "icon": "Skill_S_Gorou_01"
+      },
+      "combat3": {
+        "name": "兽牙逐突形胜战法",
+        "icon": "Skill_E_Gorou_01"
+      },
+      "passive1": {
+        "name": "不畏风雨",
+        "icon": "UI_Talent_S_Gorou_05"
+      },
+      "passive2": {
+        "name": "报恩之守",
+        "icon": "UI_Talent_S_Gorou_06"
+      },
+      "passive3": {
+        "name": "亮晶晶发现术",
+        "icon": "UI_Talent_S_Gorou_07"
+      }
+    },
+    "hutao": {
+      "combat1": {
+        "name": "往生秘传枪法",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "蝶引来生",
+        "icon": "Skill_S_Hutao_01"
+      },
+      "combat3": {
+        "name": "安神秘法",
+        "icon": "Skill_E_Hutao_01"
+      },
+      "passive1": {
+        "name": "蝶隐之时",
+        "icon": "UI_Talent_S_Hutao_05"
+      },
+      "passive2": {
+        "name": "血之灶火",
+        "icon": "UI_Talent_S_Hutao_06"
+      },
+      "passive3": {
+        "name": "多多益善",
+        "icon": "UI_Talent_Cook_ExtraFailedItem"
+      }
+    },
+    "iansan": {
+      "combat1": {
+        "name": "负重锥击",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "电掣雷驰",
+        "icon": "Skill_S_Iansan_01"
+      },
+      "combat3": {
+        "name": "力的三原理",
+        "icon": "Skill_E_Iansan_01"
+      },
+      "passive1": {
+        "name": "强化抗阻练习",
+        "icon": "UI_Talent_S_Iansan_05"
+      },
+      "passive2": {
+        "name": "动能梯度测验",
+        "icon": "UI_Talent_S_Iansan_06"
+      },
+      "passive3": {
+        "name": "夜域赐礼·勉力传动",
+        "icon": "UI_Talent_S_Varesa_07"
+      },
+      "passive4": {
+        "name": "热量均衡计划",
+        "icon": "UI_Talent_S_Iansan_08"
+      }
+    },
+    "ifa": {
+      "combat1": {
+        "name": "祛风妙仪",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "空天疾护",
+        "icon": "Skill_S_Ifa_01"
+      },
+      "combat3": {
+        "name": "复合镇静域",
+        "icon": "Skill_E_Ifa_01"
+      },
+      "passive1": {
+        "name": "场中医者视野",
+        "icon": "UI_Talent_S_Ifa_05"
+      },
+      "passive2": {
+        "name": "互助救援协议",
+        "icon": "UI_Talent_S_Ifa_06"
+      },
+      "passive3": {
+        "name": "夜域赐礼·集念急救",
+        "icon": "UI_Talent_S_Ifa_07"
+      },
+      "passive4": {
+        "name": "温敷战术包扎",
+        "icon": "UI_Talent_S_Ifa_08"
+      }
+    },
+    "illuga": {
+      "combat1": {
+        "name": "守誓枪术",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "衔莺破晓",
+        "icon": "Skill_S_Illuga_01"
+      },
+      "combat3": {
+        "name": "鉴照无影",
+        "icon": "Skill_E_Illuga_01"
+      },
+      "passive1": {
+        "name": "铸灯者的盟约",
+        "icon": "UI_Talent_S_Illuga_05"
+      },
+      "passive2": {
+        "name": "狩魔者的黄昏",
+        "icon": "UI_Talent_S_Illuga_06"
+      },
+      "passive3": {
+        "name": "月兆祝赐·凌冬不凋",
+        "icon": "UI_Talent_S_Illuga_07"
+      },
+      "passive4": {
+        "name": "巡夜者的疾行",
+        "icon": "UI_Talent_S_Illuga_08"
+      }
+    },
+    "ineffa": {
+      "combat1": {
+        "name": "除尘旋刃",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "涤净模式·稳态载频",
+        "icon": "Skill_S_Ineffa_01"
+      },
+      "combat3": {
+        "name": "至高律令·全域扫灭",
+        "icon": "Skill_E_Ineffa_01"
+      },
+      "passive1": {
+        "name": "频率超限回路",
+        "icon": "UI_Talent_S_Ineffa_05"
+      },
+      "passive2": {
+        "name": "全相重构协议",
+        "icon": "UI_Talent_S_Ineffa_06"
+      },
+      "passive3": {
+        "name": "月兆祝赐·象拟中继",
+        "icon": "UI_Talent_S_Ineffa_07"
+      },
+      "passive4": {
+        "name": "美味合成单元",
+        "icon": "UI_Talent_S_Ineffa_08"
+      }
+    },
+    "jahoda": {
+      "combat1": {
+        "name": "见机行矢",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "奇策·财富分配方案",
+        "icon": "Skill_S_Jahoda_01"
+      },
+      "combat3": {
+        "name": "秘器·猎人的七道具",
+        "icon": "Skill_E_Jahoda_01"
+      },
+      "passive1": {
+        "name": "索酬的巧计",
+        "icon": "UI_Talent_S_Jahoda_05"
+      },
+      "passive2": {
+        "name": "蜜莓的嘉赏",
+        "icon": "UI_Talent_S_Jahoda_06"
+      },
+      "passive3": {
+        "name": "月兆祝赐·檐上趱行",
+        "icon": "UI_Talent_S_Jahoda_07"
+      },
+      "passive4": {
+        "name": "暗巷的黠慧",
+        "icon": "UI_Talent_S_Jahoda_08"
+      }
+    },
+    "jean": {
+      "combat1": {
+        "name": "西风剑术",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "风压剑",
+        "icon": "Skill_S_Qin_02"
+      },
+      "combat3": {
+        "name": "蒲公英之风",
+        "icon": "Skill_E_Qin_01"
+      },
+      "passive1": {
+        "name": "顺风而行",
+        "icon": "UI_Talent_S_Qin_05"
+      },
+      "passive2": {
+        "name": "听凭风引",
+        "icon": "UI_Talent_S_Qin_06"
+      },
+      "passive3": {
+        "name": "引领之风",
+        "icon": "UI_Talent_Cook_Heal"
+      }
+    },
+    "kachina": {
+      "combat1": {
+        "name": "嵴之啮咬",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "出击，冲天转转！",
+        "icon": "Skill_S_Kachina_01"
+      },
+      "combat3": {
+        "name": "现在，认真时间！",
+        "icon": "Skill_E_Kachina_01"
+      },
+      "passive1": {
+        "name": "山的回声",
+        "icon": "UI_Talent_S_Kachina_05"
+      },
+      "passive2": {
+        "name": "坚岩之重",
+        "icon": "UI_Talent_S_Kachina_06"
+      },
+      "passive3": {
+        "name": "夜域赐礼·团结炉心",
+        "icon": "UI_Talent_S_Kachina_07"
+      },
+      "passive4": {
+        "name": "晶焰之祝",
+        "icon": "UI_Talent_S_Kachina_08"
+      }
+    },
+    "kaedeharakazuha": {
+      "combat1": {
+        "name": "我流剑术",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "千早振",
+        "icon": "Skill_S_Kazuha_01"
+      },
+      "combat3": {
+        "name": "万叶之一刀",
+        "icon": "Skill_E_Kazuha_01"
+      },
+      "passive1": {
+        "name": "相闻之剑法",
+        "icon": "UI_Talent_S_Kazuha_05"
+      },
+      "passive2": {
+        "name": "风物之诗咏",
+        "icon": "UI_Talent_S_Kazuha_06"
+      },
+      "passive3": {
+        "name": "松风霞立",
+        "icon": "UI_Talent_Explosion_Sprint"
+      }
+    },
+    "kaeya": {
+      "combat1": {
+        "name": "仪典剑术",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "霜袭",
+        "icon": "Skill_S_Kaeya_01"
+      },
+      "combat3": {
+        "name": "凛冽轮舞",
+        "icon": "Skill_E_Kaeya_01"
+      },
+      "passive1": {
+        "name": "冷血之剑",
+        "icon": "UI_Talent_S_Kaeya_05"
+      },
+      "passive2": {
+        "name": "冰渊之心",
+        "icon": "UI_Talent_S_Kaeya_06"
+      },
+      "passive3": {
+        "name": "隐藏的实力",
+        "icon": "UI_Talent_Explosion_Sprint"
+      }
+    },
+    "kamisatoayaka": {
+      "combat1": {
+        "name": "神里流·倾",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "神里流·冰华",
+        "icon": "Skill_S_Ayaka_01"
+      },
+      "combat3": {
+        "name": "神里流·霜灭",
+        "icon": "Skill_E_Ayaka"
+      },
+      "passive1": {
+        "name": "天罪国罪镇词",
+        "icon": "UI_Talent_S_Ayaka_05"
+      },
+      "passive2": {
+        "name": "寒天宣命祝词",
+        "icon": "UI_Talent_S_Ayaka_06"
+      },
+      "passive3": {
+        "name": "鉴查心得",
+        "icon": "UI_Talent_Combine_Weapon_Double"
+      }
+    },
+    "kamisatoayato": {
+      "combat1": {
+        "name": "神里流·转",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "神里流·镜花",
+        "icon": "Skill_S_Ayato_01"
+      },
+      "combat3": {
+        "name": "神里流·水囿",
+        "icon": "Skill_E_Ayato_01"
+      },
+      "passive1": {
+        "name": "神里流·清泷绕峰",
+        "icon": "UI_Talent_S_Ayato_05"
+      },
+      "passive2": {
+        "name": "神里流·破月渐盈",
+        "icon": "UI_Talent_S_Ayato_06"
+      },
+      "passive3": {
+        "name": "神里流·日常茶饭",
+        "icon": "UI_Talent_S_Ayato_07"
+      }
+    },
+    "kaveh": {
+      "combat1": {
+        "name": "旋规设矩",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "画则巧施",
+        "icon": "Skill_S_Kaveh_01"
+      },
+      "combat3": {
+        "name": "繁绘隅穹",
+        "icon": "Skill_E_Kaveh_01"
+      },
+      "passive1": {
+        "name": "营造者的担当",
+        "icon": "UI_Talent_S_Kaveh_05"
+      },
+      "passive2": {
+        "name": "工艺家的奇想",
+        "icon": "UI_Talent_S_Kaveh_06"
+      },
+      "passive3": {
+        "name": "预算师的技艺",
+        "icon": "UI_Talent_S_Yoimiya_07"
+      }
+    },
+    "keqing": {
+      "combat1": {
+        "name": "云来剑法",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "星斗归位",
+        "icon": "Skill_S_Keqing_01"
+      },
+      "combat3": {
+        "name": "天街巡游",
+        "icon": "Skill_E_Keqing_01"
+      },
+      "passive1": {
+        "name": "抵天雷罚",
+        "icon": "UI_Talent_S_Keqing_05"
+      },
+      "passive2": {
+        "name": "玉衡之贵",
+        "icon": "UI_Talent_S_Keqing_06"
+      },
+      "passive3": {
+        "name": "总务土地",
+        "icon": "UI_Talent_Expedition_Liyue"
+      }
+    },
+    "kinich": {
+      "combat1": {
+        "name": "夜阳斗技",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "悬猎·游骋高狩",
+        "icon": "Skill_S_Kinich_01"
+      },
+      "combat3": {
+        "name": "向伟大圣龙致意",
+        "icon": "Skill_E_Kinich_01"
+      },
+      "passive1": {
+        "name": "噩地的代价",
+        "icon": "UI_Talent_S_Kinich_05"
+      },
+      "passive2": {
+        "name": "焰灵的契约",
+        "icon": "UI_Talent_S_Kinich_06"
+      },
+      "passive3": {
+        "name": "夜域赐礼·索报皆偿",
+        "icon": "UI_Talent_S_Kinich_08"
+      },
+      "passive4": {
+        "name": "疾行的使令",
+        "icon": "UI_Talent_S_Kachina_08"
+      }
+    },
+    "kirara": {
+      "combat1": {
+        "name": "箱纸切削术",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "呜喵町飞足",
+        "icon": "Skill_S_Momoka_01"
+      },
+      "combat3": {
+        "name": "秘法·惊喜特派",
+        "icon": "Skill_E_Momoka_01"
+      },
+      "passive1": {
+        "name": "妖说歧尾之变",
+        "icon": "UI_Talent_S_Momoka_05"
+      },
+      "passive2": {
+        "name": "应时惑目之灵",
+        "icon": "UI_Talent_S_Momoka_06"
+      },
+      "passive3": {
+        "name": "祟祟猫步",
+        "icon": "UI_Talent_S_Aloy_07"
+      }
+    },
+    "klee": {
+      "combat1": {
+        "name": "砰砰",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "蹦蹦炸弹",
+        "icon": "Skill_S_Klee_01"
+      },
+      "combat3": {
+        "name": "轰轰火花",
+        "icon": "Skill_E_Klee_01"
+      },
+      "passive1": {
+        "name": "砰砰礼物",
+        "icon": "UI_Talent_S_Klee_05"
+      },
+      "passive2": {
+        "name": "火花无限",
+        "icon": "UI_Talent_S_Klee_06"
+      },
+      "passive3": {
+        "name": "全是宝藏",
+        "icon": "UI_Talent_Collect_Local_Mengde"
+      }
+    },
+    "kujousara": {
+      "combat1": {
+        "name": "天狗传弓术",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "鸦羽天狗霆雷召咒",
+        "icon": "Skill_S_Sara_01"
+      },
+      "combat3": {
+        "name": "煌煌千道镇式",
+        "icon": "Skill_E_Sara_01"
+      },
+      "passive1": {
+        "name": "不动心",
+        "icon": "UI_Talent_S_Sara_01"
+      },
+      "passive2": {
+        "name": "御公仪",
+        "icon": "UI_Talent_S_Sara_06"
+      },
+      "passive3": {
+        "name": "检地",
+        "icon": "UI_Talent_S_Sara_07"
+      }
+    },
+    "kukishinobu": {
+      "combat1": {
+        "name": "忍流飞刃斩",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "越祓雷草之轮",
+        "icon": "Skill_S_Shinobu_01"
+      },
+      "combat3": {
+        "name": "御咏鸣神刈山祭",
+        "icon": "Skill_E_Shinobu_01"
+      },
+      "passive1": {
+        "name": "破笼之志",
+        "icon": "UI_Talent_S_Shinobu_05"
+      },
+      "passive2": {
+        "name": "安心之所",
+        "icon": "UI_Talent_S_Shinobu_06"
+      },
+      "passive3": {
+        "name": "久时的祝祷",
+        "icon": "UI_Talent_S_Shinobu_07"
+      }
+    },
+    "lanyan": {
+      "combat1": {
+        "name": "玄鸾画水",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "凤缕随翦舞",
+        "icon": "Skill_S_Lanyan_01"
+      },
+      "combat3": {
+        "name": "鹍弦踏月出",
+        "icon": "Skill_E_Lanyan_01"
+      },
+      "passive1": {
+        "name": "四戈封刀灵卜",
+        "icon": "UI_Talent_S_Lanyan_05"
+      },
+      "passive2": {
+        "name": "苍翎镇邪敕符",
+        "icon": "UI_Talent_S_Lanyan_06"
+      },
+      "passive3": {
+        "name": "「心随芳兮意犹绵」",
+        "icon": "UI_Talent_S_Sayu_07"
+      }
+    },
+    "lauma": {
+      "combat1": {
+        "name": "林麓旅踏",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "圣言述咏·终宵永眠",
+        "icon": "Skill_S_Lauma_01"
+      },
+      "combat3": {
+        "name": "圣言述咏·众心为月",
+        "icon": "Skill_E_Lauma_01"
+      },
+      "passive1": {
+        "name": "奉向霜夜的明光",
+        "icon": "UI_Talent_S_Lauma_05"
+      },
+      "passive2": {
+        "name": "奉向甘泉的沐濯",
+        "icon": "UI_Talent_S_Lauma_06"
+      },
+      "passive3": {
+        "name": "月兆祝赐·千籁恩宠",
+        "icon": "UI_Talent_S_Lauma_07"
+      },
+      "passive4": {
+        "name": "奉向苍林的祷言",
+        "icon": "UI_Talent_S_Lauma_08"
+      }
+    },
+    "layla": {
+      "combat1": {
+        "name": "熠辉轨度剑",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "垂裳端凝之夜",
+        "icon": "Skill_S_Layla_01"
+      },
+      "combat3": {
+        "name": "星流摇床之梦",
+        "icon": "Skill_E_Layla_01"
+      },
+      "passive1": {
+        "name": "如光骤现",
+        "icon": "UI_Talent_S_Layla_05"
+      },
+      "passive2": {
+        "name": "勿扰沉眠",
+        "icon": "UI_Talent_S_Layla_06"
+      },
+      "passive3": {
+        "name": "叠影的梦兆",
+        "icon": "UI_Talent_Eula_Combine"
+      }
+    },
+    "linnea": {
+      "combat1": {
+        "name": "捕获方案",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "对策·露米呀吼吼！",
+        "icon": "Skill_S_Linnea_01"
+      },
+      "combat3": {
+        "name": "备忘·绝境生存指南",
+        "icon": "Skill_E_Linnea_01"
+      },
+      "passive1": {
+        "name": "野外观察手记",
+        "icon": "UI_Talent_S_Linnea_05"
+      },
+      "passive2": {
+        "name": "万类博物图鉴",
+        "icon": "UI_Talent_S_Linnea_06"
+      },
+      "passive3": {
+        "name": "月兆祝赐·栖地考察",
+        "icon": "UI_Talent_S_Linnea_07"
+      },
+      "passive4": {
+        "name": "大师级的冒险者",
+        "icon": "UI_Talent_S_Linnea_08"
+      }
+    },
+    "lisa": {
+      "combat1": {
+        "name": "指尖雷暴",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "苍雷",
+        "icon": "Skill_S_Lisa_01"
+      },
+      "combat3": {
+        "name": "蔷薇的雷光",
+        "icon": "Skill_E_Lisa_01"
+      },
+      "passive1": {
+        "name": "电感余震",
+        "icon": "UI_Talent_S_Lisa_05"
+      },
+      "passive2": {
+        "name": "静电场力",
+        "icon": "UI_Talent_S_Lisa_06"
+      },
+      "passive3": {
+        "name": "药剂通识",
+        "icon": "UI_Talent_Combine_Potion"
+      }
+    },
+    "lohen": {
+      "combat1": {
+        "name": "西风枪术·破誓",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "奇兵诡出",
+        "icon": "Skill_S_Lohen_01"
+      },
+      "combat3": {
+        "name": "裁罚遂成",
+        "icon": "Skill_E_Lohen_01"
+      },
+      "passive1": {
+        "name": "禁问的训诫",
+        "icon": "UI_Talent_S_Lohen_05"
+      },
+      "passive2": {
+        "name": "戏言的杰作",
+        "icon": "UI_Talent_S_Lohen_06"
+      },
+      "passive3": {
+        "name": "兴尽且去来",
+        "icon": "UI_Talent_S_Lohen_08"
+      }
+    },
+    "lynette": {
+      "combat1": {
+        "name": "迅捷礼刺剑",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "谜影障身法",
+        "icon": "Skill_S_Linette_01"
+      },
+      "combat3": {
+        "name": "魔术·运变惊奇",
+        "icon": "Skill_E_Linette_01"
+      },
+      "passive1": {
+        "name": "巧施协同",
+        "icon": "UI_Talent_S_Linette_05"
+      },
+      "passive2": {
+        "name": "道具完备",
+        "icon": "UI_Talent_S_Linette_06"
+      },
+      "passive3": {
+        "name": "点位记忆法",
+        "icon": "UI_Talent_S_Linette_07"
+      }
+    },
+    "lyney": {
+      "combat1": {
+        "name": "迫牌易位式",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "眩惑光戏法",
+        "icon": "Skill_S_Liney_01"
+      },
+      "combat3": {
+        "name": "大魔术·灵迹巡游",
+        "icon": "Skill_E_Liney_01"
+      },
+      "passive1": {
+        "name": "惊险演出",
+        "icon": "UI_Talent_S_Liney_05"
+      },
+      "passive2": {
+        "name": "完场喝彩",
+        "icon": "UI_Talent_S_Liney_06"
+      },
+      "passive3": {
+        "name": "琐碎观察术",
+        "icon": "UI_Talent_S_Liney_07"
+      }
+    },
+    "mavuika": {
+      "combat1": {
+        "name": "以火织命",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "称名之刻",
+        "icon": "Skill_S_Mavuika_01"
+      },
+      "combat3": {
+        "name": "燔天之时",
+        "icon": "Skill_E_Mavuika_01"
+      },
+      "passive1": {
+        "name": "炎花献礼",
+        "icon": "UI_Talent_S_Mavuika_05"
+      },
+      "passive2": {
+        "name": "「基扬戈兹」",
+        "icon": "UI_Talent_S_Mavuika_06"
+      },
+      "passive3": {
+        "name": "夜域赐礼·耗竭模式",
+        "icon": "UI_Talent_S_Mavuika_07"
+      },
+      "passive4": {
+        "name": "破夜的焰光",
+        "icon": "UI_Talent_S_Citlali_07"
+      }
+    },
+    "mika": {
+      "combat1": {
+        "name": "西风枪术·镝传",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "星霜的流旋",
+        "icon": "Skill_S_Mika_01"
+      },
+      "combat3": {
+        "name": "苍翎的颂愿",
+        "icon": "Skill_E_Mika_01"
+      },
+      "passive1": {
+        "name": "速射牵制",
+        "icon": "UI_Talent_S_Mika_05"
+      },
+      "passive2": {
+        "name": "地貌测绘",
+        "icon": "UI_Talent_S_Mika_06"
+      },
+      "passive3": {
+        "name": "勘界定标",
+        "icon": "UI_Talent_Collect_Local_Mengde"
+      }
+    },
+    "mitya": {
+      "combat1": {
+        "name": "链式反应",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "律定·变量侦测",
+        "icon": "Skill_S_Mitya_01"
+      },
+      "combat3": {
+        "name": "解析·递变之理",
+        "icon": "Skill_E_Mitya_01"
+      },
+      "passive1": {
+        "name": "基准承压测验",
+        "icon": "UI_Talent_S_Mitya_05"
+      },
+      "passive2": {
+        "name": "超限易爆试剂",
+        "icon": "UI_Talent_S_Mitya_06"
+      },
+      "passive3": {
+        "name": "星耀祝礼·极密协议",
+        "icon": "UI_Talent_S_Mitya_07"
+      },
+      "passive4": {
+        "name": "能源活性催化",
+        "icon": "UI_Talent_S_Mitya_08"
+      }
+    },
+    "mona": {
+      "combat1": {
+        "name": "因果点破",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "水中幻愿",
+        "icon": "Skill_S_Mona_01"
+      },
+      "combat3": {
+        "name": "星命定轨",
+        "icon": "Skill_E_Mona_01"
+      },
+      "passive1": {
+        "name": "「老太婆来抓我啊！」",
+        "icon": "UI_Talent_S_Mona_05"
+      },
+      "passive2": {
+        "name": "「托付于命运吧！」",
+        "icon": "UI_Talent_S_Mona_06"
+      },
+      "passive3": {
+        "name": "运行原理",
+        "icon": "UI_Talent_Combine_Weapon"
+      }
+    },
+    "mualani": {
+      "combat1": {
+        "name": "降温处理",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "踏鲨破浪",
+        "icon": "Skill_S_Mualani_01"
+      },
+      "combat3": {
+        "name": "爆瀑飞弹",
+        "icon": "Skill_E_Mualani_01"
+      },
+      "passive1": {
+        "name": "耐热型淡水豚豚",
+        "icon": "UI_Talent_S_Mualani_05"
+      },
+      "passive2": {
+        "name": "纳塔最好的向导",
+        "icon": "UI_Talent_S_Mualani_06"
+      },
+      "passive3": {
+        "name": "夜域赐礼·波涛顶底",
+        "icon": "UI_Talent_S_Mualani_07"
+      },
+      "passive4": {
+        "name": "要诀是保持笑容！",
+        "icon": "UI_Talent_S_Kachina_08"
+      }
+    },
+    "nahida": {
+      "combat1": {
+        "name": "行相",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "所闻遍计",
+        "icon": "Skill_S_Nahida_01"
+      },
+      "combat3": {
+        "name": "心景幻成",
+        "icon": "Skill_E_Nahida_01"
+      },
+      "passive1": {
+        "name": "净善摄受明论",
+        "icon": "UI_Talent_S_Nahida_05"
+      },
+      "passive2": {
+        "name": "慧明缘觉智论",
+        "icon": "UI_Talent_S_Nahida_06"
+      },
+      "passive3": {
+        "name": "诸相随念净行",
+        "icon": "UI_Talent_S_Nahida_07"
+      }
+    },
+    "navia": {
+      "combat1": {
+        "name": "直率的辞绝",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "典仪式晶火",
+        "icon": "Skill_S_Navia_01"
+      },
+      "combat3": {
+        "name": "如霰澄天的鸣礼",
+        "icon": "Skill_E_Navia_01"
+      },
+      "passive1": {
+        "name": "不明流通渠道",
+        "icon": "UI_Talent_S_Navia_05"
+      },
+      "passive2": {
+        "name": "互助关系网",
+        "icon": "UI_Talent_S_Navia_06"
+      },
+      "passive3": {
+        "name": "流程细致的交易",
+        "icon": "UI_Talent_S_Navia_07"
+      }
+    },
+    "nefer": {
+      "combat1": {
+        "name": "游虵吐信",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "弈术·千夜一舞",
+        "icon": "Skill_S_Nefer_01"
+      },
+      "combat3": {
+        "name": "圣约·真眸幻戏",
+        "icon": "Skill_E_Nefer_01"
+      },
+      "passive1": {
+        "name": "月下的豪赌",
+        "icon": "UI_Talent_S_Nefer_05"
+      },
+      "passive2": {
+        "name": "尘沙的女儿",
+        "icon": "UI_Talent_S_Nefer_06"
+      },
+      "passive3": {
+        "name": "月兆祝赐·廊下暮影",
+        "icon": "UI_Talent_S_Nefer_07"
+      },
+      "passive4": {
+        "name": "金室的密谋",
+        "icon": "UI_Talent_S_Nefer_08"
+      }
+    },
+    "neuvillette": {
+      "combat1": {
+        "name": "如水从平",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "泪水啊，我必偿还",
+        "icon": "Skill_S_Neuvillette_01"
+      },
+      "combat3": {
+        "name": "潮水啊，我已归来",
+        "icon": "Skill_E_Neuvillette_01"
+      },
+      "passive1": {
+        "name": "古海孑遗的权柄",
+        "icon": "UI_Talent_S_Neuvillette_05"
+      },
+      "passive2": {
+        "name": "至高仲裁的纪律",
+        "icon": "UI_Talent_S_Neuvillette_06"
+      },
+      "passive3": {
+        "name": "汇聚如浪潮一般",
+        "icon": "UI_Talent_S_Neuvillette_07"
+      }
+    },
+    "nicole": {
+      "combat1": {
+        "name": "托喻",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "圣言默示·未现之光",
+        "icon": "Skill_S_Nicole_01"
+      },
+      "combat3": {
+        "name": "圣言默示·天路历程",
+        "icon": "Skill_E_Nicole_01"
+      },
+      "passive1": {
+        "name": "分有",
+        "icon": "UI_Talent_S_Nicole_05"
+      },
+      "passive2": {
+        "name": "慕善",
+        "icon": "UI_Talent_S_Nicole_06"
+      },
+      "passive3": {
+        "name": "静念",
+        "icon": "UI_Talent_S_Nicole_08"
+      }
+    },
+    "nilou": {
+      "combat1": {
+        "name": "弦月舞步",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "七域舞步",
+        "icon": "Skill_S_Nilou_01"
+      },
+      "combat3": {
+        "name": "浮莲舞步·远梦聆泉",
+        "icon": "Skill_E_Nilou_01"
+      },
+      "passive1": {
+        "name": "折旋落英之庭",
+        "icon": "UI_Talent_S_Nilou_05"
+      },
+      "passive2": {
+        "name": "翩舞永世之梦",
+        "icon": "UI_Talent_S_Nilou_06"
+      },
+      "passive3": {
+        "name": "白玉莲盏",
+        "icon": "UI_Talent_S_Yunjin_07"
+      }
+    },
+    "ningguang": {
+      "combat1": {
+        "name": "千金掷",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "璇玑屏",
+        "icon": "Skill_S_Ningguang_01"
+      },
+      "combat3": {
+        "name": "天权崩玉",
+        "icon": "Skill_E_Ningguang_01"
+      },
+      "passive1": {
+        "name": "星移势转",
+        "icon": "UI_Talent_S_Ningguang_02"
+      },
+      "passive2": {
+        "name": "储之千日，用之一刻",
+        "icon": "UI_Talent_S_Ningguang_06"
+      },
+      "passive3": {
+        "name": "奇石珠宝录",
+        "icon": "UI_Talent_Collect_Ore"
+      }
+    },
+    "noelle": {
+      "combat1": {
+        "name": "西风剑术·女仆",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "护心铠",
+        "icon": "Skill_S_Noel_01"
+      },
+      "combat3": {
+        "name": "大扫除",
+        "icon": "Skill_E_Noel_01"
+      },
+      "passive1": {
+        "name": "全心全意",
+        "icon": "UI_Talent_S_Noel_05"
+      },
+      "passive2": {
+        "name": "干净利落",
+        "icon": "UI_Talent_S_Noel_06"
+      },
+      "passive3": {
+        "name": "女仆的态度",
+        "icon": "UI_Talent_Cook_Defense"
+      }
+    },
+    "odette": {
+      "combat1": {
+        "name": "雪鹄变奏",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "柔板·幻灵夜舞",
+        "icon": "Skill_S_Odette_01"
+      },
+      "combat3": {
+        "name": "疾板·苍羽一梦",
+        "icon": "Skill_E_Odette_01"
+      },
+      "passive1": {
+        "name": "获选者的春祭",
+        "icon": "UI_Talent_S_Odette_05"
+      },
+      "passive2": {
+        "name": "赤忱者的悲歌",
+        "icon": "UI_Talent_S_Odette_06"
+      },
+      "passive3": {
+        "name": "星耀祝礼·银晓之舞",
+        "icon": "UI_Talent_S_Odette_07"
+      },
+      "passive4": {
+        "name": "回响中的冬梦",
+        "icon": "UI_Talent_S_Odette_08"
+      }
+    },
+    "ororon": {
+      "combat1": {
+        "name": "宿灵闪箭",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "暝色缒索",
+        "icon": "Skill_S_Olorun_01"
+      },
+      "combat3": {
+        "name": "黯声回响",
+        "icon": "Skill_E_Olorun_01"
+      },
+      "passive1": {
+        "name": "夜翳的通感",
+        "icon": "UI_Talent_S_Olorun_05"
+      },
+      "passive2": {
+        "name": "灵相的触媒",
+        "icon": "UI_Talent_S_Olorun_06"
+      },
+      "passive3": {
+        "name": "夜域赐礼·流雾跃影",
+        "icon": "UI_Talent_S_Olorun_07"
+      },
+      "passive4": {
+        "name": "皮行的巧技",
+        "icon": "UI_Talent_S_Olorun_08"
+      }
+    },
+    "prune": {
+      "combat1": {
+        "name": "隆咚咚·破魔之锤",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "叮铃铃·猎魔之音",
+        "icon": "Skill_S_Prune_01"
+      },
+      "combat3": {
+        "name": "铃鸣·狩魔之刻",
+        "icon": "Skill_E_Prune_01"
+      },
+      "passive1": {
+        "name": "裁断追惩",
+        "icon": "UI_Talent_S_Prune_05"
+      },
+      "passive2": {
+        "name": "振铃同心",
+        "icon": "UI_Talent_S_Prune_06"
+      },
+      "passive3": {
+        "name": "改装！敲敲打打！",
+        "icon": "UI_Talent_S_Prune_08"
+      }
+    },
+    "qiqi": {
+      "combat1": {
+        "name": "云来古剑法",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "仙法·寒病鬼差",
+        "icon": "Skill_S_Qiqi_01"
+      },
+      "combat3": {
+        "name": "仙法·救苦度厄",
+        "icon": "Skill_E_Qiqi_01"
+      },
+      "passive1": {
+        "name": "延命妙法",
+        "icon": "UI_Talent_S_Qiqi_05"
+      },
+      "passive2": {
+        "name": "玉签偶开",
+        "icon": "UI_Talent_S_Qiqi_06"
+      },
+      "passive3": {
+        "name": "前尘旧忆",
+        "icon": "UI_Talent_Collect_Local_Liyue"
+      }
+    },
+    "raidenshogun": {
+      "combat1": {
+        "name": "源流",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "神变·恶曜开眼",
+        "icon": "Skill_S_Shougun_01"
+      },
+      "combat3": {
+        "name": "奥义·梦想真说",
+        "icon": "Skill_E_Shougun_01"
+      },
+      "passive1": {
+        "name": "万千的愿望",
+        "icon": "UI_Talent_S_Shougun_05"
+      },
+      "passive2": {
+        "name": "殊胜之御体",
+        "icon": "UI_Talent_S_Shougun_06"
+      },
+      "passive3": {
+        "name": "天下名物狩",
+        "icon": "UI_Talent_S_Shougun_07"
+      }
+    },
+    "razor": {
+      "combat1": {
+        "name": "钢脊",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "利爪与苍雷",
+        "icon": "Skill_S_Razor_01"
+      },
+      "combat3": {
+        "name": "雷牙",
+        "icon": "Skill_E_Razor_01"
+      },
+      "passive1": {
+        "name": "觉醒",
+        "icon": "UI_Talent_S_Razor_05"
+      },
+      "passive2": {
+        "name": "饥饿",
+        "icon": "UI_Talent_S_Razor_06"
+      },
+      "passive3": {
+        "name": "奔狼",
+        "icon": "UI_Talent_Explosion_Sprint"
+      }
+    },
+    "rosaria": {
+      "combat1": {
+        "name": "教会枪术",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "噬罪的告解",
+        "icon": "Skill_S_Rosaria_01"
+      },
+      "combat3": {
+        "name": "终命的圣礼",
+        "icon": "Skill_E_Rosaria_01"
+      },
+      "passive1": {
+        "name": "聆听忏悔的幽影",
+        "icon": "UI_Talent_S_Rosaria_05"
+      },
+      "passive2": {
+        "name": "暗中支援的黯色",
+        "icon": "UI_Talent_S_Rosaria_06"
+      },
+      "passive3": {
+        "name": "夜行",
+        "icon": "UI_Talent_Rosaria_NightRunner"
+      }
+    },
+    "sandrone": {
+      "combat1": {
+        "name": "事象数式·自明演绎",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "事象数式·游衍解析",
+        "icon": "Skill_S_MarionetteNew_01"
+      },
+      "combat3": {
+        "name": "事象数式·万理证毕",
+        "icon": "Skill_E_MarionetteNew_01"
+      },
+      "passive1": {
+        "name": "悠久的演算机关",
+        "icon": "UI_Talent_S_MarionetteNew_05"
+      },
+      "passive2": {
+        "name": "淑女的行事准则",
+        "icon": "UI_Talent_S_MarionetteNew_06"
+      },
+      "passive3": {
+        "name": "星耀祝礼·唯理为光",
+        "icon": "UI_Talent_S_MarionetteNew_07"
+      },
+      "passive4": {
+        "name": "茶会的序曲与长长的故事",
+        "icon": "UI_Talent_S_MarionetteNew_08"
+      }
+    },
+    "sangonomiyakokomi": {
+      "combat1": {
+        "name": "水有常形",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "海月之誓",
+        "icon": "Skill_S_Kokomi_01"
+      },
+      "combat3": {
+        "name": "海人化羽",
+        "icon": "Skill_E_Kokomi_01"
+      },
+      "passive1": {
+        "name": "匣中玉栉",
+        "icon": "UI_Talent_S_Kokomi_05"
+      },
+      "passive2": {
+        "name": "真珠御呗",
+        "icon": "UI_Talent_S_Kokomi_06"
+      },
+      "passive3": {
+        "name": "海祇姬君",
+        "icon": "UI_Talent_Explosion_Swim"
+      },
+      "passive4": {
+        "name": "庙算无遗",
+        "icon": "UI_Talent_S_Kokomi_07"
+      }
+    },
+    "sayu": {
+      "combat1": {
+        "name": "忍刀·终末番",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "呜呼流·风隐急进",
+        "icon": "Skill_S_Sayu_01"
+      },
+      "combat3": {
+        "name": "呜呼流·影貉缭乱",
+        "icon": "Skill_E_Sayu_01"
+      },
+      "passive1": {
+        "name": "更加合适的人选",
+        "icon": "UI_Talent_S_Sayu_05"
+      },
+      "passive2": {
+        "name": "早柚不用工作啦",
+        "icon": "UI_Talent_S_Sayu_06"
+      },
+      "passive3": {
+        "name": "呜呼流·屏息秘传",
+        "icon": "UI_Talent_S_Sayu_07"
+      }
+    },
+    "sethos": {
+      "combat1": {
+        "name": "王家苇箭术",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "古仪·鸣砂掣雷",
+        "icon": "Skill_S_Sethos_01"
+      },
+      "combat3": {
+        "name": "秘仪·瞑光贯影",
+        "icon": "Skill_E_Sethos_01"
+      },
+      "passive1": {
+        "name": "黑鸢的密喻",
+        "icon": "UI_Talent_S_Sethos_05"
+      },
+      "passive2": {
+        "name": "砂王的赐礼",
+        "icon": "UI_Talent_S_Sethos_06"
+      },
+      "passive3": {
+        "name": "猿月的显迹",
+        "icon": "UI_Talent_S_Tighnari_07"
+      }
+    },
+    "shenhe": {
+      "combat1": {
+        "name": "踏辰摄斗",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "仰灵威召将役咒",
+        "icon": "Skill_S_Shenhe_01"
+      },
+      "combat3": {
+        "name": "神女遣灵真诀",
+        "icon": "Skill_E_Shenhe_01"
+      },
+      "passive1": {
+        "name": "大洞弥罗尊法",
+        "icon": "UI_Talent_S_Shenhe_05"
+      },
+      "passive2": {
+        "name": "缚灵通真法印",
+        "icon": "UI_Talent_S_Shenhe_06"
+      },
+      "passive3": {
+        "name": "来复知时",
+        "icon": "UI_Talent_Expedition_Liyue"
+      }
+    },
+    "shikanoinheizou": {
+      "combat1": {
+        "name": "不动流格斗术",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "勠心拳",
+        "icon": "Skill_S_Heizo_01"
+      },
+      "combat3": {
+        "name": "聚风蹴",
+        "icon": "Skill_E_Heizo_01"
+      },
+      "passive1": {
+        "name": "反论稽古",
+        "icon": "UI_Talent_S_Heizo_05"
+      },
+      "passive2": {
+        "name": "因由勘破",
+        "icon": "UI_Talent_S_Heizo_06"
+      },
+      "passive3": {
+        "name": "在罪之先",
+        "icon": "UI_Talent_Explosion_Sprint"
+      }
+    },
+    "sigewinne": {
+      "combat1": {
+        "name": "靶向治疗",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "弹跳水疗法",
+        "icon": "Skill_S_Sigewinne_01"
+      },
+      "combat3": {
+        "name": "过饱和心意注射",
+        "icon": "Skill_E_Sigewinne_01"
+      },
+      "passive1": {
+        "name": "应有适当的休憩",
+        "icon": "UI_Talent_S_Sigewinne_05"
+      },
+      "passive2": {
+        "name": "细致入微的诊疗",
+        "icon": "UI_Talent_S_Sigewinne_06"
+      },
+      "passive3": {
+        "name": "急性剂量",
+        "icon": "UI_Talent_S_Sigewinne_07"
+      }
+    },
+    "skirk": {
+      "combat1": {
+        "name": "极恶技·断",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "极恶技·闪",
+        "icon": "Skill_S_SkirkNew_01"
+      },
+      "combat3": {
+        "name": "极恶技·灭",
+        "icon": "Skill_E_SkirkNew_01"
+      },
+      "passive1": {
+        "name": "理外之理",
+        "icon": "UI_Talent_S_SkirkNew_05"
+      },
+      "passive2": {
+        "name": "万流归寂",
+        "icon": "UI_Talent_S_SkirkNew_06"
+      },
+      "passive3": {
+        "name": "诸武相授",
+        "icon": "UI_Talent_S_SkirkNew_08"
+      }
+    },
+    "sucrose": {
+      "combat1": {
+        "name": "简式风灵作成",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "风灵作成·陆叁零捌",
+        "icon": "Skill_S_Sucrose_01"
+      },
+      "combat3": {
+        "name": "禁·风灵作成·柒伍同构贰型",
+        "icon": "Skill_E_Sucrose_01"
+      },
+      "passive1": {
+        "name": "触媒置换术",
+        "icon": "UI_Talent_S_Sucrose_05"
+      },
+      "passive2": {
+        "name": "小小的慧风",
+        "icon": "UI_Talent_S_Sucrose_06"
+      },
+      "passive3": {
+        "name": "不稳定发现",
+        "icon": "UI_Talent_Combine_Material"
+      }
+    },
+    "tartaglia": {
+      "combat1": {
+        "name": "断雨",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "魔王武装·狂澜",
+        "icon": "Skill_S_Tartaglia_01"
+      },
+      "combat3": {
+        "name": "极恶技·尽灭闪",
+        "icon": "Skill_E_Tartaglia_01"
+      },
+      "passive1": {
+        "name": "永无谢幕",
+        "icon": "UI_Talent_S_Tartaglia_03"
+      },
+      "passive2": {
+        "name": "水形剑",
+        "icon": "UI_Talent_S_Tartaglia_06"
+      },
+      "passive3": {
+        "name": "诸武精通",
+        "icon": "UI_Talent_S_Tartaglia_07"
+      }
+    },
+    "thoma": {
+      "combat1": {
+        "name": "迅破枪势",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "烈烧佑命之侍护",
+        "icon": "Skill_S_Tohma_01"
+      },
+      "combat3": {
+        "name": "真红炽火之大铠",
+        "icon": "Skill_E_Tohma_01"
+      },
+      "passive1": {
+        "name": "甲衣交叠",
+        "icon": "UI_Talent_S_Tohma_05"
+      },
+      "passive2": {
+        "name": "烈火攻燔",
+        "icon": "UI_Talent_S_Tohma_06"
+      },
+      "passive3": {
+        "name": "悬鲷狩",
+        "icon": "UI_Talent_S_Tohma_07"
+      }
+    },
+    "tighnari": {
+      "combat1": {
+        "name": "藏蕴破障",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "识果种雷",
+        "icon": "Skill_S_Tighnari_01"
+      },
+      "combat3": {
+        "name": "造生缠藤箭",
+        "icon": "Skill_E_Tighnari_01"
+      },
+      "passive1": {
+        "name": "眼识殊明",
+        "icon": "UI_Talent_S_Tighnari_05"
+      },
+      "passive2": {
+        "name": "诸叶辨通",
+        "icon": "UI_Talent_S_Tighnari_06"
+      },
+      "passive3": {
+        "name": "闳览博物",
+        "icon": "UI_Talent_S_Tighnari_07"
+      }
+    },
+    "traveleranemo": {
+      "combat1": {
+        "name": "异邦铁风",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "风涡剑",
+        "icon": "Skill_S_PlayerWind_01"
+      },
+      "combat3": {
+        "name": "风息激荡",
+        "icon": "Skill_E_PlayerWind_01"
+      },
+      "passive1": {
+        "name": "裂空之风",
+        "icon": "UI_Talent_S_PlayerWind_05"
+      },
+      "passive2": {
+        "name": "复苏之风",
+        "icon": "UI_Talent_S_PlayerWind_06"
+      }
+    },
+    "travelercryo": {
+      "combat1": {
+        "name": "异邦寒芒",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "冰雾剑",
+        "icon": "Skill_E_PlayerIce_01"
+      },
+      "combat3": {
+        "name": "聚冰成锋",
+        "icon": "Skill_S_PlayerIce_01"
+      },
+      "passive1": {
+        "name": "自锐的凛冰",
+        "icon": "UI_Talent_S_PlayerIce_05"
+      },
+      "passive2": {
+        "name": "通明的冽冰",
+        "icon": "UI_Talent_S_PlayerIce_06"
+      },
+      "passive3": {
+        "name": "星耀祝礼·幻变冰镜",
+        "icon": "UI_Talent_S_PlayerIce_07"
+      }
+    },
+    "travelerdendro": {
+      "combat1": {
+        "name": "异邦草翦",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "草缘剑",
+        "icon": "Skill_E_PlayerGrass_01"
+      },
+      "combat3": {
+        "name": "偃草若化",
+        "icon": "Skill_S_PlayerGrass_01"
+      },
+      "passive1": {
+        "name": "蔓生的埜草",
+        "icon": "UI_Talent_U_PlayerGrass_01"
+      },
+      "passive2": {
+        "name": "繁庑的丛草",
+        "icon": "UI_Talent_U_PlayerGrass_02"
+      }
+    },
+    "travelerelectro": {
+      "combat1": {
+        "name": "异邦惊雷",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "雷影剑",
+        "icon": "Skill_S_PlayerElectric_01"
+      },
+      "combat3": {
+        "name": "雷轰电转",
+        "icon": "Skill_E_PlayerElectric_01"
+      },
+      "passive1": {
+        "name": "转瞬的迅雷",
+        "icon": "UI_Talent_S_PlayerElectric_05"
+      },
+      "passive2": {
+        "name": "回响的轰雷",
+        "icon": "UI_Talent_S_PlayerElectric_06"
+      }
+    },
+    "travelergeo": {
+      "combat1": {
+        "name": "异邦岩锋",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "星陨剑",
+        "icon": "Skill_S_PlayerRock_01"
+      },
+      "combat3": {
+        "name": "岩潮叠嶂",
+        "icon": "Skill_E_PlayerRock_01"
+      },
+      "passive1": {
+        "name": "破碎的绝岩",
+        "icon": "UI_Talent_S_PlayerRock_05"
+      },
+      "passive2": {
+        "name": "狂乱的崩岩",
+        "icon": "UI_Talent_S_PlayerRock_06"
+      }
+    },
+    "travelerhydro": {
+      "combat1": {
+        "name": "异邦激流",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "水纹剑",
+        "icon": "Skill_S_PlayerWater_01"
+      },
+      "combat3": {
+        "name": "扬水制流",
+        "icon": "Skill_E_PlayerWater_01"
+      },
+      "passive1": {
+        "name": "无染的澈水",
+        "icon": "UI_Talent_S_PlayerWater_05"
+      },
+      "passive2": {
+        "name": "澄明的净水",
+        "icon": "UI_Talent_S_PlayerWater_06"
+      }
+    },
+    "travelerpyro": {
+      "combat1": {
+        "name": "异邦烈焰",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "流火剑",
+        "icon": "Skill_S_PlayerFire_01"
+      },
+      "combat3": {
+        "name": "灼火燎原",
+        "icon": "Skill_E_PlayerFire_01"
+      },
+      "passive1": {
+        "name": "爁炎的真火",
+        "icon": "UI_Talent_S_PlayerFire_05"
+      },
+      "passive2": {
+        "name": "未烬的余火",
+        "icon": "UI_Talent_S_PlayerFire_06"
+      }
+    },
+    "valeriy": {
+      "combat1": {
+        "name": "近卫战法·盾剑攻斥",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "攻势防御·堡垒骤进",
+        "icon": "Skill_S_Valeriy_01"
+      },
+      "combat3": {
+        "name": "火力焦点·雷霰急袭",
+        "icon": "Skill_E_Valeriy_01"
+      },
+      "passive1": {
+        "name": "与徐进弹幕为伴",
+        "icon": "UI_Talent_S_Valeriy_05"
+      },
+      "passive2": {
+        "name": "向防线缺口突击",
+        "icon": "UI_Talent_S_Valeriy_06"
+      },
+      "passive3": {
+        "name": "极寒应变惯性",
+        "icon": "UI_Talent_S_Valeriy_08"
+      },
+      "passive4": {
+        "name": "冰原行动情报",
+        "icon": "UI_Talent_S_Valeriy_07"
+      }
+    },
+    "varesa": {
+      "combat1": {
+        "name": "角力搏摔",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "夜虹逐跃",
+        "icon": "Skill_S_Varesa_01"
+      },
+      "combat3": {
+        "name": "闪烈降临！",
+        "icon": "Skill_E_Varesa_01"
+      },
+      "passive1": {
+        "name": "连势，三重腾跃！",
+        "icon": "UI_Talent_S_Varesa_05"
+      },
+      "passive2": {
+        "name": "英雄，二度归来！",
+        "icon": "UI_Talent_S_Varesa_06"
+      },
+      "passive3": {
+        "name": "夜域赐礼·炬照焚恶",
+        "icon": "UI_Talent_S_Varesa_07"
+      },
+      "passive4": {
+        "name": "炽心，一往直前！",
+        "icon": "UI_Talent_S_Varesa_08"
+      }
+    },
+    "varka": {
+      "combat1": {
+        "name": "西风剑术·流光之舞",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "烈风终坠",
+        "icon": "Skill_S_Varka_01"
+      },
+      "combat3": {
+        "name": "我即朔风",
+        "icon": "Skill_E_Varka_01"
+      },
+      "passive1": {
+        "name": "晓风的行军",
+        "icon": "UI_Talent_S_Varka_06"
+      },
+      "passive2": {
+        "name": "风帜的先引",
+        "icon": "UI_Talent_S_Varka_05"
+      },
+      "passive3": {
+        "name": "归风的凯歌",
+        "icon": "UI_Talent_S_Varka_07"
+      }
+    },
+    "venti": {
+      "combat1": {
+        "name": "神代射术",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "高天之歌",
+        "icon": "Skill_S_Venti_01"
+      },
+      "combat3": {
+        "name": "风神之诗",
+        "icon": "Skill_E_Venti_01"
+      },
+      "passive1": {
+        "name": "绪风之拥",
+        "icon": "UI_Talent_S_Venti_05"
+      },
+      "passive2": {
+        "name": "暴风之眼",
+        "icon": "UI_Talent_S_Venti_06"
+      },
+      "passive3": {
+        "name": "恒风随行",
+        "icon": "UI_Talent_Explosion_Glide"
+      }
+    },
+    "vesna": {
+      "combat1": {
+        "name": "巡风剑舞",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "操典·制胜有道",
+        "icon": "Skill_S_Vesna_01"
+      },
+      "combat3": {
+        "name": "致礼·献予女皇陛下",
+        "icon": "Skill_E_Vesna_01"
+      },
+      "passive1": {
+        "name": "仪典·春之行列",
+        "icon": "UI_Talent_S_Vesna_05"
+      },
+      "passive2": {
+        "name": "理典·冬之凯风",
+        "icon": "UI_Talent_S_Vesna_06"
+      },
+      "passive3": {
+        "name": "星耀祝礼·散华序饰",
+        "icon": "UI_Talent_S_Vesna_08"
+      },
+      "passive4": {
+        "name": "宝魄巡行",
+        "icon": "UI_Talent_S_Vesna_07"
+      }
+    },
+    "vodyanitsa": {
+      "combat1": {
+        "name": "水色咏叹",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "宣叙·晨声纷流",
+        "icon": "Skill_S_Vodyanitsa_01"
+      },
+      "combat3": {
+        "name": "终奏·伴尔沉沦",
+        "icon": "Skill_E_Vodyanitsa_01"
+      },
+      "passive1": {
+        "name": "最后的塑诗者",
+        "icon": "UI_Talent_S_Vodyanitsa_06"
+      },
+      "passive2": {
+        "name": "十二弦的泪歌",
+        "icon": "UI_Talent_S_Vodyanitsa_05"
+      },
+      "passive3": {
+        "name": "余声绕冰湖",
+        "icon": "UI_Talent_S_Vodyanitsa_07"
+      },
+      "passive4": {
+        "name": "无琴的诱音",
+        "icon": "UI_Talent_S_Vodyanitsa_08"
+      }
+    },
+    "wanderer": {
+      "combat1": {
+        "name": "行幡鸣弦",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "羽画·风姿华歌",
+        "icon": "Skill_S_Wanderer_01"
+      },
+      "combat3": {
+        "name": "狂言·式乐五番",
+        "icon": "Skill_E_Wanderer_01"
+      },
+      "passive1": {
+        "name": "拾玉得花",
+        "icon": "UI_Talent_S_Wanderer_05"
+      },
+      "passive2": {
+        "name": "梦迹一风",
+        "icon": "UI_Talent_S_Wanderer_06"
+      },
+      "passive3": {
+        "name": "廻色云弦",
+        "icon": "UI_Talent_S_Wanderer_07"
+      }
+    },
+    "wriothesley": {
+      "combat1": {
+        "name": "迅烈倾霜拳",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "冰牙突驰",
+        "icon": "Skill_S_Wriothesley_01"
+      },
+      "combat3": {
+        "name": "黑金狼噬",
+        "icon": "Skill_E_Wriothesley_01"
+      },
+      "passive1": {
+        "name": "公理终有辩诉之日",
+        "icon": "UI_Talent_S_Wriothesley_05"
+      },
+      "passive2": {
+        "name": "罪业终有报偿之时",
+        "icon": "UI_Talent_S_Wriothesley_06"
+      },
+      "passive3": {
+        "name": "公爵的恩馈",
+        "icon": "UI_Talent_Combine_Weapon_Double"
+      }
+    },
+    "xiangling": {
+      "combat1": {
+        "name": "白案功夫",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "锅巴出击",
+        "icon": "Skill_S_Xiangling_01"
+      },
+      "combat3": {
+        "name": "旋火轮",
+        "icon": "Skill_E_Xiangling_01"
+      },
+      "passive1": {
+        "name": "交叉火力",
+        "icon": "UI_Talent_S_Xiangling_05"
+      },
+      "passive2": {
+        "name": "绝云朝天椒",
+        "icon": "UI_Talent_S_Xiangling_06"
+      },
+      "passive3": {
+        "name": "万民堂大厨",
+        "icon": "UI_Talent_Cook_Attack"
+      }
+    },
+    "xianyun": {
+      "combat1": {
+        "name": "清风散花词",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "朝起鹤云",
+        "icon": "Skill_S_Liuyun_01"
+      },
+      "combat3": {
+        "name": "暮集竹星",
+        "icon": "Skill_E_Liuyun_01"
+      },
+      "passive1": {
+        "name": "霜翎高逐祥风势",
+        "icon": "UI_Talent_S_Liuyun_05"
+      },
+      "passive2": {
+        "name": "细想应是洞中仙",
+        "icon": "UI_Talent_S_Liuyun_06"
+      },
+      "passive3": {
+        "name": "身形如鹤",
+        "icon": "UI_Talent_S_Liuyun_07"
+      }
+    },
+    "xiao": {
+      "combat1": {
+        "name": "卷积微尘",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "风轮两立",
+        "icon": "Skill_S_Xiao_01"
+      },
+      "combat3": {
+        "name": "靖妖傩舞",
+        "icon": "Skill_E_Xiao_01"
+      },
+      "passive1": {
+        "name": "降魔·平妖大圣",
+        "icon": "UI_Talent_S_Xiao_05"
+      },
+      "passive2": {
+        "name": "坏劫·国土碾尘",
+        "icon": "UI_Talent_S_Xiao_06"
+      },
+      "passive3": {
+        "name": "神通·空中自在法",
+        "icon": "UI_Talent_Explosion_Climb"
+      }
+    },
+    "xilonen": {
+      "combat1": {
+        "name": "锐锋攫猎",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "音火锻淬",
+        "icon": "Skill_S_Xilonen_01"
+      },
+      "combat3": {
+        "name": "豹烈律动！",
+        "icon": "Skill_E_Xilonen_01"
+      },
+      "passive1": {
+        "name": "四境四象回声",
+        "icon": "UI_Talent_S_Xilonen_05"
+      },
+      "passive2": {
+        "name": "便携铠装护层",
+        "icon": "UI_Talent_S_Xilonen_06"
+      },
+      "passive3": {
+        "name": "夜域赐礼·锻火之祝",
+        "icon": "UI_Talent_S_Xilonen_07"
+      },
+      "passive4": {
+        "name": "丛山锻火驰行",
+        "icon": "UI_Talent_S_Xilonen_08"
+      }
+    },
+    "xingqiu": {
+      "combat1": {
+        "name": "古华剑法",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "古华剑·画雨笼山",
+        "icon": "Skill_S_Xingqiu_01"
+      },
+      "combat3": {
+        "name": "古华剑·裁雨留虹",
+        "icon": "Skill_E_Xingqiu_01"
+      },
+      "passive1": {
+        "name": "生水要诀",
+        "icon": "UI_Talent_S_Xingqiu_05"
+      },
+      "passive2": {
+        "name": "虚实工笔",
+        "icon": "UI_Talent_S_Xingqiu_06"
+      },
+      "passive3": {
+        "name": "灵光乍现",
+        "icon": "UI_Talent_Combine_Talent"
+      }
+    },
+    "xinyan": {
+      "combat1": {
+        "name": "炎舞",
+        "icon": "Skill_A_04"
+      },
+      "combat2": {
+        "name": "热情拂扫",
+        "icon": "Skill_S_Xinyan_01"
+      },
+      "combat3": {
+        "name": "叛逆刮弦",
+        "icon": "Skill_E_Xinyan_01"
+      },
+      "passive1": {
+        "name": "「没听众也要演奏…」",
+        "icon": "UI_Talent_S_Xinyan_05"
+      },
+      "passive2": {
+        "name": "「…这才是摇滚！」",
+        "icon": "UI_Talent_S_Xinyan_06"
+      },
+      "passive3": {
+        "name": "摇滚的食谱",
+        "icon": "UI_Talent_Cook_Defense"
+      }
+    },
+    "yaemiko": {
+      "combat1": {
+        "name": "狐灵食罪式",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "野干役咒·杀生樱",
+        "icon": "Skill_S_Yae_01"
+      },
+      "combat3": {
+        "name": "大密法·天狐显真",
+        "icon": "Skill_E_Yae_01"
+      },
+      "passive1": {
+        "name": "神篱之御荫",
+        "icon": "UI_Talent_S_Yae_05"
+      },
+      "passive2": {
+        "name": "启蜇之祝词",
+        "icon": "UI_Talent_S_Yae_06"
+      },
+      "passive3": {
+        "name": "野狐说禅",
+        "icon": "UI_Talent_S_Yae_07"
+      }
+    },
+    "yanfei": {
+      "combat1": {
+        "name": "火漆制印",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "丹书立约",
+        "icon": "Skill_S_Feiyan_01"
+      },
+      "combat3": {
+        "name": "凭此结契",
+        "icon": "Skill_E_Feiyan_01"
+      },
+      "passive1": {
+        "name": "关联条款",
+        "icon": "UI_Talent_S_Feiyan_05"
+      },
+      "passive2": {
+        "name": "法兽灼眼",
+        "icon": "UI_Talent_S_Feiyan_06"
+      },
+      "passive3": {
+        "name": "博闻强记",
+        "icon": "UI_Talent_Collect_Local_Liyue"
+      }
+    },
+    "yaoyao": {
+      "combat1": {
+        "name": "颠扑连环枪",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "云台团团降芦菔",
+        "icon": "Skill_S_Yaoyao_01"
+      },
+      "combat3": {
+        "name": "玉颗珊珊月中落",
+        "icon": "Skill_E_Yaoyao_01"
+      },
+      "passive1": {
+        "name": "天星漫散",
+        "icon": "UI_Talent_S_Yaoyao_05"
+      },
+      "passive2": {
+        "name": "推己及人",
+        "icon": "UI_Talent_S_Yaoyao_06"
+      },
+      "passive3": {
+        "name": "踮脚·蹑影轻踪",
+        "icon": "UI_Talent_S_Yaoyao_07"
+      }
+    },
+    "yelan": {
+      "combat1": {
+        "name": "潜形隐曜弓",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "萦络纵命索",
+        "icon": "Skill_S_Yelan_01"
+      },
+      "combat3": {
+        "name": "渊图玲珑骰",
+        "icon": "Skill_E_Yelan_01"
+      },
+      "passive1": {
+        "name": "猜先有方",
+        "icon": "UI_Talent_S_Yelan_05"
+      },
+      "passive2": {
+        "name": "妙转随心",
+        "icon": "UI_Talent_S_Yelan_06"
+      },
+      "passive3": {
+        "name": "长考一着",
+        "icon": "UI_Talent_Expedition_Liyue"
+      }
+    },
+    "yoimiya": {
+      "combat1": {
+        "name": "烟火打扬",
+        "icon": "Skill_A_02"
+      },
+      "combat2": {
+        "name": "焰硝庭火舞",
+        "icon": "Skill_S_Yoimiya_01"
+      },
+      "combat3": {
+        "name": "琉金云间草",
+        "icon": "Skill_E_Yoimiya_01"
+      },
+      "passive1": {
+        "name": "袖火百景图",
+        "icon": "UI_Talent_S_Yoimiya_05"
+      },
+      "passive2": {
+        "name": "炎昼风物诗",
+        "icon": "UI_Talent_S_Yoimiya_06"
+      },
+      "passive3": {
+        "name": "炎色配比法",
+        "icon": "UI_Talent_S_Yoimiya_07"
+      }
+    },
+    "yumemizukimizuki": {
+      "combat1": {
+        "name": "梦我梦心",
+        "icon": "Skill_A_Catalyst_MD"
+      },
+      "combat2": {
+        "name": "秋沙歌枕巡礼",
+        "icon": "Skill_S_Mizuki_01"
+      },
+      "combat3": {
+        "name": "安乐秘汤疗法",
+        "icon": "Skill_E_Mizuki_01"
+      },
+      "passive1": {
+        "name": "名月浮声",
+        "icon": "UI_Talent_S_Mizuki_05"
+      },
+      "passive2": {
+        "name": "昼想夜梦",
+        "icon": "UI_Talent_S_Mizuki_06"
+      },
+      "passive3": {
+        "name": "诸病无病",
+        "icon": "UI_Talent_S_Mizuki_07"
+      }
+    },
+    "yunjin": {
+      "combat1": {
+        "name": "拂云出手",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "旋云开相",
+        "icon": "Skill_S_Yunjin_01"
+      },
+      "combat3": {
+        "name": "破嶂见旌仪",
+        "icon": "Skill_E_Yunjin_01"
+      },
+      "passive1": {
+        "name": "务守本真",
+        "icon": "UI_Talent_S_Yunjin_05"
+      },
+      "passive2": {
+        "name": "莫从恒蹊",
+        "icon": "UI_Talent_S_Yunjin_06"
+      },
+      "passive3": {
+        "name": "清食养性",
+        "icon": "UI_Talent_S_Yunjin_07"
+      }
+    },
+    "zhongli": {
+      "combat1": {
+        "name": "岩雨",
+        "icon": "Skill_A_03"
+      },
+      "combat2": {
+        "name": "地心",
+        "icon": "Skill_S_Zhongli_01"
+      },
+      "combat3": {
+        "name": "天星",
+        "icon": "Skill_E_Zhongli_01"
+      },
+      "passive1": {
+        "name": "悬岩宸断",
+        "icon": "UI_Talent_S_Zhongli_05"
+      },
+      "passive2": {
+        "name": "炊金馔玉",
+        "icon": "UI_Talent_S_Zhongli_06"
+      },
+      "passive3": {
+        "name": "晶石命理",
+        "icon": "UI_Talent_Forge_Pole"
+      }
+    },
+    "zibai": {
+      "combat1": {
+        "name": "金铗点桂",
+        "icon": "Skill_A_01"
+      },
+      "combat2": {
+        "name": "天地忽然身",
+        "icon": "Skill_S_Zibai_01"
+      },
+      "combat3": {
+        "name": "三垣威仪法",
+        "icon": "Skill_E_Zibai_01"
+      },
+      "passive1": {
+        "name": "月下素娥降仙",
+        "icon": "UI_Talent_S_Zibai_05"
+      },
+      "passive2": {
+        "name": "叠嶂峦岫出云",
+        "icon": "UI_Talent_S_Zibai_06"
+      },
+      "passive3": {
+        "name": "月兆祝赐·浮明若流",
+        "icon": "UI_Talent_S_Zibai_07"
+      },
+      "passive4": {
+        "name": "花林如霰",
+        "icon": "UI_Talent_S_Zibai_08"
+      }
+    }
+  },
+  "constellations": {
+    "aino": {
+      "c1": {
+        "name": "灰与力场的平衡理论",
+        "icon": "UI_Talent_S_Aino_03"
+      },
+      "c2": {
+        "name": "齿轮差分的进位原理",
+        "icon": "UI_Talent_S_Aino_02"
+      },
+      "c3": {
+        "name": "蛋糕与机关维修艺术",
+        "icon": "UI_Talent_U_Aino_01"
+      },
+      "c4": {
+        "name": "黄油与猫与供能法则",
+        "icon": "UI_Talent_S_Aino_01"
+      },
+      "c5": {
+        "name": "金属与光的不朽涡轮",
+        "icon": "UI_Talent_U_Aino_02"
+      },
+      "c6": {
+        "name": "天才之为构造之责任",
+        "icon": "UI_Talent_S_Aino_04"
+      }
+    },
+    "albedo": {
+      "c1": {
+        "name": "伊甸之花",
+        "icon": "UI_Talent_S_Albedo_01"
+      },
+      "c2": {
+        "name": "显生之宙",
+        "icon": "UI_Talent_S_Albedo_02"
+      },
+      "c3": {
+        "name": "太阳之华",
+        "icon": "UI_Talent_U_Albedo_01"
+      },
+      "c4": {
+        "name": "神性之陨",
+        "icon": "UI_Talent_S_Albedo_03"
+      },
+      "c5": {
+        "name": "冥古之潮",
+        "icon": "UI_Talent_U_Albedo_02"
+      },
+      "c6": {
+        "name": "无垢之土",
+        "icon": "UI_Talent_S_Albedo_04"
+      }
+    },
+    "alhaitham": {
+      "c1": {
+        "name": "直观",
+        "icon": "UI_Talent_S_Alhatham_02"
+      },
+      "c2": {
+        "name": "辩章",
+        "icon": "UI_Talent_S_Alhatham_01"
+      },
+      "c3": {
+        "name": "遮诠",
+        "icon": "UI_Talent_U_Alhatham_01"
+      },
+      "c4": {
+        "name": "义贯",
+        "icon": "UI_Talent_S_Alhatham_03"
+      },
+      "c5": {
+        "name": "智度",
+        "icon": "UI_Talent_U_Alhatham_02"
+      },
+      "c6": {
+        "name": "正理",
+        "icon": "UI_Talent_S_Alhatham_04"
+      }
+    },
+    "aloy": {
+      "c1": {
+        "name": "异界之星",
+        "icon": "UI_Talent_S_Aloy_Lock"
+      },
+      "c2": {
+        "name": "异界之星",
+        "icon": "UI_Talent_S_Aloy_Lock"
+      },
+      "c3": {
+        "name": "异界之星",
+        "icon": "UI_Talent_S_Aloy_Lock"
+      },
+      "c4": {
+        "name": "异界之星",
+        "icon": "UI_Talent_S_Aloy_Lock"
+      },
+      "c5": {
+        "name": "异界之星",
+        "icon": "UI_Talent_S_Aloy_Lock"
+      },
+      "c6": {
+        "name": "异界之星",
+        "icon": "UI_Talent_S_Aloy_Lock"
+      }
+    },
+    "alyosha": {
+      "c1": {
+        "name": "寒谷轰雷",
+        "icon": "UI_Talent_S_Alyosha_01"
+      },
+      "c2": {
+        "name": "长嗥远讯",
+        "icon": "UI_Talent_S_Alyosha_02"
+      },
+      "c3": {
+        "name": "僚朋相唤",
+        "icon": "UI_Talent_U_Alyosha_01"
+      },
+      "c4": {
+        "name": "衔取猎品",
+        "icon": "UI_Talent_S_Alyosha_03"
+      },
+      "c5": {
+        "name": "莺啼止时",
+        "icon": "UI_Talent_U_Alyosha_02"
+      },
+      "c6": {
+        "name": "复夺旌幡",
+        "icon": "UI_Talent_S_Alyosha_04"
+      }
+    },
+    "amber": {
+      "c1": {
+        "name": "一箭双丘丘！",
+        "icon": "UI_Talent_S_Ambor_01"
+      },
+      "c2": {
+        "name": "一触即发",
+        "icon": "UI_Talent_S_Ambor_02"
+      },
+      "c3": {
+        "name": "烧起来啦！",
+        "icon": "UI_Talent_U_Ambor_02"
+      },
+      "c4": {
+        "name": "才不是普通的布偶",
+        "icon": "UI_Talent_S_Ambor_03"
+      },
+      "c5": {
+        "name": "是兔兔伯爵！",
+        "icon": "UI_Talent_U_Ambor_01"
+      },
+      "c6": {
+        "name": "疾如野火",
+        "icon": "UI_Talent_S_Ambor_04"
+      }
+    },
+    "aratakiitto": {
+      "c1": {
+        "name": "倘若不知，我讲你听",
+        "icon": "UI_Talent_S_Itto_01"
+      },
+      "c2": {
+        "name": "纠集众人，斗倒御岳",
+        "icon": "UI_Talent_S_Itto_02"
+      },
+      "c3": {
+        "name": "水陆自在，牛王同行",
+        "icon": "UI_Talent_U_Itto_01"
+      },
+      "c4": {
+        "name": "奉行牢狱，茶饭之所",
+        "icon": "UI_Talent_S_Itto_03"
+      },
+      "c5": {
+        "name": "十年花坂，皆知我名",
+        "icon": "UI_Talent_U_Itto_02"
+      },
+      "c6": {
+        "name": "在下荒泷一斗是也",
+        "icon": "UI_Talent_S_Itto_04"
+      }
+    },
+    "arlecchino": {
+      "c1": {
+        "name": "「所有的仇与债皆由我偿…」",
+        "icon": "UI_Talent_S_Arlecchino_01"
+      },
+      "c2": {
+        "name": "「所有的赏与罚皆自我出…」",
+        "icon": "UI_Talent_S_Arlecchino_02"
+      },
+      "c3": {
+        "name": "「你将成为我们新的家人…」",
+        "icon": "UI_Talent_U_Arlecchino_01"
+      },
+      "c4": {
+        "name": "「此后，你们须相爱相护…」",
+        "icon": "UI_Talent_S_Arlecchino_03"
+      },
+      "c5": {
+        "name": "「我们已孑然一身，与死无异…」",
+        "icon": "UI_Talent_U_Arlecchino_02"
+      },
+      "c6": {
+        "name": "「自此以后，我们将共飨新生。」",
+        "icon": "UI_Talent_S_Arlecchino_04"
+      }
+    },
+    "baizhu": {
+      "c1": {
+        "name": "呿吟至微",
+        "icon": "UI_Talent_S_Baizhuer_01"
+      },
+      "c2": {
+        "name": "动静精明",
+        "icon": "UI_Talent_S_Baizhuer_02"
+      },
+      "c3": {
+        "name": "八正定气",
+        "icon": "UI_Talent_U_Baizhuer_01"
+      },
+      "c4": {
+        "name": "法古观冥",
+        "icon": "UI_Talent_S_Baizhuer_03"
+      },
+      "c5": {
+        "name": "盈虚藏象",
+        "icon": "UI_Talent_U_Baizhuer_02"
+      },
+      "c6": {
+        "name": "真邪合离",
+        "icon": "UI_Talent_S_Baizhuer_04"
+      }
+    },
+    "barbara": {
+      "c1": {
+        "name": "彩色歌谣",
+        "icon": "UI_Talent_S_Barbara_01"
+      },
+      "c2": {
+        "name": "元气迸发",
+        "icon": "UI_Talent_S_Barbara_02"
+      },
+      "c3": {
+        "name": "明日之星",
+        "icon": "UI_Talent_U_Barbara_02"
+      },
+      "c4": {
+        "name": "努力即魔法",
+        "icon": "UI_Talent_S_Barbara_03"
+      },
+      "c5": {
+        "name": "纯真的羁绊",
+        "icon": "UI_Talent_U_Barbara_01"
+      },
+      "c6": {
+        "name": "将一切美好献给你",
+        "icon": "UI_Talent_S_Barbara_04"
+      }
+    },
+    "beidou": {
+      "c1": {
+        "name": "鱼龙沉四方",
+        "icon": "UI_Talent_S_Beidou_02"
+      },
+      "c2": {
+        "name": "赫赫雷涌起",
+        "icon": "UI_Talent_S_Beidou_01"
+      },
+      "c3": {
+        "name": "潮奔蓦引电",
+        "icon": "UI_Talent_U_Beidou_01"
+      },
+      "c4": {
+        "name": "牵星觅乡岸",
+        "icon": "UI_Talent_S_Beidou_03"
+      },
+      "c5": {
+        "name": "踏浪霞连阶",
+        "icon": "UI_Talent_U_Beidou_02"
+      },
+      "c6": {
+        "name": "北斗祓幽孽",
+        "icon": "UI_Talent_S_Beidou_04"
+      }
+    },
+    "bennett": {
+      "c1": {
+        "name": "冒险憧憬",
+        "icon": "UI_Talent_S_Bennett_01"
+      },
+      "c2": {
+        "name": "踏破绝境",
+        "icon": "UI_Talent_S_Bennett_02"
+      },
+      "c3": {
+        "name": "火热激情",
+        "icon": "UI_Talent_U_Bennett_01"
+      },
+      "c4": {
+        "name": "热情不灭",
+        "icon": "UI_Talent_S_Bennett_03"
+      },
+      "c5": {
+        "name": "开拓的心魂",
+        "icon": "UI_Talent_U_Bennett_02"
+      },
+      "c6": {
+        "name": "烈火与勇气",
+        "icon": "UI_Talent_S_Bennett_04"
+      }
+    },
+    "candace": {
+      "c1": {
+        "name": "赤沙的归嗣",
+        "icon": "UI_Talent_S_Candace_01"
+      },
+      "c2": {
+        "name": "贯月的耀锋",
+        "icon": "UI_Talent_S_Candace_02"
+      },
+      "c3": {
+        "name": "织狩的奉祀",
+        "icon": "UI_Talent_U_Candace_01"
+      },
+      "c4": {
+        "name": "守戍的誓命",
+        "icon": "UI_Talent_S_Candace_03"
+      },
+      "c5": {
+        "name": "萦金的苍瞳",
+        "icon": "UI_Talent_U_Candace_02"
+      },
+      "c6": {
+        "name": "衍溢的汐潮",
+        "icon": "UI_Talent_S_Candace_04"
+      }
+    },
+    "charlotte": {
+      "c1": {
+        "name": "以核实为约束",
+        "icon": "UI_Talent_S_Charlotte_01"
+      },
+      "c2": {
+        "name": "以求真为职守",
+        "icon": "UI_Talent_S_Charlotte_02"
+      },
+      "c3": {
+        "name": "以独立为先决",
+        "icon": "UI_Talent_U_Charlotte_01"
+      },
+      "c4": {
+        "name": "以督促为责任",
+        "icon": "UI_Talent_S_Charlotte_03"
+      },
+      "c5": {
+        "name": "以良知为原则",
+        "icon": "UI_Talent_U_Charlotte_02"
+      },
+      "c6": {
+        "name": "以有趣相关为要义",
+        "icon": "UI_Talent_S_Charlotte_04"
+      }
+    },
+    "chasca": {
+      "c1": {
+        "name": "弹匣，躁动的轮盘",
+        "icon": "UI_Talent_S_Chasca_01"
+      },
+      "c2": {
+        "name": "枪口，灼烧的轻烟",
+        "icon": "UI_Talent_S_Chasca_02"
+      },
+      "c3": {
+        "name": "笼绳，缜密的掌控",
+        "icon": "UI_Talent_U_Chasca_01"
+      },
+      "c4": {
+        "name": "星火，瞬息的击发",
+        "icon": "UI_Talent_S_Chasca_03"
+      },
+      "c5": {
+        "name": "帽檐，沙影的轮廓",
+        "icon": "UI_Talent_U_Chasca_02"
+      },
+      "c6": {
+        "name": "相决，斗争的荣光",
+        "icon": "UI_Talent_S_Chasca_04"
+      }
+    },
+    "chevreuse": {
+      "c1": {
+        "name": "稳固阵线的魄力",
+        "icon": "UI_Talent_S_Chevreuse_01"
+      },
+      "c2": {
+        "name": "诱导殉爆的狙击",
+        "icon": "UI_Talent_S_Chevreuse_02"
+      },
+      "c3": {
+        "name": "娴熟复装的技巧",
+        "icon": "UI_Talent_U_Chevreuse_01"
+      },
+      "c4": {
+        "name": "多重速射的秘诀",
+        "icon": "UI_Talent_S_Chevreuse_03"
+      },
+      "c5": {
+        "name": "增量火力的毁伤",
+        "icon": "UI_Talent_U_Chevreuse_02"
+      },
+      "c6": {
+        "name": "终结罪恶的追缉",
+        "icon": "UI_Talent_S_Chevreuse_04"
+      }
+    },
+    "chiori": {
+      "c1": {
+        "name": "正绢六通",
+        "icon": "UI_Talent_S_Chiori_01"
+      },
+      "c2": {
+        "name": "落染五色",
+        "icon": "UI_Talent_S_Chiori_03"
+      },
+      "c3": {
+        "name": "缀锦四分",
+        "icon": "UI_Talent_U_Chiori_01"
+      },
+      "c4": {
+        "name": "衣裁三礼",
+        "icon": "UI_Talent_S_Chiori_02"
+      },
+      "c5": {
+        "name": "绫羽二重",
+        "icon": "UI_Talent_U_Chiori_02"
+      },
+      "c6": {
+        "name": "万理一空",
+        "icon": "UI_Talent_S_Chiori_04"
+      }
+    },
+    "chongyun": {
+      "c1": {
+        "name": "释凌咏冰",
+        "icon": "UI_Talent_S_Chongyun_01"
+      },
+      "c2": {
+        "name": "周天运转",
+        "icon": "UI_Talent_S_Chongyun_02"
+      },
+      "c3": {
+        "name": "云尽光生",
+        "icon": "UI_Talent_U_Chongyun_01"
+      },
+      "c4": {
+        "name": "浮云霜天",
+        "icon": "UI_Talent_S_Chongyun_03"
+      },
+      "c5": {
+        "name": "真道正理",
+        "icon": "UI_Talent_U_Chongyun_02"
+      },
+      "c6": {
+        "name": "四灵捧圣",
+        "icon": "UI_Talent_S_Chongyun_04"
+      }
+    },
+    "citlali": {
+      "c1": {
+        "name": "四百星的芒刃",
+        "icon": "UI_Talent_S_Citlali_01"
+      },
+      "c2": {
+        "name": "吞心者的巡行",
+        "icon": "UI_Talent_S_Citlali_02"
+      },
+      "c3": {
+        "name": "云中蛇的羽冠",
+        "icon": "UI_Talent_U_Citlali_01"
+      },
+      "c4": {
+        "name": "拒亡者的灵髑",
+        "icon": "UI_Talent_S_Citlali_03"
+      },
+      "c5": {
+        "name": "五恶曜的咒缚",
+        "icon": "UI_Talent_U_Citlali_02"
+      },
+      "c6": {
+        "name": "原动天的密契",
+        "icon": "UI_Talent_S_Citlali_04"
+      }
+    },
+    "clorinde": {
+      "c1": {
+        "name": "「自此，行过烛影之帷」",
+        "icon": "UI_Talent_S_Clorinde_01"
+      },
+      "c2": {
+        "name": "「自此，直面长夜之危」",
+        "icon": "UI_Talent_S_Clorinde_02"
+      },
+      "c3": {
+        "name": "「我将铭记白昼的誓言」",
+        "icon": "UI_Talent_U_Clorinde_02"
+      },
+      "c4": {
+        "name": "「铭记泪，生命与仁爱」",
+        "icon": "UI_Talent_S_Clorinde_03"
+      },
+      "c5": {
+        "name": "「也铭记黎明终将到来」",
+        "icon": "UI_Talent_U_Clorinde_01"
+      },
+      "c6": {
+        "name": "「为此，勿将希望弃扬」",
+        "icon": "UI_Talent_S_Clorinde_04"
+      }
+    },
+    "collei": {
+      "c1": {
+        "name": "巡护深林",
+        "icon": "UI_Talent_S_Collei_01"
+      },
+      "c2": {
+        "name": "漫行山薮",
+        "icon": "UI_Talent_S_Collei_02"
+      },
+      "c3": {
+        "name": "夏堇芳菲",
+        "icon": "UI_Talent_U_Collei_02"
+      },
+      "c4": {
+        "name": "骞林馈遗",
+        "icon": "UI_Talent_S_Collei_03"
+      },
+      "c5": {
+        "name": "俱象残火",
+        "icon": "UI_Talent_U_Collei_01"
+      },
+      "c6": {
+        "name": "坠镞为林",
+        "icon": "UI_Talent_S_Collei_04"
+      }
+    },
+    "columbina": {
+      "c1": {
+        "name": "遍照花海，隐入群山",
+        "icon": "UI_Talent_S_Columbina_01"
+      },
+      "c2": {
+        "name": "为夜增辉，与君遥伴",
+        "icon": "UI_Talent_S_Columbina_02"
+      },
+      "c3": {
+        "name": "柔光凝露，梦湖起波",
+        "icon": "UI_Talent_U_Columbina_01"
+      },
+      "c4": {
+        "name": "花岚云翳，山岩树影",
+        "icon": "UI_Talent_S_Columbina_03"
+      },
+      "c5": {
+        "name": "万籁俱寂，唯闻君唱",
+        "icon": "UI_Talent_U_Columbina_02"
+      },
+      "c6": {
+        "name": "夜昏且暗，且随月光",
+        "icon": "UI_Talent_S_Columbina_04"
+      }
+    },
+    "cyno": {
+      "c1": {
+        "name": "立仪·俯览昼冥",
+        "icon": "UI_Talent_S_Cyno_01"
+      },
+      "c2": {
+        "name": "令仪·引谒归灵",
+        "icon": "UI_Talent_S_Cyno_02"
+      },
+      "c3": {
+        "name": "律仪·行度誓惩",
+        "icon": "UI_Talent_U_Cyno_01"
+      },
+      "c4": {
+        "name": "巡仪·蒇护禁罔",
+        "icon": "UI_Talent_S_Cyno_03"
+      },
+      "c5": {
+        "name": "幽仪·逝往星芒",
+        "icon": "UI_Talent_U_Cyno_02"
+      },
+      "c6": {
+        "name": "羽仪·裁落钧衡",
+        "icon": "UI_Talent_S_Cyno_04"
+      }
+    },
+    "dahlia": {
+      "c1": {
+        "name": "无瑕之引",
+        "icon": "UI_Talent_S_Dahlia_01"
+      },
+      "c2": {
+        "name": "眷怜启应",
+        "icon": "UI_Talent_S_Dahlia_02"
+      },
+      "c3": {
+        "name": "风花之奉",
+        "icon": "UI_Talent_U_Dahlia_01"
+      },
+      "c4": {
+        "name": "众愿的集祷",
+        "icon": "UI_Talent_S_Dahlia_03"
+      },
+      "c5": {
+        "name": "遂成的狡意",
+        "icon": "UI_Talent_U_Dahlia_02"
+      },
+      "c6": {
+        "name": "愿一切欢睦陪伴你",
+        "icon": "UI_Talent_S_Dahlia_04"
+      }
+    },
+    "dehya": {
+      "c1": {
+        "name": "皎洁之火铓辉灿漫",
+        "icon": "UI_Talent_S_Dehya_01"
+      },
+      "c2": {
+        "name": "净沙利刃明映万乘",
+        "icon": "UI_Talent_S_Dehya_02"
+      },
+      "c3": {
+        "name": "怒势疾迅如焚掠地",
+        "icon": "UI_Talent_U_Dehya_01"
+      },
+      "c4": {
+        "name": "服膺誓禁恪守无失",
+        "icon": "UI_Talent_S_Dehya_03"
+      },
+      "c5": {
+        "name": "猎兽魁首卓荦不羁",
+        "icon": "UI_Talent_U_Dehya_02"
+      },
+      "c6": {
+        "name": "燎燃利爪裂帛斫金",
+        "icon": "UI_Talent_S_Dehya_04"
+      }
+    },
+    "diluc": {
+      "c1": {
+        "name": "罪罚裁断",
+        "icon": "UI_Talent_S_Diluc_01"
+      },
+      "c2": {
+        "name": "炙热余烬",
+        "icon": "UI_Talent_S_Diluc_02"
+      },
+      "c3": {
+        "name": "钢铁炽焰",
+        "icon": "UI_Talent_U_Diluc_01"
+      },
+      "c4": {
+        "name": "流火焦灼",
+        "icon": "UI_Talent_S_Diluc_03"
+      },
+      "c5": {
+        "name": "昭告黎明的火之鸟",
+        "icon": "UI_Talent_U_Diluc_02"
+      },
+      "c6": {
+        "name": "清算黑暗的炎之剑",
+        "icon": "UI_Talent_S_Diluc_04"
+      }
+    },
+    "diona": {
+      "c1": {
+        "name": "特调的余韵",
+        "icon": "UI_Talent_S_Diona_01"
+      },
+      "c2": {
+        "name": "猫爪冰摇",
+        "icon": "UI_Talent_S_Diona_02"
+      },
+      "c3": {
+        "name": "还、还要续杯？",
+        "icon": "UI_Talent_U_Diona_01"
+      },
+      "c4": {
+        "name": "「酒业杀手」",
+        "icon": "UI_Talent_S_Diona_03"
+      },
+      "c5": {
+        "name": "双份加冰",
+        "icon": "UI_Talent_U_Diona_02"
+      },
+      "c6": {
+        "name": "猫尾打烊之时",
+        "icon": "UI_Talent_S_Diona_04"
+      }
+    },
+    "dori": {
+      "c1": {
+        "name": "追加投资",
+        "icon": "UI_Talent_S_Dori_01"
+      },
+      "c2": {
+        "name": "特许经营",
+        "icon": "UI_Talent_S_Dori_02"
+      },
+      "c3": {
+        "name": "百巧千奇",
+        "icon": "UI_Talent_U_Dori_02"
+      },
+      "c4": {
+        "name": "酌盈剂虚",
+        "icon": "UI_Talent_S_Dori_03"
+      },
+      "c5": {
+        "name": "物超所值",
+        "icon": "UI_Talent_U_Dori_01"
+      },
+      "c6": {
+        "name": "漫掷万镒",
+        "icon": "UI_Talent_S_Dori_04"
+      }
+    },
+    "durin": {
+      "c1": {
+        "name": "红土之逆",
+        "icon": "UI_Talent_S_Durin_03"
+      },
+      "c2": {
+        "name": "无底之想",
+        "icon": "UI_Talent_S_Durin_04"
+      },
+      "c3": {
+        "name": "焰镜之显",
+        "icon": "UI_Talent_U_Durin_01"
+      },
+      "c4": {
+        "name": "流溢之原",
+        "icon": "UI_Talent_S_Durin_05"
+      },
+      "c5": {
+        "name": "苦火之裂",
+        "icon": "UI_Talent_U_Durin_02"
+      },
+      "c6": {
+        "name": "双重诞生",
+        "icon": "UI_Talent_S_Durin_06"
+      }
+    },
+    "emilie": {
+      "c1": {
+        "name": "淡香浸析",
+        "icon": "UI_Talent_S_Emilie_01"
+      },
+      "c2": {
+        "name": "湖光顶调",
+        "icon": "UI_Talent_S_Emilie_02"
+      },
+      "c3": {
+        "name": "郁馥臻萃",
+        "icon": "UI_Talent_U_Emilie_01"
+      },
+      "c4": {
+        "name": "柔灯心韵",
+        "icon": "UI_Talent_S_Emilie_03"
+      },
+      "c5": {
+        "name": "纯露凝芳",
+        "icon": "UI_Talent_U_Emilie_02"
+      },
+      "c6": {
+        "name": "茉洁香迹",
+        "icon": "UI_Talent_S_Emilie_04"
+      }
+    },
+    "escoffier": {
+      "c1": {
+        "name": "味蕾绽放的餐前旋舞",
+        "icon": "UI_Talent_S_Escoffier_01"
+      },
+      "c2": {
+        "name": "鲜香味腴的炖煮艺术",
+        "icon": "UI_Talent_S_Escoffier_02"
+      },
+      "c3": {
+        "name": "焦糖褐变的烘烤魔法",
+        "icon": "UI_Talent_U_Escoffier_01"
+      },
+      "c4": {
+        "name": "迷迭生香的配比秘方",
+        "icon": "UI_Talent_S_Escoffier_03"
+      },
+      "c5": {
+        "name": "千种酱汁的风味交响",
+        "icon": "UI_Talent_U_Escoffier_02"
+      },
+      "c6": {
+        "name": "虹彩缤纷的甜点茶话",
+        "icon": "UI_Talent_S_Escoffier_04"
+      }
+    },
+    "eula": {
+      "c1": {
+        "name": "光潮的幻象",
+        "icon": "UI_Talent_S_Eula_02"
+      },
+      "c2": {
+        "name": "海沫的少女",
+        "icon": "UI_Talent_S_Eula_01"
+      },
+      "c3": {
+        "name": "劳伦斯的血脉",
+        "icon": "UI_Talent_U_Eula_01"
+      },
+      "c4": {
+        "name": "自卑者的逞强",
+        "icon": "UI_Talent_S_Eula_03"
+      },
+      "c5": {
+        "name": "骑士的素质",
+        "icon": "UI_Talent_U_Eula_02"
+      },
+      "c6": {
+        "name": "高贵者的义务",
+        "icon": "UI_Talent_S_Eula_04"
+      }
+    },
+    "faruzan": {
+      "c1": {
+        "name": "舍径求真",
+        "icon": "UI_Talent_S_Faruzan_01"
+      },
+      "c2": {
+        "name": "忘形炼智",
+        "icon": "UI_Talent_S_Faruzan_02"
+      },
+      "c3": {
+        "name": "漫行灵圃",
+        "icon": "UI_Talent_U_Faruzan_01"
+      },
+      "c4": {
+        "name": "神机明悟",
+        "icon": "UI_Talent_S_Faruzan_03"
+      },
+      "c5": {
+        "name": "繁想奇境",
+        "icon": "UI_Talent_U_Faruzan_02"
+      },
+      "c6": {
+        "name": "妙道合真",
+        "icon": "UI_Talent_S_Faruzan_04"
+      }
+    },
+    "fischl": {
+      "c1": {
+        "name": "幽邃鸦眼",
+        "icon": "UI_Talent_S_Fischl_01"
+      },
+      "c2": {
+        "name": "圣裁影羽",
+        "icon": "UI_Talent_S_Fischl_02"
+      },
+      "c3": {
+        "name": "渊色黑翼",
+        "icon": "UI_Talent_U_Fischl_01"
+      },
+      "c4": {
+        "name": "皇女幻绮谭",
+        "icon": "UI_Talent_S_Fischl_03"
+      },
+      "c5": {
+        "name": "至夜默示录",
+        "icon": "UI_Talent_U_Fischl_02"
+      },
+      "c6": {
+        "name": "永夜之禽",
+        "icon": "UI_Talent_S_Fischl_04"
+      }
+    },
+    "flins": {
+      "c1": {
+        "name": "拨开雪翳之幕",
+        "icon": "UI_Talent_S_Flins_01"
+      },
+      "c2": {
+        "name": "渡越魍魉之墙",
+        "icon": "UI_Talent_S_Flins_02"
+      },
+      "c3": {
+        "name": "夜访陌客之沼",
+        "icon": "UI_Talent_U_Flins_02"
+      },
+      "c4": {
+        "name": "荒山嘶啭之夜",
+        "icon": "UI_Talent_S_Flins_03"
+      },
+      "c5": {
+        "name": "逐远避世之影",
+        "icon": "UI_Talent_U_Flins_01"
+      },
+      "c6": {
+        "name": "歌与亡者之舞",
+        "icon": "UI_Talent_S_Flins_04"
+      }
+    },
+    "freminet": {
+      "c1": {
+        "name": "深水与泡沫之梦",
+        "icon": "UI_Talent_S_Freminet_01"
+      },
+      "c2": {
+        "name": "企鹅与丰渥之国",
+        "icon": "UI_Talent_S_Freminet_02"
+      },
+      "c3": {
+        "name": "洑流与白砂之歌",
+        "icon": "UI_Talent_U_Freminet_01"
+      },
+      "c4": {
+        "name": "雪月与芦笛之舞",
+        "icon": "UI_Talent_S_Freminet_03"
+      },
+      "c5": {
+        "name": "炉火与欢笑之夜",
+        "icon": "UI_Talent_U_Freminet_02"
+      },
+      "c6": {
+        "name": "梦晓与决意之刻",
+        "icon": "UI_Talent_S_Freminet_04"
+      }
+    },
+    "furina": {
+      "c1": {
+        "name": "「爱是难驯鸟，哀乞亦无用。」",
+        "icon": "UI_Talent_S_Furina_01"
+      },
+      "c2": {
+        "name": "「女人皆善变，仿若水中萍。」",
+        "icon": "UI_Talent_S_Furina_04"
+      },
+      "c3": {
+        "name": "「秘密藏心间，无人知我名。」",
+        "icon": "UI_Talent_U_Furina_02"
+      },
+      "c4": {
+        "name": "「若非处幽冥，怎知生可贵！」",
+        "icon": "UI_Talent_S_Furina_03"
+      },
+      "c5": {
+        "name": "「我已有觉察，他名即是…！」",
+        "icon": "UI_Talent_U_Furina_01"
+      },
+      "c6": {
+        "name": "「诸君听我颂，共举爱之杯！」",
+        "icon": "UI_Talent_S_Furina_02"
+      }
+    },
+    "gaming": {
+      "c1": {
+        "name": "通明庇佑",
+        "icon": "UI_Talent_S_Gaming_01"
+      },
+      "c2": {
+        "name": "步踏梅花",
+        "icon": "UI_Talent_S_Gaming_02"
+      },
+      "c3": {
+        "name": "醒灵擂震",
+        "icon": "UI_Talent_U_Gaming_01"
+      },
+      "c4": {
+        "name": "云里翻山",
+        "icon": "UI_Talent_S_Gaming_03"
+      },
+      "c5": {
+        "name": "吼法怖魔",
+        "icon": "UI_Talent_U_Gaming_02"
+      },
+      "c6": {
+        "name": "百兽俱驯",
+        "icon": "UI_Talent_S_Gaming_04"
+      }
+    },
+    "ganyu": {
+      "c1": {
+        "name": "饮露",
+        "icon": "UI_Talent_S_Ganyu_01"
+      },
+      "c2": {
+        "name": "获麟",
+        "icon": "UI_Talent_S_Ganyu_02"
+      },
+      "c3": {
+        "name": "云行",
+        "icon": "UI_Talent_U_Ganyu_01"
+      },
+      "c4": {
+        "name": "西狩",
+        "icon": "UI_Talent_S_Ganyu_03"
+      },
+      "c5": {
+        "name": "折草",
+        "icon": "UI_Talent_U_Ganyu_02"
+      },
+      "c6": {
+        "name": "履虫",
+        "icon": "UI_Talent_S_Ganyu_04"
+      }
+    },
+    "gorou": {
+      "c1": {
+        "name": "犬奔·疾如风",
+        "icon": "UI_Talent_S_Gorou_01"
+      },
+      "c2": {
+        "name": "犬坐·稳如钟",
+        "icon": "UI_Talent_S_Gorou_02"
+      },
+      "c3": {
+        "name": "犬爪·势如火",
+        "icon": "UI_Talent_U_Gorou_01"
+      },
+      "c4": {
+        "name": "犬舐·温如水",
+        "icon": "UI_Talent_S_Gorou_03"
+      },
+      "c5": {
+        "name": "犬突·动如雷",
+        "icon": "UI_Talent_U_Gorou_02"
+      },
+      "c6": {
+        "name": "犬勇·忠如山",
+        "icon": "UI_Talent_S_Gorou_04"
+      }
+    },
+    "hutao": {
+      "c1": {
+        "name": "赤团开时斜飞去",
+        "icon": "UI_Talent_S_Hutao_03"
+      },
+      "c2": {
+        "name": "最不安神晴又复雨",
+        "icon": "UI_Talent_S_Hutao_01"
+      },
+      "c3": {
+        "name": "逗留采血色",
+        "icon": "UI_Talent_U_Hutao_01"
+      },
+      "c4": {
+        "name": "伴君眠花房",
+        "icon": "UI_Talent_S_Hutao_02"
+      },
+      "c5": {
+        "name": "无可奈何燃花作香",
+        "icon": "UI_Talent_U_Hutao_02"
+      },
+      "c6": {
+        "name": "幽蝶能留一缕芳",
+        "icon": "UI_Talent_S_Hutao_04"
+      }
+    },
+    "iansan": {
+      "c1": {
+        "name": "万事从来开头难",
+        "icon": "UI_Talent_S_Iansan_01"
+      },
+      "c2": {
+        "name": "偷懒是健身大忌!",
+        "icon": "UI_Talent_S_Iansan_02"
+      },
+      "c3": {
+        "name": "科学的饮食规划",
+        "icon": "UI_Talent_U_Iansan_01"
+      },
+      "c4": {
+        "name": "循序渐进是关键",
+        "icon": "UI_Talent_S_Iansan_03"
+      },
+      "c5": {
+        "name": "还没有到极限呢！",
+        "icon": "UI_Talent_U_Iansan_02"
+      },
+      "c6": {
+        "name": "「沃陆之邦」的训教",
+        "icon": "UI_Talent_S_Iansan_04"
+      }
+    },
+    "ifa": {
+      "c1": {
+        "name": "藤典药剂的备制",
+        "icon": "UI_Talent_S_Ifa_01"
+      },
+      "c2": {
+        "name": "祈祷弹道的助灵",
+        "icon": "UI_Talent_S_Ifa_02"
+      },
+      "c3": {
+        "name": "与夜谈判的驳词",
+        "icon": "UI_Talent_U_Ifa_01"
+      },
+      "c4": {
+        "name": "糜烂应体的置换",
+        "icon": "UI_Talent_S_Ifa_03"
+      },
+      "c5": {
+        "name": "万物同生的共誓",
+        "icon": "UI_Talent_U_Ifa_02"
+      },
+      "c6": {
+        "name": "羽结所庇的诺言",
+        "icon": "UI_Talent_S_Ifa_04"
+      }
+    },
+    "illuga": {
+      "c1": {
+        "name": "告警之雉",
+        "icon": "UI_Talent_S_Illuga_01"
+      },
+      "c2": {
+        "name": "噬枝之麋",
+        "icon": "UI_Talent_S_Illuga_02"
+      },
+      "c3": {
+        "name": "山吼之罴",
+        "icon": "UI_Talent_U_Illuga_01"
+      },
+      "c4": {
+        "name": "逐日之狼",
+        "icon": "UI_Talent_S_Illuga_03"
+      },
+      "c5": {
+        "name": "啸风之马",
+        "icon": "UI_Talent_U_Illuga_02"
+      },
+      "c6": {
+        "name": "魇夜之莺",
+        "icon": "UI_Talent_S_Illuga_04"
+      }
+    },
+    "ineffa": {
+      "c1": {
+        "name": "循环整流引擎",
+        "icon": "UI_Talent_S_Ineffa_01"
+      },
+      "c2": {
+        "name": "辅助清理模块",
+        "icon": "UI_Talent_S_Ineffa_02"
+      },
+      "c3": {
+        "name": "高阶情感固件",
+        "icon": "UI_Talent_U_Ineffa_01"
+      },
+      "c4": {
+        "name": "敕谕未至之路",
+        "icon": "UI_Talent_S_Ineffa_03"
+      },
+      "c5": {
+        "name": "超越镜影之梦",
+        "icon": "UI_Talent_U_Ineffa_02"
+      },
+      "c6": {
+        "name": "献予你的明晨",
+        "icon": "UI_Talent_S_Ineffa_04"
+      }
+    },
+    "jahoda": {
+      "c1": {
+        "name": "再来一瓶！",
+        "icon": "UI_Talent_S_Jahoda_03"
+      },
+      "c2": {
+        "name": "律贼的临机应变",
+        "icon": "UI_Talent_S_Jahoda_02"
+      },
+      "c3": {
+        "name": "无所依归的豪赌",
+        "icon": "UI_Talent_U_Jahoda_01"
+      },
+      "c4": {
+        "name": "尘沙之上的野莓",
+        "icon": "UI_Talent_S_Jahoda_01"
+      },
+      "c5": {
+        "name": "最伟大的财宝",
+        "icon": "UI_Talent_U_Jahoda_02"
+      },
+      "c6": {
+        "name": "最渺小的幸运",
+        "icon": "UI_Talent_S_Jahoda_04"
+      }
+    },
+    "jean": {
+      "c1": {
+        "name": "流转剑脊的暴风",
+        "icon": "UI_Talent_S_Qin_01"
+      },
+      "c2": {
+        "name": "守护众人的坚盾",
+        "icon": "UI_Talent_S_Qin_02"
+      },
+      "c3": {
+        "name": "西风吹拂之时",
+        "icon": "UI_Talent_U_Qin_02"
+      },
+      "c4": {
+        "name": "蒲公英的国土",
+        "icon": "UI_Talent_S_Qin_03"
+      },
+      "c5": {
+        "name": "须臾一瞬的烈风",
+        "icon": "UI_Talent_U_Qin_01"
+      },
+      "c6": {
+        "name": "恩眷万民的狮牙",
+        "icon": "UI_Talent_S_Qin_04"
+      }
+    },
+    "kachina": {
+      "c1": {
+        "name": "晶片，也是一种宝石",
+        "icon": "UI_Talent_S_Kachina_01"
+      },
+      "c2": {
+        "name": "不能少了…冲天转转",
+        "icon": "UI_Talent_S_Kachina_02"
+      },
+      "c3": {
+        "name": "改良型·平衡稳定器",
+        "icon": "UI_Talent_U_Kachina_01"
+      },
+      "c4": {
+        "name": "敌人越多，越要小心",
+        "icon": "UI_Talent_S_Kachina_03"
+      },
+      "c5": {
+        "name": "迄今为止，所有收藏",
+        "icon": "UI_Talent_U_Kachina_02"
+      },
+      "c6": {
+        "name": "这一次，我一定要赢",
+        "icon": "UI_Talent_S_Kachina_04"
+      }
+    },
+    "kaedeharakazuha": {
+      "c1": {
+        "name": "千山红遍",
+        "icon": "UI_Talent_S_Kazuha_01"
+      },
+      "c2": {
+        "name": "山岚残芯",
+        "icon": "UI_Talent_S_Kazuha_02"
+      },
+      "c3": {
+        "name": "枫袖奇谭",
+        "icon": "UI_Talent_U_Kazuha_01"
+      },
+      "c4": {
+        "name": "大空幻法",
+        "icon": "UI_Talent_S_Kazuha_03"
+      },
+      "c5": {
+        "name": "万世之集",
+        "icon": "UI_Talent_U_Kazuha_02"
+      },
+      "c6": {
+        "name": "血赤叶红",
+        "icon": "UI_Talent_S_Kazuha_04"
+      }
+    },
+    "kaeya": {
+      "c1": {
+        "name": "卓越的血脉",
+        "icon": "UI_Talent_S_Kaeya_01"
+      },
+      "c2": {
+        "name": "无尽的霜舞",
+        "icon": "UI_Talent_S_Kaeya_02"
+      },
+      "c3": {
+        "name": "凛冽的冰戏",
+        "icon": "UI_Talent_U_Kaeya_01"
+      },
+      "c4": {
+        "name": "极寒的轻吻",
+        "icon": "UI_Talent_S_Kaeya_03"
+      },
+      "c5": {
+        "name": "至冷的拥抱",
+        "icon": "UI_Talent_U_Kaeya_02"
+      },
+      "c6": {
+        "name": "轮旋的冰凌",
+        "icon": "UI_Talent_S_Kaeya_04"
+      }
+    },
+    "kamisatoayaka": {
+      "c1": {
+        "name": "霜杀墨染樱",
+        "icon": "UI_Talent_S_Ayaka_01"
+      },
+      "c2": {
+        "name": "三重雪关扉",
+        "icon": "UI_Talent_S_Ayaka_02"
+      },
+      "c3": {
+        "name": "花白锦画纸吹雪",
+        "icon": "UI_Talent_U_Ayaka_02"
+      },
+      "c4": {
+        "name": "盈缺流返",
+        "icon": "UI_Talent_S_Ayaka_03"
+      },
+      "c5": {
+        "name": "花云钟入月",
+        "icon": "UI_Talent_U_Ayaka_01"
+      },
+      "c6": {
+        "name": "间水月",
+        "icon": "UI_Talent_S_Ayaka_04"
+      }
+    },
+    "kamisatoayato": {
+      "c1": {
+        "name": "镜华风姿",
+        "icon": "UI_Talent_S_Ayato_01"
+      },
+      "c2": {
+        "name": "世有源泉",
+        "icon": "UI_Talent_S_Ayato_02"
+      },
+      "c3": {
+        "name": "无意弄花",
+        "icon": "UI_Talent_U_Ayato_02"
+      },
+      "c4": {
+        "name": "不厌细流",
+        "icon": "UI_Talent_S_Ayato_03"
+      },
+      "c5": {
+        "name": "万水一露",
+        "icon": "UI_Talent_U_Ayato_01"
+      },
+      "c6": {
+        "name": "滥觞无底",
+        "icon": "UI_Talent_S_Ayato_04"
+      }
+    },
+    "kaveh": {
+      "c1": {
+        "name": "高门的谒礼",
+        "icon": "UI_Talent_S_Kaveh_01"
+      },
+      "c2": {
+        "name": "御驿的径迹",
+        "icon": "UI_Talent_S_Kaveh_02"
+      },
+      "c3": {
+        "name": "金塔的香献",
+        "icon": "UI_Talent_U_Kaveh_02"
+      },
+      "c4": {
+        "name": "百柱的酣宴",
+        "icon": "UI_Talent_S_Kaveh_03"
+      },
+      "c5": {
+        "name": "圣古的库藏",
+        "icon": "UI_Talent_U_Kaveh_01"
+      },
+      "c6": {
+        "name": "天园的理想",
+        "icon": "UI_Talent_S_Kaveh_04"
+      }
+    },
+    "keqing": {
+      "c1": {
+        "name": "雷厉",
+        "icon": "UI_Talent_S_Keqing_01"
+      },
+      "c2": {
+        "name": "苛捐",
+        "icon": "UI_Talent_S_Keqing_02"
+      },
+      "c3": {
+        "name": "登楼",
+        "icon": "UI_Talent_U_Keqing_01"
+      },
+      "c4": {
+        "name": "调律",
+        "icon": "UI_Talent_S_Keqing_03"
+      },
+      "c5": {
+        "name": "移灯",
+        "icon": "UI_Talent_U_Keqing_02"
+      },
+      "c6": {
+        "name": "廉贞",
+        "icon": "UI_Talent_S_Keqing_04"
+      }
+    },
+    "kinich": {
+      "c1": {
+        "name": "七鹦之喙",
+        "icon": "UI_Talent_S_Kinich_01"
+      },
+      "c2": {
+        "name": "星虎之掌",
+        "icon": "UI_Talent_S_Kinich_02"
+      },
+      "c3": {
+        "name": "原鳄之爪",
+        "icon": "UI_Talent_U_Kinich_01"
+      },
+      "c4": {
+        "name": "蜂鸟之羽",
+        "icon": "UI_Talent_S_Kinich_03"
+      },
+      "c5": {
+        "name": "吼猴之尾",
+        "icon": "UI_Talent_U_Kinich_02"
+      },
+      "c6": {
+        "name": "瑞兽之形",
+        "icon": "UI_Talent_S_Kinich_04"
+      }
+    },
+    "kirara": {
+      "c1": {
+        "name": "物器流转",
+        "icon": "UI_Talent_S_Momoka_01"
+      },
+      "c2": {
+        "name": "八尖裹术",
+        "icon": "UI_Talent_S_Momoka_02"
+      },
+      "c3": {
+        "name": "万户门牌通识",
+        "icon": "UI_Talent_U_Momoka_01"
+      },
+      "c4": {
+        "name": "韦驮骏足",
+        "icon": "UI_Talent_S_Momoka_04"
+      },
+      "c5": {
+        "name": "千里一日",
+        "icon": "UI_Talent_U_Momoka_02"
+      },
+      "c6": {
+        "name": "沿途百景会心",
+        "icon": "UI_Talent_S_Momoka_03"
+      }
+    },
+    "klee": {
+      "c1": {
+        "name": "连环轰隆",
+        "icon": "UI_Talent_S_Klee_01"
+      },
+      "c2": {
+        "name": "破破弹片",
+        "icon": "UI_Talent_S_Klee_02"
+      },
+      "c3": {
+        "name": "可莉特调",
+        "icon": "UI_Talent_U_Klee_01"
+      },
+      "c4": {
+        "name": "一触即发",
+        "icon": "UI_Talent_S_Klee_03"
+      },
+      "c5": {
+        "name": "轰击之星",
+        "icon": "UI_Talent_U_Klee_02"
+      },
+      "c6": {
+        "name": "火力全开",
+        "icon": "UI_Talent_S_Klee_04"
+      }
+    },
+    "kujousara": {
+      "c1": {
+        "name": "乌眼",
+        "icon": "UI_Talent_S_Sara_05"
+      },
+      "c2": {
+        "name": "鸦羽",
+        "icon": "UI_Talent_S_Sara_02"
+      },
+      "c3": {
+        "name": "心魔",
+        "icon": "UI_Talent_U_Sara_02"
+      },
+      "c4": {
+        "name": "彻证",
+        "icon": "UI_Talent_S_Sara_03"
+      },
+      "c5": {
+        "name": "咒咏",
+        "icon": "UI_Talent_U_Sara_01"
+      },
+      "c6": {
+        "name": "我界",
+        "icon": "UI_Talent_S_Sara_04"
+      }
+    },
+    "kukishinobu": {
+      "c1": {
+        "name": "割舍怜悯之心",
+        "icon": "UI_Talent_S_Shinobu_01"
+      },
+      "c2": {
+        "name": "割舍侥幸之心",
+        "icon": "UI_Talent_S_Shinobu_02"
+      },
+      "c3": {
+        "name": "割舍痛苦之心",
+        "icon": "UI_Talent_U_Shinobu_01"
+      },
+      "c4": {
+        "name": "割舍封闭之心",
+        "icon": "UI_Talent_S_Shinobu_03"
+      },
+      "c5": {
+        "name": "割舍逢迎之心",
+        "icon": "UI_Talent_U_Shinobu_02"
+      },
+      "c6": {
+        "name": "割舍软弱之心",
+        "icon": "UI_Talent_S_Shinobu_04"
+      }
+    },
+    "lanyan": {
+      "c1": {
+        "name": "「若有人兮云之际」",
+        "icon": "UI_Talent_S_Lanyan_01"
+      },
+      "c2": {
+        "name": "「舞袂翩兮扬玉霓」",
+        "icon": "UI_Talent_S_Lanyan_02"
+      },
+      "c3": {
+        "name": "「乘白凤兮翦雾縠」",
+        "icon": "UI_Talent_U_Lanyan_01"
+      },
+      "c4": {
+        "name": "「揽龙鹰兮结血珠」",
+        "icon": "UI_Talent_S_Lanyan_03"
+      },
+      "c5": {
+        "name": "「既见君兮予所欢」",
+        "icon": "UI_Talent_U_Lanyan_02"
+      },
+      "c6": {
+        "name": "「愿随风兮鸣银鸾」",
+        "icon": "UI_Talent_S_Lanyan_04"
+      }
+    },
+    "lauma": {
+      "c1": {
+        "name": "「唇啊，为我纺出歌与吟哦」",
+        "icon": "UI_Talent_S_Lauma_01"
+      },
+      "c2": {
+        "name": "「纺出那终北的告诫与述说」",
+        "icon": "UI_Talent_S_Lauma_02"
+      },
+      "c3": {
+        "name": "「汝、切莫贪求狡狐的小径」",
+        "icon": "UI_Talent_U_Lauma_01"
+      },
+      "c4": {
+        "name": "「汝、切莫贪恋巨熊的权柄」",
+        "icon": "UI_Talent_S_Lauma_03"
+      },
+      "c5": {
+        "name": "「若是得以将真实之物见证」",
+        "icon": "UI_Talent_U_Lauma_02"
+      },
+      "c6": {
+        "name": "「我愿将这血与泪奉予月明」",
+        "icon": "UI_Talent_S_Lauma_04"
+      }
+    },
+    "layla": {
+      "c1": {
+        "name": "寐领围垣",
+        "icon": "UI_Talent_S_Layla_01"
+      },
+      "c2": {
+        "name": "归芒携信",
+        "icon": "UI_Talent_S_Layla_02"
+      },
+      "c3": {
+        "name": "长宵宣秘",
+        "icon": "UI_Talent_U_Layla_01"
+      },
+      "c4": {
+        "name": "星示昭明",
+        "icon": "UI_Talent_S_Layla_03"
+      },
+      "c5": {
+        "name": "悬神系流",
+        "icon": "UI_Talent_U_Layla_02"
+      },
+      "c6": {
+        "name": "曜光灵炬",
+        "icon": "UI_Talent_S_Layla_04"
+      }
+    },
+    "linnea": {
+      "c1": {
+        "name": "未完成的分类",
+        "icon": "UI_Talent_S_Linnea_01"
+      },
+      "c2": {
+        "name": "喜或悲的谕告",
+        "icon": "UI_Talent_S_Linnea_02"
+      },
+      "c3": {
+        "name": "热闹的记录页",
+        "icon": "UI_Talent_U_Linnea_01"
+      },
+      "c4": {
+        "name": "专家的直感觉",
+        "icon": "UI_Talent_S_Linnea_03"
+      },
+      "c5": {
+        "name": "仙乡的赠别礼",
+        "icon": "UI_Talent_U_Linnea_02"
+      },
+      "c6": {
+        "name": "黄金猎犬之梦",
+        "icon": "UI_Talent_S_Linnea_04"
+      }
+    },
+    "lisa": {
+      "c1": {
+        "name": "无限的电回路",
+        "icon": "UI_Talent_S_Lisa_01"
+      },
+      "c2": {
+        "name": "空间电势结界",
+        "icon": "UI_Talent_S_Lisa_02"
+      },
+      "c3": {
+        "name": "谐振的雷光",
+        "icon": "UI_Talent_U_Lisa_02"
+      },
+      "c4": {
+        "name": "如雨的电浆",
+        "icon": "UI_Talent_S_Lisa_03"
+      },
+      "c5": {
+        "name": "等离态的落雷",
+        "icon": "UI_Talent_U_Lisa_01"
+      },
+      "c6": {
+        "name": "脉冲的魔女",
+        "icon": "UI_Talent_S_Lisa_04"
+      }
+    },
+    "lohen": {
+      "c1": {
+        "name": "往昔微风，载满悲歌",
+        "icon": "UI_Talent_S_Lohen_01"
+      },
+      "c2": {
+        "name": "凡飞翔者，皆为靶标",
+        "icon": "UI_Talent_S_Lohen_02"
+      },
+      "c3": {
+        "name": "唯有锋刃，能愈此伤",
+        "icon": "UI_Talent_U_Lohen_01"
+      },
+      "c4": {
+        "name": "爱若流光，逝如欢歌",
+        "icon": "UI_Talent_S_Lohen_03"
+      },
+      "c5": {
+        "name": "无可窥探，无可质疑",
+        "icon": "UI_Talent_U_Lohen_02"
+      },
+      "c6": {
+        "name": "身沦魂销，唯余欢悦",
+        "icon": "UI_Talent_S_Lohen_04"
+      }
+    },
+    "lynette": {
+      "c1": {
+        "name": "如影流露的冷刃",
+        "icon": "UI_Talent_S_Linette_01"
+      },
+      "c2": {
+        "name": "层见叠出的谜象",
+        "icon": "UI_Talent_S_Linette_02"
+      },
+      "c3": {
+        "name": "倒错知能的视度",
+        "icon": "UI_Talent_U_Linette_01"
+      },
+      "c4": {
+        "name": "灵犀默应的配合",
+        "icon": "UI_Talent_S_Linette_03"
+      },
+      "c5": {
+        "name": "暗昧遮目的障法",
+        "icon": "UI_Talent_U_Linette_02"
+      },
+      "c6": {
+        "name": "示辨真意的眼",
+        "icon": "UI_Talent_S_Linette_04"
+      }
+    },
+    "lyney": {
+      "c1": {
+        "name": "空取奇思的手艺",
+        "icon": "UI_Talent_S_Liney_01"
+      },
+      "c2": {
+        "name": "巧言贴耳的诱引",
+        "icon": "UI_Talent_S_Liney_03"
+      },
+      "c3": {
+        "name": "玄迷灵敏的指法",
+        "icon": "UI_Talent_U_Liney_01"
+      },
+      "c4": {
+        "name": "熟稔习练的筹谋",
+        "icon": "UI_Talent_S_Liney_02"
+      },
+      "c5": {
+        "name": "穿越隐秘的通术",
+        "icon": "UI_Talent_U_Liney_02"
+      },
+      "c6": {
+        "name": "违心的笑",
+        "icon": "UI_Talent_S_Liney_04"
+      }
+    },
+    "mavuika": {
+      "c1": {
+        "name": "夜主的授记",
+        "icon": "UI_Talent_S_Mavuika_01"
+      },
+      "c2": {
+        "name": "灰烬的代价",
+        "icon": "UI_Talent_S_Mavuika_02"
+      },
+      "c3": {
+        "name": "燃烧的太阳",
+        "icon": "UI_Talent_U_Mavuika_01"
+      },
+      "c4": {
+        "name": "「领袖」的觉悟",
+        "icon": "UI_Talent_S_Mavuika_03"
+      },
+      "c5": {
+        "name": "真实的含义",
+        "icon": "UI_Talent_U_Mavuika_02"
+      },
+      "c6": {
+        "name": "「人之名」解放",
+        "icon": "UI_Talent_S_Mavuika_04"
+      }
+    },
+    "mika": {
+      "c1": {
+        "name": "遇合的因缘",
+        "icon": "UI_Talent_S_Mika_01"
+      },
+      "c2": {
+        "name": "伴行的旅路",
+        "icon": "UI_Talent_S_Mika_02"
+      },
+      "c3": {
+        "name": "游击的心得",
+        "icon": "UI_Talent_U_Mika_01"
+      },
+      "c4": {
+        "name": "晴霜的祝念",
+        "icon": "UI_Talent_S_Mika_03"
+      },
+      "c5": {
+        "name": "引示的铃箭",
+        "icon": "UI_Talent_U_Mika_02"
+      },
+      "c6": {
+        "name": "依随的策援",
+        "icon": "UI_Talent_S_Mika_04"
+      }
+    },
+    "mitya": {
+      "c1": {
+        "name": "缺位寻踪的观察者",
+        "icon": "UI_Talent_S_Mitya_01"
+      },
+      "c2": {
+        "name": "惰性之外的沉寂物",
+        "icon": "UI_Talent_S_Mitya_02"
+      },
+      "c3": {
+        "name": "拓扑不变的扭结弦",
+        "icon": "UI_Talent_U_Mitya_01"
+      },
+      "c4": {
+        "name": "衰变相生的同位素",
+        "icon": "UI_Talent_S_Mitya_03"
+      },
+      "c5": {
+        "name": "勘定万物的周期律",
+        "icon": "UI_Talent_U_Mitya_02"
+      },
+      "c6": {
+        "name": "元素阶跃的理之门",
+        "icon": "UI_Talent_S_Mitya_04"
+      }
+    },
+    "mona": {
+      "c1": {
+        "name": "沉没的预言",
+        "icon": "UI_Talent_S_Mona_01"
+      },
+      "c2": {
+        "name": "星月的连珠",
+        "icon": "UI_Talent_S_Mona_02"
+      },
+      "c3": {
+        "name": "不休的天象",
+        "icon": "UI_Talent_U_Mona_01"
+      },
+      "c4": {
+        "name": "灭绝的预言",
+        "icon": "UI_Talent_S_Mona_03"
+      },
+      "c5": {
+        "name": "命运的嘲弄",
+        "icon": "UI_Talent_U_Mona_02"
+      },
+      "c6": {
+        "name": "厄运的修辞",
+        "icon": "UI_Talent_S_Mona_04"
+      }
+    },
+    "mualani": {
+      "c1": {
+        "name": "悠闲的「梅兹特利」…",
+        "icon": "UI_Talent_S_Mualani_01"
+      },
+      "c2": {
+        "name": "全力以赴玛拉妮！",
+        "icon": "UI_Talent_S_Mualani_02"
+      },
+      "c3": {
+        "name": "在欢乐海上冲浪",
+        "icon": "UI_Talent_U_Mualani_01"
+      },
+      "c4": {
+        "name": "鲨鲨主食是豚豚。",
+        "icon": "UI_Talent_S_Mualani_03"
+      },
+      "c5": {
+        "name": "同款冲浪板有售！",
+        "icon": "UI_Talent_U_Mualani_02"
+      },
+      "c6": {
+        "name": "「流泉之众」的精神",
+        "icon": "UI_Talent_S_Mualani_04"
+      }
+    },
+    "nahida": {
+      "c1": {
+        "name": "心识蕴藏之种",
+        "icon": "UI_Talent_S_Nahida_01"
+      },
+      "c2": {
+        "name": "正等善见之根",
+        "icon": "UI_Talent_S_Nahida_02"
+      },
+      "c3": {
+        "name": "熏习成就之芽",
+        "icon": "UI_Talent_U_Nahida_01"
+      },
+      "c4": {
+        "name": "比量现行之茎",
+        "icon": "UI_Talent_S_Nahida_03"
+      },
+      "c5": {
+        "name": "妙谛破愚之叶",
+        "icon": "UI_Talent_U_Nahida_02"
+      },
+      "c6": {
+        "name": "大辨圆成之实",
+        "icon": "UI_Talent_S_Nahida_04"
+      }
+    },
+    "navia": {
+      "c1": {
+        "name": "淑女的距离感守则",
+        "icon": "UI_Talent_S_Navia_01"
+      },
+      "c2": {
+        "name": "总指挥的乘胜追击",
+        "icon": "UI_Talent_S_Navia_02"
+      },
+      "c3": {
+        "name": "经营家的开阔视野",
+        "icon": "UI_Talent_U_Navia_01"
+      },
+      "c4": {
+        "name": "铭誓者的绝不姑息",
+        "icon": "UI_Talent_S_Navia_03"
+      },
+      "c5": {
+        "name": "协商人的坚决谈判",
+        "icon": "UI_Talent_U_Navia_02"
+      },
+      "c6": {
+        "name": "刺玫会长的灵活手腕",
+        "icon": "UI_Talent_S_Navia_04"
+      }
+    },
+    "nefer": {
+      "c1": {
+        "name": "谋篇乃成败之始",
+        "icon": "UI_Talent_S_Nefer_01"
+      },
+      "c2": {
+        "name": "明察为筹算之先",
+        "icon": "UI_Talent_S_Nefer_02"
+      },
+      "c3": {
+        "name": "诳言掩虚实之迹",
+        "icon": "UI_Talent_U_Nefer_01"
+      },
+      "c4": {
+        "name": "眩惑入谜局之网",
+        "icon": "UI_Talent_S_Nefer_03"
+      },
+      "c5": {
+        "name": "见机在忽微之间",
+        "icon": "UI_Talent_U_Nefer_02"
+      },
+      "c6": {
+        "name": "决胜于逆转之时",
+        "icon": "UI_Talent_S_Nefer_04"
+      }
+    },
+    "neuvillette": {
+      "c1": {
+        "name": "尊荣的创定",
+        "icon": "UI_Talent_S_Neuvillette_01"
+      },
+      "c2": {
+        "name": "律法的命诫",
+        "icon": "UI_Talent_S_Neuvillette_02"
+      },
+      "c3": {
+        "name": "溯古的拟制",
+        "icon": "UI_Talent_U_Neuvillette_01"
+      },
+      "c4": {
+        "name": "悲悯的冠冕",
+        "icon": "UI_Talent_S_Neuvillette_03"
+      },
+      "c5": {
+        "name": "公理的决裁",
+        "icon": "UI_Talent_U_Neuvillette_02"
+      },
+      "c6": {
+        "name": "忿怒的报偿",
+        "icon": "UI_Talent_S_Neuvillette_04"
+      }
+    },
+    "nicole": {
+      "c1": {
+        "name": "「不要惧怕，蒙眷爱的人之子呀」",
+        "icon": "UI_Talent_S_Nicole_01"
+      },
+      "c2": {
+        "name": "「我要教导你，指引你应走的路」",
+        "icon": "UI_Talent_S_Nicole_02"
+      },
+      "c3": {
+        "name": "「为你身边的灯，为你前方的光」",
+        "icon": "UI_Talent_U_Nicole_01"
+      },
+      "c4": {
+        "name": "「向左或向右，无论你行往何方」",
+        "icon": "UI_Talent_S_Nicole_03"
+      },
+      "c5": {
+        "name": "「我就要有话对你说，在你身旁」",
+        "icon": "UI_Talent_U_Nicole_02"
+      },
+      "c6": {
+        "name": "「这便是正确的道路，莫要彷徨」",
+        "icon": "UI_Talent_S_Nicole_04"
+      }
+    },
+    "nilou": {
+      "c1": {
+        "name": "却月的轻舞",
+        "icon": "UI_Talent_S_Nilou_01"
+      },
+      "c2": {
+        "name": "星天的花雨",
+        "icon": "UI_Talent_S_Nilou_02"
+      },
+      "c3": {
+        "name": "倾影的莲步",
+        "icon": "UI_Talent_U_Nilou_01"
+      },
+      "c4": {
+        "name": "挽漪的节音",
+        "icon": "UI_Talent_S_Nilou_03"
+      },
+      "c5": {
+        "name": "翩旋的流光",
+        "icon": "UI_Talent_U_Nilou_02"
+      },
+      "c6": {
+        "name": "断霜的弦歌",
+        "icon": "UI_Talent_S_Nilou_04"
+      }
+    },
+    "ningguang": {
+      "c1": {
+        "name": "悬星尽散击云碎",
+        "icon": "UI_Talent_S_Ningguang_01"
+      },
+      "c2": {
+        "name": "璇玑合璧镇昆仑",
+        "icon": "UI_Talent_S_Ningguang_05"
+      },
+      "c3": {
+        "name": "星罗宿列天权临",
+        "icon": "UI_Talent_U_Ningguang_02"
+      },
+      "c4": {
+        "name": "攻守易形著神机",
+        "icon": "UI_Talent_S_Ningguang_03"
+      },
+      "c5": {
+        "name": "琼屏千扇正天衡",
+        "icon": "UI_Talent_U_Ningguang_01"
+      },
+      "c6": {
+        "name": "七星璨璨凝流光",
+        "icon": "UI_Talent_S_Ningguang_04"
+      }
+    },
+    "noelle": {
+      "c1": {
+        "name": "支援就交给我吧",
+        "icon": "UI_Talent_S_Noel_01"
+      },
+      "c2": {
+        "name": "旋风女仆",
+        "icon": "UI_Talent_S_Noel_02"
+      },
+      "c3": {
+        "name": "女仆不会受伤",
+        "icon": "UI_Talent_U_Noel_01"
+      },
+      "c4": {
+        "name": "之后会扫干净的",
+        "icon": "UI_Talent_S_Noel_03"
+      },
+      "c5": {
+        "name": "骑士团扫除专家",
+        "icon": "UI_Talent_U_Noel_02"
+      },
+      "c6": {
+        "name": "要一尘不染才行",
+        "icon": "UI_Talent_S_Noel_04"
+      }
+    },
+    "odette": {
+      "c1": {
+        "name": "「不曾起舞的清晨，她望向倒影」",
+        "icon": "UI_Talent_S_Odette_01"
+      },
+      "c2": {
+        "name": "「她想，我要见证雪鹄未见之梦」",
+        "icon": "UI_Talent_S_Odette_02"
+      },
+      "c3": {
+        "name": "「我要追逐呼啸的风，向上独行」",
+        "icon": "UI_Talent_U_Odette_01"
+      },
+      "c4": {
+        "name": "「向上，坠往恍惚、燃烧的蓝空」",
+        "icon": "UI_Talent_S_Odette_03"
+      },
+      "c5": {
+        "name": "「看呀，我已告别尘与土的苦痛」",
+        "icon": "UI_Talent_U_Odette_02"
+      },
+      "c6": {
+        "name": "「伸出手，触及苍穹永恒的面容」",
+        "icon": "UI_Talent_S_Odette_04"
+      }
+    },
+    "ororon": {
+      "c1": {
+        "name": "林雾间的行迹",
+        "icon": "UI_Talent_S_Olorun_01"
+      },
+      "c2": {
+        "name": "藏蜜酒的王蜂",
+        "icon": "UI_Talent_S_Olorun_02"
+      },
+      "c3": {
+        "name": "栖地蝠的灵笼",
+        "icon": "UI_Talent_U_Olorun_01"
+      },
+      "c4": {
+        "name": "如夜风的谜烟",
+        "icon": "UI_Talent_S_Olorun_03"
+      },
+      "c5": {
+        "name": "为心魂的献礼",
+        "icon": "UI_Talent_U_Olorun_02"
+      },
+      "c6": {
+        "name": "致深泉的颂赞",
+        "icon": "UI_Talent_S_Olorun_04"
+      }
+    },
+    "prune": {
+      "c1": {
+        "name": "立下寻救的誓言，旅途由此开端",
+        "icon": "UI_Talent_S_Prune_01"
+      },
+      "c2": {
+        "name": "整理杂乱的包袱，元素妙力果然",
+        "icon": "UI_Talent_S_Prune_02"
+      },
+      "c3": {
+        "name": "同旅商队过山关，眼眸景色又转",
+        "icon": "UI_Talent_U_Prune_01"
+      },
+      "c4": {
+        "name": "循风同行回头看，影子还缺一半",
+        "icon": "UI_Talent_S_Prune_03"
+      },
+      "c5": {
+        "name": "输了一百次不算，明日接着再战",
+        "icon": "UI_Talent_U_Prune_02"
+      },
+      "c6": {
+        "name": "故事结尾在这儿，念给伙伴听完",
+        "icon": "UI_Talent_S_Prune_04"
+      }
+    },
+    "qiqi": {
+      "c1": {
+        "name": "寒苦回向",
+        "icon": "UI_Talent_S_Qiqi_01"
+      },
+      "c2": {
+        "name": "冰寒蚀骨",
+        "icon": "UI_Talent_S_Qiqi_02"
+      },
+      "c3": {
+        "name": "升天宝诰",
+        "icon": "UI_Talent_U_Qiqi_01"
+      },
+      "c4": {
+        "name": "天威压众",
+        "icon": "UI_Talent_S_Qiqi_03"
+      },
+      "c5": {
+        "name": "红莲开绽",
+        "icon": "UI_Talent_U_Qiqi_02"
+      },
+      "c6": {
+        "name": "起死回骸",
+        "icon": "UI_Talent_S_Qiqi_04"
+      }
+    },
+    "raidenshogun": {
+      "c1": {
+        "name": "恶曜卜词",
+        "icon": "UI_Talent_S_Shougun_01"
+      },
+      "c2": {
+        "name": "斩铁断金",
+        "icon": "UI_Talent_S_Shougun_03"
+      },
+      "c3": {
+        "name": "真影旧事",
+        "icon": "UI_Talent_U_Shougun_02"
+      },
+      "c4": {
+        "name": "誓奉常道",
+        "icon": "UI_Talent_S_Shougun_02"
+      },
+      "c5": {
+        "name": "凶将显形",
+        "icon": "UI_Talent_U_Shougun_01"
+      },
+      "c6": {
+        "name": "负愿前行",
+        "icon": "UI_Talent_S_Shougun_04"
+      }
+    },
+    "razor": {
+      "c1": {
+        "name": "狼性",
+        "icon": "UI_Talent_S_Razor_01"
+      },
+      "c2": {
+        "name": "压制",
+        "icon": "UI_Talent_S_Razor_02"
+      },
+      "c3": {
+        "name": "兽魂",
+        "icon": "UI_Talent_U_Razor_02"
+      },
+      "c4": {
+        "name": "撕咬",
+        "icon": "UI_Talent_S_Razor_03"
+      },
+      "c5": {
+        "name": "利爪",
+        "icon": "UI_Talent_U_Razor_01"
+      },
+      "c6": {
+        "name": "天狼",
+        "icon": "UI_Talent_S_Razor_04"
+      }
+    },
+    "rosaria": {
+      "c1": {
+        "name": "罪之导引",
+        "icon": "UI_Talent_S_Rosaria_01"
+      },
+      "c2": {
+        "name": "无福之地",
+        "icon": "UI_Talent_S_Rosaria_02"
+      },
+      "c3": {
+        "name": "告解之仪",
+        "icon": "UI_Talent_U_Rosaria_01"
+      },
+      "c4": {
+        "name": "苦痛恩典",
+        "icon": "UI_Talent_S_Rosaria_03"
+      },
+      "c5": {
+        "name": "临终祈礼",
+        "icon": "UI_Talent_U_Rosaria_02"
+      },
+      "c6": {
+        "name": "代行裁判",
+        "icon": "UI_Talent_S_Rosaria_04"
+      }
+    },
+    "sandrone": {
+      "c1": {
+        "name": "鎏金未凋，夕暮已远",
+        "icon": "UI_Talent_S_MarionetteNew_01"
+      },
+      "c2": {
+        "name": "回望镜中，时岁翩然",
+        "icon": "UI_Talent_S_MarionetteNew_02"
+      },
+      "c3": {
+        "name": "不叹日落，不羡月升",
+        "icon": "UI_Talent_U_MarionetteNew_01"
+      },
+      "c4": {
+        "name": "世事皆数，昼来夜往",
+        "icon": "UI_Talent_S_MarionetteNew_03"
+      },
+      "c5": {
+        "name": "万象皆灰，唯理明畅",
+        "icon": "UI_Talent_U_MarionetteNew_02"
+      },
+      "c6": {
+        "name": "水仙梦醒，且望晨光",
+        "icon": "UI_Talent_S_MarionetteNew_04"
+      }
+    },
+    "sangonomiyakokomi": {
+      "c1": {
+        "name": "决水于溪",
+        "icon": "UI_Talent_S_Kokomi_01"
+      },
+      "c2": {
+        "name": "波起云海",
+        "icon": "UI_Talent_S_Kokomi_02"
+      },
+      "c3": {
+        "name": "海渚月舟",
+        "icon": "UI_Talent_U_Kokomi_02"
+      },
+      "c4": {
+        "name": "月摄千川",
+        "icon": "UI_Talent_S_Kokomi_03"
+      },
+      "c5": {
+        "name": "百川集海",
+        "icon": "UI_Talent_U_Kokomi_01"
+      },
+      "c6": {
+        "name": "珊瑚一心",
+        "icon": "UI_Talent_S_Kokomi_04"
+      }
+    },
+    "sayu": {
+      "c1": {
+        "name": "一心二用之术",
+        "icon": "UI_Talent_S_Sayu_01"
+      },
+      "c2": {
+        "name": "理清逃跑路线",
+        "icon": "UI_Talent_S_Sayu_02"
+      },
+      "c3": {
+        "name": "都交给分身吧",
+        "icon": "UI_Talent_U_Sayu_02"
+      },
+      "c4": {
+        "name": "偷懒的新方法",
+        "icon": "UI_Talent_S_Sayu_03"
+      },
+      "c5": {
+        "name": "快是第一奥义",
+        "icon": "UI_Talent_U_Sayu_01"
+      },
+      "c6": {
+        "name": "呼呼大睡时间",
+        "icon": "UI_Talent_S_Sayu_04"
+      }
+    },
+    "sethos": {
+      "c1": {
+        "name": "封龛谒灵歌",
+        "icon": "UI_Talent_S_Sethos_01"
+      },
+      "c2": {
+        "name": "寂秘纸草经",
+        "icon": "UI_Talent_S_Sethos_02"
+      },
+      "c3": {
+        "name": "月升哲贤颂",
+        "icon": "UI_Talent_U_Sethos_01"
+      },
+      "c4": {
+        "name": "真念鸵羽集",
+        "icon": "UI_Talent_S_Sethos_03"
+      },
+      "c5": {
+        "name": "荒神烈沙录",
+        "icon": "UI_Talent_U_Sethos_02"
+      },
+      "c6": {
+        "name": "巡日塔门书",
+        "icon": "UI_Talent_S_Sethos_04"
+      }
+    },
+    "shenhe": {
+      "c1": {
+        "name": "心斋",
+        "icon": "UI_Talent_S_Shenhe_02"
+      },
+      "c2": {
+        "name": "定蒙",
+        "icon": "UI_Talent_S_Shenhe_01"
+      },
+      "c3": {
+        "name": "潜虚",
+        "icon": "UI_Talent_U_Shenhe_01"
+      },
+      "c4": {
+        "name": "洞观",
+        "icon": "UI_Talent_S_Shenhe_03"
+      },
+      "c5": {
+        "name": "化神",
+        "icon": "UI_Talent_U_Shenhe_02"
+      },
+      "c6": {
+        "name": "忘玄",
+        "icon": "UI_Talent_S_Shenhe_04"
+      }
+    },
+    "shikanoinheizou": {
+      "c1": {
+        "name": "称名少年事件簿",
+        "icon": "UI_Talent_S_Heizo_01"
+      },
+      "c2": {
+        "name": "殊解诸因探案集",
+        "icon": "UI_Talent_S_Heizo_02"
+      },
+      "c3": {
+        "name": "暗文隐语谜题册",
+        "icon": "UI_Talent_U_Heizo_01"
+      },
+      "c4": {
+        "name": "虚言假说百物语",
+        "icon": "UI_Talent_S_Heizo_03"
+      },
+      "c5": {
+        "name": "禁室密所大图鉴",
+        "icon": "UI_Talent_U_Heizo_02"
+      },
+      "c6": {
+        "name": "奇想天开捕物帐",
+        "icon": "UI_Talent_S_Heizo_04"
+      }
+    },
+    "sigewinne": {
+      "c1": {
+        "name": "「最快乐的精灵，可否懂得焦虑」",
+        "icon": "UI_Talent_S_Sigewinne_01"
+      },
+      "c2": {
+        "name": "「最仁慈的精灵，可否化解仇敌」",
+        "icon": "UI_Talent_S_Sigewinne_02"
+      },
+      "c3": {
+        "name": "「最健康的精灵，可否疗愈热症」",
+        "icon": "UI_Talent_U_Sigewinne_01"
+      },
+      "c4": {
+        "name": "「最美丽的精灵，可否拒绝衰朽」",
+        "icon": "UI_Talent_S_Sigewinne_03"
+      },
+      "c5": {
+        "name": "「最幸福的精灵，可否消却折磨」",
+        "icon": "UI_Talent_U_Sigewinne_02"
+      },
+      "c6": {
+        "name": "「最光辉的精灵，可否为我祷告」",
+        "icon": "UI_Talent_S_Sigewinne_04"
+      }
+    },
+    "skirk": {
+      "c1": {
+        "name": "湮远",
+        "icon": "UI_Talent_S_SkirkNew_01"
+      },
+      "c2": {
+        "name": "坠渊",
+        "icon": "UI_Talent_S_SkirkNew_02"
+      },
+      "c3": {
+        "name": "罪缘",
+        "icon": "UI_Talent_U_SkirkNew_01"
+      },
+      "c4": {
+        "name": "流断",
+        "icon": "UI_Talent_S_SkirkNew_03"
+      },
+      "c5": {
+        "name": "结愿",
+        "icon": "UI_Talent_U_SkirkNew_02"
+      },
+      "c6": {
+        "name": "至源",
+        "icon": "UI_Talent_S_SkirkNew_04"
+      }
+    },
+    "sucrose": {
+      "c1": {
+        "name": "堆叠真空域",
+        "icon": "UI_Talent_S_Sucrose_01"
+      },
+      "c2": {
+        "name": "不羁型贝特",
+        "icon": "UI_Talent_S_Sucrose_02"
+      },
+      "c3": {
+        "name": "零失误少女",
+        "icon": "UI_Talent_U_Sucrose_01"
+      },
+      "c4": {
+        "name": "炼金的偏执",
+        "icon": "UI_Talent_S_Sucrose_03"
+      },
+      "c5": {
+        "name": "认真普通瓶",
+        "icon": "UI_Talent_U_Sucrose_02"
+      },
+      "c6": {
+        "name": "混元熵增论",
+        "icon": "UI_Talent_S_Sucrose_04"
+      }
+    },
+    "tartaglia": {
+      "c1": {
+        "name": "魔王武装·遏浪",
+        "icon": "UI_Talent_S_Tartaglia_01"
+      },
+      "c2": {
+        "name": "魔王武装·暗流",
+        "icon": "UI_Talent_S_Tartaglia_02"
+      },
+      "c3": {
+        "name": "深渊之灾·纷争涡源",
+        "icon": "UI_Talent_U_Tartaglia_01"
+      },
+      "c4": {
+        "name": "深渊之灾·凝水盛放",
+        "icon": "UI_Talent_S_Tartaglia_05"
+      },
+      "c5": {
+        "name": "极恶技·斩水斩雨",
+        "icon": "UI_Talent_U_Tartaglia_02"
+      },
+      "c6": {
+        "name": "极恶技·天使灭尽",
+        "icon": "UI_Talent_S_Tartaglia_04"
+      }
+    },
+    "thoma": {
+      "c1": {
+        "name": "同袍的义理",
+        "icon": "UI_Talent_S_Tohma_01"
+      },
+      "c2": {
+        "name": "僚佐的才巧",
+        "icon": "UI_Talent_S_Tohma_02"
+      },
+      "c3": {
+        "name": "御敌的执定",
+        "icon": "UI_Talent_U_Tohma_01"
+      },
+      "c4": {
+        "name": "用臣的久计",
+        "icon": "UI_Talent_S_Tohma_03"
+      },
+      "c5": {
+        "name": "野火的豪烈",
+        "icon": "UI_Talent_U_Tohma_02"
+      },
+      "c6": {
+        "name": "炽烧的至心",
+        "icon": "UI_Talent_S_Tohma_04"
+      }
+    },
+    "tighnari": {
+      "c1": {
+        "name": "由根须断定肇始",
+        "icon": "UI_Talent_S_Tighnari_01"
+      },
+      "c2": {
+        "name": "由茎干剖析来缘",
+        "icon": "UI_Talent_S_Tighnari_02"
+      },
+      "c3": {
+        "name": "由枝节知晓造化",
+        "icon": "UI_Talent_U_Tighnari_01"
+      },
+      "c4": {
+        "name": "由片叶管窥枯荣",
+        "icon": "UI_Talent_S_Tighnari_03"
+      },
+      "c5": {
+        "name": "由繁花明了悟觉",
+        "icon": "UI_Talent_U_Tighnari_02"
+      },
+      "c6": {
+        "name": "由硕实品论应果",
+        "icon": "UI_Talent_S_Tighnari_04"
+      }
+    },
+    "traveleranemo": {
+      "c1": {
+        "name": "回转的怒风",
+        "icon": "UI_Talent_S_PlayerWind_01"
+      },
+      "c2": {
+        "name": "革新的旋风",
+        "icon": "UI_Talent_S_PlayerWind_02"
+      },
+      "c3": {
+        "name": "天地的刚风",
+        "icon": "UI_Talent_U_PlayerWind_02"
+      },
+      "c4": {
+        "name": "眷护的和风",
+        "icon": "UI_Talent_S_PlayerWind_03"
+      },
+      "c5": {
+        "name": "群星的涡风",
+        "icon": "UI_Talent_U_PlayerWind_01"
+      },
+      "c6": {
+        "name": "纠缠的信风",
+        "icon": "UI_Talent_S_PlayerWind_04"
+      }
+    },
+    "travelercryo": {
+      "c1": {
+        "name": "渐肃的凝冰",
+        "icon": "UI_Talent_S_PlayerIce_01"
+      },
+      "c2": {
+        "name": "嗡鸣的陨冰",
+        "icon": "UI_Talent_S_PlayerIce_02"
+      },
+      "c3": {
+        "name": "断金的锐冰",
+        "icon": "UI_Talent_U_PlayerIce_01"
+      },
+      "c4": {
+        "name": "不化的顽冰",
+        "icon": "UI_Talent_S_PlayerIce_03"
+      },
+      "c5": {
+        "name": "深寒的雾冰",
+        "icon": "UI_Talent_U_PlayerIce_02"
+      },
+      "c6": {
+        "name": "肃杀的熙冰",
+        "icon": "UI_Talent_S_PlayerIce_04"
+      }
+    },
+    "travelerdendro": {
+      "c1": {
+        "name": "寄身的倚草",
+        "icon": "UI_Talent_S_PlayerGrass_01"
+      },
+      "c2": {
+        "name": "健韧的劲草",
+        "icon": "UI_Talent_S_PlayerGrass_02"
+      },
+      "c3": {
+        "name": "婆娑的瑶草",
+        "icon": "UI_Talent_S_PlayerGrass_03"
+      },
+      "c4": {
+        "name": "如饴的蜜草",
+        "icon": "UI_Talent_S_PlayerGrass_04"
+      },
+      "c5": {
+        "name": "迅生的丰草",
+        "icon": "UI_Talent_S_PlayerGrass_05"
+      },
+      "c6": {
+        "name": "蕴思的霜草",
+        "icon": "UI_Talent_S_PlayerGrass_06"
+      }
+    },
+    "travelerelectro": {
+      "c1": {
+        "name": "丰穰的春雷",
+        "icon": "UI_Talent_S_PlayerElectric_01"
+      },
+      "c2": {
+        "name": "震怒的苍雷",
+        "icon": "UI_Talent_S_PlayerElectric_02"
+      },
+      "c3": {
+        "name": "连延的远雷",
+        "icon": "UI_Talent_U_PlayerElectric_01"
+      },
+      "c4": {
+        "name": "难测的云雷",
+        "icon": "UI_Talent_S_PlayerElectric_03"
+      },
+      "c5": {
+        "name": "荒野的霆雷",
+        "icon": "UI_Talent_U_PlayerElectric_02"
+      },
+      "c6": {
+        "name": "撼世的神雷",
+        "icon": "UI_Talent_S_PlayerElectric_04"
+      }
+    },
+    "travelergeo": {
+      "c1": {
+        "name": "巍然的青岩",
+        "icon": "UI_Talent_S_PlayerRock_01"
+      },
+      "c2": {
+        "name": "不稳的熔岩",
+        "icon": "UI_Talent_S_PlayerRock_02"
+      },
+      "c3": {
+        "name": "八方之岩",
+        "icon": "UI_Talent_U_PlayerRock_02"
+      },
+      "c4": {
+        "name": "险峻的重岩",
+        "icon": "UI_Talent_S_PlayerRock_03"
+      },
+      "c5": {
+        "name": "天坠之岩",
+        "icon": "UI_Talent_U_PlayerRock_01"
+      },
+      "c6": {
+        "name": "永世的磐岩",
+        "icon": "UI_Talent_S_PlayerRock_04"
+      }
+    },
+    "travelerhydro": {
+      "c1": {
+        "name": "微澜的湖水",
+        "icon": "UI_Talent_S_PlayerWater_01"
+      },
+      "c2": {
+        "name": "潺涓的碧水",
+        "icon": "UI_Talent_S_PlayerWater_02"
+      },
+      "c3": {
+        "name": "激荡的波水",
+        "icon": "UI_Talent_U_PlayerWater_01"
+      },
+      "c4": {
+        "name": "倾落的迸水",
+        "icon": "UI_Talent_S_PlayerWater_03"
+      },
+      "c5": {
+        "name": "洄旋的曲水",
+        "icon": "UI_Talent_U_PlayerWater_02"
+      },
+      "c6": {
+        "name": "公义的潮水",
+        "icon": "UI_Talent_S_PlayerWater_04"
+      }
+    },
+    "travelerpyro": {
+      "c1": {
+        "name": "流光的星火",
+        "icon": "UI_Talent_S_PlayerFire_01"
+      },
+      "c2": {
+        "name": "长明的烛火",
+        "icon": "UI_Talent_S_PlayerFire_02"
+      },
+      "c3": {
+        "name": "燧传的烽火",
+        "icon": "UI_Talent_U_PlayerFire_01"
+      },
+      "c4": {
+        "name": "燎灼的烈火",
+        "icon": "UI_Talent_S_PlayerFire_03"
+      },
+      "c5": {
+        "name": "不灭的薪火",
+        "icon": "UI_Talent_U_PlayerFire_02"
+      },
+      "c6": {
+        "name": "永燃的圣火",
+        "icon": "UI_Talent_S_PlayerFire_04"
+      }
+    },
+    "valeriy": {
+      "c1": {
+        "name": "持续压制的时序",
+        "icon": "UI_Talent_S_Valeriy_01"
+      },
+      "c2": {
+        "name": "伴随冲阵的队型",
+        "icon": "UI_Talent_S_Valeriy_02"
+      },
+      "c3": {
+        "name": "白刃对决的戒备",
+        "icon": "UI_Talent_U_Valeriy_01"
+      },
+      "c4": {
+        "name": "不惧折损的韧性",
+        "icon": "UI_Talent_S_Valeriy_03"
+      },
+      "c5": {
+        "name": "分割歼灭的专意",
+        "icon": "UI_Talent_U_Valeriy_02"
+      },
+      "c6": {
+        "name": "穿透敌阵的威能",
+        "icon": "UI_Talent_S_Valeriy_04"
+      }
+    },
+    "varesa": {
+      "c1": {
+        "name": "终始不熄的热诚",
+        "icon": "UI_Talent_S_Varesa_01"
+      },
+      "c2": {
+        "name": "逾越天光的极限",
+        "icon": "UI_Talent_S_Varesa_02"
+      },
+      "c3": {
+        "name": "百折不摧的决意",
+        "icon": "UI_Talent_U_Varesa_01"
+      },
+      "c4": {
+        "name": "直面前路的勇气",
+        "icon": "UI_Talent_S_Varesa_03"
+      },
+      "c5": {
+        "name": "暖风浮漾的心念",
+        "icon": "UI_Talent_U_Varesa_02"
+      },
+      "c6": {
+        "name": "正义英雄的凯旋",
+        "icon": "UI_Talent_S_Varesa_04"
+      }
+    },
+    "varka": {
+      "c1": {
+        "name": "「来吧，朋友，让我们在月下共舞」",
+        "icon": "UI_Talent_S_Varka_01"
+      },
+      "c2": {
+        "name": "「待天光破晓，我们便要踏上征途」",
+        "icon": "UI_Talent_S_Varka_02"
+      },
+      "c3": {
+        "name": "「朋友，莫要再饮令人落泪的苦酒」",
+        "icon": "UI_Talent_U_Varka_01"
+      },
+      "c4": {
+        "name": "「因为无人能夺去我们歌唱的自由」",
+        "icon": "UI_Talent_S_Varka_03"
+      },
+      "c5": {
+        "name": "「斟满杯中佳酿吧，暴君来了又去」",
+        "icon": "UI_Talent_U_Varka_02"
+      },
+      "c6": {
+        "name": "「我心爱的蒙德呀，依然屹立如初」",
+        "icon": "UI_Talent_S_Varka_04"
+      }
+    },
+    "venti": {
+      "c1": {
+        "name": "弦发的苍风",
+        "icon": "UI_Talent_S_Venti_01"
+      },
+      "c2": {
+        "name": "眷恋的泠风",
+        "icon": "UI_Talent_S_Venti_02"
+      },
+      "c3": {
+        "name": "千风的诗篇",
+        "icon": "UI_Talent_U_Venti_02"
+      },
+      "c4": {
+        "name": "自由的凛风",
+        "icon": "UI_Talent_S_Venti_03"
+      },
+      "c5": {
+        "name": "高天的协奏",
+        "icon": "UI_Talent_U_Venti_01"
+      },
+      "c6": {
+        "name": "抗争的暴风",
+        "icon": "UI_Talent_S_Venti_04"
+      }
+    },
+    "vesna": {
+      "c1": {
+        "name": "送冬的华宴",
+        "icon": "UI_Talent_S_Vesna_01"
+      },
+      "c2": {
+        "name": "迎春的轮舞",
+        "icon": "UI_Talent_S_Vesna_02"
+      },
+      "c3": {
+        "name": "燔燎的献礼",
+        "icon": "UI_Talent_U_Vesna_01"
+      },
+      "c4": {
+        "name": "先代的荣膺",
+        "icon": "UI_Talent_S_Vesna_03"
+      },
+      "c5": {
+        "name": "贵种的职守",
+        "icon": "UI_Talent_U_Vesna_02"
+      },
+      "c6": {
+        "name": "不移的赤忱",
+        "icon": "UI_Talent_S_Vesna_04"
+      }
+    },
+    "vodyanitsa": {
+      "c1": {
+        "name": "聚光灯下的水华",
+        "icon": "UI_Talent_S_Vodyanitsa_01"
+      },
+      "c2": {
+        "name": "穿彻风雪的余响",
+        "icon": "UI_Talent_S_Vodyanitsa_02"
+      },
+      "c3": {
+        "name": "空音犹响的春晨",
+        "icon": "UI_Talent_U_Vodyanitsa_01"
+      },
+      "c4": {
+        "name": "柔波摇漾的低诉",
+        "icon": "UI_Talent_S_Vodyanitsa_03"
+      },
+      "c5": {
+        "name": "沉往深湖的共沦",
+        "icon": "UI_Talent_U_Vodyanitsa_02"
+      },
+      "c6": {
+        "name": "永不落幕的盛歌",
+        "icon": "UI_Talent_S_Vodyanitsa_04"
+      }
+    },
+    "wanderer": {
+      "c1": {
+        "name": "初番·茂风流羽行",
+        "icon": "UI_Talent_S_Wanderer_01"
+      },
+      "c2": {
+        "name": "二番·箙岛廓白浪",
+        "icon": "UI_Talent_S_Wanderer_02"
+      },
+      "c3": {
+        "name": "三番·久世舞夕颜",
+        "icon": "UI_Talent_U_Wanderer_02"
+      },
+      "c4": {
+        "name": "四番·花月歌浮舟",
+        "icon": "UI_Talent_S_Wanderer_03"
+      },
+      "c5": {
+        "name": "末番·今昔渡来殿",
+        "icon": "UI_Talent_U_Wanderer_01"
+      },
+      "c6": {
+        "name": "祝言·霞幕倾松风",
+        "icon": "UI_Talent_S_Wanderer_04"
+      }
+    },
+    "wriothesley": {
+      "c1": {
+        "name": "予行恶者以惩惧",
+        "icon": "UI_Talent_S_Wriothesley_01"
+      },
+      "c2": {
+        "name": "予骄暴者以镣锁",
+        "icon": "UI_Talent_S_Wriothesley_02"
+      },
+      "c3": {
+        "name": "予婪诈者以谴罚",
+        "icon": "UI_Talent_U_Wriothesley_01"
+      },
+      "c4": {
+        "name": "予贞苦者以拯赎",
+        "icon": "UI_Talent_S_Wriothesley_03"
+      },
+      "c5": {
+        "name": "予冤诉者以怜恕",
+        "icon": "UI_Talent_U_Wriothesley_02"
+      },
+      "c6": {
+        "name": "予无罪者以念抚",
+        "icon": "UI_Talent_S_Wriothesley_04"
+      }
+    },
+    "xiangling": {
+      "c1": {
+        "name": "外酥里嫩",
+        "icon": "UI_Talent_S_Xiangling_01"
+      },
+      "c2": {
+        "name": "大火宽油",
+        "icon": "UI_Talent_S_Xiangling_02"
+      },
+      "c3": {
+        "name": "武火急烹",
+        "icon": "UI_Talent_U_Xiangling_02"
+      },
+      "c4": {
+        "name": "文火慢煨",
+        "icon": "UI_Talent_S_Xiangling_03"
+      },
+      "c5": {
+        "name": "锅巴凶猛",
+        "icon": "UI_Talent_U_Xiangling_01"
+      },
+      "c6": {
+        "name": "大龙卷旋火轮",
+        "icon": "UI_Talent_S_Xiangling_04"
+      }
+    },
+    "xianyun": {
+      "c1": {
+        "name": "借风洗尘缘",
+        "icon": "UI_Talent_S_Liuyun_01"
+      },
+      "c2": {
+        "name": "鹤唳远人间",
+        "icon": "UI_Talent_S_Liuyun_02"
+      },
+      "c3": {
+        "name": "造化有星月",
+        "icon": "UI_Talent_U_Liuyun_02"
+      },
+      "c4": {
+        "name": "奥妙烹黍珠",
+        "icon": "UI_Talent_S_Liuyun_03"
+      },
+      "c5": {
+        "name": "旋步霞蔚上",
+        "icon": "UI_Talent_U_Liuyun_01"
+      },
+      "c6": {
+        "name": "知是留云僊",
+        "icon": "UI_Talent_S_Liuyun_04"
+      }
+    },
+    "xiao": {
+      "c1": {
+        "name": "坏劫·毁坏三界",
+        "icon": "UI_Talent_S_Xiao_01"
+      },
+      "c2": {
+        "name": "空劫·虚空华开敷变",
+        "icon": "UI_Talent_S_Xiao_02"
+      },
+      "c3": {
+        "name": "降魔·忿怒显相",
+        "icon": "UI_Talent_U_Xiao_01"
+      },
+      "c4": {
+        "name": "神通·诸苦灭尽",
+        "icon": "UI_Talent_S_Xiao_03"
+      },
+      "c5": {
+        "name": "成劫·无明增长",
+        "icon": "UI_Talent_U_Xiao_02"
+      },
+      "c6": {
+        "name": "降魔·护法夜叉",
+        "icon": "UI_Talent_S_Xiao_04"
+      }
+    },
+    "xilonen": {
+      "c1": {
+        "name": "献予慵眠的休假日",
+        "icon": "UI_Talent_S_Xilonen_01"
+      },
+      "c2": {
+        "name": "献予灼原的五重奏",
+        "icon": "UI_Talent_S_Xilonen_02"
+      },
+      "c3": {
+        "name": "献予日炎的巡行式",
+        "icon": "UI_Talent_U_Xilonen_01"
+      },
+      "c4": {
+        "name": "献予午后的花之梦",
+        "icon": "UI_Talent_S_Xilonen_03"
+      },
+      "c5": {
+        "name": "献予夕暮的转格调",
+        "icon": "UI_Talent_U_Xilonen_02"
+      },
+      "c6": {
+        "name": "献予永夜的狂欢舞",
+        "icon": "UI_Talent_S_Xilonen_04"
+      }
+    },
+    "xingqiu": {
+      "c1": {
+        "name": "重帘留香",
+        "icon": "UI_Talent_S_Xingqiu_01"
+      },
+      "c2": {
+        "name": "天青现虹",
+        "icon": "UI_Talent_S_Xingqiu_02"
+      },
+      "c3": {
+        "name": "织诗成锦",
+        "icon": "UI_Talent_U_Xingqiu_01"
+      },
+      "c4": {
+        "name": "孤舟斩蛟",
+        "icon": "UI_Talent_S_Xingqiu_03"
+      },
+      "c5": {
+        "name": "雨深闭门",
+        "icon": "UI_Talent_U_Xingqiu_02"
+      },
+      "c6": {
+        "name": "万文集此",
+        "icon": "UI_Talent_S_Xingqiu_04"
+      }
+    },
+    "xinyan": {
+      "c1": {
+        "name": "绝命的加速",
+        "icon": "UI_Talent_S_Xinyan_01"
+      },
+      "c2": {
+        "name": "开场即兴段",
+        "icon": "UI_Talent_S_Xinyan_02"
+      },
+      "c3": {
+        "name": "摭分的指法",
+        "icon": "UI_Talent_U_Xinyan_01"
+      },
+      "c4": {
+        "name": "节奏的传染",
+        "icon": "UI_Talent_S_Xinyan_03"
+      },
+      "c5": {
+        "name": "返场的高呼",
+        "icon": "UI_Talent_U_Xinyan_02"
+      },
+      "c6": {
+        "name": "地狱里摇摆",
+        "icon": "UI_Talent_S_Xinyan_04"
+      }
+    },
+    "yaemiko": {
+      "c1": {
+        "name": "野狐供真篇",
+        "icon": "UI_Talent_S_Yae_01"
+      },
+      "c2": {
+        "name": "望月吼哕声",
+        "icon": "UI_Talent_S_Yae_02"
+      },
+      "c3": {
+        "name": "七段妙变化",
+        "icon": "UI_Talent_U_Yae_01"
+      },
+      "c4": {
+        "name": "绯樱引雷章",
+        "icon": "UI_Talent_S_Yae_03"
+      },
+      "c5": {
+        "name": "暴恶嗤笑面",
+        "icon": "UI_Talent_U_Yae_02"
+      },
+      "c6": {
+        "name": "大杀生咒禁",
+        "icon": "UI_Talent_S_Yae_04"
+      }
+    },
+    "yanfei": {
+      "c1": {
+        "name": "占理不饶人",
+        "icon": "UI_Talent_S_Feiyan_01"
+      },
+      "c2": {
+        "name": "最终解释权",
+        "icon": "UI_Talent_S_Feiyan_02"
+      },
+      "c3": {
+        "name": "真火炼宝印",
+        "icon": "UI_Talent_U_Feiyan_01"
+      },
+      "c4": {
+        "name": "丹书金铁券",
+        "icon": "UI_Talent_S_Feiyan_03"
+      },
+      "c5": {
+        "name": "遵法切结书",
+        "icon": "UI_Talent_U_Feiyan_02"
+      },
+      "c6": {
+        "name": "是额外条款",
+        "icon": "UI_Talent_S_Feiyan_04"
+      }
+    },
+    "yaoyao": {
+      "c1": {
+        "name": "妙受琼阁",
+        "icon": "UI_Talent_S_Yaoyao_01"
+      },
+      "c2": {
+        "name": "正思无邪",
+        "icon": "UI_Talent_S_Yaoyao_02"
+      },
+      "c3": {
+        "name": "墩墩善道",
+        "icon": "UI_Talent_U_Yaoyao_01"
+      },
+      "c4": {
+        "name": "爰爰可亲",
+        "icon": "UI_Talent_S_Yaoyao_03"
+      },
+      "c5": {
+        "name": "恻隐本义",
+        "icon": "UI_Talent_U_Yaoyao_02"
+      },
+      "c6": {
+        "name": "慈惠仁心",
+        "icon": "UI_Talent_S_Yaoyao_04"
+      }
+    },
+    "yelan": {
+      "c1": {
+        "name": "与谋者，以局入局",
+        "icon": "UI_Talent_S_Yelan_01"
+      },
+      "c2": {
+        "name": "入彀者，多多益善",
+        "icon": "UI_Talent_S_Yelan_02"
+      },
+      "c3": {
+        "name": "晃盅者，琼畟药骰",
+        "icon": "UI_Talent_U_Yelan_01"
+      },
+      "c4": {
+        "name": "诓惑者，接树移花",
+        "icon": "UI_Talent_S_Yelan_03"
+      },
+      "c5": {
+        "name": "坐庄者，三仙戏法",
+        "icon": "UI_Talent_U_Yelan_02"
+      },
+      "c6": {
+        "name": "取胜者，大小通吃",
+        "icon": "UI_Talent_S_Yelan_04"
+      }
+    },
+    "yoimiya": {
+      "c1": {
+        "name": "赤玉琉金",
+        "icon": "UI_Talent_S_Yoimiya_01"
+      },
+      "c2": {
+        "name": "万灯送火",
+        "icon": "UI_Talent_S_Yoimiya_02"
+      },
+      "c3": {
+        "name": "鼠火戏法",
+        "icon": "UI_Talent_U_Yoimiya_01"
+      },
+      "c4": {
+        "name": "花火职人心得",
+        "icon": "UI_Talent_S_Yoimiya_03"
+      },
+      "c5": {
+        "name": "真夏宵祭锦绘",
+        "icon": "UI_Talent_U_Yoimiya_02"
+      },
+      "c6": {
+        "name": "长野原龙势流星群",
+        "icon": "UI_Talent_S_Yoimiya_04"
+      }
+    },
+    "yumemizukimizuki": {
+      "c1": {
+        "name": "宿雾若水遥",
+        "icon": "UI_Talent_S_Mizuki_01"
+      },
+      "c2": {
+        "name": "缠忆君影梦相见",
+        "icon": "UI_Talent_S_Mizuki_02"
+      },
+      "c3": {
+        "name": "晓月又经宵",
+        "icon": "UI_Talent_U_Mizuki_01"
+      },
+      "c4": {
+        "name": "泉轻流花暖",
+        "icon": "UI_Talent_S_Mizuki_03"
+      },
+      "c5": {
+        "name": "岁云暮矣待月归",
+        "icon": "UI_Talent_U_Mizuki_02"
+      },
+      "c6": {
+        "name": "慕念萦心间",
+        "icon": "UI_Talent_S_Mizuki_04"
+      }
+    },
+    "yunjin": {
+      "c1": {
+        "name": "飞身趟马",
+        "icon": "UI_Talent_S_Yunjin_01"
+      },
+      "c2": {
+        "name": "诸般切末",
+        "icon": "UI_Talent_S_Yunjin_02"
+      },
+      "c3": {
+        "name": "牙纛探海",
+        "icon": "UI_Talent_U_Yunjin_01"
+      },
+      "c4": {
+        "name": "昇堂吊云",
+        "icon": "UI_Talent_S_Yunjin_03"
+      },
+      "c5": {
+        "name": "翘楚名坤",
+        "icon": "UI_Talent_U_Yunjin_02"
+      },
+      "c6": {
+        "name": "庄谐并举",
+        "icon": "UI_Talent_S_Yunjin_04"
+      }
+    },
+    "zhongli": {
+      "c1": {
+        "name": "岩者，六合引之为骨",
+        "icon": "UI_Talent_S_Zhongli_01"
+      },
+      "c2": {
+        "name": "石者，八荒韫玉而明",
+        "icon": "UI_Talent_S_Zhongli_02"
+      },
+      "c3": {
+        "name": "圭璋，暝仍不移其晖",
+        "icon": "UI_Talent_U_Zhongli_01"
+      },
+      "c4": {
+        "name": "黄琮，破而不夺其坚",
+        "icon": "UI_Talent_S_Zhongli_03"
+      },
+      "c5": {
+        "name": "苍璧，驱之长昭天理",
+        "icon": "UI_Talent_U_Zhongli_02"
+      },
+      "c6": {
+        "name": "金玉，礼予天地四方",
+        "icon": "UI_Talent_S_Zhongli_04"
+      }
+    },
+    "zibai": {
+      "c1": {
+        "name": "出勃然而入寥然",
+        "icon": "UI_Talent_S_Zibai_01"
+      },
+      "c2": {
+        "name": "化于生而死于尸",
+        "icon": "UI_Talent_S_Zibai_02"
+      },
+      "c3": {
+        "name": "解天韬而堕其帙",
+        "icon": "UI_Talent_U_Zibai_01"
+      },
+      "c4": {
+        "name": "魂魄往而身从之",
+        "icon": "UI_Talent_S_Zibai_03"
+      },
+      "c5": {
+        "name": "明见无值至不论",
+        "icon": "UI_Talent_U_Zibai_02"
+      },
+      "c6": {
+        "name": "天地忽如一远行",
+        "icon": "UI_Talent_S_Zibai_04"
+      }
+    }
+  }
+}

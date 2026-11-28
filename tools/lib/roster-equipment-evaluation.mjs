@@ -2,7 +2,7 @@ import { auditBuild, auditHit, bool, fact, number, novice, projectQuery, setAudi
 import { readContentSource } from './content-source.mjs';
 
 const equipmentChecks = readContentSource(new URL('../data/sources/catalog/equipment-modifier-checks.json', import.meta.url));
-const evidence = group => readContentSource(new URL('../data/sources/catalog/genshin-db/' + group + '.json', import.meta.url));
+const evidence = group => readContentSource(new URL('../data/sources/anime-game-data/' + group + '.json', import.meta.url));
 
 const comparisons = { eq: (a, b) => a === b, lt: (a, b) => a < b, lte: (a, b) => a <= b, gt: (a, b) => a > b, gte: (a, b) => a >= b };
 

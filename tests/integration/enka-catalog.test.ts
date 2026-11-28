@@ -5,12 +5,9 @@ import { createAccount, parseAccount } from '../../src/web/src/domain/account';
 import { previewEnkaImport, confirmEnkaImport } from '../../src/web/src/domain/enka-import';
 
 const catalog = read('src/game-data/data/tables/enka-catalog.json');
-const supplements = read('tools/data/sources/catalog/enka/skill-supplements.json').characters;
-const pinned = read('tools/data/sources/catalog/enka/pinned-skill-orders.json');
-const pinnedOrders: Record<string, number[]> = pinned.skillOrder;
-const elementNames: Record<string, string> = { Fire: 'pyro', Water: 'hydro', Wind: 'anemo', Rock: 'geo', Electric: 'electro', Grass: 'dendro' };
-const characterSource = read('tools/data/sources/catalog/genshin-db/characters.json');
-const forms = read('tools/data/sources/character-text/base-and-manekin.json');
+const enkaIds = read('tools/data/sources/anime-game-data/enka-ids.json').characters;
+const characterSource = read('tools/data/sources/anime-game-data/characters.json');
+const forms = read('tools/data/sources/anime-game-data/base-and-manekin.json');
 const originalPath = '.references/enka/characters.json';
 const original = existsSync(originalPath) ? read(originalPath) : undefined;
 const restricted = new Set(['aether', 'lumine', 'manekin', 'manekina']);
@@ -30,32 +27,21 @@ it('imports every catalog identity with independently classified talent levels',
     const matches = (Object.entries(catalog.characters) as [string, Mapping][])
       .filter(([key, entry]) => entry.id === id && (key.includes('-') || !restricted.has(id)));
     expect(matches, id).toHaveLength(1);
-    const [key, entry] = matches[0];
+    const [key] = matches[0];
     const [mappedAvatar, mappedDepot] = key.split('-').map(Number);
     const avatar: number = characterSource[id.split('-')[0]].metadata.id;
     expect(mappedAvatar, id).toBe(avatar);
     expect(identity.gameId, id).toBe(avatar);
-    const supplement = supplements[key];
-    const depot: number | undefined = forms.bindings[id]?.skillDepotId ?? supplement?.skillDepotId ?? mappedDepot;
-    if (id.includes('-') && !forms.bindings[id]) {
-      if (identity.element === 'cryo') {
-        expect(supplement?.id, id).toBe(id);
-        expect(supplement?.skillDepotId, id).toBe(mappedDepot);
-      } else {
-        expect(elementNames[pinned.formElement[key]], id).toBe(identity.element);
-      }
+    const adopted = enkaIds[key];
+    expect(adopted?.id, id).toBe(id);
+    const depot: number | undefined = forms.bindings[id]?.skillDepotId ?? adopted.skillDepotId ?? mappedDepot;
+    if (adopted.element) {
+      expect(adopted.element, id).toBe(identity.element);
     }
-    // Compare the pinned extract with the original capture when it is available.
+    // Compare the adopted snapshot with the original Enka capture when it is available.
     const originalSkills: number[] | undefined = original?.[key]?.SkillOrder;
-    if (originalSkills && pinnedOrders[key]) expect(originalSkills, id).toEqual(pinnedOrders[key]);
-    let skills = pinnedOrders[key];
-    if (supplement?.id === id) {
-      skills = ['normal', 'skill', 'burst'].map(category => {
-        const matches = supplement.talents.filter((talent: { category: string }) => talent.category === category);
-        expect(matches, `${id} ${category}`).toHaveLength(1);
-        return matches[0].id;
-      });
-    }
+    if (!restricted.has(id) && originalSkills && adopted.skills) expect(originalSkills, id).toEqual(adopted.skills);
+    let skills = adopted.skills;
     if (forms.bindings[id]) {
       const binding = forms.bindings[id];
       expect(mappedDepot, id).toBe(binding.skillDepotId);

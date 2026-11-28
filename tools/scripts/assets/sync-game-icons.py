@@ -1,4 +1,4 @@
-"""Prepare verified, compressed offline game icons from pinned local references.
+"""Prepare verified, compressed offline game icons from adopted anime-game-data metadata and verified URLs.
 
 Requires Python + Pillow. Rejects server placeholders even when HTTP returns 200.
 """
@@ -11,7 +11,6 @@ import io
 import json
 import re
 from pathlib import Path
-import subprocess
 import urllib.request
 from PIL import Image, ImageOps
 import xml.etree.ElementTree as ET
@@ -24,8 +23,7 @@ ROOT = Path(__file__).resolve().parents[3]
 MANIFEST = read_capture(ROOT)
 if MANIFEST['formatVersion'] != 4:
     raise ValueError('Asset manifest formatVersion must be 4')
-MONA = ROOT / '.references/mona-community'
-DB = ROOT / '.references/genshin-db/src/data'
+AGD = ROOT / 'tools/data/sources/anime-game-data'
 CACHE = ROOT / '.references/game-icon-downloads'
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--out', type=Path, default=ROOT / 'artifacts/content-candidates' / ('assets-' + str(time.time_ns())))
@@ -36,14 +34,11 @@ if not OUTPUT.is_relative_to((ROOT / 'artifacts/content-candidates').resolve()) 
     parser.error('--out must be a new directory beneath artifacts/content-candidates')
 GAME_OUTPUT = OUTPUT / 'game'
 def game_folder(kind): return GAME_OUTPUT / ('artifact-slots' if kind == 'artifactSlots' else kind)
-COMMIT = MANIFEST['sourceCommits']['TwiceDrop/genshin_artifact']
-MONA_URL = f'https://raw.githubusercontent.com/TwiceDrop/genshin_artifact/{COMMIT}/'
 PLACEHOLDER = 'ae5d4d9be2e3ee89c0fc94a326aaefd8412c55d916bef6f7d28c88ebf771af7b'
 TRANSFORM = 'square-portrait-v1'
 WEAPON_TRANSFORM = 'equipment-detail-square-v4'
 CATALYST_TRANSFORM = 'full-weapon-square-v4'
 ARTIFACT_TRANSFORM = 'artifact-square-v2'
-DB_COMMIT = MANIFEST['sourceCommits']['genshin-db']
 DOWNLOAD_LOCKS = {}
 LOCK = threading.Lock()
 ELEMENT_TRANSFORM = 'element-hq-v2'
@@ -57,10 +52,6 @@ def read(path):
 def sha(content):
     return hashlib.sha256(content).hexdigest()
 
-def generated(kind):
-    text = (MONA / f'src/assets/_gen_{kind}.js').read_text(encoding='utf-8')
-    return json.loads(text.split('export default', 1)[1].strip().rstrip(';'))
-
 def valid_image(content):
     if sha(content) == PLACEHOLDER:
         raise ValueError('Server returned a known placeholder image')
@@ -69,12 +60,11 @@ def valid_image(content):
         raise ValueError('Image is blank or a nearly transparent server placeholder')
     return image
 
-if subprocess.check_output(['git', '-C', str(MONA), 'rev-parse', 'HEAD'], text=True).strip() != COMMIT:
-    raise RuntimeError('Mona reference commit changed; review its source and catalog first')
-if subprocess.check_output(['git', '-C', str(DB.parents[1]), 'rev-parse', 'HEAD'], text=True).strip() != DB_COMMIT:
-    raise RuntimeError('genshin-db reference commit changed; review first')
-locale = read(MONA / 'src/i18n/generated/zh-cn.json')
-metadata = {kind: {locale[item['nameLocale']]: item for item in generated(group).values()} for kind, group in [('characters', 'character'), ('weapons', 'weapon'), ('artifacts', 'artifact')]}
+agd_characters = read(AGD / 'characters.json')
+agd_weapons = read(AGD / 'weapons.json')
+agd_sets = read(AGD / 'sets.json')
+agd_skill_icons = read(AGD / 'skill-icons.json')
+agd_base_manekin = read(AGD / 'base-and-manekin.json')
 catalog = {key: [read(file) for file in sorted((ROOT / 'src/game-data/data' / folder).glob('*.json'))]
            for key, folder in [('characters', 'characters'), ('weapons', 'weapons'), ('sets', 'artifact-sets')]}
 previous = MANIFEST
@@ -101,6 +91,13 @@ def sprite_sources(filename):
             sources.append((None, f"https://raw.githubusercontent.com/{name}/{previous['sourceCommits'][name]}/{matches[0]}"))
     return list(dict.fromkeys(sources))
 
+def icon_sources(filename):
+    return list(dict.fromkeys([
+        *sprite_sources(filename),
+        (None, f'https://enka.network/ui/{filename}.png'),
+        (None, f'https://gi.yatta.moe/assets/UI/{filename}.png'),
+    ]))
+
 def weapon_transform(entry):
     return CATALYST_TRANSFORM if entry.get('weaponType') == 'WEAPON_CATALYST' else WEAPON_TRANSFORM
 def expected_transform(kind, key, entry):
@@ -118,44 +115,46 @@ def expected_transform(kind, key, entry):
 
 tasks = []
 for kind, group, size in [('characters', 'characters', 128), ('weapons', 'weapons', 128), ('artifacts', 'sets', 128)]:
-    images = read(DB / f'image/{kind}.json')
     for row in catalog[group]:
         entry = {**row, **row.get('identity', {})}
-        if kind == 'characters' and re.match(r'^(aether|lumine|manekin|manekina)-(anemo|geo|electro|dendro|hydro|pyro|cryo)$',entry['id']):
+        if kind == 'characters' and re.match(r'^(aether|lumine|manekin|manekina)-(anemo|geo|electro|dendro|hydro|pyro|cryo)$', entry['id']):
             continue  # Element forms reuse the base portrait in the runtime index.
-        community = metadata[kind].get(entry['name'], {})
-        image = images.get(entry['id'], {})
         variants = {'flower': 'flower', 'plume': 'feather', 'sands': 'sand', 'goblet': 'cup', 'circlet': 'head'} if kind == 'artifacts' else {'icon': 'icon'}
-        for slot, mona_slot in variants.items():
+        for slot in variants:
             key = entry['id'] + ('-' + slot if kind == 'artifacts' else '')
-            url = community.get('avatar' if kind == 'characters' else 'url') if kind != 'artifacts' else community.get(mona_slot, {}).get('url')
-            fallback = image.get('mihoyo_' + slot) if kind == 'artifacts' else image.get('mihoyo_icon')
-            if not url and not fallback and kind == 'artifacts':
-                continue
-            sources = []
-            if url:
-                sources.append((MONA / 'public' / url.lstrip('/'), MONA_URL + 'public/' + url.lstrip('/')) if url.startswith('/') else (None, url))
-            # Verified former sources can be reused; placeholder sources never qualify.
             prior = existing.get((kind, key))
-            if prior:
-                prior_url = prior['sourceUrl']
-                path = MONA / prior_url[len(MONA_URL):] if prior_url.startswith(MONA_URL) else None
-                sources.append((path, prior_url))
-            if fallback:
-                sources.append((None, fallback.replace('upload-os-bbs.mihoyo.com', 'upload-bbs.mihoyo.com')))
-            if kind == 'characters' and image.get('hoyowiki_icon'):
-                sources.append((None, image['hoyowiki_icon']))
-            if kind == 'characters' and key in TRANSPARENT_AVATARS:
-                sources = [(None, f"https://enka.network/ui/{TRANSPARENT_AVATARS[key]}.png")]
-            if kind == 'weapons':
-                sources = sprite_sources(image['filename_gacha'] if entry['weaponType'] == 'WEAPON_CATALYST' else image['filename_icon'])
-                # Full art is a verified fallback; detail framing is applied below.
+            sources = []
+            if kind == 'characters':
+                icon_name = TRANSPARENT_AVATARS.get(key) or agd_characters.get(entry['id'], {}).get('metadata', {}).get('iconName')
+                if key in TRANSPARENT_AVATARS:
+                    sources = [
+                        (None, f'https://enka.network/ui/{icon_name}.png'),
+                        (None, f'https://gi.yatta.moe/assets/UI/{icon_name}.png'),
+                    ]
+                else:
+                    if prior:
+                        sources.append((None, prior['sourceUrl']))
+                    if icon_name:
+                        sources.extend(icon_sources(icon_name))
+            elif kind == 'weapons':
+                icon_name = agd_weapons.get(entry['id'], {}).get('metadata', {}).get('iconName')
+                if icon_name:
+                    sources.extend(icon_sources(icon_name))
                 if prior:
                     sources.append((None, prior['sourceUrl']))
-            tasks.append((kind, key, entry, sources, size))
+            else:
+                icon_name = agd_sets.get(entry['id'], {}).get('icons', {}).get(slot)
+                if not icon_name and not prior:
+                    continue
+                if prior:
+                    sources.append((None, prior['sourceUrl']))
+                if icon_name:
+                    sources.extend(icon_sources(icon_name))
+            tasks.append((kind, key, entry, list(dict.fromkeys(sources)), size))
 for element in ['anemo', 'geo', 'electro', 'hydro', 'pyro', 'cryo', 'dendro']:
-    path = MONA / f'src/images/misc/{element}.png'
-    tasks.append(('elements', element, {'id': element, 'name': element}, [(path, MONA_URL + path.relative_to(MONA).as_posix())], 128))
+    prior = existing.get(('elements', element))
+    if prior:
+        tasks.append(('elements', element, {'id': element, 'name': element}, [(None, prior['sourceUrl'])], 128))
 
 for entry in previous['assets']:
     if entry['kind'] != 'artifactSlots':
@@ -166,21 +165,20 @@ for entry in previous['assets']:
 SCOPE = previous['capture']['passives']
 excluded = []
 normal_attacks = {}
+seen_skills = set()
 
 # Store the reference identity, not inferred links to simulator mechanics.
 for kind, folder, fields in [
     ('skills', 'talents', ['combat1', 'combat2', 'combat3', 'passive1', 'passive2', 'passive3', 'passive4']),
     ('constellations', 'constellations', [f'c{i}' for i in range(1, 7)]),
 ]:
-    for character, images in read(DB / f'image/{folder}.json').items():
-        localized_path = DB / f'ChineseSimplified/{folder}/{character}.json'
-        localized = read(localized_path) if localized_path.exists() else {}
+    for character, localized in sorted(agd_skill_icons[folder].items()):
         for field in fields:
-            filename = images.get('filename_' + field)
+            details = localized.get(field) or {}
+            filename = details.get('icon')
             if not filename or filename == 'None':
                 continue
             key = f'{character}-{field}'
-            details = localized.get(field, {})
             entry = {'id': key, 'name': details.get('name', key), 'character': character, 'slot': field}
             if kind == 'skills' and field.startswith('passive') and field not in SCOPE['defaultCombatPassives'] and key not in SCOPE['extraCombatPassives']:
                 excluded.append({'kind': kind, 'key': key, 'name': entry['name'], 'reason': 'Non-combat utility/exploration passive; excluded by reviewed scope'})
@@ -189,9 +187,58 @@ for kind, folder, fields in [
                 shared = normal_attacks.setdefault(filename, {'id': 'normal-' + filename.lower(), 'name': '通用普通攻击 · ' + filename, 'slot': 'combat1', 'aliases': []})
                 shared['aliases'].append({'key': key, 'name': entry['name'], 'character': character, 'slot': field})
             else:
-                tasks.append((kind, key, entry, sprite_sources(filename), 128))
+                seen_skills.add((kind, key))
+                tasks.append((kind, key, entry, icon_sources(filename), 128))
+
+depot_id = str(agd_base_manekin['bindings']['manekin-pyro']['skillDepotId'])
+manekin_depot = agd_base_manekin['skillDepots'][depot_id]
+manekin_skills_map = agd_base_manekin['skills']
+manekin_text_map = agd_base_manekin['textMap']
+def clean_manekin_name(text_hash, fallback):
+    return re.sub(r'<[^>]+>', '', manekin_text_map.get(str(text_hash), '')).strip() or fallback
+
+normal_icon = manekin_skills_map[str(manekin_depot['skills'][0])].get('skillIcon')
+if normal_icon and normal_icon in normal_attacks:
+    existing_aliases = {alias['key'] for alias in normal_attacks[normal_icon]['aliases']}
+    for manekin_id in ['manekin', 'manekina']:
+        alias_key = f'{manekin_id}-combat1'
+        if alias_key not in existing_aliases:
+            normal_attacks[normal_icon]['aliases'].append({'key': alias_key, 'name': alias_key, 'character': manekin_id, 'slot': 'combat1'})
+
+for field, filename, name in [
+    ('combat2', manekin_skills_map[str(manekin_depot['skills'][1])].get('skillIcon', ''), clean_manekin_name(manekin_skills_map[str(manekin_depot['skills'][1])].get('nameTextMapHash'), 'manekin-combat2')),
+    ('combat3', manekin_skills_map[str(manekin_depot['energySkill'])].get('skillIcon', ''), clean_manekin_name(manekin_skills_map[str(manekin_depot['energySkill'])].get('nameTextMapHash'), 'manekin-combat3')),
+    *[
+        (f'passive{index}', item.get('icon', ''), clean_manekin_name(item.get('nameTextMapHash'), f'manekin-passive{index}'))
+        for index, item in enumerate(manekin_depot.get('passives', []), start=1)
+    ],
+]:
+    if not filename or filename == 'None':
+        continue
+    if field.startswith('passive') and field not in SCOPE['defaultCombatPassives'] and f'manekin-{field}' not in SCOPE['extraCombatPassives']:
+        for who in ['manekin', 'manekina']:
+            key = f'{who}-{field}'
+            if all(existing_item['key'] != key for existing_item in excluded):
+                excluded.append({'kind': 'skills', 'key': key, 'name': name, 'reason': 'Non-combat utility/exploration passive; excluded by reviewed scope'})
+        continue
+    key = f'manekin-{field}'
+    entry = {
+        'id': key,
+        'name': name,
+        'character': 'manekin',
+        'slot': field,
+        'aliases': [{'key': f'manekina-{field}', 'name': name, 'character': 'manekina', 'slot': field}],
+    }
+    seen_skills.add(('skills', key))
+    tasks.append(('skills', key, entry, icon_sources(filename), 128))
+
 for filename, entry in normal_attacks.items():
-    tasks.append(('skills', entry['id'], entry, sprite_sources(filename), 128))
+    seen_skills.add(('skills', entry['id']))
+    tasks.append(('skills', entry['id'], entry, icon_sources(filename), 128))
+for entry in previous['assets']:
+    if entry['kind'] in ['skills', 'constellations'] and not entry.get('sourceOverride') and (entry['kind'], entry['key']) not in seen_skills:
+        seen_skills.add((entry['kind'], entry['key']))
+        tasks.append((entry['kind'], entry['key'], {**entry, 'id': entry['key']}, [(None, entry['sourceUrl'])], 128))
 for entry in previous['assets']:
     if entry['kind'] != 'buffs':
         continue
@@ -296,9 +343,9 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
     for asset, failure in pool.map(convert, tasks):
         if asset:
             if asset['kind'] == 'characters':
-                asset['rarity'] = read(DB / f"English/characters/{asset['id']}.json")['rarity']
+                asset['rarity'] = agd_characters[asset['id']]['metadata']['rarity']
             elif asset['kind'] == 'weapons':
-                asset['rarity'] = next(item['rarity'] for item in catalog['weapons'] if item['id'] == asset['id'])
+                asset['rarity'] = agd_weapons[asset['id']]['metadata']['rarity']
             assets.append(asset)
         else:
             missing.append(failure)

@@ -27,16 +27,15 @@
 
 | 来源 | 实际用途 | 许可记录 |
 | --- | --- | --- |
+| DimbreathBot/AnimeGameData | 主数据源原始角色、武器、套装、成长曲线、圣遗物档位、Enka 技能顺序与能力机制快照 | 独立仓库许可缺失；游戏内容权利归 miHoYo / HoYoverse |
 | Genshin Optimizer / frzyc 与贡献者 | 普通属性和部位 SVG 路径、部分游戏图标镜像 | 路径代码 MIT；原文位于 `licenses/sources/genshin-optimizer/LICENSE` |
 | Yatta / Project Amber | 三份原始百分比属性 SVG，保留路径与透明轮廓 | 固定脚本版本和模块见 `assets/manifest.json`；独立素材许可声明待补核 |
-| genshin-db / theBowja 与贡献者 | 角色、技能、装备、曲线、名称和目录元数据 | MIT；原文位于 `licenses/sources/genshin-db/LICENSE` |
-| 莫娜占卜铺 / wormtql、TwiceDrop 与社区 | JSON 格式、交互参考、目录身份和部分图片来源 | MIT；原文位于 `licenses/sources/mona/LICENSE` |
+| genshin-db / theBowja 与贡献者 | 历史交叉核对与早先保留图标映射记录 | MIT；原文位于 `licenses/sources/genshin-db/LICENSE` |
+| 莫娜占卜铺 / wormtql、TwiceDrop 与社区 | JSON 导出格式、交互参考、套装别名与部分历史图片来源 | MIT；原文位于 `licenses/sources/mona/LICENSE` |
 | PathOfGenshin/resources、GenshinWikiMap | 游戏图像镜像、五种通用普攻原图 | 仓库代码 GPL-3.0；本项目使用其整理的游戏图片 |
-| Enka.Network | 公开展柜服务、接口文档、身份映射 | 接口规则见上游文档；固定资料的独立许可待补核 |
-| GachaBase | 技能数字 ID 与名称核对 | 页面数据条款待补核 |
-| LunaGC 数值资料 | 圣遗物档位与 ID | 独立数据许可待补核 |
+| Enka.Network | 公开展柜服务、接口文档、兼容身份映射与少量透明头像 | 接口规则见上游文档；固定资料的独立许可待补核 |
 | Anonymous / Openclipart #12699 | celtic vine corner 页角藤结，单色与透明镂空适配 | [CC0 / public domain](https://openclipart.org/share)；[素材来源](https://openclipart.org/detail/12699/celtic-vine-corner-by-anonymous-12699) |
-| KQM TCL、梅信心 / Meropide | 机制研究和证据交叉核对 | 研究引用，具体链接见机制文档 |
+| 梅信心 / Meropide、KQM TCL（历史引用） | Meropide 作为统一战斗公式与机制研究来源；保留 KQM 历史交叉引用 | 研究引用，具体链接见机制文档与 `tools/data/references.json` |
 
 固定版本、用途及来源文件见 [sources.json](licenses/sources.json)。逐图 URL、版本和转换记录见[资源清单](assets/manifest.json)及[资源说明](assets/README.md)。
 
@@ -51,7 +50,7 @@ Node.js、pnpm、Python 用作开发环境。应用通过 CSS 使用系统字体
 | 项目 | 当前记录 |
 | --- | --- |
 | stackback@0.0.2、err-code@2.0.3 | 安装包声明 MIT，独立 LICENSE/NOTICE 缺失；已收录 package.json 声明及现有 README 许可段 |
-| Enka 固定资料、GachaBase、部分数值资料与历史常量 | 来源已登记，独立数据授权记录待补核 |
+| Enka 固定资料与历史常量 | 来源已登记，独立数据授权记录待补核 |
 | 本项目整体 | 统一许可证待确定 |
 
 原神游戏美术、名称及内容的权利归 miHoYo / HoYoverse 及相关权利人。软件、数据和素材按各自的许可记录归档。
